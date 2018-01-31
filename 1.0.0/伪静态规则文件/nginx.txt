@@ -1,9 +1,0 @@
-location ~* /themes\/.*\.(html|xml)$ {
-    return 403;
-}
-location ~* /system\/.*$ {
-    return 403;
-}
-if (!-e $request_filename) {
-    rewrite ^(.*)$ /index.php last;
-}
