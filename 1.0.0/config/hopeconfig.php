@@ -1,5 +1,5 @@
 <?php return array (
-  'dbhost' => 'localhost:16822',
+  'dbhost' => '120.76.200.232:16822',
   'dbuser' => 'feibukeji',
   'dbpw' => 'bgyrtksithv,1*&($AC',
   'tablepre' => 'xiaozu_',
@@ -8,7 +8,7 @@
   'sitetemp' => 'm7',
   'authkey' => 'likexxx',
   'hta' => true,
-  'dbname' => 'wmr87',
+  'dbname' => 'kjc',
   'siteurl' => 'http://wmr.feibu.info',
   'admindir' => '',
   'sitename' => '联众外卖8.7最新版',
