@@ -61,12 +61,11 @@ var lng = '<{$lng|default:0}>';
 var addressname = '<{$addressname|default:''}>';
 var CITY_ID = '<{$CITY_ID|default:0}>';
 var is_loading = false;
-
- 	  <{if !empty($lng) && !empty($lat) &&  !empty($addressname)  }>
- 			loadindexcontent();
+console.log(CITY_ID);
+    <{if !empty($lng) && !empty($lat) &&  !empty($addressname)  }>
+ 	      loadindexcontent();
 		  $('#showareainfo').text(addressname);
-
-   <{else}>
+    <{else}>
 		/*if(https == ''){
 			getLocation();
 		}else{
