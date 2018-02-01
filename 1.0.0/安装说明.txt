@@ -1,0 +1,33 @@
+联众网络-外卖人8.7新版安装说明：
+
+服务器要求：win2008+phpstudy2014+apache+php5.3
+
+1.把程序包解压到主目录，然后新建数据库信息
+
+2.用文本工具修改config/hopeconfig.php里面的：
+ 'dbhost' => 'localhost',---
+ip不需要改动
+ 'dbuser' => 'wm87demo',
+ ---数据库名
+ 'dbpw' => 'wm87demo123',--- 数据库密码
+'dbname' => 'wm87demo',
+ ---数据库用户名
+ 'siteurl' => 'http://wm87.xiaoyuanji.cn',---网址
+修改完，保存覆盖！（注意：一定要用文本工具）
+
+3.导入数据库：主目录/wm87demo.spl，导入完成，重启服务器即可。
+
+网站后台：
+http://域名/index.php?ctrl=member&action=adminlogin
+
+账号：admin    密码：123456
+
+
+----------一次购买，终生升级！-------
+
+素材火：http://sucaihuo.com     技术QQ：416148489
+
+外卖人8.7---素材火开源版本首发，倒卖者，一旦发现，后果请自负！
+
+
+

@@ -1,0 +1,54 @@
+<{extends file="<{$tempdir}>/public/admin.html"}> 
+<{block name=extendjs}>
+ <{/block}>
+ <{block name=controlname}>小程序设置<{/block}>
+ <{block name=bodylist}>
+   
+      <div style="width:auto;overflow-x:hidden;overflow-y:auto;">   
+          <div id="tagscontent">
+            <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/applet/module/appletsave/datatype/json"}>" onsubmit="return subform('',this);">
+              <div>
+                <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+                  <tbody>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">小程序appid</td>
+                      <td><input type="text" name="appletAppID" id="appletAppID" value="<{$appletAppID}>" class="skey" style="width:500px;"></td>
+                    </tr>
+                    
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">小程序secret</td>
+                      <td><input type="text" name="appletsecret" id="appletsecret" value="<{$appletsecret}>" class="skey" style="width:500px;"></td>
+                    </tr>
+                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                      <td class="left">小程序高德KEY值</td>
+                      <td><input type="text" name="appletmapkey" id="appletmapkey" value="<{$appletmapkey}>" class="skey" style="width:500px;"></td>
+                    </tr> 
+					
+					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">开启小程序审核</td>
+                      <td>  
+						<input type="radio" name="is_pass_applet"  value="1" <{if  $is_pass_applet == 1}>checked<{/if}>>不开启
+						<input type="radio" name="is_pass_applet"  value="0" <{if $is_pass_applet ==0}>checked<{/if}> >开启
+						&nbsp;&nbsp;&nbsp;(开启后小程序首页将不限制距离显示，为了小程序官方可以看到数据审核通过) 
+					  </td>
+                    </tr>  
+					
+					
+                    
+                  </tbody>
+                </table>
+              </div>
+              <div class="blank20"></div>
+             
+               <input type="submit" value="确认提交" class="button">  
+            </form>
+          </div>
+         
+           
+         </div>
+      
+    
+
+          </div> 
+ 
+<{/block}>

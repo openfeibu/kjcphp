@@ -1,0 +1,132 @@
+<{extends file="<{$tempdir}>/public/admin.html"}> 
+<{block name=extendjs}>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/jquery.PrintArea.js" type="text/javascript" language="javascript"></script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
+<{/block}>
+ <{block name=controlname}>分站统计<{/block}>
+ <{block name=bodylist}>
+    <div style="width:98%;overflow-y:auto;white-space:nowrap;"> 
+      	
+      <div class="search">
+      		 
+            
+            <div class="search_content">
+            	 
+            	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/station/module/stationcount"}>">
+            	  
+            	  <label>分站城市：</label>
+				   <select name="cityid">
+					<option value="0">全部</option> 
+                      	 <{load_data assign="arealist" table="area"    fileds="*"  where=" parent_id=0 " orderby=" orderid asc " limit="1000" }>  
+							<{foreach from=$arealist['list'] key=myid  item=items}>  
+							   <option value="<{$items['adcode']}>" <{if $cityid == $items['adcode']}>selected<{/if}>><{$items['name']}></option>
+							<{/foreach}> 
+                      </select>
+				  
+				  
+             	    从<input class="Wdate datefmt" type="text" name="starttime" id="starttime" value="<{$starttime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />  
+			        到<input class="Wdate datefmt" type="text" name="endtime" id="endtime" value="<{$endtime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />                  
+ 
+            	    <input type="submit" value="提交查询" class="button">  
+            	 </form>
+            </div>
+        
+      	</div>
+      	
+      	
+      	
+           <div class="tags">
+
+      	  
+
+          <div id="tagscontent">
+
+            <div id="con_one_1">
+
+              <div class="table_td"  >
+
+              <form method="post" action="" onsubmit="return remind();">
+
+                  <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+
+                    <thead>
+
+                      <tr>
+
+                        <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall(this.form, 'id')"></th>
+<!--  商品销售金额     实际销售金额   支付宝付款金额   微信付款金额  促销金额   配送费  打包费 佣金 -->
+                       <th align="center">分站名称</th>  
+                       <th align="center">城市</th>  
+                       <th align="center">商品销售金额</th>  
+                        <th align="center">实际销售金额</th> 
+                         <th align="center">线下支付金额</th> 
+                         <th align="center">在线支付金额</th>
+                         <th align="center">订单数量</th>
+                         <th align="center">促销金额</th>
+                         <th align="center">配送费</th>
+                         <th align="center">打包费</th>
+                         <th align="center">佣金</th>
+                       </tr>
+
+                    </thead> 
+
+                     <tbody>
+                      <{if empty($stationtj)}>
+                      <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff"> 
+                        <td colspan="9" > 暂无数据</td>  
+                      </tr> 
+                      <{/if}>
+                      <{foreach from=$stationtj item=items}> 
+                      <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff"> 
+                        <td align="center" ><input type="checkbox" name="id[]" value="<{$items['uid']}>"></td> 
+                        <td align="center"><{$items['stationname']}></td>
+                        <td align="center"><{$items['name']}></td>
+						<td align="center"><{$items['goodscost']|default:'0'}></td>
+						<td align="center"><{$items['allcost']|default:'0'}></td>
+						<td align="center"><{$items['unline']|default:'0'}></td>
+						<td align="center"><{$items['online']|default:'0'}></td>
+						<td align="center"><{$items['orderNum']|default:'0'}></td> 
+						<td align="center"><{$items['cxcost']|default:'0'}></td> 
+						<td align="center"><{$items['pscost']|default:'0'}></td> 
+						<td align="center"><{$items['bagcost']|default:'0'}></td> 
+						<td align="center"><{$items['yje']|default:0}></td>  
+                       </tr> 
+                       <{/foreach}> 
+
+                    </tbody> 
+
+                  </table>
+
+                <div class="blank20"></div> 
+
+                </form>
+
+                <div class="page_newc">
+                 	     <div class="select_page">
+                 	      </div>
+                 	     	</div>
+                       <div class="show_page"><ul><{$pagecontent}></ul></div>
+                 </div> 
+
+                 <div class="blank20"></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        
+  </div>
+ </div>
+
+
+
+
+
+
+
+
+  </div> 
+
+<{/block}>

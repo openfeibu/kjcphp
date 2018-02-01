@@ -1,0 +1,349 @@
+<{extends file="<{$tempdir}>/public/admin.html"}> 
+<{block name=extendjs}>
+<script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
+
+<link href="<{$siteurl}>/templates/adminpage/public/css/phone.css" rel="stylesheet" type="text/css">
+        <{/block}>
+ <{block name=controlname}>用户端首页设置<{/block}>
+ <{block name=bodylist}>
+<div class="managShopCon">
+    <div class="managShopBox">
+        <div class="managShopMain">
+            <{include file="<{$tempdir}>/public/commentcate.html"}>
+   <div style="width:auto;overflow-x:hidden;overflow-y:auto;bottom:50px;">
+       <div class="page" style="height:800px;">
+           <div class="appAddtoCon">
+               <div class="appAddtoLeft">
+                   <div class="appAddtoImgCon">
+                       <div class="appAddtoImgBox">
+
+                           <div class="appAddtoBox">
+                               <div class="appAddtoImg">
+                                   <img src="<{$siteurl}>/templates/adminpage/public/images/app_001.png" />
+                               </div>
+                               <div class="appAddto">
+                                   <a href="javascript:;" data="imgflash" >编辑</a>
+                               </div>
+                           </div>
+
+                           <div class="appAddtoBox">
+                               <div class="appAddtoImg">
+                                   <img src="<{$siteurl}>/templates/adminpage/public/images/app_002.png" />
+                               </div>
+                               <div class="appAddto">
+                                   <a href="javascript:;" data="classlist" >编辑</a>
+                               </div>
+                           </div>
+                           <div class="appAddtoBox">
+                               <div class="appAddtoImg">
+                                   <img src="<{$siteurl}>/templates/adminpage/public/images/app_0011.png" />
+                               </div>
+                           </div>
+                           <div class="appAddtoBox">
+                               <div class="appAddtoImg" id="sddd" style="background-color:#fff;">
+
+
+                               </div>
+                               <div class="appAddto">
+                                   <a href="javascript:;" data="ztylist" >编辑</a>
+                               </div>
+                           </div>
+
+                           <div class="appAddtoBox" style="background-color: #fff;">
+                               <div class="appAddtoImg">
+                                   <img src="<{$siteurl}>/templates/adminpage/public/images/app0714.png" style="width:93.5%;margin-left:8px;" />
+                               </div>
+                               <div class="appAddto">
+                                   <a href="javascript:;" data="imgflash2" >编辑</a>
+                               </div>
+                           </div>
+
+                           <div class="appAddtoBox">
+                               <div class="appAddtoImg">
+                                   <img src="<{$siteurl}>/templates/adminpage/public/images/app_004.png" />
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               <!---  js 调用模块 -->
+               <div id="showjscontent"></div>
+           </div>
+       </div>
+       </div>
+       </div>
+       </div>
+
+       <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/adminpage/public/js/ajaxfileupload.js"> </script>
+       <script>
+           $(function(){
+               showzty();
+               $('.appAddto a').bind('click',function(){
+                   $('#showjscontent').html('');
+                   var act = $(this).attr('data');
+                   get_paramhtml(act);
+               });
+           });
+
+           function get_paramhtml(act){
+               if(act == ' '){
+                   alert("获取失败");
+                   return false;
+               }
+               var content = htmlback("<{$siteurl}>/index.php?ctrl=areaadminpage&action=weixin&module="+act+"");
+               if(content.flag == false){
+                   var getmoreContent =  $.trim(content.content);
+                   if( getmoreContent == ''){
+                       alert("获取失败");
+                   }else{
+                       $('#showjscontent').append(getmoreContent);
+                   }
+               }else{
+                   alert('获取失败');
+               }
+           }
+
+
+           $("input[name='ztystyle']").live('click',function(){
+               var url = '<{$siteurl}>/index.php?ctrl=areaadminpage&action=weixin&module=ztymodetog&random=@random@&datatype=json';
+               $.ajax({
+                   type: 'post',
+                   async:true,
+                   data:{'ztytype': $(this).val()},
+                   url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                   dataType: 'json',success: function(content) {
+                       if(content.error == false){
+                           $('#showjscontent').html('');
+                           get_paramhtml('ztylist');
+                           showzty();
+                       }else{
+                           if(content.error == true)
+                           {
+                               alert(content.msg);
+                           }else{
+                               alert(content);
+                           }
+                       }
+                   },
+                   error: function(content) {
+                       alert('数据提交失败');
+                   }
+           })
+           })
+
+           $("#imgFile").live("change", function (){
+               ajaxFileUpload();
+               $("#upload").replaceWith($("#upload").clone(true));
+           });
+           $('input[name="link_type"]').live('click',function(){
+               var link_type = $(this).val();
+               if(link_type == 1){
+                   $('select[name="i_catid"]').show();
+                   $('select[name="i_catid"]').parent().show();
+                   $('input[name="i_links"]').hide();
+                   $('input[name="i_links"]').parent().hide();
+               }else if(link_type == 2){
+                   $('select[name="i_catid"]').hide();
+                   $('select[name="i_catid"]').parent().hide();
+                   $('input[name="i_links"]').show();
+                   $('input[name="i_links"]').parent().show();
+               }
+           });
+
+
+           $('#doclose').live('click',function(){
+               $('#bottom_edit').hide();
+           });
+           $('.appAdda_bg01').live('click',function(){
+               if(confirm('确认显示')){
+                   var tempid = $(this).parents('tr').attr('cid');
+                   var ztytype=$("input[name='ztystyle']:checked").val();
+                   if(tempid==0){
+                       alert("数据不存在");return;
+                   }
+                   var type = $(this).parents('tr').attr('type');
+                   $(this).html('隐藏');
+                   $(this).addClass('appAdda_bg02');
+                   $(this).removeClass('appAdda_bg01');
+                   var url = '<{$siteurl}>/index.php?ctrl=areaadminpage&action=weixin&module=togdata&random=@random@&datatype=json';
+                   $.ajax({
+                       type: 'post',
+                       async:false,
+                       data:{'id':tempid,'type':type,'flag':1,'ztytype':ztytype},
+                       url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                       dataType: 'json',success: function(content) {
+                           if(content.error == false){
+
+                           }else{
+                               if(content.error == true)
+                               {
+                                   alert(content.msg);
+                               }else{
+                                   alert(content);
+                               }
+                           }
+                       },
+                       error: function(content) {
+                           alert('数据提交失败');
+                       }
+                   });
+               }
+               return false;
+           });
+           $('.appAdda_bg02').live('click',function(){
+               if(confirm('确认隐藏')){
+                   var tempid = $(this).parents('tr').attr('cid');
+                   var type = $(this).parents('tr').attr('type');
+                   var ztytype=$("input[name='ztystyle']:checked").val();
+                   $(this).html('显示');
+                   $(this).addClass('appAdda_bg01');
+                   $(this).removeClass('appAdda_bg02');
+                   var url = '<{$siteurl}>/index.php?ctrl=areaadminpage&action=weixin&module=togdata&random=@random@&datatype=json';
+                   $.ajax({
+                       type: 'post',
+                       async:false,
+                       data:{'id':tempid,'type':type,'flag':0,'ztytype':ztytype},
+                       url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                       dataType: 'json',success: function(content) {
+                           if(content.error == false){
+
+                           }else{
+                               if(content.error == true)
+                               {
+                                   alert(content.msg);
+                               }else{
+                                   alert(content);
+                               }
+                           }
+                       },
+                       error: function(content) {
+                           alert('数据提交失败');
+                       }
+                   });
+               }
+           });
+           function GetRequest(url) {
+               var theRequest = new Object();
+               if (url.indexOf("?") != -1) {
+                   var str = url.substr(1);
+                   strs = str.split("&");
+                   for(var i = 0; i < strs.length; i ++) {
+                       theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+                   }
+               }
+               return theRequest;
+           }
+           function ajaxFileUpload()
+           {
+               $.ajaxFileUpload
+               (
+                       {
+                           url:'<{$siteurl}>/index.php?ctrl=areaadminpage&action=weixin&module=uploadapp&datatype=json',
+                           secureuri:false,
+                           fileElementId:'imgFile',
+                           dataType: 'json',
+                           data:'',
+                           success: function (data, status)
+                           {
+                               if(typeof(data.error) != 'undefined')
+                               {
+                                   if(data.error == false)
+                                   {
+                                       $('input[name="i_img_url"]').val(data.msg[0].saveName);
+                                   }else
+                                   {
+                                       alert(data.msg);
+                                   }
+                               }else{
+                                   alert(data);
+                               }
+                           },
+                           error: function (data, status, e)
+                           {
+                               alert(e);
+                           }
+                       }
+               )
+
+               return false;
+
+           }
+           $("#imgFile1").live("change", function () {
+               ajaxFileUpload1();
+               $("#upload").replaceWith($("#upload").clone(true));
+           });
+           function ajaxFileUpload1()
+           {
+               $.ajaxFileUpload
+               (
+                       {
+                           url:'http://demo.guangheo2o.com/index.php?c=admin_system&act=uploadbyadmin1&datatype=json',
+                           secureuri:false,
+                           fileElementId:'imgFile1',
+                           dataType: 'json',
+                           data:'',
+                           success: function (data, status)
+                           {console.log(data);
+                               if(typeof(data.error) != 'undefined')
+                               {
+                                   if(data.error == false)
+                                   {
+                                       $('input[name="i_img_url1"]').val(data.url);
+                                   }else
+                                   {
+                                       alert(data.message);
+                                   }
+                               }else{
+                                   alert(data);
+                               }
+                           },
+                           error: function (data, status, e)
+                           {
+                               alert(e);
+                           }
+                       }
+               )
+
+               return false;
+
+           }
+           function htmlback(url,info)
+           {
+               var backmessage = {'flag':true,'content':''};
+               $.ajax({
+                   type: 'POST',
+                   async:false,
+                   url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                   data: info,
+                   dataType: 'html',success: function(content) {
+                       backmessage['flag'] = false;
+                       backmessage['content'] = content;
+                   },
+                   error: function(content) {
+                       backmessage['content'] = '获取失败';
+                   }
+               });
+               return backmessage;
+           }
+
+           function showzty(){
+               $('#sddd').html(' ');
+               var type=$("input[name='ztystyle']:checked").val();
+               var ztyurl = '<{$siteurl}>/index.php?ctrl=areaadminpage&action=weixin&module=ztymodehtml';
+               var content = htmlback(ztyurl,{'type':type});
+               if(content.flag == false){
+                   var getmoreContent =  $.trim(content.content);
+                   if( getmoreContent == ''){
+                       alert("获取失败");
+                   }else{
+                       $('#sddd').append(getmoreContent);
+                   }
+               }else{
+                   alert('获取失败');
+               }
+           }
+
+       </script>
+
+   </div>
+<{/block}>
