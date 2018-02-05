@@ -25,7 +25,7 @@
 </head>
 <body> 
 <{load_data assign="shopinfo" table="shop" where="`id`=<{$adminshopid}>"  type="one"}> 
-<div style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: -1;background:url(<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/background.png);"></div>
+<div style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: -1;background:#f5f5f5;"></div>
 <!---header start--->
 	<div class="header">
     	<div class="top">
@@ -48,36 +48,25 @@
             </div>
             <div class="cl"></div>
             
-            
+
             <div class="shangjiaTop">
             	<div class="sjgl">
-                	
+
                 </div>
-            	
+
             </div>
         </div>
     	
     </div>
     <!---header end--->
-    <script>
-	$(function(){
-		var clientWidth = document.body.clientWidth;
-		/*alert(clientWidth);*/
-		if( clientWidth<=1347 ){
-			
-			$(".content").css("width","1240px");
-			$(".conleft").removeClass("content_left");
-			
-		}
-	});
-</script>
+
  <!------以上是公共的头部部分------->
  
   <!---content start--->
 	<div class="content">
    	 	<!---content left start--->
-		<div class="conleft content_left fl" style="height:730px;">
-        	<div class="nav" style="height:732px;">
+		<div class="conleft content_left fl" >
+        	<div class="nav">
             	<ul>
                 	<li onclick="openlink('<{ofunc type=url link="/shopcenter/useredit"}>');" data="baseset"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dpsz.png" /></div>
 					<a href="<{ofunc type=url link="/shopcenter/useredit"}>">店铺设置</a></li>
