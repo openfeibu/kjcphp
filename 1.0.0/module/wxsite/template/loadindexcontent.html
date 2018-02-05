@@ -1,16 +1,16 @@
 <{if empty($uid) && !empty(<{$regimg}>)}>
 <div class="regjuaninfo">
-	<div id="regjuanclosed"><img style="width:25px;height:25px;" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/close.png" /></div> 
+	<div id="regjuanclosed"><img style="width:25px;height:25px;" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/close.png" /></div>
 	<div id="regjuanshowino" style="text-align:center;">
 		<p style="height:200px;">
 		<a href="<{$siteurl}>/index.php?ctrl=wxsite&action=reg"  data-ajax="false">
 		<img style="width:230px;height:280px;" src="<{$regimg}>" />
-		</a></p>		 
+		</a></p>
 	</div>
 	<div id="reg-zhezhao"></div>
 </div>
 <style>
- 
+
 #regjuanclosed{position:absolute;z-index:999999999999999;bottom: 100px;left: 45%;}
 #regjuanshowino{position:absolute;z-index:999999999999999;left:50%;margin-left:-115px;top:50%;margin-top:-172px;}
 #regjuanshowino p{font-size:16px; color:#FFF;height:35px;line-height:35px;}
@@ -32,18 +32,18 @@
 </style>
 <{/if}>
 <script>
-$(function(){	 
+$(function(){
 	$('#regjuanclosed').bind('click',function(){
- 		$('.regjuaninfo').hide();		 
+ 		$('.regjuaninfo').hide();
 	});
 });
 </script>
-<{if !empty($platpssetinfo) && $platpssetinfo['wxkefu_open']  == 1 }> 
+<{if !empty($platpssetinfo) && $platpssetinfo['wxkefu_open']  == 1 }>
 <div id="wx_kefu" >
 	<img style="width:40px;height:50px;" src="<{$siteurl}>/upload/images/wx_kefu.png" />
 </div>
 <div class="wxkefu_showino">
-	<div id="wx_closed"><img style="width:35px;height:35px;" src="<{$siteurl}>/upload/images/wx_closed.png" /></div> 
+	<div id="wx_closed"><img style="width:35px;height:35px;" src="<{$siteurl}>/upload/images/wx_closed.png" /></div>
 	<div id="wxkefu_showino" style="text-align:center;">
 		<p style="height:200px;"><img style="width:200px;height:200px;" src="<{$platpssetinfo['wxkefu_ewm']}>" /></p>
 		<p style="margin-top:5px;">长按上方二维码添加好友</p>
@@ -64,14 +64,14 @@ $(function(){
  		$('.wxkefu_showino').hide();
 		removeUnScroll();
 	});
-	
-	
+
+
 function unScroll(event) {
-document.body.style.overflow='hidden'; 
+document.body.style.overflow='hidden';
 }
 function removeUnScroll() {
    document.body.style.overflow='auto';
-}	
+}
 });
 </script>
 <style>
@@ -81,7 +81,7 @@ function removeUnScroll() {
 #wxkefu_showino{position:absolute;z-index:999999999999999;left:50%;margin-left:-100px;top:50%;margin-top:-172px;}
 #wxkefu_showino p{font-size:16px; color:#FFF;height:35px;line-height:35px;}
 #wx-zhezhao {
-	background: none repeat scroll 0 0 #000000;	 
+	background: none repeat scroll 0 0 #000000;
 	opacity: 0.7;
 	filter: alpha(opacity=70);
 	position: fixed;
@@ -94,19 +94,19 @@ function removeUnScroll() {
 }
 
 </style>
-<{/if}> 
+<{/if}>
 
 
-<div id="dev_wrapper"  style="  display:;width:100%;  overflow-x:hidden; overflow-y:scroll;"> 
- 
+<div id="dev_wrapper"  style="  display:;width:100%;  overflow-x:hidden; overflow-y:scroll;">
+
 <div id="dev_scroller"  >
 
 
- 
- 
+
+
 <div  class=" " >
-<div class=" "> 
-	 
+<div class=" ">
+
 <!-- <div id="uprefuBox"><p class="refuImg"><img  src="/upload/images/wmrloading.gif"  ></p><p class="refuFang flipup" >下拉刷新...</p></div> -->
 <{load_data assign="advlist" table="adv"    fileds="*"  limit="5" where="advtype='weixinlb' and  module='<{$sitetemp}>'  and is_show=1  and cityid='<{$CITY_ID}>'  " }>
 <{if !empty($advlist['list']) }>
@@ -117,13 +117,13 @@ function removeUnScroll() {
       <div class="swiper-wrapper-lb" style="height:185px;">
 	  <{foreach from=$advlist['list'] item=items}>
         <div class="swiper-slide-lb" ><a href="<{$items['linkurl']}>"><img data-src="<{$items['img']}>"  src="<{$items['img']}>" style="width:100%; height:185px;" alt=""></a></div>
-	  <{/foreach}>	
+	  <{/foreach}>
        </div>
     </div>
     <div class="pagination"></div>
   </div>
 
-  
+
     <script>
     var mySwiper = new Swiper('.swiper-container-lb',{
  	wrapperClass:'swiper-wrapper-lb',
@@ -175,9 +175,9 @@ function removeUnScroll() {
 		<div class="pagination-class" style="<{if count($moretypelist) <= 8 }>display:none;<{/if}>text-align:center;position:absolute;width:100%;bottom:-6px;"></div>
 	</div>
 
- 
+
 <!-- 通知 -->
-<{load_data assign="notice" table="information"  type="one"  fileds="*"  limit="1" where="type=1 and ( cityid = '<{$CITY_ID}>' or cityid = 0  )  "  orderby="addtime desc"  }> 
+<{load_data assign="notice" table="information"  type="one"  fileds="*"  limit="1" where="type=1 and ( cityid = '<{$CITY_ID}>' or cityid = 0  )  "  orderby="addtime desc"  }>
 <{if !empty($notice) }>
 <a href="<{ofunc type=url link="/wxsite/noticelist"}>"   data-transition="slide"  >
 
@@ -420,10 +420,10 @@ $(function(){
  <div class="homscrbusintit"><h3>附近商家</h3></div>
  <div class="homeNeashopBox">
   <ul id="shoplist">
-   
-   
+
+
    <{if !empty($shoplist) }>
-    
+
         <{foreach from=$shoplist item=items }>
                     <li>
                         <{if $items['shoptype']  == 1 }>
@@ -504,7 +504,7 @@ $(function(){
                         </div>
                     </li>
         <{/foreach}>
-    
+
 	<{if $open_wxcx == 1}>
 	<style>
 		.cx_maxh{max-height:40px;overflow:hidden;}
@@ -525,11 +525,11 @@ $(function(){
 			if($("#cx_"+id).hasClass("cx_maxh")){
 				$("#cx_"+id).removeClass('cx_maxh');
 				$("#cx_"+id+" .fa-caret-down").addClass('flipy');
-				
+
 			}else{
 				$("#cx_"+id).addClass('cx_maxh');
 				$("#cx_"+id+" fa-caret-down").removeClass('flipy');
-				
+
 			}
 		}
 	}
@@ -539,38 +539,38 @@ $(function(){
 				$("#showcs"+id+" .homeNeaBotShow").removeClass('cx_maxh');
 				$("#showcs"+id+" .homeNeaBotUp i").toggleClass("fa-sort-up");
 				$("#showcs"+id+" .homeNeaBotUp b").addClass('bColor');
-				
+
 			}else{
 				$("#showcs"+id+" .homeNeaBotShow").addClass('cx_maxh');
 				$("#showcs"+id+" .homeNeaBotUp i").toggleClass("fa-sort-up");
 				$("#showcs"+id+" .homeNeaBotUp b").removeClass('bColor');
-				
+
 			}
 		}
 	}
 	</script>
 	<{/if}>
-	
-	
+
+
 <{else}>
 
-<center style='height:50px;;line-height:50px;font-size:13px;color:#a9a9a9;'>附近暂未覆盖商家，敬请期待...</center>	
-	
-	 	
-	
+<center style='height:50px;;line-height:50px;font-size:13px;color:#a9a9a9;'>附近暂未覆盖商家，敬请期待...</center>
+
+
+
 <{/if}>
 
-   
-   
-   
-   
+
+
+
+
   </ul>
  </div>
 
- 
+
 <center><div style="color:#ccc;height:42px;line-height:42px;font-size:13px; text-align: center;">—————&nbsp;&nbsp;我是有底线的&nbsp;&nbsp;—————</div> </center>
-  
- 
+
+
 </div>
 <!---------------------------------------------------------------------------首页结束----------------------------------------------------------------------------------->
  </div>
@@ -590,37 +590,37 @@ var pageend = false;
 var dev_wrapper_height = 0;
 var loadflag = true;
  var scrollflag = true;
-$(function(){ 
-	
-	var mainheight = $(window).height();//窗口高度 
-	var mainwidth = $(window).width();//窗口宽度 
-	var wrapperHeight = mainheight-50; 
+$(function(){
+
+	var mainheight = $(window).height();//窗口高度
+	var mainwidth = $(window).width();//窗口宽度
+	var wrapperHeight = mainheight-50;
 //	Tmsg(wrapperHeight);
-  var wxbglogo_height = $('#wxbglogo').height(); 
+  var wxbglogo_height = $('#wxbglogo').height();
  // $('#dev_wrapper').css('marginTop','-'+wxbglogo_height+'px');
  $('#dev_wrapper').css('maxHeight',wrapperHeight+'px');
-		
+
  		$("#dev_wrapper").scroll(function() {
 		   var dev_scrollTop = $('#dev_wrapper').scrollTop() ;
 		//	 Tmsg(dev_scrollTop);
 			if( dev_scrollTop >= 100 ){
                 $("#wxbglogo").hide();
-				$('.home_change_head_top').addClass('navaA'); 
+				$('.home_change_head_top').addClass('navaA');
 			}else{
                 $("#wxbglogo").show();
 				$('.home_change_head_top').removeClass('navaA');
 			}
 			var xiangcha =  dev_scrollTop%wrapperHeight;
  			if( xiangcha <= 60  ){
-				
+
 			}
 			 $("img").lazyload({
 				threshold :20
 			});
-			 
+
 			/* 店铺加载翻页用
 			var dev_wrapper_height = $('#dev_wrapper').height();
-			//console.log((dev_wrapper_height-mainheight-100)+"------"+dev_scrollTop);	
+			//console.log((dev_wrapper_height-mainheight-100)+"------"+dev_scrollTop);
 			if( (dev_wrapper_height-mainheight-100) <= dev_scrollTop && loadflag == true ){
 				loadflag = false;
 			 	Tmsg("到达第"+page+"页");
@@ -628,14 +628,14 @@ $(function(){
 			}
 			*/
 		//	var xc = dev_wrapper_height-dev_scrollTop;
-	  		 
+
 		});
 
 		//setTimeout("newlazyload()",6000);
-});   
+});
 </script>
 <style>
-.zhengrefu{text-align:center; margin-top:-10px;} 
+.zhengrefu{text-align:center; margin-top:-10px;}
 .swiper-containeraa{
     position: absolute;
     z-index: 10;
@@ -649,7 +649,7 @@ $(function(){
 	height: 100%;
 	width: 100%;
 	position: relative;
-	background: rgba(0,0,0,0.5); 
+	background: rgba(0,0,0,0.5);
 }
 .swiper-scrollbar-cursor-drag{
 	cursor: move;

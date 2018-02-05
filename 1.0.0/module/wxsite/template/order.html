@@ -1,115 +1,115 @@
- <{extends file="<{$tempdir}>/public/wxsite.html"}>  
-<{block name=extendcss}> 
+ <{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=extendcss}>
  <link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/order.css">
 <{/block}>
-  <{block name=extendjs}> 
-  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>   
+  <{block name=extendjs}>
+  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>
 
- <script> 
+ <script>
     $(function(){
 			$('.toptitBox .toptitL').bind("click", function() {
             window.location.href="<{$siteurl}>/index.php?ctrl=wxsite";
 			})
 		});
-   
-  function acceptorder(orderid){  
- 
+
+  function acceptorder(orderid){
+
  	if(confirm('确认收货？')){
-   	     $('#loading').show(); 
-   		   var url = siteurl+'/index.php?ctrl=order&action=acceptorder&orderid='+orderid+'&datatype=json&random=@random@';   
- 	        $.ajax({ 
-           dataType: "json",  
-           url: url.replace('@random@', 1+Math.round(Math.random()*1000)),  
-           success: function(content) {    
-           	 if(content.error == false) 
-          	{  
+   	     $('#loading').show();
+   		   var url = siteurl+'/index.php?ctrl=order&action=acceptorder&orderid='+orderid+'&datatype=json&random=@random@';
+ 	        $.ajax({
+           dataType: "json",
+           url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+           success: function(content) {
+           	 if(content.error == false)
+          	{
            		$('#loading').hide();
 				window.location.reload();
-				
-          	}else{ 
+
+          	}else{
           			Tmsg(content.msg);
           		  $('#loading').hide();
-          	}  
-          	 
-	         }, 
-           error: function(content) {  
+          	}
+
+	         },
+           error: function(content) {
              	Tmsg('提交数据失败');
         	    $('#loading').hide();
 	         }
-       
-         });  
+
+         });
      }
-     return false; 
-   } 
-   
-   
- function delorder(orderid){  
- 
+     return false;
+   }
+
+
+ function delorder(orderid){
+
  	if(confirm('确认删除？')){
-   	     $('#loading').show(); 
-   		   var url = siteurl+'/index.php?ctrl=order&action=userdelorder&orderid='+orderid+'&datatype=json&random=@random@';   
- 	        $.ajax({ 
-           dataType: "json",  
-           url: url.replace('@random@', 1+Math.round(Math.random()*1000)),  
-           success: function(content) {    
-           	 if(content.error == false) 
-          	{  
+   	     $('#loading').show();
+   		   var url = siteurl+'/index.php?ctrl=order&action=userdelorder&orderid='+orderid+'&datatype=json&random=@random@';
+ 	        $.ajax({
+           dataType: "json",
+           url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+           success: function(content) {
+           	 if(content.error == false)
+          	{
            		$('#loading').hide();
 				window.location.reload();
-				
-          	}else{ 
+
+          	}else{
           			Tmsg(content.msg);
           		  $('#loading').hide();
-          	}  
-          	 
-	         }, 
-           error: function(content) {  
+          	}
+
+	         },
+           error: function(content) {
              	Tmsg('提交数据失败');
         	    $('#loading').hide();
 	         }
-       
-         });  
+
+         });
      }
-     return false; 
-   } 
+     return false;
+   }
 
  	</script>
- 
+
 <script>
-var defaultSwiper; //默认的滚动控件名 
-var holdPosition = 0; 
+var defaultSwiper; //默认的滚动控件名
+var holdPosition = 0;
 var maxposition = 0;
 var page =1;
 var pageend = false;
-var html5_config = {'showheader':true,'showfooter':true,'bodyscller':true,'Canfresh':true,'CanloadMore':true,'titilename':'外卖频道'}; 
+var html5_config = {'showheader':true,'showfooter':true,'bodyscller':true,'Canfresh':true,'CanloadMore':true,'titilename':'外卖频道'};
 $(function(){
 	loading();
 });
-function freshpage(){//刷新函数 
+function freshpage(){//刷新函数
   page =1;
   pageend = false;
-    $('#orderlist').html(''); 
+    $('#orderlist').html('');
 	var content = htmlback(siteurl+'/index.php?ctrl=wxsite&action=userorder',{'page':page});
   	if(content.flag == false){
- 	     $('#orderlist').append(content.content);    
+ 	     $('#orderlist').append(content.content);
 				if($.trim(content.content) != '' && $("#orderlist .editordercon").length >= 5  ){
  					$("#lodingmore").show();
-				} 
+				}
 				if(  $.trim(content.content) == ''  ){
 					htmlNull(1,'您还没有此类订单','nullorderimg.png');
 				}else{
 					htmlNull(0);
 				}
-				
+
 				defaultSwiper.refresh();
 	}else{
 	    Tmsg('xxxx');
-	}  
-	$('#loading').hide(); 
+	}
+	$('#loading').hide();
 	hidefresh();
-    //setTimeout("hidefresh()",50);  
+    //setTimeout("hidefresh()",50);
 }
-function loadmore(){ 
+function loadmore(){
 	page = page+1;
 	   var content = htmlback(siteurl+'/index.php?ctrl=wxsite&action=userorder',{'page':page});
 		if(content.flag == false){
@@ -117,7 +117,7 @@ function loadmore(){
 	    $('#lodingmore .moreLoading i').removeClass('iconloading');
 	    $('#lodingmore .moreLoading i').removeClass('iconOverload');
 		$("#lodingmore span").text("上拉更多...");
-		   var getmoreContent =  $.trim(content.content); 
+		   var getmoreContent =  $.trim(content.content);
   		   if( getmoreContent == ''  ){
  				pageend = true;
 				$('#lodingmore .moreLoading i').removeClass('iconstartloading');
@@ -127,7 +127,7 @@ function loadmore(){
 		   }else{
 				 $('#orderlist').append(content.content);
 		   }
-		  
+
 		}else{
 			pageend = true;
 			$('#lodingmore .moreLoading i').removeClass('iconstartloading');
@@ -135,34 +135,34 @@ function loadmore(){
 	     	$('#lodingmore .moreLoading i').addClass('iconOverload');
 			$("#lodingmore span").text("加载完毕...");
 		}
-		//  setTimeout("hideloadmore()",500);  
+		//  setTimeout("hideloadmore()",500);
 		hideloadmore();
-	
-} 
-  
+
+}
+
 //加载页面函数
 function loading(){
  	if(typeof html5_config == 'undefined'){
 		alert('获取失败');
-	}else{ 
-	    
+	}else{
+
 		if(html5_config.bodyscller == true){
- 			 setTimeout(function(){  
-				$('#wrapper').show();    
+ 			 setTimeout(function(){
+				$('#wrapper').show();
 				 addfresh();
-				 
+
 			 },500);
 		}
 	 //	$('#loading').hide();
 		//loaddata();
-		
+
 	}
-}  
+}
 </script>
 <{/block}>
 <{block name=myScrolljs}>
 <style>
-.shanchuedit{ 
+.shanchuedit{
     background-color: #ff6e6e;
     color: #fff;
 	width: 72px;
@@ -196,7 +196,7 @@ function loading(){
 	 line-height: 30px;
 	    text-align: center;
 }
-</style> 
+</style>
 <{/block}>
 <{block name=hearnav}>
 <div class="toptitCon">
@@ -207,23 +207,23 @@ function loading(){
 </div>
 <{/block}>
 <{block name=sitetitle}><{$sitename}><{/block}>
-<{block name=blockcontent}> 
+<{block name=blockcontent}>
 <style>
 p{padding:0px; margin:0px;}
 </style>
  <div id="wrapper" style="top:40px; ">
 	<div id="scroller">
-	 
+
    <div id="orderlist">
- 
- 
+
+
 </div>
 	<div  id="lodingmore"   style="display:none;"   class="downLoading "><div class="moreLoading"><i class="iconstartloading"></i><span>上拉更多...</span></div></div>
-   
+
 </div>
 </div>
- 
- 
- 
-  
+
+
+
+
 <{/block}>

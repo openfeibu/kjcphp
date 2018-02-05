@@ -1,12 +1,12 @@
- <{extends file="<{$tempdir}>/public/wxsite.html"}>  
-<{block name=extendcss}> 
+ <{extends file="<{$tempdir}>/public/wxsite0.html"}>
+<{block name=extendcss}>
  <link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/gift.css">
 <{/block}>
- <{block name=extendjs}> 
-  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>    
+ <{block name=extendjs}>
+  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>
 <{/block}>
 <{block name=myScrolljs}>
-<script> 
+<script>
 		var myScroll;
 function loaded() {
 	myScroll = new iScroll('wrapper', {
@@ -20,48 +20,48 @@ function loaded() {
 		}
 	});
 }
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false); 
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
 </script>
 <script>
  	$(function(){
- 	$('.intexbg1userlogin').click(function(){ 
+ 	$('.intexbg1userlogin').click(function(){
  		var checkuname = $('#logEmailOrPhone').val();
  		if(checkuname != ''){
- 		  
-  	 	$('#loading').toggle(); 
-  	  	var info = {'uname':$('#logEmailOrPhone').val(),'pwd':$('#logPassword').val(),'logintype':'html5'}; 
-  	 	  var  url = siteurl+'/index.php?ctrl=member&action=login&datatype=json&random=@random@' 
-  	 	   $.ajax({ 
-             url: url.replace('@random@', 1+Math.round(Math.random()*1000)), 
-            dataType: "json", 
-            data:info, 
-            success:function(content) {  
-            	$('#loading').toggle(); 
+
+  	 	$('#loading').toggle();
+  	  	var info = {'uname':$('#logEmailOrPhone').val(),'pwd':$('#logPassword').val(),'logintype':'html5'};
+  	 	  var  url = siteurl+'/index.php?ctrl=member&action=login&datatype=json&random=@random@'
+  	 	   $.ajax({
+             url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            dataType: "json",
+            data:info,
+            success:function(content) {
+            	$('#loading').toggle();
             	if(content.msg ==  false){
                     window.location.href = '<{$web_extend_link|default:$siteurl}>';
-            	}else{ 
+            	}else{
             	   Tmsg(content.msg);
               }
-            	
-            }, 
+
+            },
             error:function(){
             	$('#loading').toggle();
 
-            } 
-         });  
+            }
+         });
     }else{
     	Tmsg('用户帐号不能为空');
     }
-		  
-	 }); 
+
+	 });
 	});
 
  </script>
  <script>
  	$(function(){
- 	$('.intexbg1fastlogin').click(function(){ 
-	 
+ 	$('.intexbg1fastlogin').click(function(){
+
  		var phone = $('#phone').val();
 		var phoneyan = $('#phoneyan').val();
  		if(phone < 1){
@@ -71,32 +71,32 @@ document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 2
 		if(phoneyan < 1){
 		     Tmsg('请输入验证码');
 			 return false;
-		} 	  
-  	 	$('#loading').toggle(); 
-  	  	var info = {'phone':phone,'phoneyan':phoneyan}; 
-  	 	  var  url = siteurl+'/index.php?ctrl=member&action=fastlogin&datatype=json&random=@random@' 
-  	 	   $.ajax({ 
-             url: url.replace('@random@', 1+Math.round(Math.random()*1000)), 
-            dataType: "json", 
-            data:info, 
-            success:function(content) {  
+		}
+  	 	$('#loading').toggle();
+  	  	var info = {'phone':phone,'phoneyan':phoneyan};
+  	 	  var  url = siteurl+'/index.php?ctrl=member&action=fastlogin&datatype=json&random=@random@'
+  	 	   $.ajax({
+             url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            dataType: "json",
+            data:info,
+            success:function(content) {
 			    console.log(content)
-            	$('#loading').toggle(); 
+            	$('#loading').toggle();
             	if(content.error ==  false){
                     window.location.href= siteurl+'/index.php?ctrl=wxsite&action=member';
-            	}else{ 
+            	}else{
             	   Tmsg(content.msg);
               }
-            	
-            }, 
+
+            },
             error:function(){
             	$('#loading').toggle();
 
-            } 
-         });  
-  
-		  
-	 }); 
+            }
+         });
+
+
+	 });
 	});
 
  </script>
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 2
 </div>
 <{/block}>
 <{block name=sitetitle}><{$sitename}><{/block}>
-<{block name=blockcontent}> 
+<{block name=blockcontent}>
  <div id="wrapper" style="top:40px;">
 	<div id="scroller">
 <!--登录-->
@@ -148,9 +148,9 @@ $('.fastloginbtn').click(function(){
 <!-------------------手机快捷登录开始----------------------->
 <div class="signininput fastlogin" style='border:none;display:none'>
  <ul>
- 
+
   <li><i class="signinpho"></i><input type="text" id="phone" value="" placeholder="手机号"></li>
-    <li id="showgetcode" class="signmehide"><i class="signinmess"></i><input type="text" name="phoneyan" id="phoneyan"   value="" placeholder="验证码"><input type="button"  onclick="clickyanzheng();"  style='border-radius: 5px; float:right;margin-top: 10px;' time="0" id="dosendbtn"  value="发送验证码" class="signmeinput"></li> 
+    <li id="showgetcode" class="signmehide"><i class="signinmess"></i><input type="text" name="phoneyan" id="phoneyan"   value="" placeholder="验证码"><input type="button"  onclick="clickyanzheng();"  style='border-radius: 5px; float:right;margin-top: 10px;' time="0" id="dosendbtn"  value="发送验证码" class="signmeinput"></li>
   <li class="signmehide"><i class="signinmess"></i><input type="text"  placeholder="输入短信验证码"><input type="button" value="剩余120秒" class="signmeinput signmebg1"></li>
  </ul>
 </div>
@@ -208,11 +208,11 @@ $('.fastloginbtn').click(function(){
             #morelogin a{
                 margin-left:10px;
             }
-			 
+
 .signininput ul li {
-    border-bottom: 1px solid #f5f5f5!important;     
+    border-bottom: 1px solid #f5f5f5!important;
 }
- 
+
         </style>
         <{if $is_wx!=1}>
         <div style="padding:0px 10px;">
@@ -232,30 +232,30 @@ $('.fastloginbtn').click(function(){
 </div>
 <script>
  var regestercode = '<{$regestercode}>';
- $(function(){    
+ $(function(){
     if(regestercode ==  1){
     	$('#showgetcode').show();
-     
-    } 
-}); 
-function noshow(msg){  
+
+    }
+});
+function noshow(msg){
     	Tmsg(msg);
 }
 //获取手机验证码
-function clickyanzheng(){ 
- 
+function clickyanzheng(){
+
         var tempurl = siteurl+'/index.php?ctrl=member&action=fastloginphone&random=@random@&phone=@phone@';
    	 	     tempurl = tempurl.replace('@random@', 1+Math.round(Math.random()*1000)).replace('@phone@',$('#phone').val());
-	         $.getScript(tempurl);    
-	 
+	         $.getScript(tempurl);
+
 }
-function showsend(phone,time){  
+function showsend(phone,time){
   	    $('input[name="phone"]').val(phone);
         $('#dosendbtn').attr('time',time);
-        setTimeout("btntime();",1000);   
-} 
+        setTimeout("btntime();",1000);
+}
 	function  btntime(){
-  
+
 	   var nowtime = Number($('#dosendbtn').attr('time'));
 	   if(nowtime > 0){
 	      $('#dosendbtn').attr('disabled',true);
@@ -270,11 +270,11 @@ function showsend(phone,time){
 		  $('#dosendbtn').removeClass('signmebg1');
 	   	 $('#dosendbtn').attr('value','重新发送');
      }
-  
+
 }
-	
-	
-	
+
+
+
 
  </script>
 

@@ -168,15 +168,16 @@ class method extends wxbaseclass
         ICookie::clear('addressname');
         ICookie::clear('CITY_ID');
         ICookie::clear('CITY_NAME');
+
         $adcode = IFilter::act(IReq::get('adcode'));
         $lat = IFilter::act(IReq::get('lat'));
         $lng = IFilter::act(IReq::get('lng'));
         $addressname = IFilter::act(IReq::get('addressname'));
 
-        /* $adcode = '410100';
-        $lat = 34.802461;
-        $lng = 113.597715;
-        $addressname = '电子商务产业园(郑州高新区)'; */
+        $adcode = '410100';
+        $lat = 23.282178;
+        $lng = 113.615325;
+        $addressname = '广东农工商职业技术学院北校区';
 
         ICookie::set('lat', $lat);
         ICookie::set('lng', $lng);
@@ -229,9 +230,26 @@ class method extends wxbaseclass
         $data['lng'] = $lng;
         $data['addressname'] = $addressname;
 
+        //判断平台类型  //2微信端,3web端
+        $source = 3;
+        if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+            $source = 2;
+        }
+        $datalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('juli'=>'asc'), $lat, $lng, $source);
+        $data['shoplist']  = $datalistx;
+
+        $shoptypelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where parent_id <> 0 order by orderid  asc");
+        foreach ($shoptypelist as $key => $value) {
+            $shoptypelist[$key]['catelink'] = IUrl::creatUrl('/wxsite/shoplist/typelx/wm/typeid/'.$value['id'].'');
+        }
+        $data['shoptypelist']  = $shoptypelist;
         Mysite::$app->setdata($data);
     }
 
+    public function loadindexshoplist()
+    {
+
+    }
 
     public function loadindexcontent()
     {
@@ -331,11 +349,6 @@ class method extends wxbaseclass
         $lat =empty($lat)?0:$lat;
 
         $datalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('juli'=>'asc'), $lat, $lng, $source);
-
-
-
-
-
         $data['shoplist']  = $datalistx;
         #print_r($data['shoplist']);
         Mysite::$app->setdata($data);

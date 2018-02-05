@@ -1,11 +1,11 @@
-<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{extends file="<{$tempdir}>/public/wxsite0.html"}>
 <{block name=extendcss}>
 <link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/gift.css">
 <{/block}>
  <{block name=myScrolljs}>
 <link rel="stylesheet" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/gaodecss.css"/>
   <script src="<{$map_comment_link}>webapi.amap.com/maps?v=1.3&key=<{$map_javascript_key}>"></script>
-<script> 
+<script>
 var myScroll;
 function loaded() {
 	myScroll = new iScroll('wrapper', {
@@ -28,7 +28,7 @@ $(function(){
 
 });
 		function scorllerfreach(scoller_name,elements_name){
-		
+
 			if(typeof(scoller_name) != 'undefined'){
 				scoller_name.destroy();
 			}
@@ -41,7 +41,7 @@ $(function(){
 </script>
 <{/block}>
 <{block name=hearnav}><!--标题-->
- <{load_data assign="info" table="address" type="one" where="id='<{$id}>' and userid = '<{$member['uid']}>'" fileds="*" }> 
+ <{load_data assign="info" table="address" type="one" where="id='<{$id}>' and userid = '<{$member['uid']}>'" fileds="*" }>
 
 	<!--标题-->
 <div class="toptitCon">
@@ -50,10 +50,10 @@ $(function(){
   <div class="toptitC"><h3><{if !empty($info) }>编辑<{else}>新增<{/if}>收货地址</h3></div>
 <!--  <div class="toptitR" onclick="saveaddress();"><h3>保存</h3></div>-->
  </div>
- 
+
  <div class="mapaddressbox toptitBox" style="display:none; padding:0px; height:49px;">
  <!--搜索框-->
- 
+
 <div class="searchCon" >
  <div class="toptitL" style="margin-top:5px;"><i></i></div>
  <div class="searchBox" style="float:left; margin-left:15px; width:80%; height:32px;">
@@ -61,8 +61,8 @@ $(function(){
 </div>
 
 </div>
- 
- 
+
+
 </div>
 
 
@@ -101,23 +101,23 @@ $(function(){
                              <input type="button"  onclick="clickyanzheng();"   time="0" id="dosendbtn"  value="发送到手机" class="signmeinput">
                          </li>
                          <{/if}>
-                      
-                 
+
+
                         <li style=" height:44px; ">
                             <a style="float:left;">&nbsp;&nbsp;&nbsp;地址：</a>
                             <div lng="<{$info['lng']}>" lat="<{$info['lat']}>" lnglat="" style="float:left; height:44px; line-height:44px;margin-left:20px;" id ='selectSendAddress' type="text"  class="newinp1"><{$info['bigadr']|default:'点击选择地址'}></div>
                         </li>
                         <div class="clear"></div>
                         <li><a>&nbsp;&nbsp;&nbsp;楼号-门牌号：</a><input type="text" placeholder="例：16号楼107室" value="<{$info['detailadr']}>" class="newinp2"></li>
-                  
-						 
+
+
 						<div class="selectLabCon">
 	<div class="selectLabL">
 		<span>标&nbsp;&nbsp;&nbsp;签：</span>
 	</div>
 	<div class="selectLabR">
 			<div class="selectLabBox">
-			<input type="hidden" name="i_tag" id="i_tag" value="<{$info['tag']|default:1}>" /> 
+			<input type="hidden" name="i_tag" id="i_tag" value="<{$info['tag']|default:1}>" />
 			<span><{if !empty($info)}><{if $info['tag'] == 1 }>家<{else if $info['tag'] == 2  }>公司<{else if $info['tag'] == 3  }>学校<{else}>无<{/if}><{else}>家<{/if}></span>
 			<i class="fa fa-caret-down" style="font-size: 14px; margin-right: 12px;"></i>
 		</div>
@@ -139,12 +139,12 @@ $(function(){
 					<span>无</span>
 					<input type="radio" name="selb">
 				</li>
-							 
+
 			</ul>
 		</div>
 	</div>
 </div>
- 		 
+
                     </ul>
                 </div>
             </div>
@@ -156,25 +156,25 @@ $(function(){
 		<div class="mapaddressbox"  style="display:none;">
 	<div class="showmapbox">
 		 <div class="mapditu" id="map">
-			
+
 		 </div>
-		 
+
 		 <div id="marker_red_sprite"><img src="<{$siteurl}>/upload/map/marker_red_sprite.png" /></div>
 	</div>
- 
-	
+
+
 <div id="choiceguidebox" >
 	<ul>
-	 
+
 	</ul>
 </div>
 </div>
 
 <!-------------------------------------------------------------------------切换地址结束---------------------------------------------------------------------------------->
 
-	
-	
-	
+
+
+
   </div>
 </div>
 <div id="selectAddress" style="display:none; position:absolute;z-index:1; width:100%;height:100%;background:#fff;  " >
@@ -188,7 +188,7 @@ var biaoqianval = false;
  function bqzhi(){
 	biaoqianval  = false;
 }
-var selectSendAddress; 
+var selectSendAddress;
 $("#selectSendAddress").bind('click',function() {
 	if (lockclick()) {
 		back = 1
@@ -203,8 +203,8 @@ $("#selectSendAddress").bind('click',function() {
 			$("#searchKeywordss").bind('click',function(){
 								back = 1;
 								$('#searchAddresslist').show();
-								 $('#searchAddresslist').css({'position':'absolute','top':'0px','marginTop':'42px','width':'100%','background':'#FFF','zIndex':'99999999999999','height':($(window).height()-42)+'px'}); 
-								  
+								 $('#searchAddresslist').css({'position':'absolute','top':'0px','marginTop':'42px','width':'100%','background':'#FFF','zIndex':'99999999999999','height':($(window).height()-42)+'px'});
+
 								 selectSendAddress=    new iScroll('searchAddresslist', {
 									useTransform: false,
 									onBeforeScrollStart: function (e) {
@@ -216,7 +216,7 @@ $("#selectSendAddress").bind('click',function() {
 									}
 								});
 								bindsearchclick();
-			});  
+			});
 			$("#searchKeywordss").bind('keyup',function(e){
 				//if(biaoqianval == false){
 					//biaoqianval  = true;
@@ -230,9 +230,9 @@ $("#selectSendAddress").bind('click',function() {
 					}
 				//}
 			});
-			
-			
-		} 
+
+
+		}
 		window.addEventListener("message", function(e){
 				var name = e.data.name;
 				var lnglat = e.data.location;
@@ -249,10 +249,10 @@ $("#selectSendAddress").bind('click',function() {
 		}, false);
 
 	}
-	
-	  
-		
-		$("#houtuiimg").bind('click',function(){ 
+
+
+
+		$("#houtuiimg").bind('click',function(){
 				 if(back == 1){
 						 $("#selectAddress").hide();
 						 $(".addressbox").show();
@@ -260,13 +260,13 @@ $("#selectSendAddress").bind('click',function() {
 						 back = 1;
 						 $("#searchAddresslist").hide();
 						 $('#selectadd').show();
-				  } 
-		  }); 
-		
+				  }
+		  });
+
 	});
  $('.selectLabBox').bind('click',function(){
 		if( lockclick() ){
-			
+
 			$('.selectLab li').removeClass('show');
 			var curtagid = $('input[name="i_tag"]').val();
 			console.log(curtagid);
@@ -283,7 +283,7 @@ $("#selectSendAddress").bind('click',function() {
 				$('.selectLabBox i').addClass('fa-caret-up');
 				$('.selectLabBox i').removeClass('fa-caret-down');
 			}
-			
+
 			$('.selectLab li').bind('click',function(){
 				if( lockclick() ){
  					$('input[name="i_tag"]').val($(this).attr('tagid'));
@@ -298,11 +298,11 @@ $("#selectSendAddress").bind('click',function() {
 					}
 				}
 			});
-			
+
 		}
-	}); 
+	});
 function showaddresslist(data){
-	 
+
 	$("#searchAddresslist").show();
 	var datas = eval(data);
 	if(datas.info == "OK"  && datas.status == 1  && datas.pois.length > 0 ){
@@ -313,17 +313,17 @@ function showaddresslist(data){
 		$.each(addresslist, function(i, newobj) {
 			showhtmls += '<div class="selADditem J_returnLng" data-lng-lat="'+newobj.location+'"  ><div class="txt"><div class="poicard-name">'+newobj.name+'</div> <div class="poicard-addr">'+newobj.address+'</div></div></div>';
 		});
-	     $('#searchAddresslist div').append(showhtmls); 
-		selectSendAddress.refresh();		
+	     $('#searchAddresslist div').append(showhtmls);
+		selectSendAddress.refresh();
 		bindsearchclick();
 	}
 }
 
 
-function bindsearchclick(){ 
+function bindsearchclick(){
 	$('#searchAddresslist .selADditem').unbind();
 	$('#searchAddresslist .selADditem').bind('click',function(){
-		
+
 		var name = $(this).find('.poicard-name').text();
 		var lnglat = $(this).attr('data-lng-lat');
 		choiceaddresslnglat(name,lnglat);
