@@ -1,4 +1,4 @@
- <{extends file="<{$tempdir}>/public/shopcenter.html"}>   
+ <{extends file="<{$tempdir}>/public/shopcenter.html"}>
 <{block name=extendjs}>
   <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
   <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/template.min.js"></script>
@@ -8,16 +8,16 @@
   	</script>
 <{/block}>
  <{block name=bodylist}>
-  <!---content right start---> 
-  
-  
+  <!---content right start--->
+
+
   <div class="conWaiSet ">
-        	
+
             <div class="shopSetTop">
             	<span>店铺设置</span>
-            </div> 
-            	  <{include file="<{$tempdir}>/shopcenter/usereditmenu.html"}>  
-             <div class="cl"></div>  
+            </div>
+            	  <{include file="<{$tempdir}>/shopcenter/usereditmenu.html"}>
+             <div class="cl"></div>
                 <form id="loginForm" method="post" action="<{ofunc type=url link="/shopcenter/savebase"}>">
                  <div class="jutiSet">
         		     	<div class="serxuanze">
@@ -26,7 +26,7 @@
                         </div>
                         <div class="dianpu_right" style="width:387px;">
                         	<input type="text" style="width:387px;" id="shopname" name="shopname" value="<{$shopinfo['shopname']}>"    />
-                            
+
                         </div>
                         <div class="cl"></div>
                     </div>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="dianpu_right" style="width:387px;">
                         	<input type="text" style="width:387px;"  id="phone" name="phone" value="<{$shopinfo['phone']}>"     />
-                            
+
                         </div>
                         <div class="cl"></div>
                     </div>
@@ -46,48 +46,48 @@
                         </div>
                         <div class="dianpu_right" style="width:387px;">
                         	<input type="text" style="width:387px; "  id="maphone" name="maphone" value="<{$shopinfo['maphone']}>"  />
-                            
+
                         </div>
                         <div class="cl"></div>
                     </div>
-                    
+
                     <div class="upimg">
                     	<div class="file_img">
-                        	 <img src="<{$shopinfo['shoplogo']}>" width="136" height="130" id="imgshow" <{if  empty($shopinfo['shoplogo'])}> style="display:none;"<{/if}>>  
+                        	 <img src="<{$shopinfo['shoplogo']}>" width="136" height="130" id="imgshow" <{if  empty($shopinfo['shoplogo'])}> style="display:none;"<{/if}>>
                         </div>
                         <div class="file_xxiang">
-                        	<input type="hidden" name="shoplogo" id="shoplogo" value="<{$shopinfo['shoplogo']}>" class="skey" style="width:150px;" > 
-                     <div id="div-headpicUpload" style="display:block;"> 
-		                  <form id="form1" name="form1" method="post"  enctype="multipart/form-data" target="ifr-headpic-upload" onsubmit="return checkImagetype('1');">    
-		                  	<div class=""> 
+                        	<input type="hidden" name="shoplogo" id="shoplogo" value="<{$shopinfo['shoplogo']}>" class="skey" style="width:150px;" >
+                     <div id="div-headpicUpload" style="display:block;">
+		                  <form id="form1" name="form1" method="post"  enctype="multipart/form-data" target="ifr-headpic-upload" onsubmit="return checkImagetype('1');">
+		                  	<div class="">
 		               		<input name="head" type="file" id="imgFile" style="width:70px;float:left;" name="imgFile" onchange="$('#input1').val($(this).val())"  class="curbtn">
-		               		<input id="submitImg" type="button" value="上传" class="ss_sc curbtn" style="width:40px;float:left; border:1px solid #ccc;background-color:white;height:22px;line-height:12px;margin-top:5px;margin-left:20px;" >   
-		               	</div>  
-		               </form> 
+		               		<input id="submitImg" type="button" value="上传" class="ss_sc curbtn" style="width:40px;float:left; border:1px solid #ccc;background-color:white;height:22px;line-height:12px;margin-top:5px;margin-left:20px;" >
+		               	</div>
+		               </form>
 		             </div>
 		                         <div class="cl"></div>
                         </div>
                     </div>
-                    
-                    
+
+
                     <div class="serxuanze">
                     	<div class="xuanze_left">
                         	<span>店铺地址：</span>
                         </div>
                         <div class="dianpu_right">
                         	<input type="text" style="width:569px; " id="address" name="address" value="<{$shopinfo['address']}>" />
-                            
+
                         </div>
                         <div class="cl"></div>
                     </div>
-                    
+
                     <div class="serxuanze" style=" width:767px;">
                     	<div class="xuanze_left">
                         	<span>高德坐标：</span>
                         </div>
                         <div class="dianpu_right" style="width:498px; margin-right:0px; padding-right:0px;">
                         	<input type="text" style="width:488px; " name="baidumap" value="<{$shopinfo['lng']}>,<{$shopinfo['lat']}>"  />
-                            
+
                         </div>
                         <div class="geiquAdd curbtn fr" onclick="biaoji();" >
                         	给取地址
@@ -100,11 +100,11 @@
                         </div>
                         <div class="dianpu_right">
                         	<input type="text" style="width:569px;" id="email" name="email" value="<{$shopinfo['email']}>" />
-                            
+
                         </div>
                         <div class="cl"></div>
                     </div>
-                    
+
                      <{assign var=foo value="|"|explode:$shopinfo['starttime']}>
                      <{foreach from=$foo key=myid item=items}>
                      <{if !empty($items)}>
@@ -164,12 +164,12 @@
                         </div>
                         <div class="dianpu_right" style="width:auto; background:none; ">
                         	<input type="text" style="width:150px;float:left;" id="goodattrdefault" name="goodattrdefault" value="<{$shopinfo['goodattrdefault']}>"  /><span style="float:left; margin-left:20px;">比如：份 / 斤 / 个 / 盒</span>
-                            
+
                         </div>
                         <div class="cl"></div>
                     </div>
 					<div class="cl"></div>
-                       
+
 				  <div class="serxuanze">
                     	<div class="xuanze_left">
                         	<span>是否营业：</span>
@@ -179,42 +179,42 @@
                         </div>
                         <div class="cl"></div>
                     </div>
-					
- 		
- 
-					
-					
-					
+
+
+
+
+
+
                   	 <div class="settijiao">
-                    	
+
                           <div class="xuanze_right hc_login_btn_div" ></div>
-                         
-                     
+
+
                         <div class="cl"></div>
                     </div>
-                    
-                    
+
+
        			 </div>
-              </form>  
-                
-                
+              </form>
+
+
         </div>
         <div class="cl"></div>
-        
-        
-       
-        
-        
-        <!---content right end---> 
-  
-  
-   
- <!---content right start---> 
-<script type="text/javascript"> 
+
+
+
+
+
+        <!---content right end--->
+
+
+
+ <!---content right start--->
+<script type="text/javascript">
 var areagrade ='0';// ;
 var defaultid = '';
- 
-</script> 
+
+</script>
 <script type="text/javascript">
     $('.hc_login_btn_div').click(function(){
         var shopname = $('input[name="shopname"]').val();
@@ -258,7 +258,7 @@ var defaultid = '';
         var starttime = alltime1+alltime2+alltime3;
         var otherlink = $('input[name="otherlink"]').val();
         var baidumap = $('input[name="baidumap"]').val();
-		 
+
         var backinfo = ajaxback('<{ofunc type=url link="/shopcenter/useredit/datatype/json"}>',{'shopname':shopname,'IMEI':IMEI,'phone':phone,'address':address,'shortname':shortname,'email':email,'goodattrdefault':goodattrdefault,'is_open':is_open,'is_onlinepay':is_onlinepay,'is_daopay':is_daopay,'starttime':starttime,'otherlink':otherlink,'baidumap':baidumap,'maphone':$('input[name="maphone"]').val()});
         if(backinfo.flag == true)
         {
@@ -270,33 +270,33 @@ var defaultid = '';
     });
 	$(".hc_login_input").change(function(j){
 		var v=$(this).val();
-		var p=$(this).attr("shopname"); 
+		var p=$(this).attr("shopname");
 		switch(p){
 		case "shopname":	if(v == '' ||v == null){
-			  alert('用户名不能为空'); 
-			} 
+			  alert('用户名不能为空');
+			}
 		break;
 		case "shortname":
-		 	var patrn=/[u4e00-u9fa5]/;  
+		 	var patrn=/[u4e00-u9fa5]/;
 			if(v == '' ||v == null){
-			  alert('店铺CODE不能为空'); 
-			} 
-		break; 
+			  alert('店铺CODE不能为空');
+			}
+		break;
 		case "phone":
 		   if(v == '' ||v == null){
-			  alert('联系电话不能为空'); 
-			} 
+			  alert('联系电话不能为空');
+			}
 		break;
 		case "address":
 		   if(v == '' ||v == null){
-			  alert('联系地址不能为空'); 
-			} 
+			  alert('联系地址不能为空');
+			}
 		break;
 		case "pwd":
-			var patrn=/(.){4,16}/;  
+			var patrn=/(.){4,16}/;
 			if(!patrn.exec(v)){
-				 alert('密码是4-16位的字母、数字,区分大小写');  
-			 } 
+				 alert('密码是4-16位的字母、数字,区分大小写');
+			 }
 		break;
 		}
 	});
@@ -312,7 +312,7 @@ var defaultid = '';
 		.ajaxComplete(function(){
 			$(this).hide();
 		});
-  
+
 		$.ajaxFileUpload
 		(
 			{
@@ -326,11 +326,11 @@ var defaultid = '';
 					if(typeof(data.error) != 'undefined')
 					{
 						if(data.error == false)
-						{ 
-						 
+						{
+
 							$('#img').val(data.msg);
  	           $('#imgshow').attr('src',data.msg);
- 	                $('#imgshow').show(); 
+ 	                $('#imgshow').show();
 						}else
 						{
 							alert(data.msg);
@@ -345,20 +345,20 @@ var defaultid = '';
 				}
 			}
 		)
-		
+
 		return false;
 
 	}
 	var dialogs ;
- function uploads(){  
+ function uploads(){
  	  dialogs = art.dialog.open('<{ofunc type=url link="/other/userupload/func/uploadsucess/type/shoplogo"}>');
- 	  dialogs.title('上传图片'); 
+ 	  dialogs.title('上传图片');
  }
  function uploadsucess(linkurl){
- 	dialogs.close(); 
+ 	dialogs.close();
  	$('#img').val(linkurl);
  	$('#imgshow').attr('src',linkurl);
- 	$('#imgshow').show(); 
+ 	$('#imgshow').show();
 }
 function uploaderror(msg){
 	 alert(msg);
@@ -371,7 +371,7 @@ var ditulog;
 function biaoji(){
     	mydialog = art.dialog.open(siteurl+'/index.php?ctrl=area&action=shopbaidumap',{height:'550px',width:'850px'},false);
     	//http://www.hanwoba.com/index.php?ctrl=admin&action=baidumap&id=2#
-	 	 mydialog.title('设置标记高德地图位置'); 
+	 	 mydialog.title('设置标记高德地图位置');
   }
  function closemydilog(){
  	mydialog.close();
@@ -424,6 +424,6 @@ function biaoji(){
 	function setmap(mylnglat,mymapname){
 		$('input[name="baidumap"]').val(mylnglat);
 	}
-</script> 
- 
+</script>
+
  <{/block}>
