@@ -108,11 +108,13 @@ input {
 .homeRightCon .homeRightTop ul li{
 	width: 198px;
 	height: 114px;
-	margin-right: 10px;
+	margin:0 5px;
 	text-align: center;
 	float: left;
 	border-radius: 5px;
 	position: relative;
+	transition: all ease-out 0.5s;
+	top: 0;
 }
 
 .homeRightCon .homeRightTop ul li a{
@@ -152,6 +154,10 @@ input {
 	margin: 15px auto 10px auto;
 	display: block;
 	background-image: url(../images/base.png);
+	
+}
+.homeRightCon .homeRightTop ul li:hover{
+	top: -10px;
 }
 
 .homeRightCon .homeRightTop ul li .icon_ddks{
@@ -186,10 +192,10 @@ input {
 }
 
 .homeRightCon .homeRightBot .homeRightBox{
-	width: 1060px;
+	width: 1061px;
 	margin-right: 11px;
 	background: #fff;
-	float: left;
+	margin:0 auto;
 }
 
 .homeRightCon .homeRightBot .homeRightBox .homeRightTit{

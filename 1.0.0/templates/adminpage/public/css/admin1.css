@@ -421,6 +421,9 @@ line-height:14px;
 	width:1085px;
 	float:left; 
 	text-align:center;
+	background: #fff;
+	min-height:450px;
+	padding-bottom: 10px;
 }
 .show_content_m_ti{
 	width:1083px;
