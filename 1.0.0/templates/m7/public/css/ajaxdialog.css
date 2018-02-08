@@ -9,15 +9,20 @@ a{text-decoration: none;}
 a:link,a:visited{color:#f60}
 
 ul,li{list-style:none}
-
+input[type="text"],textarea{
+	  -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none
+}
 .content{padding:20px 20px 20px 20px;}
-.hangtiao{height:40px;margin-top:5px;}
-.labeltext{width:100px;float:left;height:40px;line-height:40px;text-align:right;color:#fff;font-weight:bold;background-color:#27a9e3;}
-.inputtext{width:500px;float:left;height:40px;line-height:40px;background-color:#ccc;}
-.inputtext .showdiv{padding-left:20px;color:#27a9e3;line-height:20px;padding-top:10px;}
+.hangtiao{min-height:40px;margin-top:5px;}
+.labeltext{width:100px;float:left;height:40px;line-height:40px;text-align:right;color:#333;font-weight:bold;}
+input.labeltext{border:none;border-radius: 2px;color: #fff;cursor: pointer;margin:0 auto;display: block;float: none;}
+.inputtext{width:500px;float:left;height:40px;line-height:40px;background-color:#f7f7f7;}
+.inputtext .showdiv{padding-left:20px;color:#666;line-height:20px;padding-top:10px;}
 .goodsbase{height:160px;margin-top:5px;}
-.baseinfo{width:100px;float:left;height:160px;line-height:40px;text-align:right;color:#fff;font-weight:bold;background-color:#27a9e3;}
-.basetext{width:300px;float:left;height:160;line-height:40px;background-color:#ccc;}
+.baseinfo{width:100px;float:left;height:160px;line-height:40px;text-align:right;color:#333;font-weight:bold;}
+.basetext{width:300px;float:left;height:160;line-height:40px;background-color:#f7f7f7;}
 .basetext p{padding-left:20px;line-height:30px;color:#666;}
 .imgdiv{background-color:#fff;padding-left:30px;width:210px;float: left;height: 160px;}
 .clr{clear:both;}
@@ -25,4 +30,10 @@ ul,li{list-style:none}
 left: 0px;
 top: 25px;
 margin-left: 450px;}
- 
+ .file_img{background: #f7f7f7;border-radius: 5px;}
+ .file_xxiang input{background:#ec7501;border:none;padding:5px;cursor: pointer;color: #fff;height: 30px;margin-right: 5px;}
+ #kloginForm input[type="text"]{height: 28px;border:1px solid #eee;}
+ #gg_det_list tr{height: 40px;background: #f7f7f7;text-align: center;}
+  #gg_det_list tr td a{cursor: pointer;width: 60px;height: 28px;background: #ec7501;text-align: center;line-height: 28px;color: #fff;display: block;margin:0 auto;}
+ .hangtiao textarea{height: 30px;margin:5px 0;}
+ .hangtiao select{height: 30px;margin:5px 0;margin-left: 20px;width:200px;}

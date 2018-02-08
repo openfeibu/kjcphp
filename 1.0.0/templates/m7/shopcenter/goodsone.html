@@ -105,7 +105,7 @@
 			   <tr> 
 			       
 				  <th style="width:100px;background-color:#27A9E3;height:40px;color:#fff;">规格名</th>
-				  <th style="text-align:left;background-color:#27A9E3;color:#fff;">规格值</th>
+				  <th style="background-color:#27A9E3;color:#fff;">规格值</th>
 		       </tr>
 			   
 			   <{foreach from=$gglist item=items}>
@@ -113,7 +113,7 @@
 			   <tr> 
 			      
 				  <td style="width:100px;text-align:center;background-color:#27A9E3;color:#fff;height:30px;"><{$items['name']}></td>
-				  <td style="text-align:left;background-color:#ccc;">
+				  <td style="text-align:left;background-color:#f7f7f7;height: 40px;">
 				  <{foreach from=$gglist item=itk}>
 				  <{if $itk['parent_id'] == $items['id']}>
 				  <span><input type="checkbox" class="ubcdd" data="<{$items['id']}>" name="choicegg<{$items['id']}>[]" value="<{$itk['id']}>" <{if in_array($itk['id'],$fdidsss)}>checked<{/if}>><{$itk['name']}></span>
@@ -127,14 +127,14 @@
 		 
 		 </div>
 		 <div id="det_show_gg">
-		     <table style="width:100%;background-color:#ccc;" >
-			 <thead style="background-color: #27A9E3;"> 
+		     <table style="width:100%;" >
+			 <thead style="background-color: #27A9E3;height: 40px;color: #fff;text-align: center;"> 
 				 <tr>
-				  <td style="width:10px;">&nbsp;</td>
-				  <td style="width:100px;">规格名称</td>
-				  <td style="text-align:center;width:120px;">库存</td>
-				  <td style="text-align:center;width:120px;">单价</td>
-				  <td style="width:50%;">&nbsp;</td>
+				  <td style="width:10px;height: 40px;">&nbsp;</td>
+				  <td style="width:200px;height: 40px;">规格名称</td>
+				  <td style="text-align:center;width:120px;height: 40px;">库存</td>
+				  <td style="text-align:center;width:120px;height: 40px;">单价</td>
+				  <td style="width:30%;height: 40px;">&nbsp;</td>
 				 </tr>
 				</thead>
 				<tbody id="gg_det_list">
@@ -241,13 +241,11 @@
 		 <div class="hangtiao clr">
 		    <div class="labeltext">所在分类：</div>	
 		    <div class="inputtext">
-		    	<div class="showdiv">
 		    	    <select name="typeid">
 		    	   	  <{foreach from=$listtype item=items}>
 		    	   	  <option value="<{$items['id']}>" <{if $goodsinfo['typeid'] == $items['id']}>selected<{/if}>><{$items['name']}></option>
 		    	   	  <{/foreach}>
 		    	   	</select> 
-		    	</div>
 		    </div> 
 		 </div>
 		 
@@ -267,20 +265,23 @@
 </div>
 	
 <div id="newimg">
-		        	<div class="file_img" style="height:136px;width:160px;">
+		        	<div class="file_img" style="height:130px;width:150px;">
                         	 <img src="<{$goodsinfo['img']}>" width="136" height="130" id="imgshow" <{if  empty($goodsinfo['img'])}> style="display:none;"<{/if}>>  
                </div>
                 <div class="file_xxiang">
                         	<input type="hidden" name="goodsimg" id="goodsimg" value="<{$goodsinfo['img']}>" class="skey" style="width:130px;" > 
-                     <div id="div-headpicUpload" style="display:block;"> 
-		                  <form id="form1" name="form1" method="post"  enctype="multipart/form-data" target="ifr-headpic-upload" onsubmit="return checkImagetype('1');">    
-		                  	<div class=""> 
-		               	      	<input name="head" type="file" id="imgFile" style="width:68px;float:left;" name="imgFile" onchange="$('#input1').val($(this).val())"  class="curbtn">
-		               		     <input id="submitImg" type="button" value="上传" class="ss_sc curbtn" style="width:40px;float:left; border:1px solid #ccc;background-color:white;height:22px;line-height:12px;margin-top:5px;margin-left:5px;" > 
-		               		     <input type="button" id="imgdel" value="删除" class="ss_sc curbtn" <{if  empty($goodsinfo['img'])}> style="display:none;"<{/if}>>
-								  <input type="button" id="xuanzekuimg" value="从商品库中选择" class="ss_sc curbtn" >
-		               	    </div>  
-		               </form> 
+                     		<div id="div-headpicUpload" style="display:block;"> 
+		                  	<form id="form1" name="form1" method="post"  enctype="multipart/form-data" target="ifr-headpic-upload" onsubmit="return checkImagetype('1');">    
+			                  	<div class=""> 
+			                  		<div class="" style="position: relative;padding:5px;background: #ec7501;margin:0 5px 0 0;float: left;color: #fff;height: 20px;">
+			                  			选择文件
+										<input name="head" type="file" id="imgFile" style="width:68px;position: absolute;top: 0;left: 0;opacity: 0" name="imgFile" onchange="$('#input1').val($(this).val())"  class="curbtn">
+			                  		</div>
+			               		    <input id="submitImg" type="button" value="上传" class="ss_sc curbtn" style="float:left;" > 
+			               		    <input type="button" id="imgdel" value="删除" class="ss_sc curbtn" <{if  empty($goodsinfo['img'])}> style="display:none;"<{/if}>>
+									<input type="button" id="xuanzekuimg" value="从商品库中选择" class="ss_sc curbtn" >
+			               	    </div>  
+		               		</form> 
 		             </div>
 		           </div>
 		    </div> 
