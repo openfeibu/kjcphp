@@ -89,7 +89,7 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .conWaiSet{ width:1200px;  padding:0 ; height:auto; background:url(../images/conRightBg.png) repeat-y;}
 .shopSetTop{ width:1200px; height:42px; background:#27a9e3; }
 .shopSetTop span{ height:42px; font-family:"微软雅黑"; line-height:42px; font-size:16px; color:#ffffff; background:url(../images/wmsetBg.png) 18px center no-repeat; padding-left:47px;}
-.waimaiset{ width:1140px; height:40px;  background:url(../images/fenleiBg.png) repeat;   padding: 30px  ;}
+.waimaiset{ width:1140px; height:40px;  background:#605d5b;   padding: 30px  ;}
 .waimaiset .jbset{ cursor:pointer; float:left; margin-right:20px; position:relative; width:135px; height:40px; text-align:center; color:#ffffff; font-family:"微软雅黑"; font-size:16px; line-height: 40px; background:url(../images/jbsetBg.png) repeat-x;border-radius: 5px;}
  .waimaiset .onset { background:#ec7501;}
  .waimaiset .jbset:hover { background:#ec7501;}
@@ -97,8 +97,8 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .waimaiset .jbset span{margin-left: 25px;}
 .waimaiset .jbset .current{ background:#ec7501;}
 
-#loginForm{background:#45423f}
-.jutiSet{ padding:48px 95px 36px 95px; width:1010px; height:auto; background:#45423f; position:relative;}
+#loginForm{}
+.jutiSet{ padding:48px 95px 36px 95px; width:1010px; height:auto; background:rgba(43,39,39,0.98); position:relative;}
 .jutiSet .serxuanze{ width:780px; height:42px; margin-bottom:18px;}
 .jutiSet .serxuanze .xuanze_left{ float:left; width:168px; height:42px;}
 .jutiSet .serxuanze .xuanze_left span{ height:42px; line-height:42px; font-size:14px; font-family:"宋体"; color:#ffffff; float:left;}
@@ -107,21 +107,22 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .jutiSet .serxuanze .xuanze_right select{  width:60px;height:30px;}
 .jutiSet .settijiao{ width:747px; height:42px; margin-bottom:18px;}
 .jutiSet .settijiao .xuanze_right{ background:url(../images/setSubmitBg.png) no-repeat; margin-left:168px; width:124px; height:38px; border:none; cursor:pointer;margin-top: 50px;}
+.fb_radio input[type="radio"],.fb_radio input[type="checkbox"]{width: 15px;height: 15px;margin:15px 5px;display: inline-block;*display: inline;*zoom:1;vertical-align: middle;}
+.fb_radio span{display: inline-block;*display: inline;*zoom:1;vertical-align: middle;margin-right: 15px;}
+.xuanze_right .Wdate{height: 32px;text-indent: 1em;}
 
 
-
-
-.jutiSet .serxuanze .dianpu_right{ padding-left:10px; float:left; width:569px; line-height:42px; color:#ffffff; font-size:12px; height:42px; background:#535251;}
+.jutiSet .serxuanze .dianpu_right{ float:left; width:569px; line-height:42px; color:#ffffff; font-size:12px; height:42px; background:#535251;}
 .jutiSet .dianpu_right input{ padding:10px; height:22px; color:#ffffff;  background:#535251; border:none;}
 .jutiSet .settijiao .dianpu_right{  background:url(../images/setSubmitBg.png) no-repeat; margin-left:168px; width:124px; height:38px; border:none; cursor:pointer;}
 
 .upimg{ width:136px; height:163px; background:#ffffff; position:absolute; right:96px; top:45px;}
-.file_img{width:136px; height:130px; background:#fff; }
-.file_xxiang input{ width:131px; line-height:30px; padding-left:5px; padding-top:5px; height:28px;}
+.file_img{width:136px; height:130px; background:#fff;}
+.file_xxiang input{ width:131px;line-height:30px;padding-left:5px; padding-top:5px; height:28px;}
 .geiquAdd{ margin-left:0px; width:81px; height:42px; background:#c56b15; font-size:12px; font-family:"宋体"; line-height:42px; text-align:center; color:#ffffff;}
 
 /*************订单查询******************/
-.selOrder{ width:1200px; height:147px; text-align:center; background:url(../images/fenleiBg.png) repeat; }
+.selOrder{ width:1200px; height:147px; text-align:center; background:#605d5b; }
 .selOrder .autoRe{ color:#ffffff; font-size:24px; font-family:"微软雅黑"; padding-top:10px;  }
 .selOrder .autoRe span{ color:#e47d1b; font-size:46px;}
 
@@ -172,12 +173,12 @@ color:#fff;}
 
 
 /************菜单设置*********************/
-.orderset{ position:relative; width:1010px; height:87px;  background:url(../images/fenleiBg.png) repeat;padding:0 95px 0 95px; }
+.orderset{ position:relative; width:1010px; height:87px;  background:#605d5b;padding:0 95px 0 95px; }
 .addFenlei { position:absolute; top:25px; right:50px;}
-.addFenlei input{ border:none; width:182px; height:36px; background:#8d755e;}
+.addFenlei input{ border:none; width:182px; height:36px; background:#fff;text-indent:1em;}
 .orderset .addButton { background:url(../images/addFenlei.png) no-repeat;  width:124px; height:38px; line-height:38px;}
 
-.caidanSet{  width:1010px;padding:0 95px 0 95px; height:auto;  background:url(../images/caidanlistBg.png) repeat; position:relative;}
+.caidanSet{  width:1010px;padding:0 95px 0 95px; height:auto;  background:rgba(43,39,39,0.98); position:relative;}
 .caidanTitle{ width:1010px; height:42px; background:#544e48;}
 .caidanTitle ul li { font-family:"微软雅黑"; font-size:14px; height:42px; line-height:42px; text-align:center; padding:0 33px; color:#f0f0f0; float:left; cursor:pointer;}
 
@@ -233,7 +234,7 @@ margin-top:10px;}
 
 
 /***************促销规则列表*****************/
-.cxruleset{ position:relative; width:1200px; height:87px;  background:url(../images/fenleiBg.png) repeat; }
+.cxruleset{ position:relative; width:1200px; height:87px;  background:#605d5b; }
 .cxrule_btn { position:absolute; top:25px; left:50px;}
 .cxrule_btn input{ border:none; width:182px; height:36px; background:#8d755e;}
 .cxruleset .cxruleButton { background:url(../images/addCxrule.png) no-repeat;  width:124px; height:38px; line-height:38px;}
@@ -270,7 +271,7 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 
 
 /****************留言和评价管理********************/
-.messageset{ position:relative; width:1200px; height:87px;  background:url(../images/fenleiBg.png) repeat; }
+.messageset{ position:relative; width:1200px; height:87px;  background:#605d5b; }
 .messageset .messageCur{ background:#ec7501;}
 .message_btn { position:absolute; top:25px; left:50px;}
 .pingjiaGl,.liuyanGl {
@@ -480,4 +481,7 @@ OVERFLOW-X: hidden;
 
 
 
-
+input[type="text"]{-webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none}
+.addDate{width: 124px;height: 38px;line-height: 38px;display: block;line-height: 38px;text-align: center;color: #fff;background: #ec7401;}

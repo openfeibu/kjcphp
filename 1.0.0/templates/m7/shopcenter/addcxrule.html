@@ -17,7 +17,7 @@
                         	<span>促销类型：</span>
                         </div>
                         <div class="xuanze_right">
-                        	<select name="controltype" id="controltype" onchange="changetxt(this)" style="margin-top:10px;">
+                        	<select name="controltype" id="controltype" onchange="changetxt(this)" style="height:42px;;width:124px;">
 								<option value="1"   selected >满赠活动</option>
                                 <option value="2"   <{if $cxinfo['controltype'] == 2}>selected<{/if}>>满减活动</option>
                                 <option value="3"   <{if $cxinfo['controltype'] == 3}>selected<{/if}>>折扣活动</option>
@@ -81,10 +81,10 @@
                     	<div class="xuanze_left">
                         	<span>具体时间：</span>
                         </div>
-                        <div class="xuanze_right">
-                        	<input type="radio" name="limittype" value="1" checked>不限制 
-                        	<input type="radio" name="limittype" value="2" <{if $cxinfo['limittype']==2}>checked<{/if}>>每周
-                        	<input type="radio" name="limittype" value="3" <{if $cxinfo['limittype']==3}>checked<{/if}>>自定义
+                        <div class="xuanze_right fb_radio">
+                        	<input type="radio" name="limittype" value="1" checked><span>不限制 </span>
+                        	<input type="radio" name="limittype" value="2" <{if $cxinfo['limittype']==2}>checked<{/if}>><span>每周</span>
+                        	<input type="radio" name="limittype" value="3" <{if $cxinfo['limittype']==3}>checked<{/if}>><span>自定义</span>
 
 
                         </div>
@@ -95,11 +95,11 @@
                     	<div class="xuanze_left">
                         	<span>选择星期：</span>
                         </div>
-                        <div class="xuanze_right">
+                        <div class="xuanze_right fb_radio">
                         	<{assign var=mysign value=","|explode:$cxinfo['limittime']}>
                         	<{assign var=signshu value="1"}>
                           <{section name=loop  loop=7}>
-                  	          <input type="checkbox" name="limittime1[]" value="<{$signshu}>" <{if in_array($signshu,$mysign)}>checked<{/if}>> 星期<{if $signshu == 7}>天<{else}><{$signshu}><{/if}>
+                  	          <input type="checkbox" name="limittime1[]" value="<{$signshu}>" <{if in_array($signshu,$mysign)}>checked<{/if}>> <span>星期<{if $signshu == 7}>天<{else}><{$signshu}></span><{/if}>
                   	          <{$signshu=$signshu+1}>
                          <{/section}>
                         </div>

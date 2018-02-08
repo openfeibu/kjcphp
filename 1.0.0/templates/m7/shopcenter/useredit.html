@@ -153,8 +153,8 @@
                      <div class="serxuanze" id="newtime">
                          <div class="xuanze_left">
                          </div>
-                         <div class="xuanze_right" style="width:589px;">
-                             <a href="javescript:;" onclick="outtimelist();">新增营业时间</a>
+                         <div class="xuanze_right" style="width:589px;background:none;">
+                             <a href="javescript:;" onclick="outtimelist();" class="addDate">新增营业时间</a>
                          </div>
                          <div class="cl"></div>
                      </div>
@@ -174,8 +174,8 @@
                     	<div class="xuanze_left">
                         	<span>是否营业：</span>
                         </div>
-                        <div class="xuanze_right">
-                        	<input type="radio"   name="is_open"   value="1" <{if $shopinfo['is_open'] == 1}>checked<{/if}>/>是 <input type="radio"  name="is_open"   value="0" <{if $shopinfo['is_open'] == 0}>checked<{/if}>/>否
+                        <div class="xuanze_right fb_radio" style="background:none;">
+                        	<input type="radio"   name="is_open"   value="1" <{if $shopinfo['is_open'] == 1}>checked<{/if}>/><span>是</span> <input type="radio"  name="is_open"   value="0" <{if $shopinfo['is_open'] == 0}>checked<{/if}>/><span>否</span>
                         </div>
                         <div class="cl"></div>
                     </div>
