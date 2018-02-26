@@ -270,3 +270,6 @@ function  orderSubmit(){
         // setTimeout("myyanchi()", 500 );
     }
 }
+function myyanchi(){
+    checknext = false;
+}
