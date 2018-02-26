@@ -3243,9 +3243,9 @@ class method extends wxbaseclass
         $info['addressdet'] = $addressinfo['address'];
 
         $info['shopid'] = intval(IReq::get('shopid'));//店铺ID
-         $info['remark'] = IFilter::act(IReq::get('remark'));//备注
-         $info['paytype'] =  IFilter::act(IReq::get('paytype'));//支付方式
-         $info['dikou'] =  intval(IReq::get('dikou'));//抵扣金额
+        $info['remark'] = IFilter::act(IReq::get('remark'));//备注
+        $info['paytype'] =  IFilter::act(IReq::get('paytype'));//支付方式
+        $info['dikou'] =  intval(IReq::get('dikou'));//抵扣金额
 
     //	 $info['senddate'] = date('Y-m-d',time());// IFilter::act(IReq::get('senddate'));
         $info['minit'] = IFilter::act(IReq::get('minit'));
@@ -3285,9 +3285,9 @@ class method extends wxbaseclass
         $areaid = ICookie::get('myaddress');
         $temp = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."address  where userid = ".$this->member['uid']." and `default`=1   ");
         $checkps = 	 $this->pscost($shopinfo, $temp['lng'], $temp['lat']);
-        if ($checkps['canps'] != 1) {
-            $this->message('该店铺不在配送范围内');
-        }
+        // if ($checkps['canps'] != 1) {
+        //     $this->message('该店铺不在配送范围内');
+        // }
         $info['cattype'] = 0;//
         if (empty($info['username'])) {
             $this->message('联系人不能为空');
