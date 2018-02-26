@@ -59,7 +59,11 @@
             <div class="shop_nums">销量<{$items['ordercount']}>份</div>
             <div class="shop_decs fb-clearfix">
               <div class="fb-fl"><span>起送￥<{$items['limitcost']}></span><span>配送￥<{$items['pscost']}></span></div>
-              <div class="fb-fr"><span><{$items['arrivetime']}>分钟</span><span>300m</span></div>
+              <div class="fb-fr">
+                  <{if !empty($items['arrivetime']) }>
+                  <span><{$items['arrivetime']}>分钟</span>
+                  <{/if}>
+                  <span><{$items['juli']}></span></div>
             </div>
             <div class="discount">
               <div class="discount_j">满30减5</div>
