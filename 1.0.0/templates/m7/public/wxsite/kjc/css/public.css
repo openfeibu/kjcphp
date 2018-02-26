@@ -1,0 +1,31 @@
+.cart_pro_all li{float:left;}
+.cart_pro_all .ordenabotL{
+    background: url("../images/ic_sub_sel.png") no-repeat center;
+    background-size: 0.45rem 0.45rem;
+}
+.cart_pro_all .ordenabotR{
+    background: url("../images/ic_add.png") no-repeat center;
+    background-size: 0.5rem 0.5rem;
+}
+.cart_pro_all .ordisordR li i {
+    display: block;
+    float: left;
+    width: 0.8rem;
+    height: 0.8rem;
+    background-repeat: no-repeat;
+}
+.cart_pro_all .ordisordR li input {
+    display: inline-block;
+    vertical-align: top;
+    width: 0.5rem;
+    height: 0.8rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.28rem;
+    line-height: 0.8rem;
+    background: #f5f5f5;
+}
+.cart_pro_all {
+    float: right;
+    margin-top: 0.1rem;
+}

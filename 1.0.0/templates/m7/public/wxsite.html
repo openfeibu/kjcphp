@@ -21,6 +21,7 @@
   <link rel="apple-touch-icon-precomposed" href="./icon.png" />
   <link rel="shortcut icon" href="./icon.png" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/public.css">
   <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/weui.min.css">
   <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/index.css">
   <link href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/swiper.min.css" rel="stylesheet" type="text/css">
@@ -32,8 +33,22 @@
   <!-- wx -->
   <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/jweixin-1.2.0.js"></script>
    <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/common.js"></script>
+   <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/public.js"></script>
   <{block name=extendcss}><{/block}>
   <{block name=extendjs}><{/block}>
+  <script>
+	var siteurl = "<{$siteurl}>";
+	var is_static ="<{$is_static}>";
+	var taction = "<{$Taction}>";
+	var https = '<{$https|default:''}>';
+    var lat = '<{$lat|default:0}>';
+    var lng = '<{$lng|default:0}>';
+	// if ( taction != 'member' &&  taction != 'login' &&  taction != 'reg'  ){
+	// 	var cururl = window.location.href;
+	// 	$.cookie('wxCurUrl', cururl);
+	// }
+
+  </script>
 </head>
 
 <body ontouchstart>
