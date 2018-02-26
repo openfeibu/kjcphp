@@ -6,7 +6,7 @@
 			  商品id1=>数量,
                           商品ID2=>数量,
 			  ),
-              'ggoods'=>array(  //此处为有多规格时存方多规格id 
+              'ggoods'=>array(  //此处为有多规格时存方多规格id
                            规格ID1=>数量,
                            规格id2=>数量,
 			  ),
@@ -16,29 +16,29 @@
               'shopgg'=>array(
                             店铺1=>规格id1的商品集
 			)
- */ 
-Class newsmcart{   
+ */
+Class newsmcart{
     private $shoptype;//私有变量店铺类型
 	private $catstruct;//购物车结构
 	private $cartname;//购物车名称
 	private $cartnamepre ="ghcart";//购物车名称前缀
 	private $goodstype;
 	private $shopid;
-	private $defualt_struct =  array('goods'=>array(),'ggoods'=>array(),'shopg'=>array(),'shopgg'=>array()); //默认的购物车结构 
+	private $defualt_struct =  array('goods'=>array(),'ggoods'=>array(),'shopg'=>array(),'shopgg'=>array()); //默认的购物车结构
 	private $carinfo;//转换后的购物车结构
 	private $mysql;
 	private $errId='no_error';
-	
+
 	public function setdb($mysql){
 		$this->mysql = $mysql;
 		return $this;
 	}
-	
+
 	public function SetShopId($shopid){
 		$this->shopid = $shopid;
 		return $this;
 	}
-	 
+
 	public function SetGoodsType($goodstype){//1表示普通商品 2有规格商品
 		$this->goodstype=$goodstype;
 		return $this;
@@ -48,15 +48,15 @@ Class newsmcart{
 			// $this->errId = '未初始化店铺类型';
 			// return false;
 		// }else{
-			$this->cartname = $this->cartnamepre.'_'; 
+			$this->cartname = $this->cartnamepre.'_';
 			$this->carinfo = $this->getMyCartStruct();
-			// $this->setMyCart($this->carinfo); 
+			// $this->setMyCart($this->carinfo);
 			return true;
 		// }
 	}
 	private function getMyCartStruct()
-	{ 
-	 	$cartValue = ICookie::get($this->cartname); 
+	{
+	 	$cartValue = ICookie::get($this->cartname);
 		if($cartValue == null){
 			return $this->defualt_struct;
 		}else{
@@ -65,11 +65,11 @@ Class newsmcart{
 		}
 	}
 	public function setMyCart($goodsInfo)
-	{ 
-		$tgoodsInfo = str_replace(array('"',','),array('&','$'),JSON::encode($goodsInfo)); 
-	    ICookie::set($this->cartname,$tgoodsInfo,'98400'); 
+	{
+		$tgoodsInfo = str_replace(array('"',','),array('&','$'),JSON::encode($goodsInfo));
+	    ICookie::set($this->cartname,$tgoodsInfo,'98400');
 		return true;
-	} 
+	}
 	private function onegoods($goodsid){
 		if($this->goodstype == 1){
 			$data = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id=".$goodsid."  ");
@@ -101,12 +101,12 @@ Class newsmcart{
 		return $data;
 	}
 	private function checkgoods($goodsid){
-		
-		
+
+
 	}
 	//检测是否是团购商品
 	private function  isgroupon($goodsid){
-		return true; 
+		return true;
 	}
 	//添加商品到购物车
 	public function AddGoods($goodsid){////若按周限时商品则此处需增加 判断
@@ -122,14 +122,15 @@ Class newsmcart{
 			if(empty($goodsinfo)){
 				$this->errId = '商品不存在';
 				return false;
-			} 
+			}
+
 			if($this->goodstype == 1){//正常商品
-				 
+
 			    if($goodsinfo['have_det'] == 1){
 					$this->errId = '请选择规格添加商品';
 					return false;
 				}
-				  
+
 				$checkstock = 0;
 				#print_r($this->carinfo['goods']);
 				if(isset($this->carinfo['goods'][$goodsid])){
@@ -162,7 +163,6 @@ Class newsmcart{
 				//允许添加  grouponid
 			}else{//规格id1
 			    $checkstock = 0;
-				
 				if(isset($this->carinfo['ggoods'][$goodsid])){
 					$checkstock = $this->carinfo['ggoods'][$goodsid]+1;
 					if($goodsinfo['is_cx'] == 1){
@@ -191,17 +191,17 @@ Class newsmcart{
 					return false;
 				}
 				$this->carinfo['ggoods'][$goodsid] = $checkstock;
-				if(!isset($this->carinfo['shopgg'][$goodsinfo['shopid']])){ 
+				if(!isset($this->carinfo['shopgg'][$goodsinfo['shopid']])){
 					$this->carinfo['shopgg'][$goodsinfo['shopid']][] = $goodsid;
-				}elseif(!in_array($goodsid,$this->carinfo['shopgg'][$goodsinfo['shopid']])){ 
+				}elseif(!in_array($goodsid,$this->carinfo['shopgg'][$goodsinfo['shopid']])){
 					$this->carinfo['shopgg'][$goodsinfo['shopid']][] = $goodsid;
 				}
-				$this->setMyCart($this->carinfo); 
-			} 
+				$this->setMyCart($this->carinfo);
+			}
 			return true;
 		}else{
 			return false;
-		} 
+		}
 	}
 
 	//删除商品从购物车
@@ -211,11 +211,11 @@ Class newsmcart{
 				$this->errId = '未初始化商品类型';
 				return false;
 			}
-			$goodsid = intval($goodsid); 
+			$goodsid = intval($goodsid);
 			$goodsinfo = $this->onegoods($goodsid);
 			if($this->goodstype == 1){//正常商品
 				$checkstock = 0;
-				if(isset($this->carinfo['goods'][$goodsid])){ 
+				if(isset($this->carinfo['goods'][$goodsid])){
 						unset($this->carinfo['goods'][$goodsid]);
 						if(!empty($goodsinfo)){
 							$newdata = array();
@@ -224,17 +224,17 @@ Class newsmcart{
 									$newdata[] = $value;
 								}
 							}
-							$this->carinfo['shopg'][$goodsinfo['shopid']] = $newdata; 
+							$this->carinfo['shopg'][$goodsinfo['shopid']] = $newdata;
 							if(count($newdata)==0){
 								unset($this->carinfo['shopg'][$goodsinfo['shopid']]);
 							}
-						} 
-						$this->setMyCart($this->carinfo);  
-				}  
+						}
+						$this->setMyCart($this->carinfo);
+				}
 				//允许添加  grouponid
 			}else{//规格id1
 			    $checkstock = 0;
-				if(isset($this->carinfo['ggoods'][$goodsid])){ 
+				if(isset($this->carinfo['ggoods'][$goodsid])){
 						unset($this->carinfo['ggoods'][$goodsid]);
 						if(!empty($goodsinfo)){
 							$newdata = array();
@@ -243,14 +243,14 @@ Class newsmcart{
 									$newdata[] = $value;
 								}
 							}
-							$this->carinfo['shopgg'][$goodsinfo['shopid']] = $newdata; 
+							$this->carinfo['shopgg'][$goodsinfo['shopid']] = $newdata;
 							if(count($newdata)==0){
 								unset($this->carinfo['shopgg'][$goodsinfo['shopid']]);
-							}  
+							}
 						}
-						$this->setMyCart($this->carinfo);  
-				}  
-			} 
+						$this->setMyCart($this->carinfo);
+				}
+			}
 			return true;
 		}else{
 			return false;
@@ -263,7 +263,7 @@ Class newsmcart{
 				$this->errId = '未初始化商品类型';
 				return false;
 			}
-			$goodsid = intval($goodsid); 
+			$goodsid = intval($goodsid);
 			$goodsinfo = $this->onegoods($goodsid);
 			if($this->goodstype == 1){//正常商品
 				$checkstock = 0;
@@ -271,7 +271,7 @@ Class newsmcart{
 					$checkstock = $this->carinfo['goods'][$goodsid]-1;
 					if($checkstock > 0){
 						 $this->carinfo['goods'][$goodsid] = $checkstock;
-						 $this->setMyCart($this->carinfo); 
+						 $this->setMyCart($this->carinfo);
 					}else{
 						unset($this->carinfo['goods'][$goodsid]);
 						if(!empty($goodsinfo)){
@@ -281,14 +281,14 @@ Class newsmcart{
 									$newdata[] = $value;
 								}
 							}
-							$this->carinfo['shopg'][$goodsinfo['shopid']] = $newdata; 
+							$this->carinfo['shopg'][$goodsinfo['shopid']] = $newdata;
 							if(count($newdata)==0){
 								unset($this->carinfo['shopg'][$goodsinfo['shopid']]);
 							}
-						} 
-						$this->setMyCart($this->carinfo); 
-					} 
-				}  
+						}
+						$this->setMyCart($this->carinfo);
+					}
+				}
 				//允许添加  grouponid
 			}else{//规格id1
 			    $checkstock = 0;
@@ -296,7 +296,7 @@ Class newsmcart{
 					$checkstock = $this->carinfo['ggoods'][$goodsid]-1;
 					if($checkstock > 0){
 						 $this->carinfo['ggoods'][$goodsid] = $checkstock;
-						 $this->setMyCart($this->carinfo); 
+						 $this->setMyCart($this->carinfo);
 					}else{
 						unset($this->carinfo['ggoods'][$goodsid]);
 						if(!empty($goodsinfo)){
@@ -306,15 +306,15 @@ Class newsmcart{
 									$newdata[] = $value;
 								}
 							}
-							$this->carinfo['shopgg'][$goodsinfo['shopid']] = $newdata; 
+							$this->carinfo['shopgg'][$goodsinfo['shopid']] = $newdata;
 							if(count($newdata)==0){
 								unset($this->carinfo['shopgg'][$goodsinfo['shopid']]);
 							}
 						}
-						$this->setMyCart($this->carinfo); 
-					} 
-				}  
-			} 
+						$this->setMyCart($this->carinfo);
+					}
+				}
+			}
 			return true;
 		}else{
 			return false;
@@ -336,132 +336,132 @@ Class newsmcart{
 			if(isset($this->carinfo['shopgg'][$this->shopid])){
 				foreach($this->carinfo['shopgg'][$this->shopid] as $key=>$value){
 					unset($this->carinfo['ggoods'][$value]);
-				} 
+				}
 				unset($this->carinfo['shopgg'][$this->shopid]);
 			}
-			$this->setMyCart($this->carinfo);  
+			$this->setMyCart($this->carinfo);
 			return true;
 		}else{
 			return false;
 		}
-		
-		
-		
+
+
+
 	}
 	//清除某类型下的所有购物车
 	public function ClearCart(){
 			if($this->init()){
 		$this->carinfo =$this->defualt_struct;
-		 
-		$this->setMyCart($this->carinfo);  
+
+		$this->setMyCart($this->carinfo);
 	   return true;
 			}
 	}
 	public function FindInproduct($goodsid){
-		if($this->init()){   
-		    //print_r($this->carinfo);  
+		if($this->init()){
+		    //print_r($this->carinfo);
 					if(!isset($this->carinfo['shopgg'][$this->shopid])){
 						return null;
 					}
 					$tempwhere = " shopid = '".$this->shopid."'  and id in(".join(',',$this->carinfo['shopgg'][$this->shopid]).") and goodsid=".$goodsid." " ;
-					$havein = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."product  where ".$tempwhere." "); 
+					$havein = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."product  where ".$tempwhere." ");
 					if(!empty($havein)){
 						$havein['count'] = $this->carinfo['ggoods'][$havein['id']];
 					}
-					return $havein; 
+					return $havein;
 		}else{
 			return null;
 		}
 	}
-	
+
 	public function productone($productid){
-		if($this->init()){   
-		    //print_r($this->carinfo); 
-			
+		if($this->init()){
+		    //print_r($this->carinfo);
+
 			if($this->goodstype == 1){//正常商品
 				if(!isset($this->carinfo['shopg'][$this->shopid])){
 					return 0;
-				}  
+				}
 				if(isset( $this->carinfo['goods'][$productid])){
 					return  $this->carinfo['goods'][$productid];
 				}else{
 					return 0;
 				}
-			
-			}else{ 
+
+			}else{
 				if(!isset($this->carinfo['shopgg'][$this->shopid])){
 					return 0;
-				}  
+				}
 				if(isset( $this->carinfo['ggoods'][$productid])){
 					return  $this->carinfo['ggoods'][$productid];
 				}else{
 					return 0;
 				}
 			}
-			 
-				 
-			 
+
+
+
 		}else{
 			return 0;
 		}
 	}
-	
+
 	//获取某个店铺类型下所有的购物车信息  获取店铺类型下的商品全信息
 	public function ShopList(){
-		if($this->init()){   
+		if($this->init()){
 			$tempinfo = $this->carinfo['shopg'];
 			$shpids = array_keys($this->carinfo['shopg']);
 			$shpids2 =   array_keys($this->carinfo['shopgg']);
 			$shopids = array_merge($shpids,$shpids2);
-			 
-			$shopids = array_flip(array_flip($shopids));  
+
+			$shopids = array_flip(array_flip($shopids));
 			$backdata = array();
-			
+
 			foreach($shopids as $key=>$value){
-				// 完整内容 	 
+				// 完整内容
 				if($this->SetShopId($value)->OneShop()){
-					 $newdata  = $this->getdata(); 
+					 $newdata  = $this->getdata();
 					 $newdata['shopinfo']  = $this->mysql->select_one("select id,shopname,shoplogo,shortname,shoptype from ".Mysite::$app->config['tablepre']."shop   where id =  ".$value."   ");
 					// $newdata['shopinfo']  = $this->rdb->ClearSet()->Table('shop')->Select(array('id','shopname','shoplogo','point','pointcount'))->Where(array('id'=>$value))->One();
-				    
+
 					 $backdata[] = $newdata;
-					 
+
 				}
 			}
-			$this->bkdata = $backdata;  
+			$this->bkdata = $backdata;
 			return true;
 		}else{
 			return false;
 		}
-		
-		
+
+
 	}
 	//获取某个店铺类型下所有的购物车统计 信息   店铺名 商品总数   商品总价的样式
 	public function ShopTJList(){
-		if($this->init()){  
+		if($this->init()){
 			$tempinfo = $this->carinfo['shopg'];
 			$shpids = array_keys($this->carinfo['shopg']);
 			$shpids2 =   array_keys($this->carinfo['shopgg']);
 			$shopids = array_merge($shpids,$shpids2);
-			$shopids = array_flip(array_flip($shopids));  
-			$backdata = array(); 
+			$shopids = array_flip(array_flip($shopids));
+			$backdata = array();
 			foreach($shopids as $key=>$value){
-				// 完整内容 	  
+				// 完整内容
 				if($this->SetShopId($value)->OneShop()){
 					 $newdata['shopinfo']  = $this->mysql->select_one("select id,shopname,shoplogo,shortname,shoptype from ".Mysite::$app->config['tablepre']."shop   where id =  ".$value."   ");
-				 
+
 					 $tempinfo = $this->getdata();
 					 $newdata['sum'] = $tempinfo['sum'];
 					 $newdata['count'] = $tempinfo['count'];
 					 $backdata[] = $newdata;
 				}
 			}
-			$this->bkdata = $backdata;  
+			$this->bkdata = $backdata;
 			return true;
 		}else{
 			return false;
 		}
-		
+
 	}
 	//获取某个店铺类型下某个店铺的购物车信息
 	public function OneShop(){
@@ -469,34 +469,34 @@ Class newsmcart{
 			if($this->shopid == null){
 				$this->errId = '未初始化店铺';
 				return false;
-			} 
-		 
-			
+			}
+
+
 		    $backdata = array('goodslist'=>array(),'sum'=>0,'count'=>0,'bagcost'=>0,'shopinfo'=>array());
 			 $backdata['shopinfo']  = $this->mysql->select_one("select id,shopname,shoplogo,shortname,shoptype from ".Mysite::$app->config['tablepre']."shop   where id = (".$this->shopid.")  ");
-				
+
 		   //  $backdata['shopinfo']  = $this->rdb->ClearSet()->Table('shop')->Select(array('id','shopname','shoplogo','point','pointcount'))->Where(array('id'=>$this->shopid))->One();
-				    
+
 			$gglist = array();
 			$goodsids = array();
 			if(isset($this->carinfo['shopgg'][$this->shopid])){
-				 
+
 				  $tempwhere = " shopid = '".$this->shopid."'  and id in (".join(',',$this->carinfo['shopgg'][$this->shopid]).") " ;
-				  
-				  
+
+
 				  $listtemp = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."product  where ".$tempwhere." ");
-				 
+
 				 // $listtemp = $this->rdb->ClearSet()->Table('goodsdet')->Where($tempwhere)->Page(0)->Size(1000)->Lst();
-				 
-				  $gglist = array(); 
+
+				  $gglist = array();
 				  foreach($listtemp as $key=>$value){
 					  $gglist[$value['goodsid']][] = $value;
 				  }
-				  
-				  
-				  $goodsids  = array_keys($gglist); 
-			} 
-			if(isset($this->carinfo['shopg'][$this->shopid])){ 
+
+
+				  $goodsids  = array_keys($gglist);
+			}
+			if(isset($this->carinfo['shopg'][$this->shopid])){
 				 $goodsids = array_merge($this->carinfo['shopg'][$this->shopid],$goodsids);
 			}
 			$goodslist = array();
@@ -505,61 +505,61 @@ Class newsmcart{
 				 $goodslist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods  where ".$tempwhere." ");
 			     //$goodslist = $this->rdb->ClearSet()->Table('goods')->Select(array('id','name','count','cost','img','shopid','shoptype','bagcost','uinit','is_det','is_show','limitid','buyprentid','grouponid'))->Where($tempwhere)->Page(0)->Size(1000)->Lst();
 			}
-			 
+
 			foreach($goodslist as $key=>$value){//若增加限时抢购  则需增加标识
-				
+
 				if(isset($gglist[$value['id']])){
 					$childarray = $gglist[$value['id']];
 					$temptc = $value;
 					foreach($childarray as $k=>$v){
-					 
+
 						$temptc['gg'] = $v;
 						$temptc['stock'] = $v['stock'];
 						$temptc['count'] = $this->carinfo['ggoods'][$v['id']];
-						$temptc['cost'] = $v['cost']; 
-						
+						$temptc['cost'] = $v['cost'];
+
 						  $temptc['cxinfo'] =  $this->goodscx($value);
 						  if(isset($temptc['cxinfo']['is_cx'])&&$temptc['cxinfo']['is_cx'] == 1 ){
-								$temptc['cost'] = round( $temptc['cost']*$temptc['cxinfo']['zhekou']/10 , 2); 
+								$temptc['cost'] = round( $temptc['cost']*$temptc['cxinfo']['zhekou']/10 , 2);
 						  }
 						$backdata['goodslist'][] = $temptc;
 						//    $value['cxinfo'] = $this->goodscx($value,$where,$value['count']);
-					   
+
 						$backdata['sum'] = round($backdata['sum']+$temptc['count']*$temptc['cost'],2);
 						$backdata['count'] = $backdata['count']+$temptc['count'];
 						$backdata['bagcost'] = $backdata['bagcost']+$temptc['count']*$temptc['bagcost'];
-					} 
+					}
 				}else{
 					$value['stock'] = $value['count'];
 					$value['count'] = $this->carinfo['goods'][$value['id']];
 					  $value['cxinfo'] = $this->goodscx($value);
 						if(isset($value['cxinfo']['is_cx'])&&$value['cxinfo']['is_cx'] == 1 ){
-								$value['cost'] = $value['cxinfo']['cxcost']; 
+								$value['cost'] = $value['cxinfo']['cxcost'];
 						  }
 					$backdata['goodslist'][] = $value;
 					$backdata['sum'] = round($backdata['sum']+$value['count']*$value['cost'],2);
 					$backdata['count'] = $backdata['count']+$value['count'];
 					$backdata['bagcost'] = $backdata['bagcost']+$value['count']*$value['bagcost'];
 				}
-				
+
 				/****还需排除正在团够的 现实限时抢购****/
-				 
-				
+
+
 			}
-			$this->bkdata = $backdata; 
+			$this->bkdata = $backdata;
 			return true;
 		}else{
 			return false;
-		} 
+		}
 	}
-	
+
 	private function goodscx($goodsinfo){
 
-		$newarray = array('cxcost'=>0,'oldcost'=>$goodsinfo['cost'],'zhekou'=>0,'is_cx'=>'0');	
+		$newarray = array('cxcost'=>0,'oldcost'=>$goodsinfo['cost'],'zhekou'=>0,'is_cx'=>'0');
 		if($goodsinfo['is_cx'] == 1){
 			$cxdata =$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodscx where goodsid=".$goodsinfo['id']."  ");
 			$newdata = getgoodscx($goodsinfo['cost'],$cxdata);
-			 
+
 			$newarray['oldcost'] = $goodsinfo['cost'];
 			$newarray['cxcost'] = $newdata['cost'];
 			$newarray['zhekou'] = $newdata['zhekou'];
@@ -580,7 +580,7 @@ Class newsmcart{
 	{
 		return $this->errId;
 	}
-	
-	
-	 
-}  
+
+
+
+}
