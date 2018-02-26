@@ -81,7 +81,7 @@ function uponeproduct(gid,tshopid,num){
     if(bk.flag == false){
         freshcart();
     }else{
-    	fb_alert(bk.content);
+    	$.toast(bk.content,'text');
     }
 }
 function removeoneproduct(gid,tshopid,num){
@@ -91,7 +91,7 @@ function removeoneproduct(gid,tshopid,num){
     if(bk.flag == false){
         freshcart();
     }else{
-        fb_alert(bk.content);
+        $.toast(bk.content,'text');
     }
 }
 function addonedish(gid,tshopid,num,obj){
@@ -108,7 +108,7 @@ function addonedish(gid,tshopid,num,obj){
             return true;
         //}
     }else{
-        fb_alert(bk.content);
+        $.toast(bk.content,'text');
         return false;
     }
     //$('#loading').hide();
@@ -162,7 +162,7 @@ function removeonedish(gid,tshopid,num){
         }
         return true;
     }else{
-        fb_alert(bk.content);
+        $.toast(bk.content,'text');
         return false;
     }
     // $('#loading').hide();
@@ -174,7 +174,7 @@ function delshopcart(){
     if(bk.flag == false){
         freshcart();
     }else{
-        fb_alert(bk.content);
+        $.toast(bk.content,'text');
     }
 
     return false;
@@ -259,7 +259,7 @@ function  orderSubmit(){
                 if(content.error ==  false){
                     window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=subshow&orderid='+content.msg ;//.html?orderid='+datas.data;
                 }else{
-                    fb_alert(content.msg);
+                    $.toast(content.msg,'text');
                     return false;
                 }
             },
@@ -267,7 +267,7 @@ function  orderSubmit(){
 
             }
         });
-        // setTimeout("myyanchi()", 500 );
+         setTimeout("myyanchi()", 500 );
     }
 }
 function myyanchi(){
