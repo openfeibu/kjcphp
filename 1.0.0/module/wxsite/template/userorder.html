@@ -1,74 +1,24 @@
 <{if !empty($orderlist) }>
  <{foreach from=$orderlist item=items }>
- 				 
-				 
-				 
-				 
-				 	<div class="editordercon" style="position:relative;"> 	
-				 	 <div class="editordertit">  
-				 	  <ul> 
-				 	   <li><i></i><{$items['shopname']}></li> 
-				 	   <li class="editordright"><span class="editorfoncol"><{$items['orderwuliustatus']}></span></li> 
-				 	  </ul> 
-				 	 </div> 
-				 	 <a href="<{ofunc type=url link="/wxsite/ordershow/orderid/<{$items['id']}>"}>"> 
- 				 	 <div class="editorderbox" > 
-				 	  <ul> 
-				<{if $items['shoplogo'] == '' }>	  
- 					 	   <li><img src="<{$shoplogo}>"></li> 
-				<{else}>
-					 	   <li><img src="<{$items['shoplogo']}>"></li> 
-				<{/if}>
-				 	   <li> 
-				 		<ul> 
-				 		 <li><span>￥<{$items['allcost']}></span></li> 
-				 		 <li><{$items['addtime']}></li>
- 				<{if $items['pstype'] != 1 }>
-					 		 <li>由平台提供配送服务</li>
-				<{else}>
-					 		 <li>由商家提供配送服务</li>
-				<{/if}>
-				 		</ul> 
-				 	   </li> 
- 				 	  </ul> 
-				 	 </div> 
-				 	 </a> 
-		<{if $items['status'] < 4 && $items['status'] > 0}>
- 				 	 <div class="editorderbut"> 
-				 	  <div><div   class="editordinp1"    ></div></div>
-				 	  <ul> 
-				<{if $items['status'] == 2 }>
- 					 	   <li><div   class="editordinp1"  onclick="acceptorder(<{$items['id']}>);" >确认收货</div></li> 
-				<{/if}>
-				<{if $items['status'] == 3 && $items['is_acceptorder'] == 1 && $items['is_ping'] == 0  }>
- 					 	 <a href="<{ofunc type=url link="/wxsite/commentorder/orderid/<{$items['id']}>"}>"> 
-					 	   <li><div   class="editordinp1"   >评价订单</div></li> 
-					 	  </a> 
-				<{/if}>				
-	 		<{if $items['is_goshop'] == 0}>
-						<{if $items['shoptype'] == 1}> 
-							 	 <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/mk/id/<{$items['shopid']}>"}>"> 
-						<{else}>
-								 	 <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['shopid']}>"}>"> 
-						<{/if}>		
-				<{else}>
-								 	 <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/yd/id/<{$items['shopid']}>"}>"> 
-				 <{/if}>		
-						 	   <li><div   class="editordinp2"   >再来一单</div></li> 
-						 	  </a> 
-	
-				 	  </ul> 
-				 	 </div> 
-				
-		<{else}>
-		
-			
-			 	<div   class="shanchuedit"  onclick="delorder(<{$items['id']}>);"  >删除</div> 
-		
-		
-		<{/if}>			 
-				 	</div>
-				 
-				 
-	<{/foreach}>
+ <div class="orderList_item">
+   <a href="">
+     <div class="img"><img src="<{if $items['shoplogo']}><{$items['shoplogo']}><{else}><{$shoplogo}><{/if}>" alt=""></div>
+     <div class="text">
+       <div class="text_top fb-clearfix">
+         <div class="name fb-fl"><{$items['shopname']}></div>
+         <div class="state fb-fr"><{$items['orderwuliustatus']}></div>
+       </div>
+       <div class="date">1分钟前</div>
+       <div class="order_con fb-clearfix">
+         <div class="order_con_l fb-fl">共3件商品</div>
+         <div class="order_con_r fb-fr">￥<{$items['allcost']}></div>
+       </div>
+     </div>
+   </a>
+   <div class="orderList_bottom">
+
+    <a href="#" class="order_button order_button_pay fb-inlineBlock">去付款</a>
+   </div>
+ </div>
+<{/foreach}>
  <{/if}>

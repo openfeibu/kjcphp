@@ -25,7 +25,7 @@ function detfreshproduct() {
             $('input[name="selectproductid"]').val(productinfo.id);
             console.log('productinfo.stock:'+productinfo.stock);
             if (productinfo.stock < 1) {
-                fb_alert('商品库存不足');
+                $.toast('商品库存不足','text');
                 $(".righ_l_b_btn_moren1").hide();
                 $(".righ_l_b_btn_hover1").hide();
                 return false;
@@ -48,7 +48,7 @@ function detfreshproduct() {
         } else {
 
             $('input[name="selectproductid"]').val('');
-            fb_alert(bk.content);
+            $.toast(bk.content,'text');
         }
     } else {
         //构造未选择完刷新提交数据
@@ -291,7 +291,7 @@ function detuponeproduct(gid, tshopid, num){
         freshcart();
         return true;
     } else{
-        fb_alert(bk.content);
+        $.toast(bk.content,'text');
         return false;
     }
 }
@@ -303,7 +303,7 @@ function detremoveoneproduct(gid, tshopid, num){
         freshcart();
         detfreshproduct();
     } else{
-        fb_alert(bk.content);
+        $.toast(bk.content,'text');
     }
 }
 function freshowdetcart(){

@@ -2073,6 +2073,7 @@ class method extends wxbaseclass
 
     public function order()
     {
+        //var_dump(Mysite::$app->config['ceshi']);
         $this->checkwxweb();
         $link = IUrl::creatUrl('wxsite/index');
         if ($this->member['uid'] == 0) {
@@ -2088,7 +2089,28 @@ class method extends wxbaseclass
         $pageinfo = new page();
         $pageinfo->setpage(intval(IReq::get('page')), 5);
         //
-        $datalist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and shoptype != 100  order by id desc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."");
+        $where = "";
+        $order_status = IReq::get('order_status');
+        switch ($order_status) {
+            case '1':
+                $where .= " AND paystatus = 0 AND status = 1";
+                break;
+            case '3':
+                //待发货，已发货，待收货
+                $where .= " and ((status = 1 and is_make = 1 and  paystatus=1) or ( is_make = 0 and status > 0 and status < 3 and  paystatus=1 ) or (status > 1 and status < 4  and paystatus=1))";
+                break;
+            case '4':
+                //已完成
+                $where .= " AND paystatus = 1 AND status = 3 ";
+                break;
+            case '5':
+                //退款售后
+                $where .= " AND status > 0 AND status <= 4 AND paystatus =1 AND is_reback > 0 ";
+                break;
+        }
+
+
+        $datalist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and shoptype != 100 ".$where." order by id desc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."");
         $temparray = array('0'=>'外卖','1'=>'超市','2'=>'其他','100'=>'跑腿订单');
         $backdata = array();
         foreach ($datalist as $key=>$value) {
@@ -2129,6 +2151,8 @@ class method extends wxbaseclass
             # print_r($orderwuliustatus);
 
             $value['orderwuliustatus'] = $orderwuliustatus['statustitle'];
+
+            //$value['orderstatus'] =
             $value['addtime'] = date('Y-m-d H:i', $value['addtime']);
             $backdata[] =$value;
         }
@@ -2152,9 +2176,6 @@ class method extends wxbaseclass
             $this->message('未登陆', $link);
         }
         $orderid = intval(IReq::get('orderid'));
-
-
-
         $wxclass = new wx_s();
         $signPackage = $wxclass->getSignPackage();
         $data['signPackage'] = $signPackage;
@@ -3324,12 +3345,14 @@ class method extends wxbaseclass
             $this->message('店铺暂停营业');
         }
         $tempdata = $this->getOpenPosttime($shopinfo['is_orderbefore'], $shopinfo['starttime'], $shopinfo['postdate'], $info['minit'], $shopinfo['befortime']);
+        /*
         if ($tempdata['is_opentime'] ==  2) {
             $this->message('选择的配送时间段，店铺未设置');
         }
         if ($tempdata['is_opentime'] == 3) {
             $this->message('选择的配送时间段已超时');
         }
+        */
         $info['sendtime'] = $tempdata['is_posttime'];
         $info['postdate'] = $tempdata['is_postdate'];
         $info['addpscost'] = $tempdata['cost'];

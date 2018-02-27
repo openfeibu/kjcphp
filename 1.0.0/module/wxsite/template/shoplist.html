@@ -68,10 +68,10 @@
 		   data: {'typelx':'<{$typelx|default:0}>','areaid':'<{$areaid|default:0}>','search_input':search_input,'order':order,'catid':catid,'qsjid':qsjid,'isxl':isxl,'sendtype':sendtype,'cxtype':cxtype,'page':page},
 		   dataType: 'html',
            success: function(content) {
-			  $('#supplierlist').html(content);
-				if(  $.trim(content) != '' && $("#supplierlist .shop_group_item").length >= 10  ){
-					$(".loadmoreing").show();
-				}else{
+                $('#supplierlist').html(content);
+                if(  $.trim(content) != '' && $("#supplierlist .shop_group_item").length >= 10  ){
+                	$(".loadmoreing").show();
+                }else{
                     $(".loadmored").show();
                     $(".loadmoreing").hide();
                 }
@@ -104,7 +104,7 @@
 				}else{
 					$('#supplierlist').append(content);
 				}
-			  },
+	      },
 		  error: function(content) {
 				 pageend = true;
                  $(_this).destroyInfinite();
