@@ -6,6 +6,7 @@
 
 </script>
 <script>
+
     var shopid = <{$shopinfo['id']}>;
     var is_goshop = <{$shopdet['is_goshop']|default:0}>;
     var shopis_open = "<{$openinfo['opentype']}>";
@@ -163,9 +164,7 @@
       </ul>
     </div>
     <div class="shop-pro-all" onscroll="bindscroll($(this))" loca="true" style="display: block;">
-      <!--没有商品-->
-      <div id="noPro" style="display: none">没有商品哟</div>
-      <!--没有商品-->
+      
        <{if !empty($goodstype) }>
       <dl>
 
@@ -221,10 +220,15 @@
         <{/foreach}>
         <{/foreach}>
       </dl>
-      <{/if}>
       <div class="weui-loadmore weui-loadmore_line">
         <span class="weui-loadmore__tips">已经到底了</span>
       </div>
+      <{else}>
+      <!--没有商品-->
+      <div id="noPro" >没有商品哟</div>
+      <!--没有商品-->
+      <{/if}>
+      
     </div>
   </div>
   <div class="shop-detail-info">
@@ -830,35 +834,48 @@
         window.location.href = carturl;
     })
     function openType(id){
-        var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
+         
+      var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
+            
         if(content.flag == false){
-            var getmoreContent =  $.trim(content.content);
+               
+            var getmoreContent =  $.trim(content.content);  
+            $F.closeLoading();
             $('.type_box').html(getmoreContent);
             $(".type_box").fadeIn(200);
             $F.fbMask(1)
-        }else{
-            $.toast('获取失败','text');
-        }
-    }
+      }else{
+         $.toast('获取失败','text');
+      }  
+
+         
+
+
+      } 
+                            
     function htmlback1(url,info)
     {
-        var backmessage = {'flag':true,'content':''};
-        $.ajax({
-            type: 'POST',
-            async:false,
-            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
-            data: info,
-            dataType: 'html',success: function(content) {
+      var backmessage = {'flag':true,'content':''};
+      $.ajax({
+           type: 'POST',
+           async:false,
+           url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+           data: info,
+          dataType: 'html',success: function(content) {  
                 backmessage['flag'] = false;
-                backmessage['content'] = content;
-            },
-            error: function(content) {
-                backmessage['content'] = '获取失败';
-            }
-        });
-        return backmessage;
-        console.log(backmessage);
+               backmessage['content'] = content; 
+          },
+          error: function(content) { 
+            console.log(content)
+          backmessage['content'] = '获取失败';
+         }
+       });  
+       return backmessage;
+       console.log(backmessage);
     }
+
+
+
 </script>
 <script>
     function freshowdetcart() {
