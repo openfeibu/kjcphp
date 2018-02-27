@@ -95,11 +95,13 @@ function removeoneproduct(gid,tshopid,num){
     }
 }
 function addonedish(gid,tshopid,num,obj){
-    //$('#loading').show();
+    $F.loading();
     var url= siteurl+'/index.php?ctrl=site&action=addcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    var bk = ajaxback(url,'');
-    if(bk.flag == false){
+    $F.loading();
+    fbajaxback(url, '',function(backmessage){
+        
+       if(backmessage.flag == false){
         // if($('#total_money').html() != undefined){
         //     //cartimg($('#gid_'+gid),gid);
         // }else{
@@ -108,19 +110,19 @@ function addonedish(gid,tshopid,num,obj){
             return true;
         //}
     }else{
-        $.toast(bk.content,'text');
+        fb_alert(backmessage.content);
         return false;
     }
-    //$('#loading').hide();
+    });
 }
 function removeonedish(gid,tshopid,num){
-
+    // .toFixed(2)
     // $('#loading').show();
     url = siteurl+'/index.php?ctrl=site&action=downcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    var bk = ajaxback(url,'');
-
-    if(bk.flag == false){
+    $F.loading();
+    fbajaxback(url, '',function(backmessage){
+        if(backmessage.flag == false){
         if($('#total_money').html() != undefined){
             /*操作分类*/
             var typeid = $('#gidli_'+gid).attr('typeid');
@@ -136,7 +138,7 @@ function removeonedish(gid,tshopid,num){
                 $('#total_count').text(0);
             }
             notypenum = Number($('#total_money').text())-Number($('#gidli_'+gid).attr('data-price'));
-            $('#total_money').text(notypenum);
+            $('#total_money').text(notypenum.toFixed(2));
             if(notypenum < 0){
                 $('#total_money').text(0);
             }
@@ -162,10 +164,12 @@ function removeonedish(gid,tshopid,num){
         }
         return true;
     }else{
-        $.toast(bk.content,'text');
+        $.toast(backmessage.content,'text');
         return false;
     }
     // $('#loading').hide();
+     })
+  
 }
 function delshopcart(){
     var url= siteurl+'/index.php?ctrl=site&action=clearcart&shopid='+shopid+'&num=1&datatype=json&random=@random@';

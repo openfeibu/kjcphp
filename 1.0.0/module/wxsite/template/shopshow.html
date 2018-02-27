@@ -71,7 +71,7 @@
                     if(val.have_det == 1)
                     {
                         html +='<div class="CprevC" have_det="'+val.have_det+'" product_id="'+val.gg.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
-                        html +=' <div class="CCinput">'+val.count+'</div>';
+                        html +='<div class="CCinput">'+val.count+'</div>';
                         html +='<div class="CaddC" have_det="'+val.have_det+'" product_id="'+val.gg.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
                         html +='</div>';
                     }else{
@@ -204,7 +204,7 @@
                 <div class="Cinput">
                   0
                 </div>
-                <div class="addC" id="<{$items['id']}>" onclick="openType(<{$items['id']}>)"></div>
+                <div class="addC" id="<{$items['id']}>"></div>
               </div>
               <{else}>
               <div class="addCar emptyCar " maxnum="65535">
@@ -280,15 +280,15 @@
             <div class="car-money fb-inlineBlock">￥<span><{$cart_list['cost']}></span></div>
             <div class="CaddCar fb-inlineBlock" maxnum="undefined">
             <{if $cart_list.have_det == 1}>
-             <div class="CprevC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.gg.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
-              <div class="CCinput"><{$cart_list.count}></div>
-             <div class="CaddC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.gg.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
-            </div>
+               <div class="CprevC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.gg.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+               <div class="CCinput"><{$cart_list.count}></div>
+               <div class="CaddC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.gg.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
             <{else}>
-            <div class="CprevC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
-             <div class="CCinput"><{$cart_list.count}></div>
-            <div class="CaddC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+              <div class="CprevC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+              <div class="CCinput"><{$cart_list.count}></div>
+              <div class="CaddC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
             <{/if}>
+            </div>
         </dd>
         <{/foreach}>
     </dl>
@@ -437,7 +437,9 @@
         //            carts = JSON.parse(window.localStorage.cart);
         if ($(this).parents(".addCar").find(".prevC").hasClass("no_prevC")) {
         //    openType(addCar);
+            $F.loading();
             openType(proid);
+            
             return false;
         }
         //if(lockclick()){
@@ -657,7 +659,7 @@
         }
         $.post(locahost + 'cart/updateCartGoodsNumber', postData, function(data) {
             if (data.code == 2001) {
-                fb_alert(fb_error["2001"])
+                $.toast(fb_error["2001"],'text')
                 // window.location.href = "../login.html";
                 return;
             }
@@ -666,7 +668,7 @@
                     func();
                 }
             } else {
-                fb_alert(data.detail);
+                $.toast(data.detail,'text');
             }
         }).error(function(xhr, errorText, errorType) {
             alert('网络超时，请稍后再试')
@@ -681,7 +683,7 @@
         if(backinfo.flag == false){
             $(this).toggleClass("shop_like_ed");
         }else{
-            fb_alert(backinfo.content);
+            $.toast(backinfo.content,'text');
         }
     })
 
@@ -700,11 +702,11 @@
         $F.fbMask(0)
     }
     //打开规格
-    function openType(obj) {
-        openTypeDom = obj;
-        $(".type_box").fadeIn(200);
-        $F.fbMask(1)
-    }
+    // function openType(obj) {
+    //     openTypeDom = obj;
+    //     $(".type_box").fadeIn(200);
+    //     $F.fbMask(1)
+    // }
     //判断是否在购物车
     function if_car(id) {
         var flag = false;
@@ -742,7 +744,7 @@
         }
         $.post(locahost + '/cart/destroyAll', postData, function(data) {
             if (data.code == 2001) {
-                fb_alert(fb_error["2001"])
+                $.toast(fb_error["2001"],'text')
                 // window.location.href = "../login.html";
                 return;
             }
@@ -755,10 +757,10 @@
                 $(".shop-buy").removeClass("active");
                 $(".addCar").addClass("no").find(".Cinput").text(0);
                 car_count = 0;
-                fb_alert(data.detail);
+                $.toast(data.detail,'text');
             } else {
                 is_alipay(false);
-                fb_alert(data.detail);
+                $.toast(data.detail,'text');
             }
         }).error(function(xhr, errorText, errorType) {
             alert('网络超时，请稍后再试')
@@ -830,34 +832,45 @@
         window.location.href = carturl;
     })
     function openType(id){
-        var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
-        if(content.flag == false){
-            var getmoreContent =  $.trim(content.content);
-            $('.type_box').html(getmoreContent);
-            $(".type_box").fadeIn(200);
-            $F.fbMask(1)
-        }else{
-            fb_alert('获取失败');
-        }
+        // var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
+        htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
+        // if(content.flag == false){
+        //     $F.closeLoading();
+        //     var getmoreContent =  $.trim(content.content);
+        //     $('.type_box').html(getmoreContent);
+        //     $(".type_box").fadeIn(200);
+        //     $F.fbMask(1)
+        // }else{
+        //     fb_alert('获取失败');
+        // }
     }
     function htmlback1(url,info)
     {
         var backmessage = {'flag':true,'content':''};
         $.ajax({
             type: 'POST',
-            async:false,
+            async:true,
             url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
             data: info,
             dataType: 'html',success: function(content) {
                 backmessage['flag'] = false;
                 backmessage['content'] = content;
+                 if(backmessage.flag == false){
+                    $F.closeLoading();
+                    var getmoreContent =  $.trim(backmessage.content);
+                    $('.type_box').html(getmoreContent);
+                    $(".type_box").fadeIn(200);
+                    $F.fbMask(1)
+                }else{
+                    $.toast('获取失败','text');
+                }
             },
             error: function(content) {
                 backmessage['content'] = '获取失败';
             }
         });
-        return backmessage;
-        console.log(backmessage);
+        // return backmessage;
+        // console.log(backmessage);
     }
 </script>
 <script>
