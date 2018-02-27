@@ -2073,7 +2073,7 @@ class method extends wxbaseclass
 
     public function order()
     {
-        //var_dump(Mysite::$app->config['ceshi']);
+        $order = new orderclass();
         $this->checkwxweb();
         $link = IUrl::creatUrl('wxsite/index');
         if ($this->member['uid'] == 0) {
@@ -2086,6 +2086,7 @@ class method extends wxbaseclass
         if ($this->member['uid'] == 0) {
             $this->message('', $link);
         }
+        $orderclass = new orderclass();
         $pageinfo = new page();
         $pageinfo->setpage(intval(IReq::get('page')), 5);
         //
@@ -2152,10 +2153,11 @@ class method extends wxbaseclass
 
             $value['orderwuliustatus'] = $orderwuliustatus['statustitle'];
 
-            //$value['orderstatus'] =
             $value['addtime'] = date('Y-m-d H:i', $value['addtime']);
+            $value['order_status'] = $orderclass->handleOrderStatus($value);
             $backdata[] =$value;
         }
+
         $data['orderlist'] = $backdata;
         #print_r($backdata);
         Mysite::$app->setdata($data);
