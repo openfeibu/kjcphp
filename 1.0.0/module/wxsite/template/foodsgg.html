@@ -24,6 +24,7 @@ function detfreshproduct() {
             var productinfo = bk.content;
             $('input[name="selectproductid"]').val(productinfo.id);
             console.log('productinfo.stock:'+productinfo.stock);
+            console.log(productinfo);
             if (productinfo.stock < 1) {
                 $.toast('商品库存不足','text');
                 $(".righ_l_b_btn_moren1").hide();
@@ -83,6 +84,14 @@ function initshop(datas){
     $('#total_count').text(0);
     $('#total_money').text(0);
     if (datas.flag == false){
+        if(Number(datas.content.sumcount)>0){
+            $(".shop-car-icon").addClass("active");
+             $('#total_count').show().text(datas.content.sumcount);
+        }else{
+            $(".shop-car-icon").removeClass("active");
+             $('#total_count').hide();
+        }
+
         html = "";
         $.each(datas.content.list, function(i,val){
             html +='<dd proid="'+val.id+'">';

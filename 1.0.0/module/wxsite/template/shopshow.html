@@ -45,14 +45,15 @@
         $('#total_money').text(0.00);
 
         if(datas.flag == false){
-            console.log($('#total_money'));
         //    if($('#total_money').html() != undefined){
                 if(Number(datas.content.sumcount)>0){
                     $(".shop-car-icon").addClass("active");
+                     $('#total_count').show().text(datas.content.sumcount);
                 }else{
-                    $(".shop-car-icon").removeClass("active")
+                    $(".shop-car-icon").removeClass("active");
+                     $('#total_count').hide();
                 }
-                $('#total_count').text(datas.content.sumcount);
+               
                 checkcartifempty();
                 var shijicost = datas.content.sum;
                 $('#total_money').text(shijicost.toFixed(2));
@@ -86,9 +87,11 @@
 
                     if($('#gidli_'+val.id).html() != undefined){
                         //$('#gshu_'+val.id).val(val.count);
-                        if($('#gidli_'+val.id).find('.addC').attr('have_det'))
+                        if($('#gidli_'+val.id).find('.addC').attr('have_det') == 0)
                         {
                             $('#gidli_'+val.id).find('.addCar').removeClass("emptyCar").find(".Cinput").text(val.count);
+                        }else{
+                           $('#gidli_'+val.id).find('.addCar').removeClass("emptyCar").find(".Cinput").text(val.count);
                         }
 
                     }
@@ -203,7 +206,7 @@
                 <div class="Cinput">
                   0
                 </div>
-                <div class="addC" id="<{$items['id']}>" onclick="openType(<{$items['id']}>)"></div>
+                <div class="addC" id="<{$items['id']}>" ></div>
               </div>
               <{else}>
               <div class="addCar emptyCar " maxnum="65535">
@@ -684,6 +687,12 @@
         var backinfo = ajaxback(url,{});
         if(backinfo.flag == false){
             $(this).toggleClass("shop_like_ed");
+            if($(this).hasClass("shop_like_ed")){
+              $.toast("收藏成功",'text');
+            }else{
+              $.toast("取消收藏成功",'text');
+
+            }
         }else{
             $.toast(backinfo.content,'text');
         }
@@ -797,10 +806,14 @@
         var i = $(this).index(".shop_img img");
         var pb = $.photoBrowser({
             items: [
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg"
+            <{foreach from=$shopreal key=key item =shoprealitems}>
+              <{if !empty($shoprealitems['shoprealimg'])}>
+                  <{foreach from=$shoprealitems['shoprealimg'] key=key item =items}>
+                    "<{$items['img']}>",
+                  <{/foreach}>
+              <{/if}>
+              <{/foreach}>
+                
             ],
             initIndex: i
 
