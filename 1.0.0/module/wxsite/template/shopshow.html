@@ -443,26 +443,26 @@
         //if(lockclick()){
             status = addonedish(proid,$(this).attr('data-shopid'),1,this);
         //}
-        if (status) {
-            if (num == 0) {
-                addCar.removeClass("emptyCar").find(".Cinput").text(nowNum);
-                var pro_info = {
-                    "name": dd.find(".shop-pro-name").text(),
-                    "value": dd.find(".shop-pro-money label").text(),
-                    "maxNum": addCar.attr("maxNum"),
-                    "proid": proid,
-                    "goods_id": proid,
-                    "goods_name": dd.find(".shop-pro-name").text(),
-                    "goods_price": dd.find(".shop-pro-money label").text(),
-                    "goods_maxNus": addCar.attr("maxNum"),
-                    "goods_number": 1
-                }
-            } else {
-                addCar.find(".Cinput").text(nowNum);
-                console.log(proid)
-                $(".car-list dd[proid='" + proid + "']").find(".CCinput").text(nowNum);
-            }
-        }
+        // if (status) {
+        //     if (num == 0) {
+        //         addCar.removeClass("emptyCar").find(".Cinput").text(nowNum);
+        //         var pro_info = {
+        //             "name": dd.find(".shop-pro-name").text(),
+        //             "value": dd.find(".shop-pro-money label").text(),
+        //             "maxNum": addCar.attr("maxNum"),
+        //             "proid": proid,
+        //             "goods_id": proid,
+        //             "goods_name": dd.find(".shop-pro-name").text(),
+        //             "goods_price": dd.find(".shop-pro-money label").text(),
+        //             "goods_maxNus": addCar.attr("maxNum"),
+        //             "goods_number": 1
+        //         }
+        //     } else {
+        //         addCar.find(".Cinput").text(nowNum);
+        //         console.log(proid)
+        //         $(".car-list dd[proid='" + proid + "']").find(".CCinput").text(nowNum);
+        //     }
+        // }
     })
     $("body").on("click", ".type_button", function() {
         console.log(openTypeDom)
@@ -508,7 +508,7 @@
             num = Number(CaddCar.find(".CCinput").text()), //当前
             nowNum = Cnum + 1;
 
-            CaddCar.find(".CCinput").text(num + 1);
+            // CaddCar.find(".CCinput").text(num + 1);
 
         //    updataCount(1);
         //    updataCar(proid, nowNum) //加入购物车
@@ -518,7 +518,7 @@
             }else{
                 addonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1,this);
             }
-            $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(nowNum);
+            // $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(nowNum);
     })
 
     // 加入购物车
@@ -680,6 +680,11 @@
         var backinfo = ajaxback(url,{});
         if(backinfo.flag == false){
             $(this).toggleClass("shop_like_ed");
+            if($(this).hasClass("shop_like_ed")){
+              $.toast('收藏成功','text');
+            }else{
+              $.toast('取消收藏成功','text');
+            }
         }else{
             $.toast(backinfo.content,'text');
         }

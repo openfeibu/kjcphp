@@ -7,9 +7,11 @@
     添加新地址
   </div>
   <div class="shopMap">
-    <div class="noPro" >
+  <{if empty($arealist)}>
+    <div class="noPro" style="display: block;">
       请先设置收货地址
     </div>
+    <{/if}>
     <ul>
       <{foreach from=$arealist key=mykey item=items}>
       <li class="clearfix <{if $items['default'] == 1}>active<{/if}>">
