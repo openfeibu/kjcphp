@@ -11,11 +11,17 @@ function loadaddreslist(){ 	//记载购物车 地址有关信息
             $(".usermap").show();
 			$(".noMap").hide();
 			var html = '';
+			console.log(addresslist)
 			$.each(addresslist, function(i, newobj) {
-                html += '<div class="orderDetail_address_con">';
-                html += '<p><span>'+newobj.contactname+'</span>'+newobj.phone+'</p>';
-                html += '<p>'+newobj.address+'</p>';
-                html += '</div>';
+				if(newobj.default == 1){
+					//默认地址
+					html += '<div class="orderDetail_address_con">';
+	                html += '<p><span>'+newobj.contactname+'</span>'+newobj.phone+'</p>';
+	                html += '<p>'+newobj.detailadr+'</p>';
+	                html += '</div>';
+	                return false;
+				}
+                  
 
 			});
             $('.orderDetail_address').html(html);
