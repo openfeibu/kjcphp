@@ -1,5 +1,5 @@
 <{extends file="<{$tempdir}>/public/wxsite.html"}>
-<{block name=sitetitle}>筷叫餐<{/block}>
+<{block name=sitetitle}><{$sitename}><{/block}>
 <{block name=blockcontent}>
 <div class="main">
   <div class="main_header">
@@ -9,7 +9,7 @@
       <div class="icon fb-inlineBlock"></div>
     </div>
     <div class="index_search">
-      <a href="search.html">
+      <a href="<{ofunc type=url link="/wxsite/search"}>">
         <div class="icon fb-inlineBlock"></div>
         <p class="fb-inlineBlock">搜索发现更多美食</p>
       </a>
@@ -65,10 +65,13 @@
                   <{/if}>
                   <span><{$items['juli']}></span></div>
             </div>
+            <{if !empty($items['cxlist'] ) }>
             <div class="discount">
-              <div class="discount_j">满30减5</div>
-              <div class="discount_t">【5折】香酥鸡排限时抢购</div>
+                <{foreach from=$items['cxlist'] item=itv }>
+                <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
+                <{/foreach}>
             </div>
+            <{/if}>
           </div>
         </a>
       </div>

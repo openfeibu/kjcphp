@@ -7285,7 +7285,119 @@ CREATE TABLE `xiaozu_shophuiorder` (
     //8.3 个人中心点击我的收藏判断登录
     public function collect()
     {
+        error_reporting(-1);
+        ini_set('display_errors',1);            //错误信息
         $this->checkwxweb();
+        $lng = ICookie::get('lng');
+        $lat = ICookie::get('lat');
+        $lng = empty($lng)?0:$lng;
+        $lat =empty($lat)?0:$lat;
+        $lng = trim($lng);
+        $lat = trim($lat);
+        $lng = empty($lng)?0:$lng;
+        $lat =empty($lat)?0:$lat;
+        $list =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and endtime > ".time()."  ");
+        $nowhour = date('H:i:s', time());
+        $nowhour = strtotime($nowhour);
+        $templist = array();
+        $cxclass = new sellrule();
+
+        if (is_array($list)) {
+            foreach ($list as $keys=>$values) {
+                if ($values['id'] > 0) {
+                    $values['collect'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."collect where  collecttype = 0 and uid = ".$this->member['uid']." and collectid  = '".$values['id']."' ");//收藏
+                    if (!empty($values['collect'])) {
+                        $templist111 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where cattype = ".$values['shoptype']." and  parent_id = 0    order by orderid asc limit 0,1000");
+                        $attra = array();
+                        $attra['input'] = 0;
+                        $attra['img'] = 0;
+                        $attra['checkbox'] = 0;
+                        foreach ($templist111 as $key=>$vall) {
+                            if ($vall['type'] == 'input') {
+                                $attra['input'] =  $attra['input'] > 0?$attra['input']:$vall['id'];
+                            } elseif ($vall['type'] == 'img') {
+                                $attra['img'] =  $attra['img'] > 0?$attra['img']:$vall['id'];
+                            } elseif ($vall['type'] == 'checkbox') {
+                                $attra['checkbox'] =  $attra['checkbox'] > 0?$attra['checkbox']:$vall['id'];
+                            }
+                        }
+                        #		print_r($attra);
+                        #		echo("11111111");
+
+                        if ($values['shoptype'] == 1) {
+                            $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$values['id']."   ");
+                        } else {
+                            $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$values['id']."   ");
+                        }
+                        if (!empty($shopdet)) {
+                            $values = array_merge($values, $shopdet);
+
+                            $values['shoplogo'] = empty($values['shoplogo'])? Mysite::$app->config['imgserver'].Mysite::$app->config['shoplogo']:Mysite::$app->config['imgserver'].$values['shoplogo'];
+                            $checkinfo = $this->shopIsopen($values['is_open'], $values['starttime'], $values['is_orderbefore'], $nowhour);
+                            $values['opentype'] = $checkinfo['opentype'];
+                            $values['newstartime']  =  $checkinfo['newstartime'];
+
+                            $attrdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopattr where  cattype = ".$values['shoptype']." and shopid = ".$values['id']."");
+                            $cxclass->setdata($values['id'], 1000, $values['shoptype']);
+
+                            $mi = $this->GetDistance($lat, $lng, $values['lat'], $values['lng'], 1);
+                            $tempmi = $mi;
+                            $mi = $mi > 1000? round($mi/1000, 2).'km':$mi.'m';
+
+                            $values['juli'] = 		$mi;
+
+                            $checkps = 	 $this->pscost($values);
+                            $values['pscost'] = $checkps['pscost'];
+
+                            $shopcounts = $this->mysql->select_one("select sellcount as shuliang  from ".Mysite::$app->config['tablepre']."shop	 where    id = ".$values['id']."");
+                            if (empty($shopcounts['shuliang'])) {
+                                $values['ordercount'] = 0;
+                            } else {
+                                $values['ordercount']  = $shopcounts['shuliang'];
+                            }
+                            $values['ordercount']  = $values['ordercount']+$values['virtualsellcounts'];
+
+                            $d = (date("w") ==0) ?7:date("w") ;
+                            $cxinfo = $this->mysql->getarr("select name,id,imgurl,signid from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$values['id'].",shopid)   and status = 1   and ( limittype = 1 or ( limittype = 2 and ".$d."  in ( limittime )  )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
+//var_dump($cxinfo);exit;
+                            $values['cxlist'] = $cxinfo;
+
+                            // foreach ($cxinfo as $k1=>$v1) {
+                            //     if (isset($cxarray[$v1['signid']])) {
+                            //         $v1['imgurl'] = $cxarray[$v1['signid']];
+                            //         $values['cxlist'][] = $v1;
+                            //     }
+                            // }
+                            // 店铺星级计算
+                            $zongpoint = $values['point'];
+                            $zongpointcount = $values['pointcount'];
+                            if ($zongpointcount != 0) {
+                                $shopstart = intval(round($zongpoint/$zongpointcount));
+                            } else {
+                                $shopstart= 0;
+                            }
+                            $values['point'] = 	$shopstart;
+                            $values['attrdet'] = array();
+                            foreach ($attrdet as $k=>$v) {
+                                if ($v['firstattr'] == $attra['input']) {
+                                    $values['attrdet']['input'] = $v['value'];
+                                } elseif ($v['firstattr'] == $attra['img']) {
+                                    $values['attrdet']['img'][] = $v['value'];
+                                } elseif ($v['firstattr'] == $attra['checkbox']) {
+                                    $values['attrdet']['checkbox'][] = $v['value'];
+                                }
+                            }
+
+                            #		 print_r($values['attrdet']);
+
+                            $templist[] = $values;
+                        }
+                    }
+                }
+            }
+        }
+        $data['templist'] = $templist;
+        Mysite::$app->setdata($data);
     }
     //8.3 个人中心点击绑定手机号判断登录
     public function binding()

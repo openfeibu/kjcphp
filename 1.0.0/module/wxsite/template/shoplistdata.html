@@ -19,17 +19,19 @@
                 <{/if}>
                 <span><{$items['juli']}></span></div>
           </div>
-          <div class="discount">
+
               <{if $open_wxcx == 1}>
                   <{if !empty($items['cxlist'] ) }>
+                  <div class="discount">
                       <{foreach from=$items['cxlist'] item=itv }>
                       <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
                       <{/foreach}>
+                  </div>
                   <{/if}>
               <{/if}>
             <!-- <div class="discount_j">满30减5</div>
             <div class="discount_t">【5折】香酥鸡排限时抢购</div> -->
-          </div>
+
         </div>
       </a>
     </div>

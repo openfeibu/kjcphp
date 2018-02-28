@@ -6,7 +6,6 @@
 
 </script>
 <script>
-
     var shopid = <{$shopinfo['id']}>;
     var is_goshop = <{$shopdet['is_goshop']|default:0}>;
     var shopis_open = "<{$openinfo['opentype']}>";
@@ -45,15 +44,14 @@
         $('#total_money').text(0.00);
 
         if(datas.flag == false){
+            console.log($('#total_money'));
         //    if($('#total_money').html() != undefined){
                 if(Number(datas.content.sumcount)>0){
                     $(".shop-car-icon").addClass("active");
-                     $('#total_count').show().text(datas.content.sumcount);
                 }else{
-                    $(".shop-car-icon").removeClass("active");
-                     $('#total_count').hide();
+                    $(".shop-car-icon").removeClass("active")
                 }
-               
+                $('#total_count').text(datas.content.sumcount);
                 checkcartifempty();
                 var shijicost = datas.content.sum;
                 $('#total_money').text(shijicost.toFixed(2));
@@ -87,11 +85,9 @@
 
                     if($('#gidli_'+val.id).html() != undefined){
                         //$('#gshu_'+val.id).val(val.count);
-                        if($('#gidli_'+val.id).find('.addC').attr('have_det') == 0)
+                        if($('#gidli_'+val.id).find('.addC').attr('have_det'))
                         {
                             $('#gidli_'+val.id).find('.addCar').removeClass("emptyCar").find(".Cinput").text(val.count);
-                        }else{
-                           $('#gidli_'+val.id).find('.addCar').removeClass("emptyCar").find(".Cinput").text(val.count);
                         }
 
                     }
@@ -167,7 +163,9 @@
       </ul>
     </div>
     <div class="shop-pro-all" onscroll="bindscroll($(this))" loca="true" style="display: block;">
-      
+      <!--没有商品-->
+      <div id="noPro" style="display: none">没有商品哟</div>
+      <!--没有商品-->
        <{if !empty($goodstype) }>
       <dl>
 
@@ -206,7 +204,7 @@
                 <div class="Cinput">
                   0
                 </div>
-                <div class="addC" id="<{$items['id']}>" ></div>
+                <div class="addC" id="<{$items['id']}>" onclick="openType(<{$items['id']}>)"></div>
               </div>
               <{else}>
               <div class="addCar emptyCar " maxnum="65535">
@@ -223,15 +221,10 @@
         <{/foreach}>
         <{/foreach}>
       </dl>
+      <{/if}>
       <div class="weui-loadmore weui-loadmore_line">
         <span class="weui-loadmore__tips">已经到底了</span>
       </div>
-      <{else}>
-      <!--没有商品-->
-      <div id="noPro" >没有商品哟</div>
-      <!--没有商品-->
-      <{/if}>
-      
     </div>
   </div>
   <div class="shop-detail-info">
@@ -687,12 +680,6 @@
         var backinfo = ajaxback(url,{});
         if(backinfo.flag == false){
             $(this).toggleClass("shop_like_ed");
-            if($(this).hasClass("shop_like_ed")){
-              $.toast("收藏成功",'text');
-            }else{
-              $.toast("取消收藏成功",'text');
-
-            }
         }else{
             $.toast(backinfo.content,'text');
         }
@@ -806,14 +793,10 @@
         var i = $(this).index(".shop_img img");
         var pb = $.photoBrowser({
             items: [
-            <{foreach from=$shopreal key=key item =shoprealitems}>
-              <{if !empty($shoprealitems['shoprealimg'])}>
-                  <{foreach from=$shoprealitems['shoprealimg'] key=key item =items}>
-                    "<{$items['img']}>",
-                  <{/foreach}>
-              <{/if}>
-              <{/foreach}>
-                
+                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
+                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
+                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
+                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg"
             ],
             initIndex: i
 
@@ -847,48 +830,35 @@
         window.location.href = carturl;
     })
     function openType(id){
-         
-      var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
-            
+        var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
         if(content.flag == false){
-               
-            var getmoreContent =  $.trim(content.content);  
-            $F.closeLoading();
+            var getmoreContent =  $.trim(content.content);
             $('.type_box').html(getmoreContent);
             $(".type_box").fadeIn(200);
             $F.fbMask(1)
-      }else{
-         $.toast('获取失败','text');
-      }  
-
-         
-
-
-      } 
-                            
+        }else{
+            $.toast('获取失败','text');
+        }
+    }
     function htmlback1(url,info)
     {
-      var backmessage = {'flag':true,'content':''};
-      $.ajax({
-           type: 'POST',
-           async:false,
-           url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
-           data: info,
-          dataType: 'html',success: function(content) {  
+        var backmessage = {'flag':true,'content':''};
+        $.ajax({
+            type: 'POST',
+            async:false,
+            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            data: info,
+            dataType: 'html',success: function(content) {
                 backmessage['flag'] = false;
-               backmessage['content'] = content; 
-          },
-          error: function(content) { 
-            console.log(content)
-          backmessage['content'] = '获取失败';
-         }
-       });  
-       return backmessage;
-       console.log(backmessage);
+                backmessage['content'] = content;
+            },
+            error: function(content) {
+                backmessage['content'] = '获取失败';
+            }
+        });
+        return backmessage;
+        console.log(backmessage);
     }
-
-
-
 </script>
 <script>
     function freshowdetcart() {

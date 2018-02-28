@@ -5,46 +5,41 @@
 <div class="shopCollection">
   <div class="shop_group">
     <div class="shop_group_list">
+      <{foreach from=$templist key=mykey item=items}>
       <div class="shop_group_item">
-        <a href="shopDetail.html">
-          <div class="shop_state shop_state_ing"></div>
-          <div class="img"><img src="images/ic_coupon_2.png" alt=""></div>
+        <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
+            <{if $items['opentype'] == 2  }>
+            <div class="shop_state shop_state_ing"></div>
+            <{else}>
+            <div class="shop_state shop_state_ed"></div>
+            <{/if}>
+          <div class="img"><img src="<{$items.shoplogo}>" alt=""></div>
           <div class="text">
-            <div class="shop_name">正新鸡排（中新店）</div>
-            <div class="shop_nums">销量325份</div>
+            <div class="shop_name"><{$items.shopname}></div>
+            <div class="shop_nums">月售<{$items.ordercount}>份</div>
             <div class="shop_decs fb-clearfix">
-              <div class="fb-fl"><span>起送￥20</span><span>配送￥3</span></div>
-              <div class="fb-fr"><span>10分钟</span><span>300m</span></div>
+              <div class="fb-fl"><span>起送￥<{$items.limitcost}></span><span>配送￥<{$items.pscost}></span></div>
+              <div class="fb-fr">
+                  <{if !empty($items['arrivetime']) }>
+      			         <span><{$items['arrivetime']}>分钟</span>
+      			  <{/if}>
+                  <span><{$items.juli}></span>
+              </div>
             </div>
+            <{if !empty($items['cxlist'] ) }>
             <div class="discount">
-              <div class="discount_j">满30减5</div>
-              <div class="discount_t">【5折】香酥鸡排限时抢购</div>
+                <{foreach from=$items['cxlist'] item=itv }>
+                <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
+                <{/foreach}>
             </div>
+            <{/if}>
           </div>
         </a>
       </div>
-      <div class="shop_group_item">
-        <a href="">
-          <div class="shop_state shop_state_ed"></div>
-          <div class="img"><img src="images/ic_coupon_2.png" alt=""></div>
-          <div class="text">
-            <div class="shop_name">正新鸡排（中新店）</div>
-            <div class="shop_nums">销量325份</div>
-            <div class="shop_decs fb-clearfix">
-              <div class="fb-fl"><span>起送￥20</span><span>配送￥3</span></div>
-              <div class="fb-fr"><span>10分钟</span><span>300m</span></div>
-            </div>
-            <div class="discount">
-              <div class="discount_j">满30减5</div>
-              <div class="discount_t">【5折】香酥鸡排限时抢购</div>
-            </div>
-          </div>
-        </a>
-      </div>
-
+      <{/foreach}>
 
     </div>
-    <div class="weui-loadmore weui-loadmore_line loadmored">
+    <div class="weui-loadmore weui-loadmore_line loadmored" style="display:block;">
       <span class="weui-loadmore__tips">已经到底了</span>
     </div>
   </div>
