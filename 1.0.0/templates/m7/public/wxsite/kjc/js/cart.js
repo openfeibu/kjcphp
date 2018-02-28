@@ -12,7 +12,7 @@ function freshcart($payflag){
 	var bk = ajaxback(url,'');
 	if($('#shocart').html() == undefined){
         console.log('bk:'+bk);
-		initshop(bk);
+		initshop(bk); 
 	}else{
 	    freshcartdata(bk,$payflag);
 	}
