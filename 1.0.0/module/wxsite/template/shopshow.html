@@ -71,7 +71,7 @@
                     if(val.have_det == 1)
                     {
                         html +='<div class="CprevC" have_det="'+val.have_det+'" product_id="'+val.gg.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
-                        html +=' <div class="CCinput">'+val.count+'</div>';
+                        html +='<div class="CCinput">'+val.count+'</div>';
                         html +='<div class="CaddC" have_det="'+val.have_det+'" product_id="'+val.gg.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
                         html +='</div>';
                     }else{
@@ -262,6 +262,8 @@
     <p>￥<label id="total_money">0.00</label></p>
     <{if $psinfo['pscost'] > 0 }>
     <span>另需配送费<{$psinfo['pscost']}>元</span>
+    <{else}>
+    <span>免配送费</span>
     <{/if}>
   </div>
   <div class="shop-buy">还差￥<{$shopdet['limitcost']}>起送</div>
@@ -535,16 +537,16 @@
             nowNum = num - 1;
         status = removeonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1);
         console.log('status:'+status);
-        if(status)
-        {
-            if (nowNum == 0) {
-                addCar.addClass("emptyCar").find(".Cinput").text(nowNum);
-                $(".car-list dd[proid='" + proid + "']").remove();
-            } else {
-                addCar.find(".Cinput").text(nowNum);
-                $(".car-list dd[proid='" + proid + "']").find(".CCinput").text(nowNum);
-            }
-        }
+        // if(status)
+        // {
+        //     if (nowNum == 0) {
+        //         addCar.addClass("emptyCar").find(".Cinput").text(nowNum);
+        //         $(".car-list dd[proid='" + proid + "']").remove();
+        //     } else {
+        //         addCar.find(".Cinput").text(nowNum);
+        //         $(".car-list dd[proid='" + proid + "']").find(".CCinput").text(nowNum);
+        //     }
+        // }
 
 
     })
@@ -564,20 +566,20 @@
         	removeonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1,this);
         }
 
-        if (nowNum == 0) {
-            dd.remove();
-            CaddCar.find(".CCinput").text(nowNum);
-            if (--Cnum == 0) {
-                $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(Cnum).end().find(".addCar").addClass("emptyCar");
-            } else {
-                $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(Cnum);
-            }
-        } else {
-            CaddCar.find(".CCinput").text(nowNum);
+        // if (nowNum == 0) {
+        //     dd.remove();
+        //     CaddCar.find(".CCinput").text(nowNum);
+        //     if (--Cnum == 0) {
+        //         $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(Cnum).end().find(".addCar").addClass("emptyCar");
+        //     } else {
+        //         $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(Cnum);
+        //     }
+        // } else {
+        //     CaddCar.find(".CCinput").text(nowNum);
 
-            $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(nowNum);
-            console.log(proid);
-        }
+        //     $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(nowNum);
+        //     console.log(proid);
+        // }
         setTimeout("myyanchi()", 500);
     })
     // 减少购物车
@@ -798,10 +800,13 @@
         var i = $(this).index(".shop_img img");
         var pb = $.photoBrowser({
             items: [
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg",
-                "<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/proImg.jpg"
+               <{foreach from=$shopreal key=key item =shoprealitems}>
+                <{if !empty($shoprealitems['shoprealimg'])}>
+                    <{foreach from=$shoprealitems['shoprealimg'] key=key item =items}>
+                     "<{$items['img']}>",
+                    <{/foreach}>
+                <{/if}>
+                <{/foreach}>
             ],
             initIndex: i
 

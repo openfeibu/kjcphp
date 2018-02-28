@@ -4,6 +4,11 @@
 <{block name=blockcontent}>
 <div class="shopCollection">
   <div class="shop_group">
+    <{if empty($templist)}>
+    <div class="noPro" style="display: block;">
+      先去收藏店铺
+    </div>
+    <{/if}>
     <div class="shop_group_list">
       <{foreach from=$templist key=mykey item=items}>
       <div class="shop_group_item">
@@ -37,8 +42,8 @@
         </a>
       </div>
       <{/foreach}>
-
     </div>
+
     <div class="weui-loadmore weui-loadmore_line loadmored" style="display:block;">
       <span class="weui-loadmore__tips">已经到底了</span>
     </div>
