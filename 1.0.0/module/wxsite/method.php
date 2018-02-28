@@ -947,6 +947,29 @@ class method extends wxbaseclass
         $data['backdata'] = $backdata;
         /*   购物车结束*/
 
+        /*  优惠商品开始  */
+        $cx_goodsids = array();
+        $nowtime = time();
+        $nowdate = date('Y-m-d', time());
+        $checktime = $nowtime-strtotime($nowdate);
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid WHERE g.shopid = $shopid AND g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) ";
+        $goods_list = $this->mysql->getarr($sql);
+        foreach ($goods_list as $key => $goods) {
+            $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
+            $goods_list[$key]['zhekou'] = $goods['cxzhe']*0.1;
+            $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .' and ord.status = 3  and is_reback = 0';
+            //$where1 = ' where ord.addtime > '.$goods['cxstarttime'] .'';
+            $sql = "select count(ordet.id) as shuliang from ".Mysite::$app->config['tablepre']."orderdet  as ordet left join  ".Mysite::$app->config['tablepre']."order as ord on ordet.order_id = ord.id  ".$where1." and  ordet.goodsid = ".$goods['id']."";
+            $goods_count_data = $this->mysql->select_one($sql);
+            $sell_count = $goods_count_data['shuliang'];
+            $goods_list[$key]['sell_count'] = $sell_count;
+            $all_count = $sell_count + $goods['count'];
+            $goods_list[$key]['percent'] = $sell_count <= 0 ? '0%' : ($goods['count'] > 0 ? round($sell_count/$all_count * 100 , 2) . "%" : '100%');
+            $cx_goodsids[] = $goods['id'];
+        }
+        $data['cx_goods_list'] = $goods_list;
+        $data['cx_goodsids'] = $cx_goodsids;
+        /*  优惠商品结束  */
         Mysite::$app->setdata($data);
 
         if ($shopinfo['shoptype'] == 1) {
@@ -7672,8 +7695,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
         foreach ($goods_list as $key => $goods) {
             $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
             $goods_list[$key]['zhekou'] = $goods['cxzhe']*0.1;
-        //    $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .' and ord.status = 3  and is_reback = 0';
-        $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .'';
+            $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .' and ord.status = 3  and is_reback = 0';
+            //$where1 = ' where ord.addtime > '.$goods['cxstarttime'] .'';
             $sql = "select count(ordet.id) as shuliang from ".Mysite::$app->config['tablepre']."orderdet  as ordet left join  ".Mysite::$app->config['tablepre']."order as ord on ordet.order_id = ord.id  ".$where1." and  ordet.goodsid = ".$goods['id']."";
             $goods_count_data = $this->mysql->select_one($sql);
             $sell_count = $goods_count_data['shuliang'];

@@ -157,8 +157,11 @@
   <div class="shop-detail-con">
     <div class="shop-pro-class">
       <ul>
+          <{if !empty($cx_goods_list) }>
+          <li cateid="cx" class="active">促销</li>
+          <{/if}>
           <{foreach from=$goodstype key=mykey item=items}>
-          <li cateid="<{$items['id']}>" <{if $mykey == 0  }>class="active"<{/if}> ><{$items['name']}></li>
+          <li cateid="<{$items['id']}>" <{if $mykey == 0  && empty($cx_goods_list)}>class="active"<{/if}> ><{$items['name']}></li>
           <{/foreach}>
       </ul>
     </div>
@@ -168,11 +171,52 @@
       <!--没有商品-->
        <{if !empty($goodstype) }>
       <dl>
-
+        <{if !empty($cx_goods_list) }>
+        <div class="pro_label">促销</div>
+        <{foreach from=$cx_goods_list item=goods }>
+        <dd proid="<{$goods['id']}>" id="gidli_<{$goods['id']}>" typeid="<{$goods['typeid']}>" data-price="<{$goods['cost']}>">
+          <div onclick="callDialog(this)" imgurl="<{$goods['img']|default:$shoplogo}>" class="shop-pro-img" style="background-image:url(<{$goods['img']|default:$shoplogo}>)">
+          </div>
+          <div class="shop-pro-right" onclick="callDialog(this)">
+            <div class="shop-pro-name">
+              <{$goods['name']}>
+            </div>
+            <div class="shop-pro-des" desc="<{$goods['descgoods']}>">销量<{$goods['sellcount']}>份</div>
+            <div class="shop-pro-money">
+                ￥<label ><{$goods['cost']}></label>
+                <{if $goods['is_cx'] == 1 }><span><{$goods['cost']/($goods['zhekou']/10)}></span><{/if}>
+            </div>
+          </div>
+          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $goods['count'] > 0}>
+          <{else}>
+              <{if $goods['have_det'] == 1 }>
+              <div class="addCar emptyCar" maxnum="65535">
+                <div class="prevC no_prevC"></div>
+                <div class="Cinput">
+                  0
+                </div>
+                <div class="addC" id="<{$goods['id']}>" ></div>
+              </div>
+              <{else}>
+              <div class="addCar emptyCar " maxnum="65535">
+                <div class="prevC" data-id="<{$goods['id']}>" data-shopid="<{$goods['shopid']}>" id="gid_<{$goods['id']}>" have_det="<{$goods['have_det']}>"></div>
+                <div class="Cinput">
+                  0
+                </div>
+                <div class="addC" data-id="<{$goods['id']}>" data-shopid="<{$goods['shopid']}>" id="gid_<{$goods['id']}>" have_det="<{$goods['have_det']}>" data-price="<{$goods['cost']}>" typeid="<{$goods['typeid']}>"></div>
+              </div>
+              <{/if}>
+          <{/if}>
+        </dd>
+        <{/foreach}>
+        <{/if}>
   	    <{foreach from=$goodstype key=mykey item=itv}>
         <div class="pro_label"><{$itv['name']}></div>
+        <{if !empty($cx_goods_list) }>
+
+        <{/if}>
         <{foreach from=$itv['det'] item=items }>
-        <{if $items['is_live'] == 1 }>
+        <{if $items['is_live'] == 1 && !in_array($items['id'],$cx_goodsids)}>
         <dd proid="<{$items['id']}>" id="gidli_<{$items['id']}>" typeid="<{$items['typeid']}>" data-price="<{$items['cost']}>">
           <div onclick="callDialog(this)" imgurl="<{$items['img']|default:$shoplogo}>" class="shop-pro-img" style="background-image:url(<{$items['img']|default:$shoplogo}>)">
           </div>
