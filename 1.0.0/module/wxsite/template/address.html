@@ -15,7 +15,7 @@
     <ul>
       <{foreach from=$arealist key=mykey item=items}>
       <li class="clearfix <{if $items['default'] == 1}>active<{/if}>">
-        <div class="map_default"></div>
+        <div class="map_default" gid="<{$items['id']}>"></div>
         <a href="<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress&id=<{$items['id']}>">
           <div class="orderDetail_address">
             <div class="orderDetail_address_con">
@@ -24,6 +24,7 @@
             </div>
           </div>
         </a>
+        <div class="map_update"><a href="<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress&id=<{$items['id']}>"></a></div>
         <div class="map_delete" gid="<{$items['id']}>"></div>
       </li>
       <{/foreach}>
@@ -32,8 +33,31 @@
 </div>
 <script>
   $(".shopMap .map_default").on("click",function(){
-    var i = $(this).index(".shopMap .map_default");
-    $(this).parents("li").addClass("active").siblings("li").removeClass("active");
+    var that = $(this);
+    var i = that.index(".shopMap .map_default");
+    
+    var info = {'tijiao':'do','default':'1','addressid':$(this).attr('gid'),'what':'default'};
+    var url = siteurl+'/index.php?ctrl=area&action=editaddress&random=@random@&datatype=json';
+        url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+    var backinfo = ajaxback(url,info);
+        if(backinfo.flag ==  false){
+          $.toast("设置默认地址成功",'text');
+          that.parents("li").addClass("active").siblings("li").removeClass("active");
+        }else{
+          $.toast(backinfo.content,'text');
+        } 
+    var url = siteurl+'/index.php?ctrl=shop&action=addcollect&datatype=json&collectid='+shopid+'&type=0';
+      var backinfo = ajaxback(url,{});
+      if(backinfo.flag == false){
+          $(this).toggleClass("shop_like_ed");
+          if($(this).hasClass("shop_like_ed")){
+            $.toast('收藏成功','text');
+          }else{
+            $.toast('取消收藏成功','text');
+          }
+      }else{
+          $.toast(backinfo.content,'text');
+      }
   })
   $(".map_delete").on("click",function(){
     var that = $(this);
