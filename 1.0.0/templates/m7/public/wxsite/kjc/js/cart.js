@@ -100,7 +100,7 @@ function removeonedish(gid,tshopid,num){
     $F.loading();
     fbajaxback(url, '',function(backmessage){
         if(backmessage.flag == false){
-            
+
             freshcart();
             return true;
         }else{
@@ -109,7 +109,7 @@ function removeonedish(gid,tshopid,num){
         }
     // $('#loading').hide();
      })
-  
+
 }
 function delshopcart(){
     var url= siteurl+'/index.php?ctrl=site&action=clearcart&shopid='+shopid+'&num=1&datatype=json&random=@random@';
