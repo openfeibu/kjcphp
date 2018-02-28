@@ -1,0 +1,99 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<div class="discount">
+  <div class="pro_group_list" id="supplierlist">
+      <div class="noPro" style="display:block;">暂无折扣商品</div>
+  </div>
+
+  <div class="weui-loadmore loadmoreing">
+    <i class="weui-loading "></i>
+    <span class="weui-loadmore__tips ">正在加载中</span>
+  </div>
+  <div class="weui-loadmore weui-loadmore_line loadmored">
+    <span class="weui-loadmore__tips">已经到底了</span>
+  </div>
+</div>
+
+
+<script>
+    function freshpage(){//刷新函数
+        $F.loading();
+        $('.pro_group_list').get(0).loading = false;
+        page =1;
+        pageend = false;
+        var ajaxurl = '<{ofunc type=url link="/wxsite/discountlistdata"}>';
+        $F.loading();
+        $.ajax({
+           type: 'POST',
+           async:true,
+           url: ajaxurl,
+           data: {'page':page},
+           dataType: 'html',
+           success: function(content) {
+                $F.closeLoading();
+                if(removeBr(content).length == 0){
+                    $('#supplierlist').html('<div class="noPro" style="display:block;">暂无折扣商品</div>');
+                }else{
+                    $('#supplierlist').html(content);
+                }
+                if(  $.trim(content) != '' && $("#supplierlist .pro_group_item").length >= 10  ){
+                    $(".loadmoreing").show();
+                    $(".loadmored").hide();
+                }else{
+                    $(".loadmored").show();
+                    $(".loadmoreing").hide();
+                }
+          },
+          error: function(content) {
+              $F.closeLoading();
+                 //Tmsg('获取失败...');
+          }
+        });
+     }
+     freshpage();
+    function loadmore(_this)
+    {
+        _this.loading = true;
+        page = page+1;
+        var ajaxurl = '<{ofunc type=url link="/wxsite/discountlistdata"}>';
+        $.ajax({
+            type: 'POST',
+            async:true,
+            url: ajaxurl,
+            data: {'page':page},
+            dataType: 'html',
+            success: function(content) {
+                var getmoreContent =  $.trim(content);
+                if( getmoreContent == ''  ){
+                    pageend = true;
+                    // $(_this).destroyInfinite();
+                    $(_this).find(".loadmoreing").hide();
+                    $(_this).find(".loadmored").show();
+                }else{
+                    _this.loading = false;
+                    $('#supplierlist').append(content);
+                }
+            },
+            error: function(content) {
+                pageend = true;
+                // $(_this).destroyInfinite();
+                $(_this).find(".loadmoreing").hide();
+                $(_this).find(".loadmored").show();
+            }
+        });
+    }
+//  滚动
+
+  var page=0
+  var loading = false;
+    $('body').infinite(50).on("infinite", function() {
+      if(loading) return;
+      loading = true;
+      loadmore(_this);
+    });
+
+
+</script>
+<{/block}>
+<{block name="footer"}><{/block}>

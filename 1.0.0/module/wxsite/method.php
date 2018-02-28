@@ -7285,8 +7285,6 @@ CREATE TABLE `xiaozu_shophuiorder` (
     //8.3 个人中心点击我的收藏判断登录
     public function collect()
     {
-        error_reporting(-1);
-        ini_set('display_errors',1);            //错误信息
         $this->checkwxweb();
         $lng = ICookie::get('lng');
         $lat = ICookie::get('lat');
@@ -7653,6 +7651,29 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $weblink = ICookie::get('wx_login_link');
         $defaultlink = IUrl::creatUrl('wxsite/member');
         $data['web_extend_link'] = empty($weblink)? $defaultlink:$weblink;
+        Mysite::$app->setdata($data);
+    }
+    public function discount()
+    {
+        error_reporting(-1);
+        ini_set('display_errors',1);            //错误信息
+    }
+    public function discountlistdata()
+    {
+        error_reporting(-1);
+        ini_set('display_errors',1);            //错误信息
+        $pageinfo = new page();
+        $pageinfo->setpage(intval(IReq::get('page')));
+        $nowtime = time();
+        $nowdate = date('Y-m-d', time());
+        $checktime = $nowtime-strtotime($nowdate);
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid WHERE g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ";
+        $goods_list = $this->mysql->getarr($sql);
+        foreach ($goods_list as $key => $goods) {
+            $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
+            $goods_list[$key]['zhekou'] = $goods['cxzhe']*0.1;
+        }
+        $data['goods_list'] = $goods_list;
         Mysite::$app->setdata($data);
     }
 }

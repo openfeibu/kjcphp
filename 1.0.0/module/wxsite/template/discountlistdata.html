@@ -1,0 +1,30 @@
+<{foreach from=$goods_list item=items }>
+<div class="pro_group_item">
+    <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['shopid']}>"}>">
+        <div class="img"><img src="<{$items['img']|default:$shoplogo}>" alt=""></div>
+        <div class="text">
+          <div class="pro_name"><{$items['name']}></div>
+          <div class="pro_nums fb-clearfix">
+            <div class="pro_nums_m">
+                ￥<{$items['cost']}>
+                <{if $items['is_cx'] == 1 }><span><{$items['cost']/($items['zhekou']/10)}></span><{/if}>
+            </div>
+            <div class="pro_nums_x">
+              限购<{$items['cxnum']}>件/天
+            </div>
+          </div>
+          <div class="pro_speed">
+            <div class="pro_speed_text">已抢20件</div>
+            <div class="pro_speed_num">30%</div>
+            <div class="pro_speed_fill" style="width: 30%">
+              <div class="pro_speed_fill_b">
+                <div class="pro_speed_text2">已抢20件</div>
+                <div class="pro_speed_num2">30%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pro_button fb-position-absolute">马上抢</div>
+    </a>
+</div>
+<{/foreach}>

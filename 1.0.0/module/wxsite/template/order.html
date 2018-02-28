@@ -88,6 +88,7 @@ function freshpage(){//刷新函数
             $('#orderlist').append(content);
             if($.trim(content) != '' && $("#orderlist .orderList_item").length >= 5  ){
                 $(".loadmoreing").show();
+                $(".loadmored").hide();
             }else{
                 $(".loadmored").show();
                 $(".loadmoreing").hide();
@@ -103,6 +104,7 @@ function freshpage(){//刷新函数
 function loadmore(_this){//加载函数
     page++;
     pageend = false;
+     _this.loading = true;
     console.log('order_status:'+order_status);
     var url = siteurl+'/index.php?ctrl=wxsite&action=userorder';
     $.ajax({
@@ -115,16 +117,17 @@ function loadmore(_this){//加载函数
             var getmoreContent =  $.trim(content);
             if( getmoreContent == ''  ){
                 pageend = true;
-                $(_this).destroyInfinite();
+            //    $(_this).destroyInfinite();
                 $(_this).find(".loadmoreing").hide();
-                $(_this).find(".loadmored").show()
+                $(_this).find(".loadmored").show();
             }else{
+                _this.loading = false;
                 $('#orderlist').append(content);
             }
         },
         error: function(content) {
             pageend = true;
-            $(_this).destroyInfinite();
+            //$(_this).destroyInfinite();
             $(_this).find(".loadmoreing").hide();
             $(_this).find(".loadmored").show()
         }
@@ -136,6 +139,7 @@ freshpage();
 //  滚动
     $('.order_group').infinite(50).on("infinite", function() {
         var _this = this;
+        if(_this.loading) return;
         loadmore(_this);
     });
 
