@@ -75,6 +75,7 @@ function htmlback(url,info)
 function freshpage(){//刷新函数
     page = 1;
     pageend = false;
+    $('.order_group').get(0).loading = false;
     console.log('order_status:'+order_status);
     var url = siteurl+'/index.php?ctrl=wxsite&action=userorder';
     $('#orderlist').html('');
@@ -85,7 +86,12 @@ function freshpage(){//刷新函数
         data: {'page':page,'order_status':order_status},
         dataType: 'html',
         success: function(content) {
-            $('#orderlist').append(content);
+            if(removeBr(content).length == 0){
+              $('#orderlist').html('<div id="noPro">  </div>');
+            }else{
+              $('#orderlist').html(content);
+            }
+            // $('#orderlist').append(content);
             if($.trim(content) != '' && $("#orderlist .orderList_item").length >= 5  ){
                 $(".loadmoreing").show();
                 $(".loadmored").hide();
