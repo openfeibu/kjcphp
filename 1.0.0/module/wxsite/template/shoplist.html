@@ -58,7 +58,7 @@
         freshpage();
     })
     function freshpage(){//刷新函数
-      
+
       $('.shop_group').get(0).loading = false;
         page =1;
         pageend = false;
@@ -77,7 +77,7 @@
                 }else{
                   $('#supplierlist').html(content);
                 }
-                
+
                 if(  $.trim(content) != '' && $("#supplierlist .shop_group_item").length >= 10  ){
                 	  $(".loadmoreing").show();
                     $(".loadmored").hide();
@@ -131,7 +131,7 @@
         if(_this.loading) return;
         loadmore(_this);
     });
- 
+
 
 </script>
 

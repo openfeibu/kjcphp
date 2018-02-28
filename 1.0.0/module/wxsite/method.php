@@ -7672,6 +7672,14 @@ CREATE TABLE `xiaozu_shophuiorder` (
         foreach ($goods_list as $key => $goods) {
             $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
             $goods_list[$key]['zhekou'] = $goods['cxzhe']*0.1;
+        //    $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .' and ord.status = 3  and is_reback = 0';
+        $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .'';
+            $sql = "select count(ordet.id) as shuliang from ".Mysite::$app->config['tablepre']."orderdet  as ordet left join  ".Mysite::$app->config['tablepre']."order as ord on ordet.order_id = ord.id  ".$where1." and  ordet.goodsid = ".$goods['id']."";
+            $goods_count_data = $this->mysql->select_one($sql);
+            $sell_count = $goods_count_data['shuliang'];
+            $goods_list[$key]['sell_count'] = $sell_count;
+            $all_count = $sell_count + $goods['count'];
+            $goods_list[$key]['percent'] = $sell_count <= 0 ? '0%' : ($goods['count'] > 0 ? round($sell_count/$all_count * 100 , 2) . "%" : '100%');
         }
         $data['goods_list'] = $goods_list;
         Mysite::$app->setdata($data);
