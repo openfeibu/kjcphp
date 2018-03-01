@@ -4,11 +4,11 @@
 *   版本v.2.1
 */
 class method   extends baseclass
-{ 
+{
 	public $platpsinfo;
-     
-		
-	 
+
+
+
 	/***************外卖人首页： 优选商家 分类 专题页 *****************/
 	function waimairenindex(){
 
@@ -16,7 +16,7 @@ class method   extends baseclass
 		$lat = trim(IFilter::act(IReq::get('lat')));
 		$lng = trim(IFilter::act(IReq::get('lng')));
 		$cityid = 0;
-		$cityinfo = array(); 
+		$cityinfo = array();
 		if( !empty($adcode) ){
 				$areacodeone =  $this->mysql->select_one("select id,pid from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
@@ -31,27 +31,27 @@ class method   extends baseclass
 						$cityinfo = $areainfoone;
  					}
 				}
-		}  
+		}
 		if( empty($cityinfo) ){
  			 $this->message("获取城市失败，跳转到选择城市页面");
  		}else{
 			$cityid = $cityinfo['adcode'];
-		} 
-		$data['cityinfo'] = $cityinfo; 
-		$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  "; 
-		
+		}
+		$data['cityinfo'] = $cityinfo;
+		$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  ";
+
 		$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1
 		$ordertype = intval(IFilter::act(IReq::get('ordertype'))); //排序类型   0,1,2,3
 		//shoptype
 		$areaid = intval(IFilter::act(IReq::get('areaid')));//区域ID
-		$limitcosttype = intval(IFilter::act(IReq::get('limitcosttype'))); //起送价格类型 0 1 2 3  
+		$limitcosttype = intval(IFilter::act(IReq::get('limitcosttype'))); //起送价格类型 0 1 2 3
 		$lat = IFilter::act(IReq::get('lat'));
-		$lng = IFilter::act(IReq::get('lng')); 
+		$lng = IFilter::act(IReq::get('lng'));
 		$lat = empty($lat)?0:$lat;
 		$lng =empty($lng)?0:$lng;
-		
-		
-		$userAgent = $_SERVER['HTTP_USER_AGENT']; 
+
+
+		$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		$listflag = true;
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
 			$source =  intval(IFilter::act(IReq::get('source')));
@@ -60,9 +60,9 @@ class method   extends baseclass
 				$listflag = false;
 			}else{
 			}
-		}else{ 
+		}else{
 		}
-		 
+
 
 		$Mdata['appadv1'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."appadv where id > 0 and  type !=2   ".$citywhere." order by orderid asc");
 		$Mdata['appadv2'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."appadv where id > 0 and type =2 and is_show=1 ".$citywhere." order by orderid asc");
@@ -74,7 +74,7 @@ class method   extends baseclass
 		if(!empty($imgtran1)){
 			foreach($imgtran1 as $key=>$value){
 				if( $value['linkurl'] == '#' || $value['linkurl'] == 'javascript:void(0);' || $value['linkurl'] == 'javascript:;' ){
-					$value['linkurl'] = ''; 
+					$value['linkurl'] = '';
 				}
 				$newimgtran1[] = $value;
 			}
@@ -86,13 +86,13 @@ class method   extends baseclass
 		if(!empty($imgtran2)){
 			foreach($imgtran2 as $key=>$value){
 				if( $value['linkurl'] == '#' || $value['linkurl'] == 'javascript:void(0);' || $value['linkurl'] == 'javascript:;' ){
-					$value['linkurl'] = ''; 
+					$value['linkurl'] = '';
 				}
 				$newimgtran2[] = $value;
 			}
 		}
 		$Mdata['imgtran2']  = $newimgtran2;
-		
+
 		//通知
 		$Mdata['noticeInfo'] = $this->mysql->select_one("select title,cityid from ".Mysite::$app->config['tablepre']."information where type = 1 ".$citywhere." order by addtime asc limit 1");
 		if(empty($Mdata['noticeInfo'])){
@@ -113,16 +113,16 @@ class method   extends baseclass
 		$data['ztymode'] =$Mdata['ztymode'];
 
 		$data['imgtran1'] =$Mdata['imgtran1'];
-		$data['imgtran2'] =$Mdata['imgtran2']; 
-			
+		$data['imgtran2'] =$Mdata['imgtran2'];
+
 		$limitcosttype = in_array($limitcosttype,array(0,1,2,3))?$limitcosttype:0;
 		$shopopentype = in_array($shopopentype,array(0,1,2))?$shopopentype:0;
-		
-		
+
+
 		$limitarr = array();
 		if($shopopentype == 0){
 			$limitarr['shoptype'] = 1;
-		}elseif($shopopentype == 1){ 
+		}elseif($shopopentype == 1){
 			$limitarr['shoptype'] = 2;
 		}
 		if($limitcosttype > 0){
@@ -135,7 +135,7 @@ class method   extends baseclass
 			$datalistx = $this->Tdata($cityid,$limitarr,array('juli'=>'asc'),$lat,$lng,4);
 		}
 		$pageinfo = new page();
-		$pageinfo->setpage(intval(IReq::get('page'))); 
+		$pageinfo->setpage(intval(IReq::get('page')));
 		$starnum = $pageinfo->startnum();
 		$pagesize = $pageinfo->getsize();
 		$templist = array();
@@ -146,7 +146,7 @@ class method   extends baseclass
 			}else{
 				break;
 			}
-		}  
+		}
 		$tempc = array();
 		foreach($datalistx as $key=>$value){
 			if($value['isforyou'] == 1&& $value['canps'] == 1){
@@ -180,34 +180,34 @@ class method   extends baseclass
 		}
 		$data['regimg'] = Mysite::$app->config['regimg'];
 		$data['shoplist'] = $templist;
-		$data['fyshoplist'] = $fyshop;  
+		$data['fyshoplist'] = $fyshop;
 		$data['mobilemodule']=1;
-		$this->success($data);  
+		$this->success($data);
 	}
-	function saveloation(){ 
+	function saveloation(){
 			ICookie::clear('lat');
 			ICookie::clear('lng');
 			ICookie::clear('mapname');
 			ICookie::clear('addressname');
 			ICookie::clear('CITY_ID');
 			ICookie::clear('CITY_NAME');
-			$adcode = IFilter::act(IReq::get('adcode'));   
-			$lat = IFilter::act(IReq::get('lat'));   
-			$lng = IFilter::act(IReq::get('lng')); 
-			$addressname = IFilter::act(IReq::get('addressname')); 
-			
+			$adcode = IFilter::act(IReq::get('adcode'));
+			$lat = IFilter::act(IReq::get('lat'));
+			$lng = IFilter::act(IReq::get('lng'));
+			$addressname = IFilter::act(IReq::get('addressname'));
+
 			/* $adcode = '410100';
 			$lat = 34.802461;
 			$lng = 113.597715;
 			$addressname = '电子商务产业园(郑州高新区)'; */
-			
-			ICookie::set('lat',$lat);  
-			ICookie::set('lng',$lng);  
-			ICookie::set('addressname',$addressname); 
-			ICookie::set('mapname',$addressname); 
-			
+
+			ICookie::set('lat',$lat);
+			ICookie::set('lng',$lng);
+			ICookie::set('addressname',$addressname);
+			ICookie::set('mapname',$addressname);
+
 			$data['areainfoone'] = array();
-			
+
 			if( !empty($adcode) ){
 				$areacodeone =  $this->mysql->select_one("select id,pid from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
 				if( !empty($areacodeone) ){
@@ -225,17 +225,17 @@ class method   extends baseclass
 			}
 			$this->success($data);
 	}
-	function newwaimairenindexPage(){ 
-		$adcode = trim(IFilter::act(IReq::get('adcode'))); 
+	function newwaimairenindexPage(){
+		$adcode = trim(IFilter::act(IReq::get('adcode')));
 		$shoplogo = Mysite::$app->config['shoplogo'];
 		$cityid = 0;
-		$cityinfo = array(); 
+		$cityinfo = array();
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( !empty($areainfoone)){
 						$city_id = "CITY_ID_".$areainfoone['adcode'];
 						$city_name = "CITY_NAME_".$areainfoone['name'];
@@ -244,14 +244,14 @@ class method   extends baseclass
 						$cityinfo = $areainfoone;
  					}
 				}
-		}  
+		}
 		if( empty($cityinfo)){
  			 $this->message("获取城市失败，跳转到选择城市页面");
  		}else{
 			$cityid = $cityinfo['adcode'];
-		} 
-		$data['cityinfo'] = $cityinfo; 
-		$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  ";  
+		}
+		$data['cityinfo'] = $cityinfo;
+		$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  ";
 		$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1
 		$ordertype = intval(IFilter::act(IReq::get('ordertype'))); //排序类型   0,1,2,3
 		//shoptype
@@ -279,28 +279,28 @@ class method   extends baseclass
 			}
 		}else{
 		}
-		 
+
 		$limitcosttype = in_array($limitcosttype,array(0,1,2,3))?$limitcosttype:0;
 		$shopopentype = in_array($shopopentype,array(0,1,2))?$shopopentype:0;
 		$limitarr = array();
 		if($shopopentype == 0){
 			$limitarr['shoptype'] = 1;
-		}elseif($shopopentype == 1){ 
+		}elseif($shopopentype == 1){
 			$limitarr['shoptype'] = 2;
 		}
 		if($limitcosttype > 0){
 			$limitarr['limitcost'] = $limitcosttype;
 		}
 		$limitarr['index_com'] =1;
-		
+
 		if($listflag == false){//当为苹果并且上架时强制性输出所有.
 			$datalistx = $this->Tdata($cityid,$limitarr,array('juli'=>'asc'),$lat,$lng,4,1);
 		}else{
 			$datalistx = $this->Tdata($cityid,$limitarr,array('juli'=>'asc'),$lat,$lng,4);
 		}
-		 
+
 		$pageinfo = new page();
-		$pageinfo->setpage(intval(IReq::get('page'))); 
+		$pageinfo->setpage(intval(IReq::get('page')));
 		$starnum = $pageinfo->startnum();
 		$pagesize = $pageinfo->getsize();
 		$templist = array();
@@ -311,14 +311,14 @@ class method   extends baseclass
 			}else{
 				break;
 			}
-		}  	 
-			 
+		}
+
 		$data['shoplist'] = $templist;
 		#print_r($data['shoplist']);
 		$data['mobilemodule']=1;
-		$this->success($data); 
-	} 
-	function newshop(){ 
+		$this->success($data);
+	}
+	function newshop(){
 		$shoplogo = Mysite::$app->config['shoplogo'];
 		$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1
 		$ordertype = intval(IFilter::act(IReq::get('ordertype'))); //排序类型   0,1,2,3
@@ -336,12 +336,12 @@ class method   extends baseclass
             }else{
                 $adcode = $areainfoone['adcode'];
             }
-		} 
+		}
 		$areaid = intval(IFilter::act(IReq::get('areaid')));//区域ID
 		$limitcosttype = intval(IFilter::act(IReq::get('limitcosttype'))); //起送价格类型 0 1 2 3
 		$is_waimai = intval(IFilter::act(IReq::get('is_waimai'))); //表示外送
 		$is_goshop = intval(IFilter::act(IReq::get('is_goshop'))); //表示到店
-		$searvalue = IFilter::act(IReq::get('searchvalue')); 
+		$searvalue = IFilter::act(IReq::get('searchvalue'));
 		$lat = IFilter::act(IReq::get('lat'));
 		$lng = IFilter::act(IReq::get('lng'));
 		$goodstype = intval(IFilter::act(IReq::get('shoptype')));
@@ -350,10 +350,10 @@ class method   extends baseclass
 		$is_new = intval(IFilter::act(IReq::get('is_new')));
 		$lat = empty($lat)?0:$lat;
 		$lng =empty($lng)?0:$lng;
-		
+
 		$limitcosttype = in_array($limitcosttype,array(0,1,2,3))?$limitcosttype:0;
-		$shopopentype = in_array($shopopentype,array(0,1,2))?$shopopentype:0; 
-		
+		$shopopentype = in_array($shopopentype,array(0,1,2))?$shopopentype:0;
+
 		$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		$listflag = true;
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
@@ -364,45 +364,45 @@ class method   extends baseclass
 			}else{
 			}
 		}else{
-		} 
-	 
+		}
+
 		$limitarr = array();
-		 
+
 		if($limitcosttype > 0){
 			$limitarr['limitcost'] = $limitcosttype;
-		} 
+		}
 		if($is_waimai == 1){
 			$limitarr['is_waimai'] = 1;
 		}
 		if($is_goshop == 1){
 			$limitarr['is_goshop'] = 1;
-		} 
+		}
 		if($goodstype > 0){
 			$limitarr['shopcat'] =$goodstype;
 		}
-		$orderarray = array( 
-			//默认距离由近到远排序					   
+		$orderarray = array(
+			//默认距离由近到远排序
 			'0' =>array('juli'=>'asc'),
 			//按好评由高到低排序
 			'1'=>array('ping'=>'desc'),
 			//按起送价由低到高排序
 			'2'=>array('limitcost'=>'asc'),
-			//按销量由高到低排序           
-			'3'=>array('sell'=>'desc'),			   
+			//按销量由高到低排序
+			'3'=>array('sell'=>'desc'),
 		);
-		
-		$order = in_array($ordertype,array(1,2,3))? $ordertype:0; 
-		
-		
+
+		$order = in_array($ordertype,array(1,2,3))? $ordertype:0;
+
+
 		if($listflag == false){//当为苹果并且上架时强制性输出所有.
 			$datalistx = $this->Tdata($adcode,$limitarr,array('juli'=>'asc'),$lat,$lng,4,1);
 		}else{
 			$datalistx = $this->Tdata($adcode,$limitarr,$orderarray[$order],$lat,$lng,4);
 		}
-		 
-		 
+
+
 		$pageinfo = new page();
-		$pageinfo->setpage(intval(IReq::get('page'))); 
+		$pageinfo->setpage(intval(IReq::get('page')));
 		$starnum = $pageinfo->startnum();
 		$pagesize = $pageinfo->getsize();
 		$templist = array();
@@ -413,8 +413,8 @@ class method   extends baseclass
 			}else{
 				break;
 			}
-		}  	 
-		$this->success($templist); 
+		}
+		$this->success($templist);
 	}
 	function getuserinfo(){
 		$member = array();
@@ -423,7 +423,7 @@ class method   extends baseclass
 		$logintype = trim(IFilter::act(IReq::get('logintype')));
 		$phone = trim(IFilter::act(IReq::get('phone')));
 		if( $logintype == 'phone' ){// 快捷登录
-			$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' and  phone='".$phone."' "); 
+			$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' and  phone='".$phone."' ");
 		}else{
 			$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' and  password='".md5($pwd)."' ");
 		}
@@ -435,57 +435,57 @@ class method   extends baseclass
 	}
 	/**
 	*@method 用户端  分类下超市便利店独立模块
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=marketshop&lat=34.802330&lng=113.543806&page=1&datatype=json 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=marketshop&lat=34.802330&lng=113.543806&page=1&datatype=json
  	*@所需参数   lat  lng 坐标参数   page 页码
 	*添加时间:2017/9/27    技术：闫
 	**/
 	function marketshop(){
-		
-		$shoplogo = Mysite::$app->config['shoplogo'];		 
+
+		$shoplogo = Mysite::$app->config['shoplogo'];
 		$lat = trim(IFilter::act(IReq::get('lat')));
-		$lng = trim(IFilter::act(IReq::get('lng')));  		 
-        $adcode = trim(IFilter::act(IReq::get('adcode')));  		 
+		$lng = trim(IFilter::act(IReq::get('lng')));
+        $adcode = trim(IFilter::act(IReq::get('adcode')));
 		if(empty($adcode)){
 			if( !empty($lat) &&  !empty($lng) ){
-				   $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all'); 
+				   $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all');
 					 $backinfo  = json_decode($content,true);
-					
+
 					if( $backinfo['status'] == 1 && $backinfo['info'] == 'OK'){
-						$adcode = $backinfo['regeocode']['addressComponent']['adcode']; 
-						 
-					}  
-						
+						$adcode = $backinfo['regeocode']['addressComponent']['adcode'];
+
+					}
+
 			}else{
 				$this->message('位置获取失败');
 		    }
 		}
-		$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
-		
+		$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
+
 		if( !empty($areacodeone) ){
 			$adcodeid = $areacodeone['id'];
 			$pid = $areacodeone['pid'];
 			$adcode = $adcode;
-			$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
-			
+			$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
+
 			if( !empty($areainfoone) ){
 				$city_id = "CITY_ID_".$areainfoone['adcode'];
 				$city_name = "CITY_NAME_".$areainfoone['name'];
 				ICookie::set('CITY_ID',$city_id);
 				ICookie::set('CITY_NAME',$city_name);
 				$data['areainfoone']  = $areainfoone;
-				$adcode = $areainfoone['adcode']; 
+				$adcode = $areainfoone['adcode'];
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 		$imglist  = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."adv where `advtype` = 'chaoshilb' and cityid=".$adcode." " );
 		foreach($imglist as $k=>$v){
 			 $v['img'] = Mysite::$app->config['siteurl'].$v['img'];
-             $data['imglist'][] = $v;	 
-		}	
-		$userAgent = $_SERVER['HTTP_USER_AGENT']; 
+             $data['imglist'][] = $v;
+		}
+		$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		$listflag = true;
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
 			$source =  intval(IFilter::act(IReq::get('source')));
@@ -494,20 +494,20 @@ class method   extends baseclass
 				$listflag = false;
 			}else{
 			}
-		}else{ 
-		} 
-		 
-		$limitarr = array(); 
-		$limitarr['shoptype'] =2; 
+		}else{
+		}
+
+		$limitarr = array();
+		$limitarr['shoptype'] =2;
 		if($listflag == false){//当为苹果并且上架时强制性输出所有.
 			$datalistx = $this->Tdata($adcode,$limitarr,array('juli'=>'asc'),$lat,$lng,4,1);
 		}else{
 			$datalistx = $this->Tdata($adcode,$limitarr,array('juli'=>'asc'),$lat,$lng,4);
 		}
-		 
-		 
+
+
 		$pageinfo = new page();
-		$pageinfo->setpage(intval(IReq::get('page'))); 
+		$pageinfo->setpage(intval(IReq::get('page')));
 		$starnum = $pageinfo->startnum();
 		$pagesize = $pageinfo->getsize();
 		$templist = array();
@@ -518,104 +518,104 @@ class method   extends baseclass
 			}else{
 				break;
 			}
-		}  	
-		 
-		 
-        $data['shoplist'] = $templist;	
+		}
+
+
+        $data['shoplist'] = $templist;
 		$this->success($data);
-			
+
 	}
 	/**
 	*@method 新版商家端  编辑优惠活动时  获取优惠活动详情
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=editrule&uid=10203&pwd=123456&id=485&datatype=json 
- 	*@所需参数   uid：用户uid   pwd：用户密码   id：优惠活动活动id 	
-	*@备注：   
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=editrule&uid=10203&pwd=123456&id=485&datatype=json
+ 	*@所需参数   uid：用户uid   pwd：用户密码   id：优惠活动活动id
+	*@备注：
 	*添加时间:2017/9/27    技术：闫
 	**/
     function editrule(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		$id = IFilter::act(IReq::get('id'));
-		$ruleinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where id = ".$id." "); 
+		$ruleinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where id = ".$id." ");
 		if(empty($ruleinfo)) $this->message('活动信息获取失败');
 			$ruleinfo['creattime'] = date('Y-m-d H:i:s',$ruleinfo['creattime']);
 			$ruleinfo['starttime'] = empty($ruleinfo['starttime'])?'':date('Y-m-d',$ruleinfo['starttime']);
-			$ruleinfo['endtime'] = empty($ruleinfo['endtime'])?'':date('Y-m-d',$ruleinfo['endtime']);						 
+			$ruleinfo['endtime'] = empty($ruleinfo['endtime'])?'':date('Y-m-d',$ruleinfo['endtime']);
 			$ruleinfo['limitcontent'] = explode(',',$ruleinfo['limitcontent']);
-			$ruleinfo['controlcontent'] = explode(',',$ruleinfo['controlcontent']);	 
+			$ruleinfo['controlcontent'] = explode(',',$ruleinfo['controlcontent']);
 			$ruleinfo['presenttitle'] = empty($ruleinfo['presenttitle'])?'':$ruleinfo['presenttitle'];
 			$ruleinfo['imgurl'] = Mysite::$app->config['siteurl'].$ruleinfo['imgurl'];
-		    $ruleinfo['supportplatform'] = explode(',',$ruleinfo['supportplatform']);			 						 		 
-			$ruleinfo['limittime'] = explode(',',$ruleinfo['limittime']);	 
+		    $ruleinfo['supportplatform'] = explode(',',$ruleinfo['supportplatform']);
+			$ruleinfo['limittime'] = explode(',',$ruleinfo['limittime']);
 		$this->success($ruleinfo);
 	}
 	/**
 	*@method 新版商家端  促销活动列表
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=cxrulelist&uid=10203&pwd=123456&type=1&datatype=json 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=cxrulelist&uid=10203&pwd=123456&type=1&datatype=json
  	*@所需参数   uid：用户uid   pwd：用户密码   type：1 待生效 2进行中 3已结束
-	*@备注：   
+	*@备注：
 	*添加时间:2017/9/27    技术：闫
 	**/
    function cxrulelist(){
-       $backinfo = $this->checkapp();		 
+       $backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-	   $shopinfo = $this->mysql->select_one("select id, shoptype  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");			
+	   $shopinfo = $this->mysql->select_one("select id, shoptype  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");
 	   if(empty($shopinfo)) $this->message('店铺信息获取失败');
 	   if($shopinfo['shoptype'] == 0){
-		   $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopinfo['id']."'  ");	
+		   $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopinfo['id']."'  ");
 	   }else{
-		   $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid = '".$shopinfo['id']."'  ");	
+		   $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid = '".$shopinfo['id']."'  ");
 	   }
-	   
-	   
+
+
 	   $type = intval(IReq::get('type'));//1 待生效 2进行中 3已结束
-       $type = in_array($type, array(1, 2, 3)) ? $type : 1;     
+       $type = in_array($type, array(1, 2, 3)) ? $type : 1;
 	   if($psinfo['sendtype'] == 1){ //商家配送的情况下   进行中的活动不显示  平台设置的免配送费活动
-		  $wherearr = array(	    
+		  $wherearr = array(
 		   '1'=>' and parentid = 0 and limittype = 3  and starttime > '.time().' and status = 1 ',
 		   '2'=>' and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > '.time().' and starttime < '.time().')) and ( ( parentid = 1 and controltype != 4 ) or parentid = 0 )',
-		   '3'=>' and parentid = 0 and ( status = 0 or ( limittype = 3 and endtime < '.time().' ) )  ',	    
-		   ); 
-		   
+		   '3'=>' and parentid = 0 and ( status = 0 or ( limittype = 3 and endtime < '.time().' ) )  ',
+		   );
+
 	   }else{//平台配送的情况下   进行中的活动不显示  商家设置的免配送费活动
-		   $wherearr = array(	    
+		   $wherearr = array(
 		   '1'=>' and parentid = 0 and limittype = 3  and starttime > '.time().' and status = 1 ',
 		   '2'=>' and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > '.time().' and starttime < '.time().')) and ( ( parentid = 0 and controltype != 4 ) or parentid = 1 ) ',
-		   '3'=>' and parentid = 0 and ( status = 0 or ( limittype = 3 and endtime < '.time().' ) )  ',	    
-		   );   
+		   '3'=>' and parentid = 0 and ( status = 0 or ( limittype = 3 and endtime < '.time().' ) )  ',
+		   );
 	   }
-	   
-	    
+
+
        $cxrulelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$shopinfo['id'].",shopid) ".$wherearr[$type]."   order by id desc " );
-	   
+
 	   $data['cxrulelist'] = array();
 	   foreach($cxrulelist as $k=>$v){
 		    $v['creattime'] = date('Y-m-d H:i:s',$v['creattime']);
 		    $v['starttime'] = empty($v['starttime'])?'':date('Y-m-d',$v['starttime']);
-			$v['endtime'] = empty($v['endtime'])?'':date('Y-m-d',$v['endtime']);			 
+			$v['endtime'] = empty($v['endtime'])?'':date('Y-m-d',$v['endtime']);
 			$v['presenttitle'] = empty($v['presenttitle'])?'':$v['presenttitle'];
 			$v['imgurl'] = Mysite::$app->config['siteurl'].$v['imgurl'];
-			$v['supportplatform'] = explode(',',$v['supportplatform']);	 
+			$v['supportplatform'] = explode(',',$v['supportplatform']);
 			$v['limitcontent'] = explode(',',$v['limitcontent']);
-			$v['controlcontent'] = explode(',',$v['controlcontent']);	 
-			$v['limittime'] = explode(',',$v['limittime']);	 
-			$data['cxrulelist'][] = $v;	    
-	   }  	   
-	   $this->success($data);                
+			$v['controlcontent'] = explode(',',$v['controlcontent']);
+			$v['limittime'] = explode(',',$v['limittime']);
+			$data['cxrulelist'][] = $v;
+	   }
+	   $this->success($data);
    }
    /**
 	*@method 新版商家端  检测是否可以添加活动
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=checkcx&uid=10203&pwd=123456&type=1&datatype=json 
- 	*@所需参数   uid：用户uid   pwd：用户密码  type:活动类型 1满赠活动 2满减活动 3折扣活动 4免配送费 
-	*@备注：   
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=checkcx&uid=10203&pwd=123456&type=1&datatype=json
+ 	*@所需参数   uid：用户uid   pwd：用户密码  type:活动类型 1满赠活动 2满减活动 3折扣活动 4免配送费
+	*@备注：
 	*添加时间:2017/9/28    技术：闫
 	**/
 	function checkcx(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
@@ -633,9 +633,9 @@ class method   extends baseclass
 				$data['canadd'] = 0;
 			    $data['reason'] = '仅限商家配送店铺创建此活动';
 			}else{
-				$checkcxinfox1 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and  limittype = 3  and starttime > ".time()." and status = 1  "); 
+				$checkcxinfox1 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and  limittype = 3  and starttime > ".time()." and status = 1  ");
 			//进行中
-			    $checkcxinfox2 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time()."))"); 
+			    $checkcxinfox2 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time()."))");
 		    if(!(empty($checkcxinfox1) && empty($checkcxinfox2))){
 					$data['canadd'] = 0;
 			        $data['reason'] = '当前已有该类型活动，无法进行创建';
@@ -643,15 +643,15 @@ class method   extends baseclass
 					$data['canadd'] = 1;
 			        $data['reason'] = '可创建该类型活动';
 				}
-				
+
 			}
-			
+
 		}
 		if($type < 4){
 			//待生效
-			$checkcxinfo1 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and  limittype = 3  and starttime > ".time()." and status = 1  "); 
+			$checkcxinfo1 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and  limittype = 3  and starttime > ".time()." and status = 1  ");
 			//进行中
-			$checkcxinfo2 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time()."))"); 
+			$checkcxinfo2 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$type." and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time()."))");
 		    if(!empty($checkcxinfo1) || !empty($checkcxinfo2)){
 				$data['canadd'] = 0;
 			    $data['reason'] = '当前已有该类型活动，无法进行创建';
@@ -660,63 +660,63 @@ class method   extends baseclass
 			    $data['reason'] = '可创建该类型活动';
 			}
 		}
-		$this->success($data); 
+		$this->success($data);
 	}
 
 
     /**
 	*@method 新版商家端  终止进行中的活动
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=stopcx&uid=10203&pwd=123456&cxid=123&datatype=json 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=stopcx&uid=10203&pwd=123456&cxid=123&datatype=json
  	*@所需参数   uid：用户uid   pwd：用户密码  cxid:活动id
-	*@备注：   
+	*@备注：
 	*添加时间:2017/9/27    技术：闫
 	**/
 	function stopcx(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		$id = IFilter::act(IReq::get('cxid'));
-		$ruleinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where id = ".$id." "); 
-		if(empty($ruleinfo))$this->message('活动数据获取失败');  
+		$ruleinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where id = ".$id." ");
+		if(empty($ruleinfo))$this->message('活动数据获取失败');
 		$data['status'] = 0;
 		$this->mysql->update(Mysite::$app->config['tablepre'].'rule',$data,"id='".$id."'");
-		$this->success('success'); 
+		$this->success('success');
 	}
 
    /**
 	*@method 新版商家端  保存促销活动
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=savecxrule&uid=10203&pwd=123456&controltype=1&supporttype=1&limitcontent=30&presenttitle=测试玩具&limittype=1&datatype=json 
- 	*@所需参数  
-		|  参数名         | 类型   | 说明                                                               |   		 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=savecxrule&uid=10203&pwd=123456&controltype=1&supporttype=1&limitcontent=30&presenttitle=测试玩具&limittype=1&datatype=json
+ 	*@所需参数
+		|  参数名         | 类型   | 说明                                                               |
 		|  uid            | string | 用户uid                                                            |
 		|  pwd            | string | 密码                                                               |
 		|  cxid           | string | 编辑原有活动传活动id  新增不传该参数                               |
 		|  controltype    | string | 1满赠活动 2满减活动 3折扣活动 4免配送费 5首单立减                  |
 		|  limitcontent   | string | 限制金额  多条满减时  限制金额用逗号隔开 例 30,40,50               |
-		|  controlcontent | string | 减免金额  折扣数  多条满减时  减免金额用逗号隔开 例 10,20,30       |   
-		|  presenttitle   | string | controltype=1为满赠活动时  需传赠品名称  其他类型活动该参数可不传值| 
+		|  controlcontent | string | 减免金额  折扣数  多条满减时  减免金额用逗号隔开 例 10,20,30       |
+		|  presenttitle   | string | controltype=1为满赠活动时  需传赠品名称  其他类型活动该参数可不传值|
 		|  limittype      | string | 1不限制 2表示指定星期 3自定义日期                                  |
-		|  limittime      | string | limittype=1和3时不传值 limittype=2时传星期  例1,2,5,7              |    
+		|  limittime      | string | limittype=1和3时不传值 limittype=2时传星期  例1,2,5,7              |
 		|  starttime      | string | limittype=3时传值  开始时间 2016-02-02                             |
 		|  endtime        | string | limittype=3时传值  结束时间 2016-03-02    	                        |
-	*@备注：   
+	*@备注：
 	*添加时间:2017/9/27    技术：闫
 	**/
 	function savecxrule(){
-        $backinfo = $this->checkapp();		 
+        $backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 	    $shopinfo = $this->mysql->select_one("select id  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");
-		$data['shopid'] = $shopinfo['id'];	
-		if(empty($data['shopid']))$this->message('店铺数据获取失败');        
+		$data['shopid'] = $shopinfo['id'];
+		if(empty($data['shopid']))$this->message('店铺数据获取失败');
         $data['parentid'] = 0;
         $data['shopbili'] = 0;
         $data['type'] = 1;//默认购物车限制
 		$cxid = intval(IReq::get('cxid'));
         $controltype = intval(IReq::get('controltype'));//1满赠活动 2满减活动 3折扣活动 4免配送费 5首单立减
-		$data['controltype'] = $controltype;		
+		$data['controltype'] = $controltype;
         $setinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."cxruleset where  id = ".$controltype."   " );
 		$data['imgurl'] = $setinfo['imgurl'];//活动图标
 		$data['supporttype'] = $setinfo['supportorder'];//支持订单类型 1支持全部订单 2只支持在线支付订单
@@ -725,38 +725,38 @@ class method   extends baseclass
 		$ordertype = $data['supporttype']==2?'在线支付满':'满';
 		$data['limitcontent'] = IReq::get('limitcontent');
 		$data['controlcontent'] = IReq::get('controlcontent');
-		if($controltype == 1){//1满赠活动			 
+		if($controltype == 1){//1满赠活动
 			$data['presenttitle'] = trim(IFilter::act(IReq::get('presenttitle')));
 			if(empty($data['limitcontent'])) $this->message('请输入订单限制金额');
-			if(empty($data['presenttitle'])) $this->message('请输入赠品名称及数量'); 
-			$data['name']= $ordertype.''.$data['limitcontent'].'赠送'.$data['presenttitle'];	 
+			if(empty($data['presenttitle'])) $this->message('请输入赠品名称及数量');
+			$data['name']= $ordertype.''.$data['limitcontent'].'赠送'.$data['presenttitle'];
 		}
 		if($controltype == 2){//2满减活动
-            if(empty($data['limitcontent'])) $this->message('请输入订单限制金额');		
+            if(empty($data['limitcontent'])) $this->message('请输入订单限制金额');
 			$limit = explode(',',$data['limitcontent']);
 			$jian = explode(',',$data['controlcontent']);
 			$name = $data['supporttype']==2?'在线支付':'';
 			foreach($limit as $k1=>$v1){
 				if($jian[$k1]>$v1){
-					$this->message('减免金额不能大于限制金额');		
+					$this->message('减免金额不能大于限制金额');
 				}
 				$name .= '满'.$v1.'减'.$jian[$k1].';';
 			}
 			$data['name'] = rtrim($name, ";");
 		}
-		if($controltype == 3){//3折扣活动			 
+		if($controltype == 3){//3折扣活动
 			$zhe = $data['controlcontent']/10;
 			$data['name']= $ordertype.''.$data['limitcontent'].'享'.$zhe.'折优惠';
 			if(empty($data['limitcontent'])) $this->message('请输入订单限制金额');
-			if(empty($data['controlcontent'])) $this->message('请输入折扣值'); 
+			if(empty($data['controlcontent'])) $this->message('请输入折扣值');
 		}
-		if($controltype == 4){//4免配送费			 		 
+		if($controltype == 4){//4免配送费
 			$data['name']= $ordertype.''.$data['limitcontent'].'免基础配送费';
-			if(empty($data['limitcontent'])) $this->message('请输入订单限制金额');			 
+			if(empty($data['limitcontent'])) $this->message('请输入订单限制金额');
 		}
 		if($controltype == 5){//5首单立减
-			$data['limitcontent'] = 0;	            
-			$data['name']= '新用户下单立减'.$data['controlcontent'].'元';	 	
+			$data['limitcontent'] = 0;
+			$data['name']= '新用户下单立减'.$data['controlcontent'].'元';
 		}
         if(empty($data['name'])) $this->message('促销标题不能为空');
         $limittype = intval(IReq::get('limittype'));//1不限制 2表示指定星期 3自定义日期
@@ -769,63 +769,63 @@ class method   extends baseclass
             $data['limittime'] = $limittime;
         }else{
 			$starttime = IFilter::act(IReq::get('starttime'));
-            $endtime = IFilter::act(IReq::get('endtime'));			
+            $endtime = IFilter::act(IReq::get('endtime'));
             if(empty($starttime)) $this->message('cx_starttime');
-			if(empty($endtime)) $this->message('cx_endtime');        
+			if(empty($endtime)) $this->message('cx_endtime');
 			$data['starttime'] = strtotime($starttime.' 00:00:00');
 			$data['endtime'] = strtotime($endtime.' 23:59:59');
-			if($data['endtime'] <= $data['starttime']) $this->message('结束时间不能早于开始时间');     
-        } 
-         		
+			if($data['endtime'] <= $data['starttime']) $this->message('结束时间不能早于开始时间');
+        }
+
         if(empty($cxid)){
-			/**新建活动时 检测是否添加过该类型活动**/		
+			/**新建活动时 检测是否添加过该类型活动**/
 			//待生效
-			$checkcxinfo1 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$controltype." and  limittype = 3  and starttime > '.time().' and status = 1  "); 
+			$checkcxinfo1 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$controltype." and  limittype = 3  and starttime > '.time().' and status = 1  ");
 			//进行中
 			$checkcxinfo2 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where parentid = 0 and shopid = ".$shopinfo['id']." and controltype = ".$controltype." and status = 1 and ( limittype < 3  or ( limittype = 3 and endtime > '.time().' and starttime < '.time().'))");
 			if(!empty($checkcxinfo1) || !empty($checkcxinfo2))  $this->message('已存在同类型活动，不可重复添加');
-			$data['creattime'] = time();			 
+			$data['creattime'] = time();
             $this->mysql->insert(Mysite::$app->config['tablepre'].'rule',$data);
-        }else{ 
-            $oneinfo = $this->mysql->select_one("select parentid  from ".Mysite::$app->config['tablepre']."rule  where id = '".$cxid."'  ");		if($oneinfo['parentid']==1) $this->message('您无权修改平台活动');     
+        }else{
+            $oneinfo = $this->mysql->select_one("select parentid  from ".Mysite::$app->config['tablepre']."rule  where id = '".$cxid."'  ");		if($oneinfo['parentid']==1) $this->message('您无权修改平台活动');
 			$this->mysql->update(Mysite::$app->config['tablepre'].'rule',$data,"id='".$cxid."'");
         }
-		
+
         $this->success('success');
 	}
-	
-	
+
+
 //跑腿8.6升级（2017.4.15）
     function getpaotuiinfo(){
-		$helpbuyinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."helpbuy where isnotsee= 0 order by orderid asc"); 
-		$helpmoveinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."helpmove where isnotsee= 0 order by orderid asc "); 
+		$helpbuyinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."helpbuy where isnotsee= 0 order by orderid asc");
+		$helpmoveinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."helpmove where isnotsee= 0 order by orderid asc ");
 		$data['helpbuyinfo'] = $helpbuyinfo;
 		$data['helpmoveinfo'] = $helpmoveinfo;
-		$this->success($data); 
+		$this->success($data);
 	}
-	/** 
+	/**
 	 * @shopapi
-     * @name 新版商家端  订单详情地图中   买家、店铺、配送员位置信息 
+     * @name 新版商家端  订单详情地图中   买家、店铺、配送员位置信息
 	 * @other 2017/8/11   闫
-     * @orderid   订单id 必传 
-	 * @datatype 固定值 json 必传  
-	 * @extend 必传登陆验证参数 
-	*	 { 
-	*	 "error" : "false", 
-	*	 "msg" : { 
+     * @orderid   订单id 必传
+	 * @datatype 固定值 json 必传
+	 * @extend 必传登陆验证参数
+	*	 {
+	*	 "error" : "false",
+	*	 "msg" : {
 	*		  "shoplat" : "34.753611", 【店铺坐标lat值】
 	*		  "shoplng" : "113.682705", 【店铺坐标lng值】
 	*		  "buyerlat" : "34.746423", 【买家坐标lat值】
 	*		  "buyerlng" : "113.601503", 【买家坐标lng值】
 	*		  "psylng" : "113.54336615668403", 【配送员坐标lng值】
 	*		  "psylat" : "34.80242648654514"   【配送员坐标lat值】
-	*      } 
+	*      }
 	*}
-     */  
+     */
     function orderlocationinfo(){
-	    $orderid = IFilter::act(IReq::get('orderid'));	    
+	    $orderid = IFilter::act(IReq::get('orderid'));
 		if(empty($orderid)) $this->message('订单id获取失败');
-		$orderinfo = $this->mysql->select_one("select psuid,pstype,status,shoplat,shoplng,buyerlat,buyerlng,psyoverlng,psyoverlat from ".Mysite::$app->config['tablepre']."order where id='".$orderid."' "); 	
+		$orderinfo = $this->mysql->select_one("select psuid,pstype,status,shoplat,shoplng,buyerlat,buyerlng,psyoverlng,psyoverlat from ".Mysite::$app->config['tablepre']."order where id='".$orderid."' ");
 		if(empty($orderinfo)) $this->message('订单获取失败');
         $data['shoplat'] = $orderinfo['shoplat'];
 		$data['shoplng'] = $orderinfo['shoplng'];
@@ -840,62 +840,62 @@ class method   extends baseclass
 					 $data['psylng'] = empty($orderinfo['psyoverlng'])?'':$orderinfo['psyoverlng'];
 		             $data['psylat'] = empty($orderinfo['psyoverlat'])?'':$orderinfo['psyoverlat'];
 				 }else{
-					 $psbinterface = new psbinterface();				 
+					 $psbinterface = new psbinterface();
 					 $psylocationonfo = $psbinterface->getpsbclerkinfo($orderinfo['psuid']);
-					 if( !empty($psylocationonfo) && !empty($psylocationonfo['posilnglat']) ){					
+					 if( !empty($psylocationonfo) && !empty($psylocationonfo['posilnglat']) ){
 					     $posilnglatarr = explode(',',$psylocationonfo['posilnglat']);
 					     $posilng = $posilnglatarr[0];
-					     $posilat = $posilnglatarr[1]; 
+					     $posilat = $posilnglatarr[1];
 						 if(!empty($posilng) && !empty($posilat)){
 							 $data['psylng'] = $posilng;
 							 $data['psylat'] = $posilat;
 						 }else{
 							 $data['psylng'] = '';
 							 $data['psylat'] = '';
-						 }	 
+						 }
 				     }else{
 						 $data['psylng'] = '';
 					     $data['psylat'] = '';
-					 }	 					 
-				 }	
+					 }
+				 }
 			}else{
 				$data['psylng'] = '';
-		        $data['psylat'] = '';	
-			}	
-		}				
-		$this->success($data); 		
+		        $data['psylat'] = '';
+			}
+		}
+		$this->success($data);
 	}
-	
+
 	/**
 	*@method 新版商家端  待处理->退款->同意退款和拒绝退款操作
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=drawbackoperation&uid=10203&pwd=123456&operationtype=ok&orderid=29873&datatype=json 
- 	*@所需参数   uid：用户uid   pwd：用户密码    operationtype：商家退款操作ok同意退款  no拒绝退款    orderid：订单id 	
-	*@备注：当商家同意退款  operationtype参数值传ok   商家拒绝退款  operationtype参数值传no   
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=drawbackoperation&uid=10203&pwd=123456&operationtype=ok&orderid=29873&datatype=json
+ 	*@所需参数   uid：用户uid   pwd：用户密码    operationtype：商家退款操作ok同意退款  no拒绝退款    orderid：订单id
+	*@备注：当商家同意退款  operationtype参数值传ok   商家拒绝退款  operationtype参数值传no
 	*添加时间:2017/8/9    技术：闫旭明
 	**/
 	function drawbackoperation(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		$operationtype = IFilter::act(IReq::get('operationtype'));
 		if(empty($operationtype)) $this->message('未定义的操作');
 		$orderid = IFilter::act(IReq::get('orderid'));
-		if(empty($orderid)) $this->message('订单id获取失败');	
-		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."' "); 	
-		if(empty($orderinfo)) $this->message('订单获取失败');		
-		if($orderinfo['is_reback'] == 0) $this->message('订单未申请退款');			 
-		if($orderinfo['status'] > 3) $this->message('订单已取消');			 
-		$drawbacklog = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."drawbacklog where orderid=".$orderid." order by  id desc  limit 0,2");		
-		if(empty($drawbacklog)) $this->message('退款申请不存在');			
-		if($drawbacklog['status'] > 0 && $drawbacklog['status'] < 3)  $this->message('退款申请已处理'); //退款状态 0未待处理 1为已退 2为拒绝退款 3待商家确认			
+		if(empty($orderid)) $this->message('订单id获取失败');
+		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."' ");
+		if(empty($orderinfo)) $this->message('订单获取失败');
+		if($orderinfo['is_reback'] == 0) $this->message('订单未申请退款');
+		if($orderinfo['status'] > 3) $this->message('订单已取消');
+		$drawbacklog = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."drawbacklog where orderid=".$orderid." order by  id desc  limit 0,2");
+		if(empty($drawbacklog)) $this->message('退款申请不存在');
+		if($drawbacklog['status'] > 0 && $drawbacklog['status'] < 3)  $this->message('退款申请已处理'); //退款状态 0未待处理 1为已退 2为拒绝退款 3待商家确认
 		#if($drawbacklog['type'] != 0)  $this->message('商家已处理过退款');
         if($operationtype == 'ok'){
 			#$data['type'] = 1;
 			$data['status'] = 0;
-			$this->mysql->update(Mysite::$app->config['tablepre'].'drawbacklog',$data,"id='".$drawbacklog['id']."'"); 
+			$this->mysql->update(Mysite::$app->config['tablepre'].'drawbacklog',$data,"id='".$drawbacklog['id']."'");
 			$data1['is_reback'] = 1;
-			$this->mysql->update(Mysite::$app->config['tablepre'].'order',$data1,"id='".$orderid."'"); 
+			$this->mysql->update(Mysite::$app->config['tablepre'].'order',$data1,"id='".$orderid."'");
 			$ordCls = new orderclass();
 			$ordCls->noticeback($orderid);
             //退款通知配送宝
@@ -905,19 +905,19 @@ class method   extends baseclass
 
                 }
             }
-			$this->success('同意退款操作成功'); 
+			$this->success('同意退款操作成功');
 		}else{
 			$udata['is_reback'] = 0;//商家拒绝退款后   订单返回原状态
 			$this->mysql->update(Mysite::$app->config['tablepre'].'order',$udata,"id='".$orderid."'");
 			$ordCls = new orderclass();
 			$ordCls->writewuliustatus($orderid,15,$orderinfo['paytype']);  // 拒绝退款
-		    $ordCls->noticeunback($orderid); 
-            $this->success('拒绝退款操作成功'); 			
+		    $ordCls->noticeunback($orderid);
+            $this->success('拒绝退款操作成功');
 		}
 	}
 	/**
 	*@method 新版商家端  门店管理->店铺统计->营业统计
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=shopStatistics&uid=12154&pwd=123456&searchtype=today&starttime=2006-1-1&endtime=2018-1-1&datatype=json 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=shopStatistics&uid=12154&pwd=123456&searchtype=today&starttime=2006-1-1&endtime=2018-1-1&datatype=json
 	*@所需参数   searchtype = week:近七天  today:今天  month:近30天  自定义:selfdefined
  	*@所需参数   starttime = 开始时间   endtime = 结束时间
 	*@返回数据   total:营业总额  shopsubsidy:商家补贴  validcount:有效订单量  invalidcount:无效订单量
@@ -925,77 +925,77 @@ class method   extends baseclass
 	*添加时间:2017/8/5    技术：闫旭明
 	**/
 	function shopStatistics(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-        $shopinfo = $this->mysql->select_one("select id  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");			
+        $shopinfo = $this->mysql->select_one("select id  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");
 		if(empty($shopinfo)) $this->message('店铺信息获取失败');
-		$shopid = $shopinfo['id'];		
+		$shopid = $shopinfo['id'];
 		$searchtype = trim(IFilter::act(IReq::get('searchtype')));
 		$searchtype = empty($searchtype)?'today':$searchtype;
 		$endtime = time();
-		$nowtime = strtotime(date('Y-m-d',time())); //当天开始时间		 
+		$nowtime = strtotime(date('Y-m-d',time())); //当天开始时间
 		if($searchtype == 'today'){
-			$starttime = $nowtime;						
+			$starttime = $nowtime;
 		}
 		if($searchtype == 'week'){
-			$starttime = $nowtime - 6*86400;			
+			$starttime = $nowtime - 6*86400;
 		}
 		if($searchtype == 'month'){
-			$starttime = $nowtime - 29*86400;			
+			$starttime = $nowtime - 29*86400;
 		}
 		if($searchtype == 'selfdefined'){
 			$starttime = strtotime(IReq::get('starttime'));
-			$endtime = strtotime(IReq::get('endtime')) + 86400;		
+			$endtime = strtotime(IReq::get('endtime')) + 86400;
 		}
-        //营业总额		
-		$total =  $this->mysql->select_one("select sum(acountcost) as total from ".Mysite::$app->config['tablepre']."shopjs  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." ");		
-        $data['total'] = empty($total['total'])?0:round($total['total'],2);		 
+        //营业总额
+		$total =  $this->mysql->select_one("select sum(acountcost) as total from ".Mysite::$app->config['tablepre']."shopjs  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." ");
+        $data['total'] = empty($total['total'])?0:round($total['total'],2);
 		//商家补贴
-		$shopsubsidy = $this->mysql->select_one("select sum(cxcost - shopdowncost) as shopsubsidy  from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." and status = 3 and is_reback = 0 ");		
+		$shopsubsidy = $this->mysql->select_one("select sum(cxcost - shopdowncost) as shopsubsidy  from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." and status = 3 and is_reback = 0 ");
 		$data['shopsubsidy'] = empty($shopsubsidy['shopsubsidy'])?0:round($shopsubsidy['shopsubsidy'],2);
 		//有效订单量
-		$validcount = $this->mysql->select_one("select count(id) as validcount from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." and status = 3  ");		
+		$validcount = $this->mysql->select_one("select count(id) as validcount from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." and status = 3  ");
 		$data['validcount'] = $validcount['validcount'];
 		//无效订单量
 		$invalidcount = $this->mysql->select_one("select count(id) as invalidcount from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."'  and addtime > ".$starttime." and addtime < ".$endtime." and status != 3 and is_reback > 0 ");
 		$data['invalidcount'] = $invalidcount['invalidcount'];
-		 
-		$this->success($data); 		
+
+		$this->success($data);
 	}
 	/**
 	*@method 新版商家端  门店管理->设置->配送信息
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=shoppsinfo&uid=12154&pwd=123456&datatype=json   	
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=shoppsinfo&uid=12154&pwd=123456&datatype=json
 	*@返回数据   limitcost:起送价  maketime:制作时间  arrivetime:送达时间
 	*添加时间:2017/8/5    技术：闫旭明
 	**/
 	function shoppsinfo(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-        $shopinfo = $this->mysql->select_one("select id,shoptype  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");			
+        $shopinfo = $this->mysql->select_one("select id,shoptype  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");
 		if(empty($shopinfo)) $this->message('店铺信息获取失败');
 		if($shopinfo['shoptype'] == 0){
-			$shoppsinfo = $this->mysql->select_one("select limitcost,maketime,arrivetime  from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopinfo['id']."'  ");			
+			$shoppsinfo = $this->mysql->select_one("select limitcost,maketime,arrivetime  from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopinfo['id']."'  ");
 		}else{
 			$shoppsinfo = $this->mysql->select_one("select limitcost,maketime,arrivetime  from ".Mysite::$app->config['tablepre']."shopmarket  where shopid = '".$shopinfo['id']."'  ");
 		}
-		$this->success($shoppsinfo); 
+		$this->success($shoppsinfo);
 	}
 	/**
 	*@method 新版商家端  门店管理->设置->配送信息->保存配送信息
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=saveshoppsinfo&uid=12154&pwd=123456&limitcost=10&maketime=10&arrivetime=10&datatype=json   	
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=saveshoppsinfo&uid=12154&pwd=123456&limitcost=10&maketime=10&arrivetime=10&datatype=json
 	*@所需参数   limitcost:起送价  maketime:制作时间  arrivetime:送达时间
 	*添加时间:2017/8/5    技术：闫旭明
 	**/
 	function saveshoppsinfo(){
-		$backinfo = $this->checkapp();		 
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-        $shopinfo = $this->mysql->select_one("select id,shoptype  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");			
+        $shopinfo = $this->mysql->select_one("select id,shoptype  from ".Mysite::$app->config['tablepre']."shop  where uid = '".$backinfo['uid']."'  ");
 		if(empty($shopinfo)) $this->message('店铺信息获取失败');
 		$data['limitcost'] = IFilter::act(IReq::get('limitcost')) ;
 		$data['maketime'] = IFilter::act(IReq::get('maketime'));
@@ -1005,11 +1005,11 @@ class method   extends baseclass
 		}else{
 			$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'");
 		}
-		$this->success('配送信息设置成功！'); 
+		$this->success('配送信息设置成功！');
 	}
 	/**
 	*@method 新版商家端 订单详情->打印订单
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=orderprintdata&uid=12154&pwd=123456&dno=15019210358158&datatype=json   	
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=orderprintdata&uid=12154&pwd=123456&dno=15019210358158&datatype=json
 	*@所需参数   dno:订单编号
 	*@返回数据   sitename网站名字       shopname店铺名   bookphone订餐电话  orderstatus订单状态  buyername顾客名字   buyerphone顾客电话  dno订单编号
     *@返回数据   buyeraddress下单地址   addtime下单时间  posttime配送时间   orderdet商品详情     shopps配送费        allcost订单总价     content订单备注
@@ -1018,21 +1018,21 @@ class method   extends baseclass
     function orderprintdata(){
 		$dno =  IFilter::act(IReq::get('dno'));
 		$orderinfo = $this->mysql->select_one("select id,shopid,paystatus,paytype,buyername,buyerphone,buyeraddress,addtime,posttime,shopps,addpscost,content,dno,allcost  from ".Mysite::$app->config['tablepre']."order  where dno= '".$dno."'   ");
-		 
+
 		if(empty($orderinfo))  $this->message('订单获取失败！');
 		$orderdet =  $this->mysql->getarr("select goodsname,goodscost,goodscount,goodsattr  from ".Mysite::$app->config['tablepre']."orderdet  where order_id= '".$orderinfo['id']."'   ");
-		
+
 		foreach($orderdet as $key=>$value){
 		    if(empty($value['goodsattr'])){
 				$value['goodsattr'] = '份';
 			}
 			$allcost = $value['goodscost'] * $value['goodscount'];
 			$value['allcost'] = number_format($allcost, 2);
-			$goods[] = $value;	
-		}	
-		
-		$shopinfo =  $this->mysql->select_one("select shopname,phone  from ".Mysite::$app->config['tablepre']."shop  where id= '".$orderinfo['shopid']."'   ");		 
-		$data['sitename'] = Mysite::$app->config['sitename'];		
+			$goods[] = $value;
+		}
+
+		$shopinfo =  $this->mysql->select_one("select shopname,phone  from ".Mysite::$app->config['tablepre']."shop  where id= '".$orderinfo['shopid']."'   ");
+		$data['sitename'] = Mysite::$app->config['sitename'];
 		$payarrr = array('outpay'=>'到付','open_acout'=>'余额支付');
 		$orderpastatus = $orderinfo['paystatus'] == 1?'已支付':'未支付';
 		$orderpaytype = isset($payarrr[$orderinfo['paytype']])?$payarrr[$orderinfo['paytype']]:'在线支付';
@@ -1042,59 +1042,59 @@ class method   extends baseclass
 		$data['buyername'] = $orderinfo['buyername'];
 		$data['buyerphone'] = $orderinfo['buyerphone'];
 		$data['buyeraddress'] = $orderinfo['buyeraddress'];
-		$data['addtime'] = date('m-d H:i',$orderinfo['addtime']); 
+		$data['addtime'] = date('m-d H:i',$orderinfo['addtime']);
 		$data['posttime'] = date('m-d H:i',$orderinfo['posttime']);
         $data['orderdet'] = $goods;
         $data['shopps'] = $orderinfo['shopps'];
         $data['allcost'] = $orderinfo['allcost'];
-		$data['dno'] = $orderinfo['dno'];	
-		$data['addpscost'] = $orderinfo['addpscost'];	
-		$data['content'] = empty($orderinfo['content'])?'无':$orderinfo['content'];					 
-		$this->success($data); 	
+		$data['dno'] = $orderinfo['dno'];
+		$data['addpscost'] = $orderinfo['addpscost'];
+		$data['content'] = empty($orderinfo['content'])?'无':$orderinfo['content'];
+		$this->success($data);
 	}
 	function pthelpme(){  // 跑腿----帮我送/买
                 //获取对应模块下的标签
-                $id = intval(IReq::get('id'));               
-                if(!empty($id)) {                     
+                $id = intval(IReq::get('id'));
+                if(!empty($id)) {
                     $title = $this->mysql->select_one(" select name from ".Mysite::$app->config['tablepre']."helpbuy where id = ".$id." ");
                     $bqlist = $this->mysql->getarr(" select name from ".Mysite::$app->config['tablepre']."helpbuybq where parent_id = ".$id." order by id asc");
                 }
-                 $data['goods'] = IReq::get('goods'); 
+                 $data['goods'] = IReq::get('goods');
                  $data['title'] = $title;
                  $data['bqlist'] = $bqlist;
-                 $data['movegoodsname'] = IReq::get('movegoods');   
-                 $data['movegoodscost'] = IReq::get('cost');    
-                 $data['movegoodsweight'] = IReq::get('weight');    
-                 
+                 $data['movegoodsname'] = IReq::get('movegoods');
+                 $data['movegoodscost'] = IReq::get('cost');
+                 $data['movegoodsweight'] = IReq::get('weight');
+
                  $lng = ICookie::get('lng');
                  $lat = ICookie::get('lat');
                  $mapname = ICookie::get('mapname');
                  $city_id = $this->CITY_ID;
                  $city_name = $this->CITY_NAME;
-	 
+
 		if( !empty($city_id) && !empty($city_name) ){
 			$where = " where  cityid = '".$city_id."' ";
 		}
-		
+
 		$data['lng'] = $lng;
 		$data['lat'] = $lat;
 		$data['mapname'] = $mapname;
-	
- 		$pttype = intval(IReq::get('pttype')); 
+
+ 		$pttype = intval(IReq::get('pttype'));
 		$data['pttype'] = $pttype;  // 1为帮我送  2为帮我买
-		
-		$data['ptsetinfo'] = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset ".$where."  "); 
-		 
+
+		$data['ptsetinfo'] = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset ".$where."  ");
+
 		  $postdate =  $data['ptsetinfo']['postdate'];
 		  $befortime = $data['ptsetinfo']['pt_orderday'];
 		  if($data['ptsetinfo']['is_ptorderbefore']==0){$befortime = 0;}
-		  
+
  $nowhout = strtotime(date('Y-m-d',time()));//当天最小linux 时间
 		$timelist = !empty($postdate)?unserialize($postdate):array();
 		$data['pstimelist'] = array();
 		$checknow = time();
-		
-		 
+
+
 		$whilestatic = $befortime;
 		$nowwhiltcheck = 0;
 		while($whilestatic >= $nowwhiltcheck){
@@ -1110,44 +1110,44 @@ class method   extends baseclass
 					$tempt['d'] = date('Y-m-d',$stime);
 					$tempt['i'] =  $value['i'];
 					$tempt['cost'] =  isset($value['cost'])?$value['cost']:0;
-					
+
 					$tempt['name'] = $stime > $checknow?$tempt['s'].'-'.$tempt['e']:'立即配送';
 					$data['pstimelist'][] = $tempt;
 				}
 			}
-		 
+
 			$nowwhiltcheck = $nowwhiltcheck+1;
 		}
-		
-		
-		$this->success($data); 
+
+
+		$this->success($data);
 	}
-	
-	
-        
+
+
+
 	function getofinfo(){
 		$default_cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
-		
+
 		$areainfo = $this->mysql->select_one("select name from ".Mysite::$app->config['tablepre']."area where adcode=".$default_cityid."  ");
-		
+
 		if(empty($areainfo)){
 			$cityname = Mysite::$app->config['cityname'];
 		}else{
 			$cityname = $areainfo['name'];
 		}
-	 
-		
+
+
  		$data['default_city_adcode'] = $default_cityid;
 		$data['default_city_name'] = $cityname;
 
-		$this->success($data); 
+		$this->success($data);
 	}
 	/*到店消费商家  计算优惠后的金额*/
-	
+
 	function shophuicount(){
-		    $shopid = trim(IFilter::act(IReq::get('shopid')));		    
+		    $shopid = trim(IFilter::act(IReq::get('shopid')));
 			$xfcost  = trim(IFilter::act(IReq::get('shopcost')));
-		
+
 		if($shopone['shoptype'] == 0){
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop as a left join ".Mysite::$app->config['tablepre']."shopfast as b on a.id = b.shopid where a.id='".$shopid."' "); // 店铺信息
         }else{
@@ -1155,24 +1155,24 @@ class method   extends baseclass
         }
 
 		  if( $shopinfo['is_shophui'] == 1 ){
-           
+
                 $shophuiinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophui where shopid='".$shopid."' ");  //闪慧信息
                 if(!empty($shophuiinfo)  && $shophuiinfo['shopid'] == $shopid) {
 					if( $shophuiinfo['controltype'] == 2 ){
 						$checkcost = $shophuiinfo['mjlimitcost']; // 每满费用金额
 						if( $xfcost >= $checkcost  ){
 							$yhcost = $shophuiinfo['controlcontent'];
-						}else{ 
+						}else{
 						    $yhcost = 0;
-						} 
+						}
 					}
 					if( $shophuiinfo['controltype'] == 3 ){
 						$checkcost = $shophuiinfo['limitzhekoucost']; // 打折金额限制
 						if( $xfcost >= $checkcost  ){
-							$yhcost = $xfcost*((100-$shophuiinfo['controlcontent'])/100);	 
+							$yhcost = $xfcost*((100-$shophuiinfo['controlcontent'])/100);
 						}else{
 						    $yhcost = 0;
-						}				
+						}
 					}
 				   $data[huihoucost] = $xfcost - $yhcost ;
                 }else{
@@ -1181,45 +1181,45 @@ class method   extends baseclass
             }
 			$this->success($data);
         }
-			
-	
-	
+
+
+
 	function modify(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
+		}
 		$phone = trim(IFilter::act(IReq::get('uname')));
 		$oldpwd = trim(IFilter::act(IReq::get('oldpwd')));
 		$newpwd = trim(IFilter::act(IReq::get('newpwd')));
-		$surepwd = trim(IFilter::act(IReq::get('surepwd'))); 
-		$code = IFilter::act(IReq::get('code')); 
+		$surepwd = trim(IFilter::act(IReq::get('surepwd')));
+		$code = IFilter::act(IReq::get('code'));
 		if(empty($newpwd)){
 			$this->message('新密码不能为空');
 		}
 		if($newpwd != $surepwd){
 			$this->message('新密码和确认密码不一致');
 		}
-		if(isset($backinfo['temp_password']) && !empty($backinfo['temp_password'])){ 
-				$this->message('快捷登录请使用其他方法修改密码'); 
+		if(isset($backinfo['temp_password']) && !empty($backinfo['temp_password'])){
+				$this->message('快捷登录请使用其他方法修改密码');
 		}
-	 
+
 		if($backinfo['password'] != md5($oldpwd)){
 			$this->message('旧密码错误');
-		}  
-		$newdata['password'] = md5($newpwd); 
+		}
+		$newdata['password'] = md5($newpwd);
 		$this->mysql->update(Mysite::$app->config['tablepre'].'member',$newdata,"uid='".$backinfo['uid']."'");
 		unset($backinfo['password']);
-		$this->success($backinfo); 
+		$this->success($backinfo);
 	}
 	function modifyphone(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$phone =  trim(IFilter::act(IReq::get('phone'))); 
-		$newphone =  trim(IFilter::act(IReq::get('newphone'))); 
-		$code =  trim(IFilter::act(IReq::get('code')));  
+		$phone =  trim(IFilter::act(IReq::get('phone')));
+		$newphone =  trim(IFilter::act(IReq::get('newphone')));
+		$code =  trim(IFilter::act(IReq::get('code')));
 	    $member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$phone."' ");
   	    if(empty($member)){
 			$this->message('用户不存在');
@@ -1227,48 +1227,48 @@ class method   extends baseclass
 		if($backinfo['uid']  != $member['uid']){
 		   $this->message('手机号不对应本账号');
 		}
-		 
+
 		// if($code != $yanzhengcode){
 			// $this->message('验证失败');
 		// }
-	   
+
 		if(!IValidate::suremobi($newphone)){
 			$this->message('新手机号格式错误');
-		 } 
+		 }
 		  $check2 = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$newphone."' ");
-  	  
+
 	    if(!empty($check2)){
 			 $this->message('新手机号已绑定其他账号不能重复绑定');
 		}
-		$phonecls = new phonecode($this->mysql,8,$newphone); 
+		$phonecls = new phonecode($this->mysql,8,$newphone);
 		if($phonecls->checkcode($code)){
 			$newdata['phone'] = $newphone;
 			$this->mysql->update(Mysite::$app->config['tablepre'].'member',$newdata,"uid='".$member['uid']."'");
 			$this->success('success');
 		}else{
 			$this->message($phonecls->getError());
-		}  
+		}
 	}
   function advimgs(){
 	   $type = IFilter::act(IReq::get('imgid'));
 	   $imginfo= $this->mysql->select_one("select name,img from ".Mysite::$app->config['tablepre']."appadv where type='".$type."' ");
 	   $this->success($imginfo);
 	}
-	function fastmodify(){ 
+	function fastmodify(){
 		$uid = IFilter::act(IReq::get('uid'));
 		$phone = IFilter::act(IReq::get('phone'));
 		$oldpwd =  IFilter::act(IReq::get('oldpwd'));
 		$newpwd = trim(IFilter::act(IReq::get('newpwd')));
-		$surepwd = trim(IFilter::act(IReq::get('surepwd'))); 
-		$code = IFilter::act(IReq::get('code')); 
+		$surepwd = trim(IFilter::act(IReq::get('surepwd')));
+		$code = IFilter::act(IReq::get('code'));
 		$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
-		if(empty($member['phone'])){ 
+		if(empty($member['phone'])){
 			$this->message('用户未绑定任何手机号');
 		}
 		if($member['phone'] != $phone){
 			$this->message('账号和登录手机号不一致');
-		} 
-		if(!empty($member['temp_password'])){ 
+		}
+		if(!empty($member['temp_password'])){
 			if($member['temp_password'] != $oldpwd){
 				$this->message('密码错误!');
 			}
@@ -1276,66 +1276,66 @@ class method   extends baseclass
 			if($member['password'] != md5($oldpwd)){
 				$this->message('旧密码错误');
 			}
-		}   */		
+		}   */
 		$newdata['password'] = md5($newpwd);
 		$backinfo['temp_password'] = '';
 		$this->mysql->update(Mysite::$app->config['tablepre'].'member',$newdata,"uid='".$backinfo['uid']."'");
 		unset($backinfo['password']);
-		$this->success($backinfo); 
+		$this->success($backinfo);
 	}
-    /** 	
-     * @userapi 
+    /**
+     * @userapi
      * @name 普通会员登录
      * @uname    账号
 	 * @pwd     密码
 	 * @userid  设备值
-     * @datatype 固定值 json 必传   
+     * @datatype 固定值 json 必传
 	*/
 	function appMemlogin(){
 		$uname = trim(IFilter::act(IReq::get('uname')));
 		$pwd = trim(IFilter::act(IReq::get('pwd')));
 		$mDeviceID =  trim(IFilter::act(IReq::get('mDeviceID')));
 		if(empty($uname)) $this->message('用户名为空');
-		if(empty($pwd)) $this->message('密码为空'); 
+		if(empty($pwd)) $this->message('密码为空');
 		if(!$this->memberCls->login($uname,$pwd)){
 	    	    $this->message($this->memberCls->ero());
 		}
 		$uid = $this->memberCls->getuid();
 		$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
-		$tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$uid."' and status < 2 and  endtime > ".time()." "); 
-		if(!empty($member['logo'])){ 
+		$tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$uid."' and status < 2 and  endtime > ".time()." ");
+		if(!empty($member['logo'])){
 			$member['logo'] = preg_match('/(http:\/\/)|(https:\/\/)/i', $member['logo'])?$member['logo']:Mysite::$app->config['siteurl'].$member['logo'];
 		}else{
 			$member['logo'] = Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo'];
 		}
-		
-		
-		
+
+
+
 		$member['juancount'] = $tjyhj;
 		$channelid = trim(IFilter::act(IReq::get('channelid')));
 		$userid = trim(IFilter::act(IReq::get('userid')));
-		
-		
-		  
+
+
+
 		 ICookie::set('appuid',$member['uid'],86400);
-		 
-		 
-		 
+
+
+
 		if(!empty($userid)){
 			$checkmid =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."appbuyerlogin where uid='".$uid."' ");
 			if(empty($checkmid)){
 				$Mdata['channelid'] = $channelid;
 				$Mdata['userid'] = $userid;
 				$Mdata['uid']=$uid;
-				$Mdata['addtime'] = time(); 
+				$Mdata['addtime'] = time();
 				$this->mysql->insert(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata);  //插入新数据
 			}else{
-				if($checkmid['userid'] != $userid){ 
+				if($checkmid['userid'] != $userid){
 						$Mdata['channelid'] = $channelid;
 						$Mdata['userid'] = $userid;
 						$Mdata['uid']=$uid;
 						$Mdata['addtime'] = time();
-						$this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'"); 
+						$this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'");
 				}
 			}
 	    }
@@ -1343,48 +1343,48 @@ class method   extends baseclass
 		$this->success($member);
 	}
 	function fastlogin(){
-		$phone = trim(IFilter::act(IReq::get('phone'))); 
+		$phone = trim(IFilter::act(IReq::get('phone')));
 		$code =  trim(IFilter::act(IReq::get('code')));
-		 
-		$phonecls = new phonecode($this->mysql,4,$phone); 
+
+		$phonecls = new phonecode($this->mysql,4,$phone);
 		if($phonecls->checkcode($code)){
 			$member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$phone."' ");
-		    if(empty($member)){ 
+		    if(empty($member)){
 			     $checkphone = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."mobileapp where phone ='".$phone."'   order by addtime desc limit 0,1");
-				 $temp_password = rand(100000,999999);  
+				 $temp_password = rand(100000,999999);
 				 $checkstr = md5($checkphone['phone']);
 				 $arr['username'] = substr($checkstr,0,8);
 				 $arr['phone'] = $checkphone['phone'];
 				 $arr['address'] = '';
 				 $arr['password'] = md5($temp_password);
 				 $arr['email'] = '';
-				 $arr['creattime'] = time(); 
+				 $arr['creattime'] = time();
 				 $arr['score']  = $score == 0?Mysite::$app->config['regesterscore']:$score;
-				 $arr['logintime'] = time(); 
+				 $arr['logintime'] = time();
 				 $arr['logo'] = Mysite::$app->config['userlogo'];
 				 $arr['loginip'] = IClient::getIp();
 				 $arr['group'] = 5;
-				 $arr['cost'] = 0; 
+				 $arr['cost'] = 0;
 				 $arr['parent_id'] =0;
 				 $arr['temp_password'] = $temp_password;
-				 $this->mysql->insert(Mysite::$app->config['tablepre'].'member',$arr);   
-				 $uid = $this->mysql->insertid(); 
+				 $this->mysql->insert(Mysite::$app->config['tablepre'].'member',$arr);
+				 $uid = $this->mysql->insertid();
 				 if($arr['score'] > 0){
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
-				 } 
-         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );  	   
-         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );	   
+				 }
+         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );
+         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );
 		 if($juansetinfo['status'] ==1 && !empty($juaninfo)){
-	 	   //注册送优惠券		   		   	  
-		   foreach($juaninfo as $key=>$value){			   
-			   $juandata['uid'] = $this->uid;// 用户ID	
+	 	   //注册送优惠券
+		   foreach($juaninfo as $key=>$value){
+			   $juandata['uid'] = $this->uid;// 用户ID
 			   $juandata['username'] = $arr['username'];// 用户名
-			   $juandata['name'] = $value['name'];//  优惠券名称 
-			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效	
+			   $juandata['name'] = $value['name'];//  优惠券名称
+			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
 			   $juandata['card'] = $nowtime.rand(100,999);
 			   $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
-			   $juandata['limitcost']	= $value['limitcost'];	
-			   
+			   $juandata['limitcost']	= $value['limitcost'];
+
 			   if($juansetinfo['timetype'] == 1){
 					$juandata['creattime'] = time();
 					$date = date('Y-m-d',$juandata['creattime']);
@@ -1398,18 +1398,18 @@ class method   extends baseclass
 				    $juandata['cost'] = $value['cost'];
 			   }else{
 					$juandata['cost'] = rand($value['costmin'],$value['costmax']);
-			   }			   			   		  	    		   
-			   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);			   
-		   } 
-       }	   
-					   		  				   
+			   }
+			   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);
+		   }
+       }
+
 			$member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
 			}
 			$tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$member['uid']."' and status < 2 and  endtime > ".time()." ");
 			$member['logo'] = empty($member['logo'])?Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo']:Mysite::$app->config['siteurl'].$member['logo'];
 			$member['juancount'] = $tjyhj;
-			$member['temp_password'] = md5(rand(100000,999999));  
-			
+			$member['temp_password'] = md5(rand(100000,999999));
+
 			$channelid = trim(IFilter::act(IReq::get('channelid')));
 			$userid = trim(IFilter::act(IReq::get('userid')));
 			if(!empty($userid)){
@@ -1418,24 +1418,24 @@ class method   extends baseclass
 					$Mdata['channelid'] = $channelid;
 					$Mdata['userid'] = $userid;
 					$Mdata['uid']=$uid;
-					$Mdata['addtime'] = time(); 
+					$Mdata['addtime'] = time();
 					$this->mysql->insert(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata);  //插入新数据
 				}else{
-					if($checkmid['userid'] != $userid){ 
+					if($checkmid['userid'] != $userid){
 							$Mdata['channelid'] = $channelid;
 							$Mdata['userid'] = $userid;
 							$Mdata['uid']=$uid;
 							$Mdata['addtime'] = time();
-							$this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'"); 
+							$this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'");
 					}
 				}
 			}
 			$expire = time() + 86400; // 设置24小时的有效期
 			setcookie("app_login", "app_login", $expire);
-			setcookie("app_loginphone", $phone, $expire); 
+			setcookie("app_loginphone", $phone, $expire);
 			unset($member['password']);
 			$this->success($member);
-			 
+
 		}else{
 			$this->message($phonecls->getError());
 		}
@@ -1444,7 +1444,7 @@ class method   extends baseclass
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}    
+		}
 		$json = new Services_JSON();
 		$uploadpath = 'upload/user/';
 		$filepath = '/upload/user/';
@@ -1455,29 +1455,29 @@ class method   extends baseclass
 
 		}else{
 			$data['logo'] = $filepath.$file[0]['saveName'];
-		    $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid='".$backinfo['uid']."'  "); 
+		    $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid='".$backinfo['uid']."'  ");
 			$this->success($data);
-		} 
+		}
 	}
 	function fastupdateuserimg(){
 		$uid = trim(IFilter::act(IReq::get('uid')));
 		if(empty($uid)){
 			$this->message('未登录');
-		} 
+		}
 		$json = new Services_JSON();
 		$uploadpath = 'upload/user/';
 		$filepath = '/upload/user/';
 		$upload = new upload($uploadpath,array('gif','jpg','jpge','png'));//upload
 		$file = $upload->getfile();
 		if($upload->errno!=15&&$upload->errno!=0) {
-			$this->message($upload->errmsg()); 
+			$this->message($upload->errmsg());
 		}else{
 			$data['logo'] = $filepath.$file[0]['saveName'];
-		    $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid='".$uid."'  "); 
+		    $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid='".$uid."'  ");
 			$this->success($data);
-		} 
+		}
 	}
-	
+
 	/*
 	  保存APP通知百度信息
 	  参数
@@ -1521,7 +1521,7 @@ class method   extends baseclass
   		       $Mdata['userid'] = $userid;
 	           $Mdata['uid']=$backinfo['uid'];
 	           $Mdata['addtime'] = time();
-			   $this->mysql->update(Mysite::$app->config['tablepre'].'applogin',$Mdata,"uid='".$backinfo['uid']."'");  
+			   $this->mysql->update(Mysite::$app->config['tablepre'].'applogin',$Mdata,"uid='".$backinfo['uid']."'");
   			}
   		}
 
@@ -1533,20 +1533,20 @@ class method   extends baseclass
 		$shoptype = intval(IFilter::act(IReq::get('shoptype')));
 		//shoptype == 1 时获取 所有 超市 规格
 		$gglist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where   shoptype=".$shoptype." and parent_id = 0  order by id desc limit 0,1000  ");
-				 
+
 				$product_attr = array();
 				if(!empty($gglist)){//获取所有规格不为空
 				   foreach($gglist as $key=>$value){
-					       
+
 							    $value['det'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where   parent_id = ".$value['id']."  order by id desc limit 0,1000  ");
-						      
-								$product_attr[] = $value; 
+
+								$product_attr[] = $value;
 				   }
 				}
-		$this->success($product_attr);		 
+		$this->success($product_attr);
 				exit;
 	}
-  
+
 	/*
 	*  检测商家是否登陆
 	*/
@@ -1554,7 +1554,7 @@ class method   extends baseclass
 		$uid = trim(IFilter::act(IReq::get('uid')));
 		$pwd = trim(IFilter::act(IReq::get('pwd')));
 		$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
-		 
+
 		$backarr = array('uid'=>0);
 		if(!empty($member)){
 			if($member['password'] == md5($pwd)){
@@ -1569,22 +1569,22 @@ class method   extends baseclass
 	2015-12-26新增
 	*/
 	function shopcxlist(){
-		 
+
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		  
-		 
-		if(empty($shopinfo)) $this->message('获取店铺资料失败'); 
+
+
+		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		$controltype = intval(IFilter::act(IReq::get('controltype')));
 		$controltype = in_array($controltype,array(1,2,3,4))?$controltype:1;
-		 
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);  
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 		$tempcxlist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$shopinfo['id'].",shopid)   and controltype='".$controltype."' order by id desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
         $cxlist = array();
         foreach($tempcxlist as $key=>$value){
@@ -1615,38 +1615,38 @@ class method   extends baseclass
 			}
 			$tempc['content_c'] = $content_c;
 			$cxlist[] = $tempc;
-			
-		} 
+
+		}
 		$this->success($cxlist);
 	}
-	function getshopcx(){ 
-	 
+	function getshopcx(){
+
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		if(empty($shopinfo)) $this->message('获取店铺资料失败');  
-		 
-		 
+		if(empty($shopinfo)) $this->message('获取店铺资料失败');
+
+
 		$id = intval(IFilter::act(IReq::get('id')));
 		$temparr  =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where shopid='".$shopinfo['id']."'  and id='".$id."' order by id desc  limit 0,1 ");
         if(!empty($temparr)){
 			$data['cxinfo'] =$temparr;
 			$data['cxinfo']['starttime'] = date('Y-m-d',$data['cxinfo']['starttime']);
 			$data['cxinfo']['endtime'] = date('Y-m-d',$data['cxinfo']['endtime']);
-			
+
 			if($data['cxinfo']['controltype'] ==3){
 				$data['cxinfo']['controlcontent'] = $data['cxinfo']['controlcontent']*0.1;
 			}
-			
+
 		}else{
 			$data['cxinfo']  = '';
 		}
-	
-	   $this->success($data);  
+
+	   $this->success($data);
 	}
-	/*新版商家端  
+	/*新版商家端
 	获取单条促销活动详情
 	2017-07-14 yxm
 	**/
@@ -1658,45 +1658,45 @@ class method   extends baseclass
 		$id = intval(IFilter::act(IReq::get('id')));
 		$cxinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where id='".$id."' ");
         /*活动的起止时间  格式重组*/
-		$starttime = $cxinfo['starttime'];		
-		$stime['year'] =  date('Y',$starttime);		
-		$stime['mouth'] =  date('m',$starttime);		
+		$starttime = $cxinfo['starttime'];
+		$stime['year'] =  date('Y',$starttime);
+		$stime['mouth'] =  date('m',$starttime);
 		$stime['day'] =  date('d',$starttime);
 		$cxinfo['starttime'] = $stime;
-		 
+
 		$endtime = $cxinfo['endtime'];
 		$etime['year'] =  date('Y',$endtime);
 		$etime['mouth'] =  date('m',$endtime);
 		$etime['day'] =  date('d',$endtime);
 		$cxinfo['endtime'] = $etime;
-	    $this->success($cxinfo); 
+	    $this->success($cxinfo);
 	}
 	function savecx(){
-		 
-		 
+
+
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		if(empty($shopinfo)) $this->message('获取店铺资料失败');   
-		 
+		if(empty($shopinfo)) $this->message('获取店铺资料失败');
+
 		 $id = intval(IFilter::act(IReq::get('id')));
 		 $data['name'] = trim(IFilter::act(IReq::get('name')));
-		 if(empty($data['name'])) $this->message('促销活动标题不能为空'); 
+		 if(empty($data['name'])) $this->message('促销活动标题不能为空');
 		 if($id > 0){
 			 $temparr  =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where shopid='".$shopinfo['id']."'  and id='".$id."' order by id desc  limit 0,1 ");
 			 if(empty($temparr)){
 				 $this->message('促销规则不存在');
 			 }
-      
+
 		 }
 		 $limittype = intval(IFilter::act(IReq::get('limittype')));
         $data['supporttype'] = IFilter::act(IReq::get('supporttype'));//支持类型：1首单有效，2在线支付有效
         $data['supportplatform'] = IFilter::act(IReq::get('supportplatform'));//支持平台：1pc端，2微信端，3触屏端，4客户端（安卓苹果）
 		 if($limittype == 2){
 			 $data['limittype'] =2;
-			 $data['limittime'] = trim(IFilter::act(IReq::get('limittime')));//格式 未1到7中任意组合   使用逗号分隔 
+			 $data['limittime'] = trim(IFilter::act(IReq::get('limittime')));//格式 未1到7中任意组合   使用逗号分隔
 		 }elseif($limittype == 3){
 			  $data['limittype'] =3;
 			  $data['limittime'] = trim(IFilter::act(IReq::get('limittime')));//使用 08:00-09:00 多个时间段,分隔
@@ -1710,7 +1710,7 @@ class method   extends baseclass
 	     $data['controltype'] = $controltype;
 		 $data['presenttitle'] = $controltype == 1? trim(IFilter::act(IReq::get('presenttitle'))):'';
 		 $controlcontent = IFilter::act(IReq::get('controlcontent'));
-		 $data['controlcontent'] = $controltype == 3? intval($controlcontent*10):intval($controlcontent);  
+		 $data['controlcontent'] = $controltype == 3? intval($controlcontent*10):intval($controlcontent);
 		 if($controltype ==2 || $controltype ==3){
 			 if($data['controlcontent'] < 1) $this->message('减少金额或者折扣不能等于0');
 		 }elseif($controltype == 1){
@@ -1722,16 +1722,16 @@ class method   extends baseclass
 		 $data['signid'] = intval(IFilter::act(IReq::get('signid')));
 		 if(empty($data['signid']))$this->message('请选择促销标签');
 		 $data['starttime'] = strtotime(IFilter::act(IReq::get('starttime')));
-		 $data['endtime'] = strtotime(IFilter::act(IReq::get('endtime')))+86399; 
+		 $data['endtime'] = strtotime(IFilter::act(IReq::get('endtime')))+86399;
 		 if($data['starttime']>$data['endtime'])$this->message('开始时间不能大于结束时间');
 		 $data['type'] = 1;
 		 if($id > 0){
-			  $this->mysql->update(Mysite::$app->config['tablepre'].'rule',$data,"id='".$id."'");  
+			  $this->mysql->update(Mysite::$app->config['tablepre'].'rule',$data,"id='".$id."'");
 		 }else{
 			 $this->mysql->insert(Mysite::$app->config['tablepre'].'rule',$data);  //插入新数据
 			 $id = $this->mysql->insertid();
-		 } 
-		 $this->success($id); 
+		 }
+		 $this->success($id);
 	}
 	function delcx(){
 		$backinfo = $this->checkapp();
@@ -1739,21 +1739,21 @@ class method   extends baseclass
 			$this->message('nologin');
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		if(empty($shopinfo)) $this->message('获取店铺资料失败');   
-		 
+		if(empty($shopinfo)) $this->message('获取店铺资料失败');
+
 		 $id = intval(IFilter::act(IReq::get('id')));
-		 if(empty($id)) $this->message('促销ID为空'); 
-	      
+		 if(empty($id)) $this->message('促销ID为空');
+
 		 $temparr  =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where shopid='".$shopinfo['id']."'  and id='".$id."'  ");
 		 if(empty($temparr)) $this->message('促销规则不存在');
 		 $this->mysql->delete(Mysite::$app->config['tablepre']."rule"," shopid='".$shopinfo['id']."' and id=".$id." ");
-		 $this->success('操作成功'); 
+		 $this->success('操作成功');
 	}
-	
-	 
-	
+
+
+
 	/**
-	获取商家评价 
+	获取商家评价
 	2015-12-26
 	***/
 	function managescommt(){
@@ -1763,50 +1763,50 @@ class method   extends baseclass
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,shoplogo,shoptype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,intr_info,notice_info from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
-		 
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = $pagesize > 0? $pagesize:10;
 		$pointtype = intval(IFilter::act(IReq::get('pointtype')));
 		$pointwherearr = array(
 		0=>' and point > 0',
 		1=>' and point > 4',
 		2=>' and point > 1 and point < 5',
-		3=>' and point < 2', 
+		3=>' and point < 2',
 		);
 		$tempwhere =  isset($pointwherearr[$pointtype]) ? $pointwherearr[$pointtype]:'';
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
-		
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
+
 		$backdata = array();
 		#$memberlog = $this->mysql->getarr("select a.*,b.username,b.logo,c.name from ".Mysite::$app->config['tablepre']."comment as a left join  ".Mysite::$app->config['tablepre']."member as b on a.uid = b.uid left join ".Mysite::$app->config['tablepre']."goods as c on a.goodsid = c.id  where a.shopid=".$shopinfo['id']." ".$tempwhere." order by a.id desc   limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
-	     
+
 		$orderid = $this->mysql->getarr("select id from ".Mysite::$app->config['tablepre']."order   where shopid ='".$shopinfo['id']."'   ".$tempwhere." and status = 3   order by id desc limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()." ");
-		 
-		 
+
+
 		foreach($orderid as $k=>$v){
 			 $usercomment = array();
 			 $comment = array();
-			 $commentinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."comment  where shopid ='".$shopinfo['id']."' and orderid = ".$v['id']." ");			 
+			 $commentinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."comment  where shopid ='".$shopinfo['id']."' and orderid = ".$v['id']." ");
 			 if(!empty($commentinfo)){
 			    foreach($commentinfo as $k1=>$v1){
 					 $v1['addtime'] = date('Y-m-d',$v1['addtime']);
-					 if(empty($v1['replycontent'])){				  
+					 if(empty($v1['replycontent'])){
 					 $v1['replycontent'] = '';
 					 $v1['replytime'] = '';
-					 }else{					 
+					 }else{
 						$v1['replytime'] = date('Y-m-d',$v1['replytime']);
 					 }
 					 $v1['virtualname'] = empty($v1['virtualname'])?'':$v1['virtualname'];
 					 $goodsinfo = $this->mysql->select_one("select goodsname  from ".Mysite::$app->config['tablepre']."orderdet where id='".$v1['orderdetid']."' ");
-					 $v1['name'] = $goodsinfo['goodsname']; 
+					 $v1['name'] = $goodsinfo['goodsname'];
 					 $comment[] = $v1;
 				}
 				 $uid = $comment[0]['uid'];
-				 $userinfo = $goodsinfo = $this->mysql->select_one("select username,logo  from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");	 
+				 $userinfo = $goodsinfo = $this->mysql->select_one("select username,logo  from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
 				 $usercomment['orderid'] = $comment[0]['orderid'];
 				 $usercomment['username'] = $userinfo['username'];
 				 $usercomment['logo'] = $userinfo['logo'];
-				 $usercomment['addtime'] = $comment[0]['addtime'];			 
+				 $usercomment['addtime'] = $comment[0]['addtime'];
 				 $usercomment['replycontent'] = $comment[0]['replycontent'];
 				 $usercomment['replytime'] = $comment[0]['replytime'];
 				 $usercomment['repstatus'] = empty($usercomment['replycontent'])?1:0;
@@ -1814,7 +1814,7 @@ class method   extends baseclass
 				 $backdata[]=$usercomment;
 			 }
 		}
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
 	/*
 	商家提交评价回复
@@ -1828,68 +1828,68 @@ class method   extends baseclass
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,shoplogo,shoptype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,intr_info,notice_info from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
-		
+
 		$orderid = intval(IFilter::act(IReq::get('orderid')));
 		$content = trim(IFilter::act(IReq::get('replaycontent')));
 		$data['replytime'] = time();
 		$checkcomment = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."comment   where orderid ='".$orderid."'     order by id desc limit 0,1 ");
-	 
+
 		if(empty($checkcomment)) $this->message('评价不存在');
 		if(!empty($checkcomment['replycontent'])) $this->message('该评价已回复');
 		if($checkcomment['shopid'] != $shopinfo['id']) $this->message('该评价不属于该店铺');
 		if(empty($content)) $this->message('评价回复不能为空');
 		$data['replycontent'] = $content;
-		$this->mysql->update(Mysite::$app->config['tablepre'].'comment',$data,"orderid='".$orderid."'");  
+		$this->mysql->update(Mysite::$app->config['tablepre'].'comment',$data,"orderid='".$orderid."'");
 		$this->success('success');
 	}
 	/**
 	*@method 新版商家端 待处理->待处理订单列表
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=appwaitorder&uid=10203&pwd=123456&datatype=json&page=1	 
- 	*@所需参数   uid   pwd	 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=appwaitorder&uid=10203&pwd=123456&datatype=json&page=1
+ 	*@所需参数   uid   pwd
 	*添加时间:2017/6/26    技术：闫旭明
-    **/	
+    **/
 	function appwaitorder(){
-		  
+
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		 
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
   		/*
-	    获取平台设置的结算公式			
+	    获取平台设置的结算公式
  	    */
 		$jsinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."jscompute where id > 0  ");
 		$data['ptyj'] = $jsinfo[0];   //平台配送情况下的佣金设置
 		$data['sjyj'] = $jsinfo[1];   //商家配送情况下的佣金设置
 		$data['ptjs'] = $jsinfo[2];   //平台配送情况下的结算设置
-		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置	
-		 
+		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置
+
 		$orderlist =  $this->mysql->getarr("select id,content,pstype,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and  status > 0 and status < 2 and is_make = 0 and is_reback = 0 order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");   /* and posttime < ".$endtime." */
-		 
-		
+
+
 		if(empty($orderlist)){
 			$this->message('暂无符合条件的订单');
 		}
 		foreach($orderlist as $key=>$value){
-		 		
-  
+
+
 		$scoretocost =Mysite::$app->config['scoretocost'];
 		$scorcost = $value['scoredown'] > 0? intval($value['scoredown']/$scoretocost):0;
 		$value['allcx'] = $value['cxcost']+$value['yhjcost']+$scorcost;
 	    if($value['paytype'] == 0){
 			$value['paystatustype'] = "货到支付";
 		}else{
-		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';	
+		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';
 		}
 		$value['addtime'] = date('H:i:s',$value['addtime']);
 		$value['posttime'] = date('Y-m-d',$value['posttime'])." ".$value['postdate'];
-		//下单次数		 	 
+		//下单次数
 		$sdf = $this->mysql->getarr("select  dno from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$value['buyeruid']." and shopid = ".$value['shopid']."  ");
-			 
+
 				foreach($sdf as $k=>$v){
 					if($v['dno']==$value['dno']){
 						$value['orderNum'] = $k+1;
@@ -1899,13 +1899,13 @@ class method   extends baseclass
 		//计算佣金(平台服务费)和结算金额(本单预计收入)
 	    $shopinfo =   $this->mysql->select_one("select id,yjin,shoptype from ".Mysite::$app->config['tablepre']."shop where id='".$value['shopid']."' ");
         if($shopinfo['shoptype'] == 0){
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");	
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");
 		}else{
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");				
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");
 		}
-		 
+
 		if($sendinfo['sendtype'] == 1){
-			
+
 			//计算商家配送情况下佣金
 			$sjyjnum = $value['shopcost'];
             if($data['sjyj']['pscost'] == 1){
@@ -1929,13 +1929,13 @@ class method   extends baseclass
 			}
 			if($data['sjjs']['shopdowncost'] == 1){
 			    $sjjsnum = 	$sjjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
-			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）		
+			}
+			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）
 		    $value['expectincome'] = round($value['expectincome'] ,2);
 		}else{
-			 
+
 			//计算平台配送情况下佣金
-			$ptyjnum = $value['shopcost'];          			
+			$ptyjnum = $value['shopcost'];
 			if($data['ptyj']['pscost'] == 1){
 			    $ptyjnum = 	$ptyjnum + $value['shopps'];
 			}
@@ -1957,20 +1957,20 @@ class method   extends baseclass
 			}
 			if($data['ptjs']['shopdowncost'] == 1){
 			    $ptjsnum = 	$ptjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
+			}
 		    $value['expectincome'] = $ptjsnum - $value['servicecost'];//本单预计收入（结算金额）
-            $value['expectincome'] = round($value['expectincome'] ,2);			
-		}	
+            $value['expectincome'] = round($value['expectincome'] ,2);
+		}
 		$templist =   $this->mysql->getarr("select id,order_id,goodsname,goodscost,goodscount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$value['id']."' ");
 		$newdatalist = array();
 		$shuliang = 0;
-		 
+
 		foreach($templist as $key=>$value1){
 			$value1['goodscost'] = $value1['goodscost'];
-			$newdatalist[] = $value1; 
+			$newdatalist[] = $value1;
 			$shuliang += $value1['goodscount'];
 		}
-		
+
 		$value['det'] = $newdatalist;
 
 		if(!empty($value['othertext'])){
@@ -1982,17 +1982,17 @@ class method   extends baseclass
 
 		$waitorderlist[] = $value;
 		}
-		
-   
+
+
 		$this->success($waitorderlist);
 	}
-	
-	
+
+
     /**
 	*@method 新版商家端 待处理->获取待商家处理退款订单个数
 	*@order表中   is_reback字段值代表意义：0正常状态   1退款中待平台处理  2退款成功  3拒绝退款   4退款中待商家处理
 	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=getrebackordercount&uid=10203&pwd=123456&datatype=json
- 	*@所需参数   uid   pwd	 
+ 	*@所需参数   uid   pwd
 	*添加时间:2017/8/10
 	**/
     function getrebackordercount(){
@@ -2000,59 +2000,59 @@ class method   extends baseclass
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$rebackcount =  $this->mysql->counts("select id  from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and is_reback = 4 ");  
+		$rebackcount =  $this->mysql->counts("select id  from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and is_reback = 4 ");
 	    $this->success($rebackcount);
 	}
-	
-	
+
+
 	/**
 	*@method 新版商家端 待处理->待商家处理退款订单列表
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=apprebackorder&uid=10203&pwd=123456&datatype=json&page=1	 
- 	*@所需参数   uid   pwd	 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=apprebackorder&uid=10203&pwd=123456&datatype=json&page=1
+ 	*@所需参数   uid   pwd
 	*添加时间:2017/8/9    技术：闫旭明
 	**/
 	function apprebackorder(){
-		  
+
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		 
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
   		/*
-	    获取平台设置的结算公式			
+	    获取平台设置的结算公式
  	    */
 		$jsinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."jscompute where id > 0  ");
 		$data['ptyj'] = $jsinfo[0];   //平台配送情况下的佣金设置
 		$data['sjyj'] = $jsinfo[1];   //商家配送情况下的佣金设置
 		$data['ptjs'] = $jsinfo[2];   //平台配送情况下的结算设置
-		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置	
-		 
-		$orderlist =  $this->mysql->getarr("select id,content,pstype,is_reback,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and is_reback = 4 order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");  
-		 
-		 
+		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置
+
+		$orderlist =  $this->mysql->getarr("select id,content,pstype,is_reback,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and is_reback = 4 order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");
+
+
 		if(empty($orderlist)){
 			$this->message('暂无符合条件的订单');
 		}
 		foreach($orderlist as $key=>$value){
-		 		
-  
+
+
 		$scoretocost =Mysite::$app->config['scoretocost'];
 		$scorcost = $value['scoredown'] > 0? intval($value['scoredown']/$scoretocost):0;
 		$value['allcx'] = $value['cxcost']+$value['yhjcost']+$scorcost;
 	    if($value['paytype'] == 0){
 			$value['paystatustype'] = "货到支付";
 		}else{
-		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';	
+		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';
 		}
 		$value['addtime'] = date('H:i:s',$value['addtime']);
 		$value['posttime'] = date('Y-m-d',$value['posttime'])." ".$value['postdate'];
-		//下单次数		 	 
+		//下单次数
 		$sdf = $this->mysql->getarr("select  dno from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$value['buyeruid']." and shopid = ".$value['shopid']."  ");
-			 
+
 				foreach($sdf as $k=>$v){
 					if($v['dno']==$value['dno']){
 						$value['orderNum'] = $k+1;
@@ -2062,13 +2062,13 @@ class method   extends baseclass
 		//计算佣金(平台服务费)和结算金额(本单预计收入)
 	    $shopinfo =   $this->mysql->select_one("select id,yjin,shoptype from ".Mysite::$app->config['tablepre']."shop where id='".$value['shopid']."' ");
         if($shopinfo['shoptype'] == 0){
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");	
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");
 		}else{
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");				
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");
 		}
-		 
+
 		if($sendinfo['sendtype'] == 1){
-			
+
 			//计算商家配送情况下佣金
 			$sjyjnum = $value['shopcost'];
             if($data['sjyj']['pscost'] == 1){
@@ -2092,13 +2092,13 @@ class method   extends baseclass
 			}
 			if($data['sjjs']['shopdowncost'] == 1){
 			    $sjjsnum = 	$sjjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
-			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）		
+			}
+			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）
 		    $value['expectincome'] = round($value['expectincome'] ,2);
 		}else{
-			 
+
 			//计算平台配送情况下佣金
-			$ptyjnum = $value['shopcost'];          			
+			$ptyjnum = $value['shopcost'];
 			if($data['ptyj']['pscost'] == 1){
 			    $ptyjnum = 	$ptyjnum + $value['shopps'];
 			}
@@ -2120,20 +2120,20 @@ class method   extends baseclass
 			}
 			if($data['ptjs']['shopdowncost'] == 1){
 			    $ptjsnum = 	$ptjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
+			}
 		    $value['expectincome'] = $ptjsnum - $value['servicecost'];//本单预计收入（结算金额）
-            $value['expectincome'] = round($value['expectincome'] ,2);			
-		}	
+            $value['expectincome'] = round($value['expectincome'] ,2);
+		}
 		$templist =   $this->mysql->getarr("select id,order_id,goodsname,goodscost,goodscount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$value['id']."' ");
 		$newdatalist = array();
 		$shuliang = 0;
-		 
+
 		foreach($templist as $key=>$value1){
 			$value1['goodscost'] = $value1['goodscost'];
-			$newdatalist[] = $value1; 
+			$newdatalist[] = $value1;
 			$shuliang += $value1['goodscount'];
 		}
-		
+
 		$value['det'] = $newdatalist;
 
 		if(!empty($value['othertext'])){
@@ -2145,60 +2145,60 @@ class method   extends baseclass
 
 		$rebackorderlist[] = $value;
 		}
-		
-   
+
+
 		$this->success($rebackorderlist);
 	}
-	
+
 	/**
 	*@method 新版商家端 待处理->待平台处理退款订单列表
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=platformrebackorder&uid=10203&pwd=123456&datatype=json&page=1	 
- 	*@所需参数   uid   pwd	 
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=platformrebackorder&uid=10203&pwd=123456&datatype=json&page=1
+ 	*@所需参数   uid   pwd
 	*添加时间:2017/8/9    技术：闫旭明
 	**/
 	function platformrebackorder(){
-		  
+
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$phone = intval(IFilter::act(IReq::get('phone'))); 
+		$phone = intval(IFilter::act(IReq::get('phone')));
 		$phonewhere = empty($phone)?"":" and buyerphone like '%".$phone."%' " ;
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
   		/*
-	    获取平台设置的结算公式			
+	    获取平台设置的结算公式
  	    */
 		$jsinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."jscompute where id > 0  ");
 		$data['ptyj'] = $jsinfo[0];   //平台配送情况下的佣金设置
 		$data['sjyj'] = $jsinfo[1];   //商家配送情况下的佣金设置
 		$data['ptjs'] = $jsinfo[2];   //平台配送情况下的结算设置
-		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置	
+		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置
 		 #print_r($phonewhere);
-		$orderlist =  $this->mysql->getarr("select id,content,pstype,is_reback,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and is_reback > 0  and is_reback < 3 ".$phonewhere."  order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");  
-		 	
+		$orderlist =  $this->mysql->getarr("select id,content,pstype,is_reback,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and is_reback > 0  and is_reback < 3 ".$phonewhere."  order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");
+
 		if(empty($orderlist)){
 			$this->message('暂无符合条件的订单');
 		}
 		foreach($orderlist as $key=>$value){
-		 		
-  
+
+
 		$scoretocost =Mysite::$app->config['scoretocost'];
 		$scorcost = $value['scoredown'] > 0? intval($value['scoredown']/$scoretocost):0;
 		$value['allcx'] = $value['cxcost']+$value['yhjcost']+$scorcost;
 	    if($value['paytype'] == 0){
 			$value['paystatustype'] = "货到支付";
 		}else{
-		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';	
+		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';
 		}
 		$value['addtime'] = date('H:i:s',$value['addtime']);
 		$value['posttime'] = date('Y-m-d',$value['posttime'])." ".$value['postdate'];
 		$value['status'] = $value['is_reback'] == 2?'平台已退款':'等待平台审核';
-		//下单次数		 	 
+		//下单次数
 		$sdf = $this->mysql->getarr("select  dno from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$value['buyeruid']." and shopid = ".$value['shopid']."  ");
-			 
+
 				foreach($sdf as $k=>$v){
 					if($v['dno']==$value['dno']){
 						$value['orderNum'] = $k+1;
@@ -2208,13 +2208,13 @@ class method   extends baseclass
 		//计算佣金(平台服务费)和结算金额(本单预计收入)
 	    $shopinfo =   $this->mysql->select_one("select id,yjin,shoptype from ".Mysite::$app->config['tablepre']."shop where id='".$value['shopid']."' ");
         if($shopinfo['shoptype'] == 0){
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");	
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");
 		}else{
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");				
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");
 		}
-		 
+
 		if($sendinfo['sendtype'] == 1){
-			
+
 			//计算商家配送情况下佣金
 			$sjyjnum = $value['shopcost'];
             if($data['sjyj']['pscost'] == 1){
@@ -2238,13 +2238,13 @@ class method   extends baseclass
 			}
 			if($data['sjjs']['shopdowncost'] == 1){
 			    $sjjsnum = 	$sjjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
-			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）		
+			}
+			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）
 		    $value['expectincome'] = round($value['expectincome'] ,2);
 		}else{
-			 
+
 			//计算平台配送情况下佣金
-			$ptyjnum = $value['shopcost'];          			
+			$ptyjnum = $value['shopcost'];
 			if($data['ptyj']['pscost'] == 1){
 			    $ptyjnum = 	$ptyjnum + $value['shopps'];
 			}
@@ -2266,20 +2266,20 @@ class method   extends baseclass
 			}
 			if($data['ptjs']['shopdowncost'] == 1){
 			    $ptjsnum = 	$ptjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
+			}
 		    $value['expectincome'] = $ptjsnum - $value['servicecost'];//本单预计收入（结算金额）
-            $value['expectincome'] = round($value['expectincome'] ,2);			
-		}	
+            $value['expectincome'] = round($value['expectincome'] ,2);
+		}
 		$templist =   $this->mysql->getarr("select id,order_id,goodsname,goodscost,goodscount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$value['id']."' ");
 		$newdatalist = array();
 		$shuliang = 0;
-		 
+
 		foreach($templist as $key=>$value1){
 			$value1['goodscost'] = $value1['goodscost'];
-			$newdatalist[] = $value1; 
+			$newdatalist[] = $value1;
 			$shuliang += $value1['goodscount'];
 		}
-		
+
 		$value['det'] = $newdatalist;
 
 		if(!empty($value['othertext'])){
@@ -2291,68 +2291,68 @@ class method   extends baseclass
 
 		$rebackorderlist[] = $value;
 		}
-		
-   
+
+
 		$this->success($rebackorderlist);
-	} 
-	        
+	}
+
 	function aaa(){
-		$shopinfo =   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where dno='15073669562394' "); 	
+		$shopinfo =   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where dno='15073669562394' ");
 		print_r($shopinfo);exit;
 	}
-	
+
 	/* 新版商家端
 	*  商家获取进行中和已完成订单
 	2017-07-06 yxm
-	*/	
-	function newapporder(){	
+	*/
+	function newapporder(){
 		$backinfo = $this->checkapp();
 	    if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
-		$phone = trim(IFilter::act(IReq::get('phone')));		 
-		$gettype = trim(IFilter::act(IReq::get('gettype')));		 
+		}
+		$phone = trim(IFilter::act(IReq::get('phone')));
+		$gettype = trim(IFilter::act(IReq::get('gettype')));
 		$gettype = !in_array($gettype,array('doing','finish')) ?'doing':$gettype;
 		$checktime = IFilter::act(IReq::get('checktime'));
-		$stime = empty($checktime)?strtotime(date("Y-m-d")):strtotime($checktime); 
-		$endtime = $stime + 86400;	 
+		$stime = empty($checktime)?strtotime(date("Y-m-d")):strtotime($checktime);
+		$endtime = $stime + 86400;
 		//进行中的订单  不加时间限制  已完成的订单  默认显示全部  选择日期时再根据日期筛选
 		if(empty($checktime)){
 			$wherearr = array(
-			'doing'=> ' status < 3 and is_make = 1 and is_reback = 0 ',	//进行中		 
-			'finish'=>' status = 3 and is_reback = 0 '                    //已完成 
+			'doing'=> ' status < 3 and is_make = 1 and is_reback = 0 ',	//进行中
+			'finish'=>' status = 3 and is_reback = 0 '                    //已完成
 		    );
 		}else{
 			$wherearr = array(
-			'doing'=> ' status < 3 and is_make = 1 and is_reback = 0 ',	//进行中		 
-			'finish'=>' status = 3 and is_reback = 0 and suretime >'.$stime.' and suretime < '.$endtime.' '                    //已完成 
+			'doing'=> ' status < 3 and is_make = 1 and is_reback = 0 ',	//进行中
+			'finish'=>' status = 3 and is_reback = 0 and suretime >'.$stime.' and suretime < '.$endtime.' '                    //已完成
 		    );
 		}
-		
-        
+
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
-  	    
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
+
 		/*
-	    获取平台设置的结算公式			
- 	    */		
+	    获取平台设置的结算公式
+ 	    */
 		$jsinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."jscompute where id > 0  ");
 		$data['ptyj'] = $jsinfo[0];   //平台配送情况下的佣金设置
 		$data['sjyj'] = $jsinfo[1];   //商家配送情况下的佣金设置
 		$data['ptjs'] = $jsinfo[2];   //平台配送情况下的结算设置
-		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置			 
-		  
+		$data['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置
+
 		if($phone > 0){
-			$orderlist =  $this->mysql->getarr("select id,content,psuid,psusername,psemail,pstype,psstatus,picktime,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and ".$wherearr[$gettype]."  and buyerphone like '%".$phone."%'  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."    ");   				 				    
+			$orderlist =  $this->mysql->getarr("select id,content,psuid,psusername,psemail,pstype,psstatus,picktime,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and ".$wherearr[$gettype]."  and buyerphone like '%".$phone."%'  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."    ");
 		}else{
-			$orderlist =  $this->mysql->getarr("select id,content,psuid,psusername,psemail,pstype,psstatus,picktime,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and ".$wherearr[$gettype]."   order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");   				 
-		}			  
+			$orderlist =  $this->mysql->getarr("select id,content,psuid,psusername,psemail,pstype,psstatus,picktime,cxcost,bagcost,shopps,shopdowncost,shopcost,addtime,shopid,posttime,paytype,paystatus,dno,allcost,status,is_make,daycode,buyeruid,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." and ".$wherearr[$gettype]."   order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");
+		}
 		if(empty($orderlist)){
 			$this->message('暂无满足条件的订单');
 		}
-	     
+
 		foreach($orderlist as $key=>$value){
 		$scoretocost =Mysite::$app->config['scoretocost'];
 		$scorcost = $value['scoredown'] > 0? intval($value['scoredown']/$scoretocost):0;
@@ -2360,30 +2360,30 @@ class method   extends baseclass
 	    if($value['paytype'] == 0){
 			$value['paystatustype'] = "货到支付";
 		}else{
-		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';	
-		}	
+		    $value['paystatustype'] =  empty($value['paystatus'])?'未支付':'已支付';
+		}
 		$value['addtime'] = date('H:i:s',$value['addtime']);
 		$value['posttime'] = date('Y-m-d',$value['posttime'])." ".$value['postdate'];
 		$value['psuid'] = empty($value['psuid'])?'':$value['psuid'];
 		$value['showsend'] = 0;//是否显示发货按钮
 		$value['showover'] = 0;//是否显示确认完成按钮
-		
-		
-		//下单次数		 	 
+
+
+		//下单次数
 		$sdf = $this->mysql->getarr("select  dno from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$value['buyeruid']." and shopid = ".$value['shopid']."  ");
-			 
+
 				foreach($sdf as $k=>$v){
 					if($v['dno']==$value['dno']){
 						$value['orderNum'] = $k+1;
 					}
 				}
 		$value['orderNum'] = $value['orderNum'];
-		
+
 	    $shopinfo =   $this->mysql->select_one("select id,yjin,shoptype from ".Mysite::$app->config['tablepre']."shop where id='".$value['shopid']."' ");
         if($shopinfo['shoptype'] == 0){
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");	
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$value['shopid']."' ");
 		}else{
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");				
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$value['shopid']."' ");
 		}
 		if($sendinfo['sendtype'] == 1 && $value['is_make'] == 1 && $value['status'] == 1){
 			$value['showsend'] = 1;
@@ -2391,30 +2391,30 @@ class method   extends baseclass
 		if($value['status'] == 2 && $sendinfo['sendtype'] == 1){
 			$data['showover'] = 1;
 		}
-		
+
 		if( $value['pstype'] == 1){//商家配送的情况
 			$value['psyname'] = '';
 			$value['psyphone'] = '';
 			$value['picktime'] = '';
 			if($value['status'] < 2){
-				$value['orderstatus'] = '待发货';				 
+				$value['orderstatus'] = '待发货';
 			}
             if($value['status']==2){
-				$value['orderstatus'] = '配送中';	
+				$value['orderstatus'] = '配送中';
 			}
             if($value['status']==3){
-				$value['orderstatus'] = '订单已完成';	
-			}           		
+				$value['orderstatus'] = '订单已完成';
+			}
 		}else{
 			if($value['psuid'] > 0){
 			if($value['pstype'] == 0){//网站配送
-				$orderpsinfo = $this->mysql->select_one("select status,picktime from ".Mysite::$app->config['tablepre']."orderps where orderid='".$value['id']."' ");	
+				$orderpsinfo = $this->mysql->select_one("select status,picktime from ".Mysite::$app->config['tablepre']."orderps where orderid='".$value['id']."' ");
 			    if(empty($orderpsinfo)) $this->message('配送单不存在');
 				if($orderpsinfo['status'] == 1 && $value['status'] != 3 ){
 					$value['orderstatus'] = '待取货';
 					$value['psyname'] = empty($value['psusername'])?'':$value['psusername'];
 					$value['psyphone'] = empty($value['psemail'])?'':$value['psemail'];
-					$orderpsinfo1 = $this->mysql->select_one("select addtime from ".Mysite::$app->config['tablepre']."orderstatus where statustitle = '配送员已抢单' ");				   
+					$orderpsinfo1 = $this->mysql->select_one("select addtime from ".Mysite::$app->config['tablepre']."orderstatus where statustitle = '配送员已抢单' ");
 					$value['picktime'] = date('H:i',$orderpsinfo1['addtime']);
 				}
 				if($orderpsinfo['status'] == 2 && $value['status'] != 3){
@@ -2430,7 +2430,7 @@ class method   extends baseclass
 					$value['picktime'] = date('H:i',$orderpsinfo['picktime']);
 				}
 			}
-	 
+
 			if($value['pstype'] == 2){//配送宝
 				if($value['psstatus'] < 3 && $value['status'] != 3){
 					$value['orderstatus'] = '待取货';
@@ -2452,14 +2452,14 @@ class method   extends baseclass
 					$value['psyphone'] = empty($value['psemail'])?'':$value['psemail'];
 					$value['picktime'] = $value['picktime'];
 					$value['psystatus'] = date('H:i',$value['picktime']).'已送达';
-				}				
-			}	
+				}
+			}
 		}else{
 			if($value['status'] < 2 && $value['is_make'] == 1 ){
 				$value['orderstatus'] = '待发货';
 				$value['psyname'] = '';
 				$value['psyphone'] = '';
-				$value['picktime'] = '';			
+				$value['picktime'] = '';
 			}
 			if($value['status'] != 3){
 				$value['orderstatus'] = '待抢单';
@@ -2472,17 +2472,17 @@ class method   extends baseclass
 				$value['psyname'] = '';
 				$value['psyphone'] = '';
 				$value['picktime'] = '';
-			}			
-		}
-			
-			
-			
+			}
 		}
 
-		
+
+
+		}
+
+
 		//计算佣金(平台服务费)和结算金额(本单预计收入)
 		if($sendinfo['sendtype'] == 1){
-			
+
 			//计算商家配送情况下佣金
 			$sjyjnum = $value['shopcost'];
             if($data['sjyj']['pscost'] == 1){
@@ -2506,13 +2506,13 @@ class method   extends baseclass
 			}
 			if($data['sjjs']['shopdowncost'] == 1){
 			    $sjjsnum = 	$sjjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
+			}
 			$value['expectincome'] = $sjjsnum - $value['servicecost'];//本单预计收入（结算金额）
-            $value['expectincome'] = round($value['expectincome'] ,2);			
+            $value['expectincome'] = round($value['expectincome'] ,2);
 		}else{
-			 
+
 			//计算平台配送情况下佣金
-			$ptyjnum = $value['shopcost'];          			
+			$ptyjnum = $value['shopcost'];
 			if($data['ptyj']['pscost'] == 1){
 			    $ptyjnum = 	$ptyjnum + $value['shopps'];
 			}
@@ -2534,17 +2534,17 @@ class method   extends baseclass
 			}
 			if($data['ptjs']['shopdowncost'] == 1){
 			    $ptjsnum = 	$ptjsnum - ($value['cxcost'] - $value['shopdowncost']);
-			}			
+			}
 		    $value['expectincome'] = $ptjsnum - $value['servicecost'];//本单预计收入（结算金额）
-            $value['expectincome'] = round($value['expectincome'] ,2);			
-		}	
+            $value['expectincome'] = round($value['expectincome'] ,2);
+		}
 		$templist =   $this->mysql->getarr("select id,order_id,goodsname,goodscost,goodscount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$value['id']."' ");
 		$newdatalist = array();
 		$shuliang = 0;
-		 
+
 		foreach($templist as $key=>$value1){
 			$value1['goodscost'] = $value1['goodscost'];
-			$newdatalist[] = $value1; 
+			$newdatalist[] = $value1;
 			$shuliang += $value1['goodscount'];
 		}
 		$value['det'] = $newdatalist;
@@ -2558,19 +2558,19 @@ class method   extends baseclass
 
 		$orderlistdata[] = $value;
 		}
-		
-   
+
+
 		$this->success($orderlistdata);
 	}
-	
-	
-	
-	
+
+
+
+
 	/*
 	*  获取商家订单
 	*/
-	
-	
+
+
 	function apporder(){
 		$statusarr = array('0'=>'新订单','1'=>'待发货','2'=>'待完成','3'=>'完成','4'=>'关闭','5'=>'关闭');
 		$gostatusarr = array('0'=>'新订单','1'=>'待消费','2'=>'待消费','3'=>'已消费','4'=>'关闭','5'=>'关闭');
@@ -2595,7 +2595,7 @@ class method   extends baseclass
 			if($value['is_goshop'] == 1){
 				$value['showstatus'] = $gostatusarr[$value['status']];
 			}else{
-				$value['showstatus'] = $statusarr[$value['status']]; 
+				$value['showstatus'] = $statusarr[$value['status']];
 			}
 			$shop= $this->mysql->select_one("select shoptype from ".Mysite::$app->config['tablepre']."shop where id='".$value['shopid']."' ");
 			if($shop['shoptype']==0){
@@ -2606,7 +2606,7 @@ class method   extends baseclass
 			$timearr = explode("-",$value['postdate']);
 			$maxpstime = strtotime($timearr[1]);
 			$value['is_yuding'] = $maxpstime -  $shopinfo['interval_minit']*60  > $value['addtime']?'1':'2';
-			
+
 			$value['addtime'] = date('H:i:s',$value['addtime']);
 			$value['posttime'] = date('m-d',$value['posttime']);
 			$value['posttime'] = $value['posttime'].' '.$value['postdate'];
@@ -2649,13 +2649,13 @@ class method   extends baseclass
 			}
 			$backdatalist[] = $value;
 		}
-		 
+
 		$this->success($backdatalist);
 	}
 	/**
 	*@method 新版商家端  开启关闭自动接单功能
-	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=editautopreceipt&uid=10203&pwd=123456&status=1&datatype=json 
- 	*@所需参数   uid：用户uid   pwd：用户密码    status：开启传1   关闭传0	   
+	*@request_url http://m6.waimairen.com/index.php?ctrl=app&action=editautopreceipt&uid=10203&pwd=123456&status=1&datatype=json
+ 	*@所需参数   uid：用户uid   pwd：用户密码    status：开启传1   关闭传0
 	*添加时间:2017/9/26    技术：闫
 	**/
 	function editautopreceipt(){
@@ -2665,7 +2665,7 @@ class method   extends baseclass
 		}
 		$data['is_autopreceipt'] = trim(IFilter::act(IReq::get('status')));
 		$this->mysql->update(Mysite::$app->config['tablepre'].'shop',$data,"uid='".$backinfo['uid']."' ");
-     	$this->success('操作成功');	
+     	$this->success('操作成功');
 	}
 	/*
 	* 商家获取信息
@@ -2678,7 +2678,7 @@ class method   extends baseclass
 		}
 		//获取店铺
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,shoplogo,shoptype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,intr_info,notice_info,is_autopreceipt from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		
+
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		$shopinfo['opentime'] = str_replace("|", ",", $shopinfo['opentime']);
 		$shopinfo['intr_info'] =strip_tags($shopinfo['intr_info']);
@@ -2689,17 +2689,17 @@ class method   extends baseclass
 		}else{
 			$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");
 
-		} 
+		}
 		$shopinfo['isshowpsf'] = $shopdet['sendtype'] == 1?1:0;
-		$shopattr = $this->mysql->getarr("select value from ".Mysite::$app->config['tablepre']."shopattr where shopid='".$shopinfo['id']."' ");		
+		$shopattr = $this->mysql->getarr("select value from ".Mysite::$app->config['tablepre']."shopattr where shopid='".$shopinfo['id']."' ");
 		foreach($shopattr as $k=>$v){
 			$shoptype[] = $v['value'];
 		}
 		#print_r($shopdet);exit;
 		$shoptype = implode(',',$shoptype);
 		$shopinfo['shoptype'] = empty($shoptype)?'': $shoptype;
-		$shopinfo['is_orderbefore'] = empty($shopdet)?0:$shopdet['is_orderbefore']; 
-	    $shopinfo['limitcost']  = empty($shopdet)?0:$shopdet['limitcost']; 
+		$shopinfo['is_orderbefore'] = empty($shopdet)?0:$shopdet['is_orderbefore'];
+	    $shopinfo['limitcost']  = empty($shopdet)?0:$shopdet['limitcost'];
 		#print_r($shopinfo);exit;
 		$this->success($shopinfo);
 	}
@@ -2714,14 +2714,14 @@ class method   extends baseclass
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
-		if($shopinfo['shoptype'] != 0)$this->message('超市店铺不通过此链接返回'); 
-		
+		if($shopinfo['shoptype'] != 0)$this->message('超市店铺不通过此链接返回');
+
 		$shoptype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$shopinfo['id']."' order by orderid asc");
 		$tempc = array();
 		foreach($shoptype as $key=>$value){
 			$value['shuliang'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid=".$value['id']." order by good_order asc");
 			$tempc[] = $value;
-		} 
+		}
 		$this->success($tempc);
 	}
 	/*
@@ -2733,17 +2733,17 @@ class method   extends baseclass
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}		
+		}
 		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		$shopattr = $this->mysql->getarr("select attrid from ".Mysite::$app->config['tablepre']."shopattr where shopid='".$shopinfo['id']."' ");
 		foreach($shopattr as $k=>$v){
 			$attrids[] = $v['attrid'];
-		}		
+		}
 		$catparent = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype  where  type='checkbox' order by cattype asc limit 0,100");
 			$catlist = array();
 			foreach($catparent as $key=>$value){
 				$tempcat   = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype  where parent_id = '".$value['id']."' and cattype = ".$shopinfo['shoptype']." limit 0,100");
-				
+
 				foreach($tempcat as $k=>$v){
 					 if(in_array($v['id'],$attrids)){
 						$v['check'] = 1;
@@ -2755,7 +2755,7 @@ class method   extends baseclass
 			}
 		$this->success($catlist);
 	}
-	
+
 	/** 商家端改版后
 	商家店铺设置保存店铺类型信息
 	2017-07-04修改yxm
@@ -2765,20 +2765,20 @@ class method   extends baseclass
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$shopinfo = $this->mysql->select_one("select id from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");		
+		$shopinfo = $this->mysql->select_one("select id from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		$attrids = IFilter::act(IReq::get('attrids'));
 		if(empty($attrids)) $this->message('请选择店铺类型');
 		$attrids = explode(',',$attrids);
 		$this->mysql->delete(Mysite::$app->config['tablepre'].'shopattr',"shopid ='".$shopinfo['id']."' ");
 		foreach($attrids as $k=>$v){
-		    $info = $this->mysql->select_one("select name,parent_id from ".Mysite::$app->config['tablepre']."shoptype where id='".$v."' ");		
+		    $info = $this->mysql->select_one("select name,parent_id from ".Mysite::$app->config['tablepre']."shoptype where id='".$v."' ");
 			$data['shopid'] = $shopinfo['id'];
 			$data['attrid'] = $v;
 			$data['firstattr'] = $info['parent_id'];
 			$data['value'] = $info['name'];
 			$this->mysql->insert(Mysite::$app->config['tablepre']."shopattr",$data);
 		}
-        $this->success('操作成功');		
+        $this->success('操作成功');
 	}
 	/** 商家端改版后
 	商家店铺获取配送费设置
@@ -2788,14 +2788,14 @@ class method   extends baseclass
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 		
-	    $shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");		        
-	    if($shopinfo['shoptype'] == 1){
-			$psinfo = $this->mysql->select_one("select pradius, pradiusvalue from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopinfo['id']."' ");	
-		}else{
-			$psinfo = $this->mysql->select_one("select pradius, pradiusvalue from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopinfo['id']."' ");	
 		}
-	    $pradiusvalue = unserialize($psinfo['pradiusvalue']);		
+	    $shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
+	    if($shopinfo['shoptype'] == 1){
+			$psinfo = $this->mysql->select_one("select pradius, pradiusvalue from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopinfo['id']."' ");
+		}else{
+			$psinfo = $this->mysql->select_one("select pradius, pradiusvalue from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopinfo['id']."' ");
+		}
+	    $pradiusvalue = unserialize($psinfo['pradiusvalue']);
 		$pradius = $psinfo['pradius'];
 		for($k=0; $k<$pradius; $k++){
 			$value['id'] = $k;
@@ -2803,9 +2803,9 @@ class method   extends baseclass
 			$value['cost'] = empty($pradiusvalue[$k])?0:$pradiusvalue[$k];
 			$pslist[] = $value;
 		}
-	    $this->success($pslist);			 
+	    $this->success($pslist);
 	}
-        
+
 	/** 商家端改版后
 	商家店铺保存配送费设置
 	2017-07-05修改yxm
@@ -2814,29 +2814,29 @@ class method   extends baseclass
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
-		$psinfo = IFilter::act(IReq::get('psinfo'));	 
-		$pslist = explode(',',$psinfo);		
-		$data['pradiusvalue'] = serialize($pslist);		
-		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");		        
-	    if($shopinfo['shoptype'] == 1){
-			$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."' ");	
-		}else{
-			$this->mysql->update(Mysite::$app->config['tablepre'].'shopfast',$data,"shopid='".$shopinfo['id']."' ");	
 		}
-		$this->success("配送费设置成功！");				
-	} 
-	/** 商家端改版后	
-     * @shopapi 
+		$psinfo = IFilter::act(IReq::get('psinfo'));
+		$pslist = explode(',',$psinfo);
+		$data['pradiusvalue'] = serialize($pslist);
+		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
+	    if($shopinfo['shoptype'] == 1){
+			$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."' ");
+		}else{
+			$this->mysql->update(Mysite::$app->config['tablepre'].'shopfast',$data,"shopid='".$shopinfo['id']."' ");
+		}
+		$this->success("配送费设置成功！");
+	}
+	/** 商家端改版后
+     * @shopapi
      * @name 新版商家端  订单详情
      * @other 2017/8/18   闫
      * @orderid  订单id  必传
-     * @datatype 固定值 json 必传 
+     * @datatype 固定值 json 必传
      * @extend 必传登陆验证参数
 	 * @返回示例：
-	*{ 
-     *"error" : "false", 
-     *"msg" : { 
+	*{
+     *"error" : "false",
+     *"msg" : {
      *     "status" : "等待处理", 【订单状态】
 	*	  "status1" : "08:00下单", 【订单状态右上角显示】
      *     "posttime" : "2017-08-09 17:42", 【配送时间】
@@ -2846,7 +2846,7 @@ class method   extends baseclass
      *     "buyername" : "123", 【买家名字】
      *     "buyerphone" : "15222222222", 【买家电话】
      *    "buyeraddress" : "郑州市政府213", 【买家地址】
-     *     "orderstatus" : "1", 
+     *     "orderstatus" : "1",
      *     "orderNum" : "3", 【下单次数】
      *     "allcost" : "18.80", 【订单总价】
      *     "is_reback" : "1", 【退款状态  0正常 1待平台审核 2退款成功 3待商家审核】
@@ -2864,27 +2864,27 @@ class method   extends baseclass
     *     "sendtype" : "1", 【配送类型 1商家配送 非1网站配送】
     *      "shopcost" : "14.80", 【商品总价】
     *      "orderdetail" : { 【商品详情】
-    *           "0" : { 
+    *           "0" : {
     *                "goodsname" : "进口金奇异果", 【名字】
     *                "goodscost" : "14.80", 【价格】
     *                "goodscount" : "1" 【数量】
-    *           }, 
-    *      }, 
+    *           },
+    *      },
     *      "paystatustype" : "已支付" 【支付状态】
-    * } 
+    * }
 	*}
 	*/
-	function orderdetail(){		 
-		/* $orderinfo = $this->mysql->select_one("select id from ".Mysite::$app->config['tablepre']."order where dno = 14991588346974  ");		 
+	function orderdetail(){
+		/* $orderinfo = $this->mysql->select_one("select id from ".Mysite::$app->config['tablepre']."order where dno = 14991588346974  ");
         print_r($orderinfo);exit; */
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		
+
 		$orderid = IFilter::act(IReq::get('orderid'));
 		if(empty($orderid)) $this->message('订单获取失败');
-		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid." and shopuid = ".$backinfo['uid']."  order by id desc limit 0,20");		 		 
+		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid." and shopuid = ".$backinfo['uid']."  order by id desc limit 0,20");
 		#print_r($orderinfo);
 		$data['status2'] = '';
 		if($orderinfo['status'] == 0 || $orderinfo['is_make'] == 0){
@@ -2903,14 +2903,14 @@ class method   extends baseclass
 			$data['status'] = '等待配送员抢单';
 			$data['status1'] = date('H:i',$orderinfo['maketime']).'接单';
 		}
-		if(!empty($orderinfo['psuid']) && $orderinfo['pstype'] != 1 && $orderinfo['status'] != 3 && $orderinfo['psstatus'] < 3 ){			 
+		if(!empty($orderinfo['psuid']) && $orderinfo['pstype'] != 1 && $orderinfo['status'] != 3 && $orderinfo['psstatus'] < 3 ){
 			$data['status'] = '配送员正在取货中';
-			$orderstatusinfo = $this->mysql->select_one("select addtime from ".Mysite::$app->config['tablepre']."orderstatus where orderid=".$orderid." and statustitle = '配送员已抢单' ");		 		 						 
+			$orderstatusinfo = $this->mysql->select_one("select addtime from ".Mysite::$app->config['tablepre']."orderstatus where orderid=".$orderid." and statustitle = '配送员已抢单' ");
 			$data['status1'] = date('H:i',$orderstatusinfo['addtime']).'抢单';
 			$data['status2'] = date('H:i',$orderstatusinfo['addtime']).'接单，正在到店取货';
 		}
-		
-		if(!empty($orderinfo['psuid']) && $orderinfo['pstype'] != 1 && $orderinfo['status'] != 3 && $orderinfo['psstatus'] == 3 ){			 
+
+		if(!empty($orderinfo['psuid']) && $orderinfo['pstype'] != 1 && $orderinfo['status'] != 3 && $orderinfo['psstatus'] == 3 ){
 			$data['status'] = '配送员正在配送中';
 			$data['status1'] = date('H:i',$orderinfo['picktime']).'取货';
 			$data['status2'] = date('H:i',$orderinfo['picktime']).'取货，正在配送中';
@@ -2931,40 +2931,40 @@ class method   extends baseclass
 		}
 		if($orderinfo['status'] > 3){
 			$data['status'] = '订单取消';
-		}						
+		}
 		$data['posttime'] = date('Y-m-d H:i',$orderinfo['posttime']);    //配送时间
 		$data['addtime'] = date('Y-m-d H:i',$orderinfo['addtime']); //下单日期
 		$data['addtime1'] = date('H:i',$orderinfo['addtime']); //下单时间
 		$data['daycode'] = $orderinfo['daycode'];      //订单序号
 		$data['buyername'] = $orderinfo['buyername'];  //顾客名字
 		$data['buyerphone'] = $orderinfo['buyerphone'];//顾客电话
-		$data['buyeraddress'] = $orderinfo['buyeraddress'];//顾客地址	
-        $data['orderstatus'] = $orderinfo['status'];		
-		$sdf = $this->mysql->getarr("select dno from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$orderinfo['buyeruid']." and shopid = ".$orderinfo['shopid']."  ");			 
-		 
+		$data['buyeraddress'] = $orderinfo['buyeraddress'];//顾客地址
+        $data['orderstatus'] = $orderinfo['status'];
+		$sdf = $this->mysql->getarr("select dno from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$orderinfo['buyeruid']." and shopid = ".$orderinfo['shopid']."  ");
+
 		foreach($sdf as $k=>$v){
 				if($v['dno']==$orderinfo['dno']){
 					$value['orderNum'] = $k+1;
 				}
 			}
-		$data['orderNum'] = $value['orderNum'];//下单次数			
+		$data['orderNum'] = $value['orderNum'];//下单次数
 		$data['allcost'] = $orderinfo['allcost'];//订单金额
 		$data['is_reback'] = $orderinfo['is_reback'];
-	    /****获取平台设置的结算公式	计算平台服务费(佣金)  订单预计收入(结算金额)*****/	
- 	    
+	    /****获取平台设置的结算公式	计算平台服务费(佣金)  订单预计收入(结算金额)*****/
+
 		$jsinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."jscompute where id > 0  ");
 		$data1['ptyj'] = $jsinfo[0];   //平台配送情况下的佣金设置
 		$data1['sjyj'] = $jsinfo[1];   //商家配送情况下的佣金设置
 		$data1['ptjs'] = $jsinfo[2];   //平台配送情况下的结算设置
-		$data1['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置			 
+		$data1['sjjs'] = $jsinfo[3];   //商家配送情况下的结算设置
 	    $shopinfo = $this->mysql->select_one("select id,yjin,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
         if(empty($shopinfo)) $this->message('店铺信息获取失败');
 	    if($shopinfo['shoptype'] == 0){
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopinfo['id']."' ");	
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopinfo['id']."' ");
 		}else{
-		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopinfo['id']."' ");				
-		}		 
-		if($sendinfo['sendtype'] == 1){			
+		    $sendinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopinfo['id']."' ");
+		}
+		if($sendinfo['sendtype'] == 1){
 			//计算商家配送情况下佣金
 			$sjyjnum = $orderinfo['shopcost'];
             if($data1['sjyj']['pscost'] == 1){
@@ -2988,13 +2988,13 @@ class method   extends baseclass
 			}
 			if($data1['sjjs']['shopdowncost'] == 1){
 			    $sjjsnum = 	$sjjsnum - ($orderinfo['cxcost'] - $orderinfo['shopdowncost']);
-			}			
-			$data['expectincome'] = $sjjsnum - $data['servicecost'];//本单预计收入（结算金额）	
-            $data['expectincome'] = number_format($data['expectincome'] ,2);			
+			}
+			$data['expectincome'] = $sjjsnum - $data['servicecost'];//本单预计收入（结算金额）
+            $data['expectincome'] = number_format($data['expectincome'] ,2);
 		}else{
-			 
+
 			//计算平台配送情况下佣金
-			$ptyjnum = $orderinfo['shopcost'];          			
+			$ptyjnum = $orderinfo['shopcost'];
 			if($data1['ptyj']['pscost'] == 1){
 			    $ptyjnum = 	$ptyjnum + $orderinfo['shopps'];
 			}
@@ -3016,31 +3016,31 @@ class method   extends baseclass
 			}
 			if($data1['ptjs']['shopdowncost'] == 1){
 			    $ptjsnum = 	$ptjsnum - ($orderinfo['cxcost'] - $orderinfo['shopdowncost']);
-			}			
-		    $data['expectincome'] = $ptjsnum - $data['servicecost'];//本单预计收入（结算金额）	
+			}
+		    $data['expectincome'] = $ptjsnum - $data['servicecost'];//本单预计收入（结算金额）
 			$data['expectincome'] = number_format($data['expectincome'] ,2);
-		}	
+		}
 		$data['pscost'] = number_format($orderinfo['shopps'],2);//配送费
 		$data['cxcost'] = number_format($orderinfo['cxcost'],2);//促销优惠金额
 		$data['jfcost'] = number_format($orderinfo['scoredown']/Mysite::$app->config['scoretocost'],2);//积分抵扣金额
 		$data['yhjcost'] = number_format($orderinfo['yhjcost'],2);//优惠券抵扣金额
 		$data['bagcost'] = number_format($orderinfo['bagcost'],2);//打包费
 		$data['addpscost'] = number_format($orderinfo['addpscost'],2);//附加配送费
-		$data['dno'] = $orderinfo['dno'];//订单编号		
+		$data['dno'] = $orderinfo['dno'];//订单编号
 		$data['content'] = $orderinfo['content'];//订单备注
 		$data['psyname'] = empty($orderinfo['psusername'])?'':$orderinfo['psusername'];//配送员名字
 		$data['psyphone'] = empty($orderinfo['psemail'])?'':$orderinfo['psemail'];//配送员电话
 		$data['sendtype'] = $orderinfo['pstype'];//配送方式  1商家配送  其他为网站配送
-		$data['shopcost'] = $orderinfo['shopcost'];//商品总价	       	
+		$data['shopcost'] = $orderinfo['shopcost'];//商品总价
 		$data['orderdetail'] = $this->mysql->getarr("select goodsname,goodscost,goodscount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$orderinfo['id']."' ");
 		if($orderinfo['paytype'] == 0){
 			$data['paystatustype'] = "货到支付";
 		}else{
-		    $data['paystatustype'] =  empty($orderinfo['paystatus'])?'未支付':'已支付';	
+		    $data['paystatustype'] =  empty($orderinfo['paystatus'])?'未支付':'已支付';
 		}
 		$this->success($data);
 	}
-	
+
 	/*
 	* 商家端改版后
 	商家删除商品分类
@@ -3050,27 +3050,27 @@ class method   extends baseclass
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
-        $typeid = intval(IFilter::act(IReq::get('typeid')));		
-		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid=".$backinfo['uid']." ");		 
-		
+		}
+        $typeid = intval(IFilter::act(IReq::get('typeid')));
+		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid=".$backinfo['uid']." ");
+
 		if($shopinfo['shoptype'] == 1){//超市
-			$checkinfo = $this->mysql->select_one("select parent_id from ".Mysite::$app->config['tablepre']."marketcate where id=".$typeid." ");		 
-			if($checkinfo['parent_id'] > 0){//超市二级分类  				
-				$this->mysql->delete(Mysite::$app->config['tablepre'].'goods',"typeid ='".$typeid."' and shopid = ".$shopinfo['id']."  ");		
+			$checkinfo = $this->mysql->select_one("select parent_id from ".Mysite::$app->config['tablepre']."marketcate where id=".$typeid." ");
+			if($checkinfo['parent_id'] > 0){//超市二级分类
+				$this->mysql->delete(Mysite::$app->config['tablepre'].'goods',"typeid ='".$typeid."' and shopid = ".$shopinfo['id']."  ");
 			}else{ //超市一级分类
-				$sontypeid = $this->mysql->getarr("select id from ".Mysite::$app->config['tablepre']."marketcate where parent_id=".$typeid." ");	 
+				$sontypeid = $this->mysql->getarr("select id from ".Mysite::$app->config['tablepre']."marketcate where parent_id=".$typeid." ");
 				foreach($sontypeid as $k=>$v){
-					$this->mysql->delete(Mysite::$app->config['tablepre'].'goods',"typeid ='".$v['id']."' and shopid = ".$shopinfo['id']."  ");	
-					$this->mysql->delete(Mysite::$app->config['tablepre'].'marketcate',"id ='".$v['id']."' ");	
+					$this->mysql->delete(Mysite::$app->config['tablepre'].'goods',"typeid ='".$v['id']."' and shopid = ".$shopinfo['id']."  ");
+					$this->mysql->delete(Mysite::$app->config['tablepre'].'marketcate',"id ='".$v['id']."' ");
 				}
 			}
-			$this->mysql->delete(Mysite::$app->config['tablepre'].'marketcate',"id ='".$typeid."' ");	 
+			$this->mysql->delete(Mysite::$app->config['tablepre'].'marketcate',"id ='".$typeid."' ");
 		}else{//外卖
 			$this->mysql->delete(Mysite::$app->config['tablepre'].'goodstype',"id ='".$typeid."' ");
-			$this->mysql->delete(Mysite::$app->config['tablepre'].'goods',"typeid ='".$typeid."' and shopid = ".$shopinfo['id']."  ");	
+			$this->mysql->delete(Mysite::$app->config['tablepre'].'goods',"typeid ='".$typeid."' and shopid = ".$shopinfo['id']."  ");
 		}
-		$this->success("删除商品分类成功");	
+		$this->success("删除商品分类成功");
 	}
 	/*
 	* 商家端改版后
@@ -3081,92 +3081,92 @@ class method   extends baseclass
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  	 
+		}
 		$shoptype = intval(IFilter::act(IReq::get('shoptype')));//店铺类型 0外卖 1超市
 		$id = intval(IFilter::act(IReq::get('id')));
 		if($shoptype == 0){
-		    $goodstype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodstype where id=".$id." order by orderid asc");	    
+		    $goodstype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodstype where id=".$id." order by orderid asc");
 		}else{
-			$goodstype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where id=".$id." order by orderid asc");	
+			$goodstype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where id=".$id." order by orderid asc");
 		}
 		if(empty($goodstype)) $this->message('分类获取失败');
-		$this->success($goodstype);		
+		$this->success($goodstype);
 	}
 	/*
 	* 商家端改版后
 	商家保存商品分类
 	2017-07-04修改yxm
 	*/
-	function savegoodstype(){		 
-		$backinfo = $this->checkapp();		  
+	function savegoodstype(){
+		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  	          
-		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid=".$backinfo['uid']." ");		 
-		if(empty($shopinfo)) $this->message('店铺信息获取失败'); 
+		}
+		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid=".$backinfo['uid']." ");
+		if(empty($shopinfo)) $this->message('店铺信息获取失败');
 		$shopid = $shopinfo['id'];//店铺id
-		$shoptype = $shopinfo['shoptype'];//店铺类型 0外卖 1超市		
-		$id = intval(IFilter::act(IReq::get('id')));    //分类id		
+		$shoptype = $shopinfo['shoptype'];//店铺类型 0外卖 1超市
+		$id = intval(IFilter::act(IReq::get('id')));    //分类id
 		$name = trim(IFilter::act(IReq::get('name')));  //分类名字
-		if(mb_strlen($name,"UTF8")>10) $this->message('商品名称长度不能大于10个字符'); 
-		if(empty($name)) $this->message('商品名称不能为空'); 
-		
+		if(mb_strlen($name,"UTF8")>10) $this->message('商品名称长度不能大于10个字符');
+		if(empty($name)) $this->message('商品名称不能为空');
+
 		$pid = intval(IFilter::act(IReq::get('pid')));   //分类父id
-		$orderid = intval(IFilter::act(IReq::get('orderid')));//排序号        		
+		$orderid = intval(IFilter::act(IReq::get('orderid')));//排序号
 		if($id > 0){  //编辑分类
 			if($shoptype == 0){  //外卖分类
 				$checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid=".$shopid." and name = '".$name."' and id !=".$id." ");
-				if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加'); 
+				if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加');
 				$data['name'] = $name;
 				$data['orderid'] = $orderid;
-				$this->mysql->update(Mysite::$app->config['tablepre'].'goodstype',$data,"id='".$id."' ");			
+				$this->mysql->update(Mysite::$app->config['tablepre'].'goodstype',$data,"id='".$id."' ");
 		    }else{               //超市分类
 			    if($pid > 0){    //二级分类
 					$checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid=".$shopid." and name = '".$name."' and id !=".$id." and parent_id = ".$pid." ");
-					if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加'); 
+					if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加');
 					$data['name'] = $name;
 					$data['orderid'] = $orderid;
 					$data['parent_id'] = $pid;
-					$this->mysql->update(Mysite::$app->config['tablepre'].'marketcate',$data,"id='".$id."' ");			
+					$this->mysql->update(Mysite::$app->config['tablepre'].'marketcate',$data,"id='".$id."' ");
 			    }else{           //一级分类
 				    $checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid=".$shopid." and name = '".$name."' and id !=".$id." ");
-					if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加'); 
+					if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加');
 					$data['name'] = $name;
-					$data['orderid'] = $orderid;			
-					$this->mysql->update(Mysite::$app->config['tablepre'].'marketcate',$data,"id='".$id."' ");	
+					$data['orderid'] = $orderid;
+					$this->mysql->update(Mysite::$app->config['tablepre'].'marketcate',$data,"id='".$id."' ");
 			    }
 		    }
 		}else{      //新建分类
 			if($shoptype == 0){  //外卖分类
 			    $checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid=".$shopid." and name = '".$name."' ");
-				if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加'); 
+				if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加');
 				$data['name'] = $name;
 				$data['orderid'] = $orderid;
 				$data['shopid'] = $shopid;
-				$this->mysql->insert(Mysite::$app->config['tablepre']."goodstype",$data);						
+				$this->mysql->insert(Mysite::$app->config['tablepre']."goodstype",$data);
 		    }else{               //超市分类
 			    if($pid > 0){    //二级分类
 				    $checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid=".$shopid." and name = '".$name."' and parent_id =".$pid." ");
-				    if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加'); 
+				    if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加');
 					$data['name'] = $name;
 					$data['orderid'] = $orderid;
 					$data['parent_id'] = $pid;
 					$data['shopid'] = $shopid;
-					$this->mysql->insert(Mysite::$app->config['tablepre'].'marketcate',$data);			
+					$this->mysql->insert(Mysite::$app->config['tablepre'].'marketcate',$data);
 			    }else{           //一级分类
 				    $checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid=".$shopid." and name = '".$name."' and parent_id = 0 ");
-				    if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加'); 
+				    if(!empty($checkinfo)) $this->message('该分类已存在，不可重复添加');
 					$data['name'] = $name;
 					$data['orderid'] = $orderid;
-                    $data['parent_id'] = 0;		
-                    $data['shopid'] = $shopid;                   				
-					$this->mysql->insert(Mysite::$app->config['tablepre'].'marketcate',$data);	
+                    $data['parent_id'] = 0;
+                    $data['shopid'] = $shopid;
+					$this->mysql->insert(Mysite::$app->config['tablepre'].'marketcate',$data);
 			    }
-		    } 
-		}			 
-		$this->success('保存成功！');		
+		    }
+		}
+		$this->success('保存成功！');
 	}
-	
+
 	/*
 	* 商家端改版后
 	商家获取商品分类
@@ -3181,37 +3181,37 @@ class method   extends baseclass
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		//外卖店铺商品分类
 		if($shopinfo['shoptype'] == 0){
-		$goodstype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$shopinfo['id']."' order by orderid asc");	    
+		$goodstype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$shopinfo['id']."' order by orderid asc");
      	$tempc = array();
 		foreach($goodstype as $key=>$value){
-			$value['goodscount'] = $this->mysql->counts("select id from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid   =".$value['id']."  order by id desc"); 
+			$value['goodscount'] = $this->mysql->counts("select id from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid   =".$value['id']."  order by id desc");
  			$value['sontype'] = array();
-			$tempc[] = $value;			
-		   } 
+			$tempc[] = $value;
+		   }
 		    $data['shoptype'] = 0;
-		//超市店铺商品一级分类   
+		//超市店铺商品一级分类
 		}else{
 		$goodstype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = 0 order by orderid asc");
 		$tempc = array();
-		foreach($goodstype as $key=>$value){ 
- 			//超市店铺商品二级分类   
+		foreach($goodstype as $key=>$value){
+ 			//超市店铺商品二级分类
 			$sontypearr =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = ".$value['id']." order by orderid asc");
-           	$value['goodscount'] = $this->mysql->counts("select id from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid in(select id from ".Mysite::$app->config['tablepre']."marketcate where parent_id =".$value['id'].") order by id desc"); 
+           	$value['goodscount'] = $this->mysql->counts("select id from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid in(select id from ".Mysite::$app->config['tablepre']."marketcate where parent_id =".$value['id'].") order by id desc");
 		   $value['sontype'] = array();
 		   $sontype = array();
-		   foreach($sontypearr as $key1=>$value1){			   	
-				$value1['goodscount'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid   =".$value1['id']."  order by id asc"); 
+		   foreach($sontypearr as $key1=>$value1){
+				$value1['goodscount'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid   =".$value1['id']."  order by id asc");
 				$sontype[] = $value1;
 				$value['sontype'] = $sontype;
 			}
-			$tempc[] = $value;			
-		} 	
+			$tempc[] = $value;
+		}
          $data['shoptype'] = 1;
 		}
 		$data['typeinfo'] = $tempc;
 		$this->success($data);
 	}
-	
+
 	/*
 	* 商家端改版后
 	商家添加商品分类
@@ -3228,33 +3228,33 @@ class method   extends baseclass
 		$name = trim(IFilter::act(IReq::get('name')));
 		$orderid = intval(IFilter::act(IReq::get('orderid')));
 		$parent_id = intval(IFilter::act(IReq::get('parent_id')));
-		
+
 		//外卖店铺商品分类
-		if($shopinfo['shoptype'] == 0){	
-		$goodstype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$shopinfo['id']."' order by orderid asc");	    
+		if($shopinfo['shoptype'] == 0){
+		$goodstype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$shopinfo['id']."' order by orderid asc");
      	$tempc = array();
 		foreach($goodstype as $key=>$value){
  			$value['sontype'] = array();
-			$tempc[] = $value;			
-		   } 
-		//超市店铺商品一级分类   
+			$tempc[] = $value;
+		   }
+		//超市店铺商品一级分类
 		}else{
 		$goodstype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = 0 order by orderid desc");
 		$tempc = array();
-		foreach($goodstype as $key=>$value){ 
- 			//超市店铺商品二级分类   
+		foreach($goodstype as $key=>$value){
+ 			//超市店铺商品二级分类
 			$sontypearr =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = ".$value['id']." order by orderid desc");
             foreach($sontypearr as $key1=>$value1){
 				$sontype[] = $value1;
 				$value['sontype'] = $sontype;
 			}
-			$tempc[] = $value;			
-	    } 		
+			$tempc[] = $value;
+	    }
 		}
 		$this->success($tempc);
 	}
-	
-	
+
+
 	/*
 	* 商家删除商品分类
 	2015-12-26修改
@@ -3268,13 +3268,13 @@ class method   extends baseclass
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		$id = intval(IFilter::act(IReq::get('id')));
 		if(empty($id)) $this->message('删除ID获取失败');
-		if($shopinfo['shoptype'] != 0)$this->message('超市店铺分类删除链接错误'); 
+		if($shopinfo['shoptype'] != 0)$this->message('超市店铺分类删除链接错误');
 		//增加个check  判断是否
 		$checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid=".$id." order by id desc");
 		if(!empty($checkdata)) $this->message('该分类下有商品，删除失败');
 		$this->mysql->delete(Mysite::$app->config['tablepre']."goodstype"," shopid='".$shopinfo['id']."' and id=".$id." ");
 		$shoptype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$shopinfo['id']."' order by orderid desc");
-		$this->success($shoptype); 
+		$this->success($shoptype);
 	}
 	/*
 	* 商家添加商品分类
@@ -3291,13 +3291,13 @@ class method   extends baseclass
 		$name = trim(IFilter::act(IReq::get('name')));
 		$orderid = intval(IFilter::act(IReq::get('orderid')));
 		//	id	shopid 店铺ID	name 分类名称	orderid	cattype 1外卖 2订台
-		if($shopinfo['shoptype'] != 0)$this->message('超市店铺分类添加不通过此处操作'); 
+		if($shopinfo['shoptype'] != 0)$this->message('超市店铺分类添加不通过此处操作');
 		if(empty($name)) $this->message('分类名称不能为空');
 		$newdata['shopid'] = $shopinfo['id'];
 		$newdata['name'] = $name;
 		$newdata['orderid'] = $orderid;
 		$newdata['cattype'] = $shopinfo['shoptype'];
- 
+
 		if(empty($id)){
 			//新增
 			$this->mysql->insert(Mysite::$app->config['tablepre']."goodstype",$newdata);
@@ -3313,26 +3313,26 @@ class method   extends baseclass
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-	    $typeid = intval(IFilter::act(IReq::get('typeid'))); 
+	    $typeid = intval(IFilter::act(IReq::get('typeid')));
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		
+
 		if($shopinfo['shoptype'] == 1){
 			$typeone = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where id='".$typeid."'   order by id desc");
 			if(empty($typeone)){
 				$this->message('商品分类获取失败');
 			}
 			$data['typelist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where parent_id='".$typeone['parent_id']."' and shopid  ='".$typeone['shopid']."' order by orderid desc");
-			$this->success($data); 
+			$this->success($data);
 		}else{
-			
+
 			$typeone = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodstype where id='".$typeid."'   order by id desc");
 			if(empty($typeone)){
 				$this->message('商品分类获取失败');
 			}
 			$data['typelist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodstype where shopid='".$typeone['shopid']."'   order by orderid desc");
-			$this->success($data); 
+			$this->success($data);
 		}
-		
+
 	}
 	/*
 	* 商家获取商品
@@ -3345,21 +3345,21 @@ class method   extends baseclass
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
-		$typeid = intval(IFilter::act(IReq::get('typeid'))); 
+		$typeid = intval(IFilter::act(IReq::get('typeid')));
 		$page = intval(IFilter::act(IReq::get('page')));
 		$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
-			 $pagesize = 1000000; 
+			 $pagesize = 1000000;
 		}else{
 			$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		}
 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);  
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
         $goodslist1 =  $this->mysql->getarr("select id,typeid,name,count,cost,bagcost,img,have_det,is_live,shopid,instro,descgoods from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid = ".$typeid." order by id desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
-		
-        foreach($goodslist1 as $k=>$v){	 
-			$v['img'] = empty($v['img'])?"": Mysite::$app->config['siteurl'].$v['img'];	
+
+        foreach($goodslist1 as $k=>$v){
+			$v['img'] = empty($v['img'])?"": Mysite::$app->config['siteurl'].$v['img'];
 			$v['instro'] = empty($v['instro'])?"":strip_tags($v['instro']);
 			$goodslist[] = $v;
 		}
@@ -3376,17 +3376,17 @@ class method   extends baseclass
 		}
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
-		$typeid = intval(IFilter::act(IReq::get('typeid'))); 
+		$typeid = intval(IFilter::act(IReq::get('typeid')));
 		$page = intval(IFilter::act(IReq::get('page')));
 		$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
-			 $pagesize = 1000000; 
+			 $pagesize = 1000000;
 		}else{
 			$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		}
-		
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);  
+
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 //		$goodslist =  $this->mysql->getarr("select id,typeid,name,count,cost,bagcost,img,have_det from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid = ".$typeid." order by id desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
         $goodslist =  $this->mysql->getarr("select id,typeid,name,count,cost,bagcost,img,have_det,is_live,shopid from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid = ".$typeid." order by id desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
 		$this->success($goodslist);
@@ -3422,7 +3422,7 @@ class method   extends baseclass
 		if(empty($goodsinfo)) $this->message("商品获取失败");
 		$temparray= empty($goodsinfo['product_attr'])?array():unserialize($goodsinfo['product_attr']);
 		//$temparray = array_keys($temparray);
-		sort($temparray); 
+		sort($temparray);
 		$doarray = array();
 		if(count($temparray) > 0){
 			foreach($temparray as $key=>$value){
@@ -3430,38 +3430,38 @@ class method   extends baseclass
 			}
 		}
 		$goodsinfo['product_attr'] = $doarray;
-		 
+
 		$productlist = array();
 		if($goodsinfo['have_det'] == 1){
 			$productlist= $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."product where shopid='".$shopinfo['id']."' and goodsid = ".$id." order by id desc  limit  0,100  ");
 		}
-		 
-		
-		
-		
+
+
+
+
 		$tempgglist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where shoptype = '".$shopinfo['shoptype']."'  order by orderid asc limit 0,1000  ");
         $gglist=array();
         foreach($tempgglist as $key=>$value){
 			if($value['parent_id'] == 0){
-				 
-				
+
+
 				$value['det'] = array();
 				foreach($tempgglist as $c=>$d){
 					if($d['parent_id'] == $value['id']){
 						$value['det'][] = $d;
 					}
 				}
-				 
+
 				$gglist[] = $value;
 			}
-			
-		}		
+
+		}
 	    $backdata['goodsinfo'] =$goodsinfo;
 		$backdata['productlist'] =$productlist;
 		$backdata['gglist'] = $gglist;
 		$this->success($backdata);
-		
-		
+
+
 	}
 	/*
 	*  新版商家端获取后台添加的计量单位
@@ -3481,7 +3481,7 @@ class method   extends baseclass
 		$id = intval(IFilter::act(IReq::get('goodsid')));
 		$goodsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id =  ".$id." ");
 		#$goodsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id =  5191    ");
-		
+
 		$data['name'] = $goodsinfo['name'];      //商品名字
 		$data['have_det'] = $goodsinfo['have_det'];  //是否为多规格
 		$data['img'] = empty($goodsinfo['img'])?'': Mysite::$app->config['siteurl'].$goodsinfo['img'];//图片全路径
@@ -3491,32 +3491,32 @@ class method   extends baseclass
 		$data['goodattr'] = $goodsinfo['goodattr'];//计量单位
 		$data['typeid'] = $goodsinfo['typeid'];    //所属分类
 		$product_attr = unserialize($goodsinfo['product_attr']);//规格值
-		 
+
 		#print_r($product_attr);exit;
 		if($data['have_det'] == 1){
 			foreach($product_attr as $key=>$value){
-			$fgg[] = $key;    
-            $cgg = array();			
+			$fgg[] = $key;
+            $cgg = array();
 			foreach($value['det'] as $k=>$v){
-			$cgg[] = $v['id'];		
+			$cgg[] = $v['id'];
 		    }
-			$cgg1[] = implode(',',$cgg);          	 
+			$cgg1[] = implode(',',$cgg);
 		}
 		    $fgg = implode(',',$fgg);
 			$cgg = implode('@',$cgg1);
 			$data['fgg'] = empty($fgg)?"":$fgg;
 			$data['cgg'] = empty($cgg1)?"":$cgg;
-			$productinfo =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."product where goodsid =  ".$id." ");	 
+			$productinfo =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."product where goodsid =  ".$id." ");
 			#print_r($productinfo);exit;
 			$sgg = array();
 			$price = array();
 			$count = array();
 			foreach($productinfo as $key=>$value){
 				$sgg[] = $value['attrids'];
-                $sggname[] = $value['attrname'];				
-				$price[] = $value['cost'];	
-				$count[] = $value['stock'];	
-			}			
+                $sggname[] = $value['attrname'];
+				$price[] = $value['cost'];
+				$count[] = $value['stock'];
+			}
 			$sgg = implode('@',$sgg);
 			$sggname = implode('@',$sggname);
 			$data['sgg'] = empty($sgg)?"":$sgg;
@@ -3528,24 +3528,24 @@ class method   extends baseclass
 		}else{
 			$data['price'] = $goodsinfo['cost'];
 			$data['count'] = $goodsinfo['count'];
-		}		
-		$this->success($data);		
+		}
+		$this->success($data);
 	}
-	
-	
-	
+
+
+
 	/*
 	*  新版商家端商家添加商品
 	2017-07-01修改 yxm
 	*/
-	function addgoods(){		 
+	function addgoods(){
 	      /* $goodsinfo =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."product where goodsid =  5189    ");
-		print_r($goodsinfo);exit;   */  
+		print_r($goodsinfo);exit;   */
 	    $backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' "); 
+		$shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		/* $shopinfo = $this->mysql->select_one("select id,shoptype from ".Mysite::$app->config['tablepre']."shop where uid= 13549"); */
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		$id = intval(IFilter::act(IReq::get('id')));    //判断是新增还是编辑   为空时新增商品  不为空时编辑已有商品
@@ -3560,30 +3560,30 @@ class method   extends baseclass
 		$bagcost = IFilter::act(IReq::get('bagcost'));   //餐盒费
 		$img = trim(IFilter::act(IReq::get('img')));           //图片
 		$havedet = intval(IFilter::act(IReq::get('havedet')));	// 判断有无规格  0无规格  1有规格
-        
+
 		$data['shopid'] = $shopinfo['id'];
 		$data['is_live'] = 1;
 		$data['name'] = $name;
 		$data['count'] = $count;
 		$data['cost'] = $price;
-		$data['typeid'] = $typeid; 
-		$data['bagcost'] = $bagcost;		 
-		$data['img'] = $img; 
+		$data['typeid'] = $typeid;
+		$data['bagcost'] = $bagcost;
+		$data['img'] = $img;
 		$data['goodattr'] = $goodattr;
 		$data['instro'] = $instro;
-		
-		if(empty($name)) $this->message('商品名称不能为空'); 
-		if(empty($typeid)) $this->message('请选择商品分类'); 
+
+		if(empty($name)) $this->message('商品名称不能为空');
+		if(empty($typeid)) $this->message('请选择商品分类');
 		 //编辑商品
-		if($id > 0){           
-			if($havedet == 0){  //编辑无规格商品			
+		if($id > 0){
+			if($havedet == 0){  //编辑无规格商品
 	            $data['have_det'] = 0;
 			    $this->mysql->update(Mysite::$app->config['tablepre'].'goods',$data,"id='".$id."' and shopid='".$shopinfo['id']."' ");
 			    $this->mysql->delete(Mysite::$app->config['tablepre'].'product',"`goodsid`=".$id." ");
-				$goodsid = $id;			
-			}else{              //编辑有规格商品			    
-			    $this->mysql->delete(Mysite::$app->config['tablepre'].'goods'," `id`=".$id." ");  
-			    $this->mysql->delete(Mysite::$app->config['tablepre'].'product',"`goodsid`=".$id." ");  
+				$goodsid = $id;
+			}else{              //编辑有规格商品
+			    $this->mysql->delete(Mysite::$app->config['tablepre'].'goods'," `id`=".$id." ");
+			    $this->mysql->delete(Mysite::$app->config['tablepre'].'product',"`goodsid`=".$id." ");
 			    $data['have_det'] = 1;
 				$data['id'] = $id;
 				$fgg = trim(IFilter::act(IReq::get('fgg')));     //父规格集合
@@ -3593,19 +3593,19 @@ class method   extends baseclass
 				$sgg = trim(IFilter::act(IReq::get('sgg')));     //每个商品选中的子规格集合
 				 #print_r($sgg);exit;    117,113@117,101@116,113@116,101
 				$price = trim(IFilter::act(IReq::get('price'))); //价格集合
-				$count = trim(IFilter::act(IReq::get('count'))); //库存集合			 
+				$count = trim(IFilter::act(IReq::get('count'))); //库存集合
 				$pricearr =  explode(",", $price);//价格数组
 				$data['cost'] = min($pricearr);  //获取所有规格中价格最小的那个作为主商品的价格
 				$countarr =  explode(",", $count); //库存数组
-				$data['count'] = min($countarr);  //获取所有规格中库存最小的那个作为主商品的库存				
-				$cgg = str_replace("@",",", $cgg);	//子规格id集合		
+				$data['count'] = min($countarr);  //获取所有规格中库存最小的那个作为主商品的库存
+				$cgg = str_replace("@",",", $cgg);	//子规格id集合
 				/*  Array ( [0] => 117,116 [1] => 113,101 )  */
-				
+
 				#prinT_r($cggarr);exit;
-				$sggarr = explode("@", $sgg);	//每个商品选中的子规格数组			
+				$sggarr = explode("@", $sgg);	//每个商品选中的子规格数组
 				/*Array ( [0] => 117,113 [1] => 117,101 [2] => 116,113 [3] => 116,101 )*/
 				#prinT_r($sggarr);exit;
-				$gglist = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $fgg . "' ) and parent_id = 0  order by orderid asc limit 0,1000  ");				
+				$gglist = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $fgg . "' ) and parent_id = 0  order by orderid asc limit 0,1000  ");
 				/*Array
 					(
 						[0] => Array
@@ -3629,88 +3629,88 @@ class method   extends baseclass
 					)*/
 				#prinT_r($gglist);exit;
 				$product_attr = array();
-				foreach ($gglist as $key => $value) {					 					
-					$value['det'] = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $cgg . "' ) and parent_id = " . $value['id'] . "  order by orderid asc limit 0,1000  ");                     
-					$product_attr[$value['id']] = $value;				     
-				}				
-				$data['product_attr'] = serialize($product_attr);				
-				//生成主商品  插入goods表		 
-				$this->mysql->insert(Mysite::$app->config['tablepre']."goods",$data);			    				
+				foreach ($gglist as $key => $value) {
+					$value['det'] = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $cgg . "' ) and parent_id = " . $value['id'] . "  order by orderid asc limit 0,1000  ");
+					$product_attr[$value['id']] = $value;
+				}
+				$data['product_attr'] = serialize($product_attr);
+				//生成主商品  插入goods表
+				$this->mysql->insert(Mysite::$app->config['tablepre']."goods",$data);
 				//生成子商品  循环插入product表
 				$gdata['shopid'] = $data['shopid'];
 				$gdata['bagcost'] = $data['bagcost'];
 				$gdata['goodsid'] = $id;
-				$gdata['goodsname'] = $data['name'];				
-				foreach ($sggarr as $key => $value) {					 
+				$gdata['goodsname'] = $data['name'];
+				foreach ($sggarr as $key => $value) {
 					$gdata['attrids'] = $value;
 					$gdata['cost'] = $pricearr[$key];
 					$gdata['stock'] = $countarr[$key];
 					//获取单个商品对应的规格名
-					$attrnamearr = $this->mysql->getarr("select name from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $value . "' )  order by orderid asc limit 0,1000  ");            				    				
+					$attrnamearr = $this->mysql->getarr("select name from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $value . "' )  order by orderid asc limit 0,1000  ");
 					$namearr = array();
 					foreach ($attrnamearr as $key => $value) {
-						$namearr[] = $value['name'];						
+						$namearr[] = $value['name'];
 					}
 					$attrname = implode(',',$namearr);
-					$gdata['attrname'] = $attrname;					 
-                    $this->mysql->insert(Mysite::$app->config['tablepre']."product",$gdata); 
+					$gdata['attrname'] = $attrname;
+                    $this->mysql->insert(Mysite::$app->config['tablepre']."product",$gdata);
 				}
-                $goodsid = $id;				
+                $goodsid = $id;
 			}
 	    //新增商品
-		}else{                   
-			if($havedet == 0){   //新增无规格商品				
+		}else{
+			if($havedet == 0){   //新增无规格商品
 	            $data['have_det'] = 0;
 				$this->mysql->insert(Mysite::$app->config['tablepre']."goods",$data);
 			    $goodsid = $this->mysql->insertid();
-			}else{               //新增有规格商品			
+			}else{               //新增有规格商品
 				$data['have_det'] = 1;
 				$fgg = trim(IFilter::act(IReq::get('fgg')));     //父规格集合
 				$cgg = trim(IFilter::act(IReq::get('cgg')));     //每个父规格下被选中的子规格id集
 				$sgg = trim(IFilter::act(IReq::get('sgg')));     //每个商品选中的子规格集合
 				$price = trim(IFilter::act(IReq::get('price'))); //价格集合
-				$count = trim(IFilter::act(IReq::get('count'))); //库存集合			 
+				$count = trim(IFilter::act(IReq::get('count'))); //库存集合
 				$pricearr =  explode(",", $price);//价格数组
 				$data['cost'] = min($pricearr);  //获取所有规格中价格最小的那个作为主商品的价格
 				$countarr =  explode(",", $count); //库存数组
-				$data['count'] = min($countarr);  //获取所有规格中库存最小的那个作为主商品的库存				
-				$cgg = str_replace("@",",", $cgg);	//子规格集合			
-				$sggarr = explode("@", $sgg);	//每个商品选中的子规格数组			
-				$gglist = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $fgg . "' ) and parent_id = 0  order by orderid asc limit 0,1000  ");				
+				$data['count'] = min($countarr);  //获取所有规格中库存最小的那个作为主商品的库存
+				$cgg = str_replace("@",",", $cgg);	//子规格集合
+				$sggarr = explode("@", $sgg);	//每个商品选中的子规格数组
+				$gglist = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $fgg . "' ) and parent_id = 0  order by orderid asc limit 0,1000  ");
 				$product_attr = array();
 				foreach ($gglist as $key => $value) {
 					$value['det'] = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $cgg . "' ) and parent_id = " . $value['id'] . "  order by orderid asc limit 0,1000  ");
-                    $product_attr[$value['id']] = $value;				     
+                    $product_attr[$value['id']] = $value;
 				}
 				#print_r($product_attr);exit;
 				$data['product_attr'] = serialize($product_attr);
-                  				
-				//生成主商品  插入goods表		 
+
+				//生成主商品  插入goods表
 				$this->mysql->insert(Mysite::$app->config['tablepre']."goods",$data);
 			    $goodsid = $this->mysql->insertid();
 				//生成子商品  循环插入product表
 				$gdata['shopid'] = $data['shopid'];
 				$gdata['bagcost'] = $data['bagcost'];
 				$gdata['goodsid'] = $goodsid;
-				$gdata['goodsname'] = $data['name'];				
-				foreach ($sggarr as $key => $value) {					 
+				$gdata['goodsname'] = $data['name'];
+				foreach ($sggarr as $key => $value) {
 					$gdata['attrids'] = $value;
 					$gdata['cost'] = $pricearr[$key];
 					$gdata['stock'] = $countarr[$key];
 					//获取单个商品对应的规格名
-					$attrnamearr = $this->mysql->getarr("select name from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $value . "' )  order by orderid asc limit 0,1000  ");            				    				
+					$attrnamearr = $this->mysql->getarr("select name from " . Mysite::$app->config['tablepre'] . "goodsgg where  FIND_IN_SET( `id` , '" . $value . "' )  order by orderid asc limit 0,1000  ");
 					$namearr = array();
 					foreach ($attrnamearr as $key => $value) {
-						$namearr[] = $value['name'];						
+						$namearr[] = $value['name'];
 					}
 					$attrname = implode(',',$namearr);
-					$gdata['attrname'] = $attrname;					 
-                    $this->mysql->insert(Mysite::$app->config['tablepre']."product",$gdata); 
-				}	 
-			}		
-		} 
+					$gdata['attrname'] = $attrname;
+                    $this->mysql->insert(Mysite::$app->config['tablepre']."product",$gdata);
+				}
+			}
+		}
 		$this->success($goodsid);
-	}	
+	}
 	/*
 	*  商家添加商品
 	2015-12-25修改
@@ -3728,17 +3728,17 @@ class method   extends baseclass
 		$cost = trim(IFilter::act(IReq::get('cost')));
 		$cost = intval($cost*100);
 		$cost = $cost/100;
-		$typeid = intval(IFilter::act(IReq::get('typeid'))); 
+		$typeid = intval(IFilter::act(IReq::get('typeid')));
 		$bagcost = trim(IFilter::act(IReq::get('bagcost')));
 		$img = trim(IFilter::act(IReq::get('img')));
 		$changeflag = intval(IFilter::act(IReq::get('changeflag')));
 		//	id	shopid 店铺ID	name 分类名称	orderid	cattype 1外卖 2订台
-		if(empty($name)) $this->message('商品名称不能为空'); 
-		
+		if(empty($name)) $this->message('商品名称不能为空');
+
 	    if($id > 0){
 			$goodsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and id = ".$id." order by id desc  limit   0,1 ");
-		    if(empty($goodsinfo)) $this->message('商品不存在');  
-		} 
+		    if(empty($goodsinfo)) $this->message('商品不存在');
+		}
 		if($changeflag ==1){
 			if($id < 1) $this->message('编辑商品商品不存在');
 		}
@@ -3755,11 +3755,11 @@ class method   extends baseclass
 		$data['name'] = $name;
 		$data['count'] = $count;
 		$data['cost'] = $cost;
-		$data['typeid'] = $typeid; 
+		$data['typeid'] = $typeid;
 		$data['bagcost'] = $bagcost;
 		if(!empty($img)){
-			$data['img'] = $img; 
-		}	
+			$data['img'] = $img;
+		}
 		if($changeflag == 1){           //编辑商品
 			   $data['have_det'] = $goodsinfo['have_det'];
 			   $data['product_attr'] = $goodsinfo['product_attr'];
@@ -3771,31 +3771,31 @@ class method   extends baseclass
 			   $idtonamearray = array();
 				if($have_det == 1){
 					$fggids = trim(IFilter::act(IReq::get('fggids')));
-					if(!empty($fggids)){ 
-					 
+					if(!empty($fggids)){
+
 						$gglist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where  FIND_IN_SET( `id` , '".$fggids."' ) and parent_id = 0  order by id desc limit 0,1000  ");
-						 
+
 						$product_attr = array();
 						if(!empty($gglist)){//获取所有规格不为空
 						   foreach($gglist as $key=>$value){
 								  $checkid = IFilter::act(IReq::get('choicegg'.$value['id']));
 								  if(!empty($checkid)){
 										$checkid = is_array($checkid)?join(',',$checkid):trim($checkid);
-										
-										 
+
+
 										$value['det'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where  FIND_IN_SET( `id` , '".$checkid."' ) and parent_id = ".$value['id']."  order by id desc limit 0,1000  ");
-										$product_attr[$value['id']] = $value; 
-										 
+										$product_attr[$value['id']] = $value;
+
 										foreach($value['det']  as $k=>$v){
 											$idtonamearray[$v['id']] = $v['name'];
 										}
 								  }
 						   }
-						} 
+						}
 						if(count($product_attr) > 0){
-							
+
 							 $data['have_det'] = 1;
-							 $data['product_attr'] = serialize($product_attr);  
+							 $data['product_attr'] = serialize($product_attr);
 							 //循环写入入字表
 							 // goodsdetids  goodsdetids
 							 $goodsdetids  =IFilter::act(IReq::get('goodsdetids'));  //删除所有 改商品 gooids 相同但不在goodsdetids 里的值
@@ -3812,13 +3812,13 @@ class method   extends baseclass
 									}
 									$sqlstr = join(',',$tempidsddd);
 									if(!empty($sqlstr)){
-										$this->mysql->delete(Mysite::$app->config['tablepre'].'product'," `id` not in(".$goodsdetids.")  and `goodsid`=".$id." ");  
+										$this->mysql->delete(Mysite::$app->config['tablepre'].'product'," `id` not in(".$goodsdetids.")  and `goodsid`=".$id." ");
 									}else{
-										$this->mysql->delete(Mysite::$app->config['tablepre'].'product',"   `goodsid`=".$id." ");  
+										$this->mysql->delete(Mysite::$app->config['tablepre'].'product',"   `goodsid`=".$id." ");
 									}
 								}else{
-									 $this->mysql->delete(Mysite::$app->config['tablepre'].'product',"   `goodsid`=".$id." ");  
-								
+									 $this->mysql->delete(Mysite::$app->config['tablepre'].'product',"   `goodsid`=".$id." ");
+
 								}
 							 }
 							 $productlist = array();
@@ -3826,7 +3826,7 @@ class method   extends baseclass
 							 $gg_sstock = IFilter::act(IReq::get('gg_sstock'));
 							 $gg_sids =  IFilter::act(IReq::get('gg_sids'));
 							 $goodsdetids =  IFilter::act(IReq::get('goodsdetids'));
-							 if(is_array($gg_scost)){ 
+							 if(is_array($gg_scost)){
 								$data['count'] = 0;
 								 foreach($gg_scost as $key=>$value){
 									 if(isset($gg_sids[$key]) && !empty($gg_sids[$key])){
@@ -3857,27 +3857,27 @@ class method   extends baseclass
 									 }
 								 }
 							}
-							
-							 
+
+
 							foreach($productlist as $key=>$value){
-								if($value['id'] > 0){ 
+								if($value['id'] > 0){
 									$tempp = $value;
 									unset($tempp['id']);
 									$this->mysql->update(Mysite::$app->config['tablepre'].'product',$tempp,"id='".$value['id']."'  ");
 								}else{
 									unset($value['id']);
-									$this->mysql->insert(Mysite::$app->config['tablepre'].'product',$value); 
-									$ccid = $this->mysql->insertid(); 
+									$this->mysql->insert(Mysite::$app->config['tablepre'].'product',$value);
+									$ccid = $this->mysql->insertid();
 										$Productids[] = $ccid;
-									 
-								} 
-							} 
-									
-						}  
+
+								}
+							}
+
+						}
 					}
-				}  
+				}
 		}
-		 
+
 		//			exit;
 		if(empty($id)){
 			//新增
@@ -3899,7 +3899,7 @@ class method   extends baseclass
 		}
 		$this->success($goodsid);
 	}
-	
+
 	//编辑子商品
 	function edit_product(){
 		$backinfo = $this->checkapp();
@@ -3907,7 +3907,7 @@ class method   extends baseclass
 			$this->message('nologin');
 		}
 		$shopinfo= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		if(empty($shopinfo)) $this->message('获取店铺资料失败'); 
+		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		$productid = intval(IFilter::act(IReq::get('productid')));
 		$stock = intval(IFilter::act(IReq::get('stock')));
 		$cost = intval(IFilter::act(IReq::get('cost')));
@@ -3922,42 +3922,42 @@ class method   extends baseclass
 		if($productinfo['shopid'] != $shopinfo['id']){
 			$this->message('商品id和店铺id不一直');
 		}
-		
+
 		$newdata['stock'] = $stock;
 		$newdata['cost'] = $cost;
-		$newdata['bagcost'] = $goodsinfo['bagcost']; 
-		
+		$newdata['bagcost'] = $goodsinfo['bagcost'];
+
 		 $this->mysql->update(Mysite::$app->config['tablepre'].'product',$newdata,"id =".$productid."  ");
-		 $this->success('success'); 
+		 $this->success('success');
 	}
-	
-	
+
+
 	//获取店铺 配送时间列表
 	function shop_pstimelist(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
+		}
 		$shopinfo= $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)){
 			$this->message('店铺不存在');
 		}else{
 			$shopdet = '';
 			if($shopinfo['shoptype'] == 0){
-				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");  
+				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");
 			}else{
-				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");  
-			} 
+				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");
+			}
 			if(empty($shopdet)){
 				$this->message('店铺未开启');
 			}
 			//一次性构造所有时间段
 			$intvaltime = intval($shopdet['interval_minit']);
 			$intvaltime = $intvaltime < 5?30:$intvaltime;
-			
+
 			$minidaydaytime = strtotime(date('Y-m-d',time()));  //当天最小时间
 			$minday = date('Y-m-d',time());
-			
+
 			$tempopendata = explode('|',$shopinfo['starttime']);
 			if(empty($shopinfo['starttime'])){
 				$this->message('请先设置营业时间');
@@ -3971,17 +3971,17 @@ class method   extends baseclass
 						$ccc =array();
 						$temp_a_s  = $newtemp[0];
 						$temp_a_e = $newtemp[1];
-						$temp_a_s = strtotime($minday.' '.$temp_a_s.':00'); 
+						$temp_a_s = strtotime($minday.' '.$temp_a_s.':00');
 						$temp_a_e = strtotime($minday.' '.$temp_a_e.':00');
 						$checkdotime = $temp_a_s;
 						while($checkdotime < $temp_a_e){
 							$tempd = array();
 							$astime = date('H:i',$checkdotime);
-							$tempd['sdata'] = $checkdotime-$minidaydaytime; 
+							$tempd['sdata'] = $checkdotime-$minidaydaytime;
 							$checkdotime = $checkdotime+60*$intvaltime;
-							if($checkdotime < $temp_a_e){ 
+							if($checkdotime < $temp_a_e){
 							}else{
-								$checkdotime = $temp_a_e; 
+								$checkdotime = $temp_a_e;
 							}
 						    $tempd['edata'] = $checkdotime-$minidaydaytime;
 							$estime = date('H:i',$checkdotime);
@@ -3991,24 +3991,24 @@ class method   extends baseclass
 							$opendata[] = $tempd;
 						}
 					}
-				} 
+				}
 			}
-			$timelist = !empty($shopdet['postdate'])?unserialize($shopdet['postdate']):array();  
+			$timelist = !empty($shopdet['postdate'])?unserialize($shopdet['postdate']):array();
 			$newopendata = array();
 			foreach($opendata as $key=>$value){
 				$tempfind = false;
 				foreach($timelist as $k=>$v){
 				    if($value['sdata'] == $v['s'] && $value['edata'] == $v['e']){
 					   $tempfind = true;
-				    } 
-				} 
+				    }
+				}
 				if($tempfind == true){
 					$value['choice'] = 1;
 				}
 				$newopendata[] = $value;
-			} 
-		    $this->success($newopendata); 
-		} 
+			}
+		    $this->success($newopendata);
+		}
 	}
 	function editshop(){
 		$backinfo = $this->checkapp();
@@ -4017,15 +4017,15 @@ class method   extends baseclass
 		}
 		$typename = trim(IFilter::act(IReq::get('typename')));
 		$typevalue = trim(IFilter::act(IReq::get('typevalue')));
-	 
-	 
+
+
 		//   opentime
 		// if(!in_array($typename,array('opentype','opentime','shopphone'))) $this->message('未定义的操作');
-		if($typename == 'shopopentype'){  
+		if($typename == 'shopopentype'){
 			$data['is_open'] = intval($typevalue);
-		}elseif($typename == 'opentime'){ 
+		}elseif($typename == 'opentime'){
 			$bakcdata = str_replace(",", "|", $typevalue);
-			
+
 			$checkinfo = explode('|',$bakcdata);
 			$checktime = 0;
 			if(count($checkinfo) > 0){
@@ -4045,14 +4045,14 @@ class method   extends baseclass
 							  $checktime = $chkb;
 						 }
 					  }
-					
+
 				}
-				
-			} 
+
+			}
 			$data['starttime'] = $bakcdata;
-		}elseif($typename=='shopname'){  
+		}elseif($typename=='shopname'){
 			$data['shopname'] = trim($typevalue);
-		}elseif($typename=='shopaddress'){  
+		}elseif($typename=='shopaddress'){
 			$data['address'] = trim($typevalue);
 		}elseif($typename == 'shopphone'){
 			if(!(IValidate::phone($typevalue))) $this->message('正录入正确的订餐电话');
@@ -4063,85 +4063,85 @@ class method   extends baseclass
 			$data['notice_info'] = trim($typevalue);
 		}elseif($typename == 'is_orderbefore'){
 			$data['is_orderbefore'] = trim($typevalue);
-			$shopinfo= $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' "); 
+			$shopinfo= $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 			if(empty($shopinfo)){
 				$this->message('店铺不存在');
 			}
 			$shopdet = '';
 			if($shopinfo['shoptype'] == 0){
-				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");  
+				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");
 			}else{
-				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");  
-			} 
+				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");
+			}
 			if(empty($shopdet)){
 				$this->message('店铺未开启');
 			}
-			
+
 			if($shopinfo['shoptype'] == 0){
 				$this->mysql->update(Mysite::$app->config['tablepre'].'shopfast',$data,"shopid='".$shopinfo['id']."'");
 			}else{
-				$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'"); 
+				$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'");
 			}
-			$this->success('ok');  
+			$this->success('ok');
 		}elseif($typename == 'pstime'){
-		 
+
 			$pstimestime = IFilter::act(IReq::get('pstimestime'));
-			$pstimeetime = IFilter::act(IReq::get('pstimeetime')); 
-			
-			 
+			$pstimeetime = IFilter::act(IReq::get('pstimeetime'));
+
+
 			$postdata = array();
 			$miniday = strtotime(date('Y-m-d',time()));
 			$minidaydate = date('Y-m-d',time());
 			if(is_array($pstimestime)){
-				foreach($pstimestime as $key=>$value){  
+				foreach($pstimestime as $key=>$value){
 						 if(isset($pstimeetime[$key]) && !empty($pstimeetime[$key]) && !empty($value)){
 							 $tempb = array();
 							 $tempb['s'] = strtotime($minidaydate.' '.$value.':00')-$miniday;
 							 $tempb['e'] = strtotime($minidaydate.' '.$pstimeetime[$key].':00')-$miniday;
-							 
-							 
-							 
-							 
-							 $tempb['i'] = ''; 
+
+
+
+
+							 $tempb['i'] = '';
 							 $tempb['cost'] = 0;
 							 $postdata[] = $tempb;
-						 } 
+						 }
 				}
 			}
 			$shopinfo= $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
-		 
+
 			if(empty($shopinfo)){
 				$this->message('店铺不存在');
 			}
 			$shopdet = '';
 			if($shopinfo['shoptype'] == 0){
-				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");  
+				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");
 			}else{
-				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");  
-			} 
+				$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");
+			}
 			if(empty($shopdet)){
 				$this->message('店铺未开启');
 			}
-			$timelist = !empty($shopdet['postdate'])?unserialize($shopdet['postdate']):array();   
+			$timelist = !empty($shopdet['postdate'])?unserialize($shopdet['postdate']):array();
 			$newopendata = array();
 			foreach($postdata as $key=>$value){
 				$tempfind = false;
 				foreach($timelist as $k=>$v){
 				    if($value['s'] == $v['s'] && $value['e'] == $v['e']){
-						
+
 					   $tempfind = true;
 					   $value['cost'] = $v['cost'];
-				    } 
-				} 
+				    }
+				}
 				$newopendata[] = $value;
-			} 
-		    $data['postdate'] =serialize($newopendata); 
+			}
+		    $data['postdate'] =serialize($newopendata);
 			if($shopinfo['shoptype'] == 0){
 				$this->mysql->update(Mysite::$app->config['tablepre'].'shopfast',$data,"shopid='".$shopinfo['id']."'");
 			}else{
-				$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'"); 
+				$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'");
 			}
-			$this->success('ok');  
+			$this->success('ok');
 		}elseif($typename == 'limitcost'){
 			$data['limitcost'] = trim($typevalue);
 			$shopinfo= $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
@@ -4149,32 +4149,32 @@ class method   extends baseclass
 				$this->message('店铺不存在');
 			}else{
 				if($shopinfo['shoptype'] == 0){
-					$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   "); 
-				  
+					$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast       where  shopid = ".$shopinfo['id']."   ");
+
 				}else{
-					$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   "); 
-				 
-				} 
+					$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket       where  shopid = ".$shopinfo['id']."   ");
+
+				}
 				if(!empty($shopdet)){
 					if($shopinfo['shoptype'] == 0){
 						$this->mysql->update(Mysite::$app->config['tablepre'].'shopfast',$data,"shopid='".$shopinfo['id']."'");
 					}else{
-						$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'"); 
+						$this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopinfo['id']."'");
 					}
 				}
 			}
 			$this->success('ok');
-		}else{ 
+		}else{
 			$this->message('未定义的操作');
 		}
-		$this->mysql->update(Mysite::$app->config['tablepre'].'shop',$data,"uid='".$backinfo['uid']."'");  
+		$this->mysql->update(Mysite::$app->config['tablepre'].'shop',$data,"uid='".$backinfo['uid']."'");
 		$this->success('ok');
 	}
     function uplodeimg(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}   	
+		}
 		$json = new Services_JSON();
 		$uploadpath = 'upload/goods/';
 		$filepath = '/upload/goods/';
@@ -4184,9 +4184,9 @@ class method   extends baseclass
 			$this->message($upload->errmsg());
 
 		}else{
-			$data['img'] = $filepath.$file[0]['saveName'];			
+			$data['img'] = $filepath.$file[0]['saveName'];
 			$this->success($data);
-		} 
+		}
 	}
 
 	/*
@@ -4242,21 +4242,21 @@ class method   extends baseclass
 		   $order['posttimename'] = '消费时间:';
 		   $paytypelist[0] = '到店支付';
 		}else if($order['shoptype'] == 100){
-		   $order['ordershow'] = '跑腿'; 
+		   $order['ordershow'] = '跑腿';
 		}elseif($order['shoptype'] == 1){
-			 $order['ordershow'] = '超市'; 
+			 $order['ordershow'] = '超市';
 		}else{
 			$order['ordershow'] = '外卖';
 		}
-		
+
  	    $order['shoptype'] = isset($shoptypearr[$order['shoptype']])?$shoptypearr[$order['shoptype']]:'其他';
-		 
-		
+
+
 		//cxcost,yhjcost,scoredown,
 		$scoretocost =Mysite::$app->config['scoretocost'];
 		$scorcost = $order['scoredown'] > 0? intval($order['scoredown']/$scoretocost):0;
 		$order['allcx'] = $order['cxcost']+$order['yhjcost']+$scorcost;
-	
+
 		$order['paytype'] = $paytypelist[$order['paytype']];
 		$order['paystatustype'] =  empty($order['paystatus'])?'未支付':'已支付';
 		$order['addtime'] = date('H:i:s',$order['addtime']);
@@ -4266,7 +4266,7 @@ class method   extends baseclass
 		$shuliang = 0;
 		foreach($templist as $key=>$value){
 			$value['goodscost'] = $value['goodscost'];
-			$newdatalist[] = $value; 
+			$newdatalist[] = $value;
 			$shuliang += $value['goodscount'];
 		}
 		$newgoods = array('id'=>'0','order_id'=>$orderid,'goodsname'=>'商品总价','goodscount'=>$shuliang,'goodscost'=>$order['shopcost']);
@@ -4279,8 +4279,8 @@ class method   extends baseclass
 				$order['content'] = $order['content'].$key.':'.$value.',';
 			}
 		}
-		
- 
+
+
 
 		$this->success($order);
 	}
@@ -4295,36 +4295,36 @@ class method   extends baseclass
 		$orderid = trim(IFilter::act(IReq::get('orderid')));
 		$dostring = trim(IFilter::act(IReq::get('dostring')));
 		if(empty($orderid)) $this->message('订单获取失败');
-		if(!in_array($dostring,array('domake','unmake','send','over'))) $this->message('未定义的操作'); 
+		if(!in_array($dostring,array('domake','unmake','send','over'))) $this->message('未定义的操作');
 		$shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop  where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)){
 			$this->message('店铺不存在');
-		} 
-		$shopctlord = new shopctlord($orderid,$shopinfo['id'],$this->mysql); 
-		if($dostring == 'domake'){ 
+		}
+		$shopctlord = new shopctlord($orderid,$shopinfo['id'],$this->mysql);
+		if($dostring == 'domake'){
 			if($shopctlord->makeorder()){
 				$this->success('success');
 			}else{
 				$this->message($shopctlord->Error());
-			}  
-		}elseif($dostring == 'unmake'){  
+			}
+		}elseif($dostring == 'unmake'){
 		     if($shopctlord->SetMemberls($this->memberCls)->unmakeorder()){
 				$this->success('success');
 			}else{
 				$this->message($shopctlord->Error());
-			}  
-		}elseif($dostring == 'send'){ 
+			}
+		}elseif($dostring == 'send'){
 			if($shopctlord->sendorder()){
 				$this->success('success');
 			}else{
 				$this->message($shopctlord->Error());
-			}  
+			}
 		}elseif($dostring == 'over'){
 			if($shopctlord->SetMemberls($this->memberCls)->wancheng()){
 					$this->success('success');
 			}else{
 				$this->message($shopctlord->Error());
-			}  
+			}
 		}else{
 			$this->message('未定义的操作');
 		}
@@ -4338,7 +4338,7 @@ function applogin(){
 	$pwd = trim(IFilter::act(IReq::get('pwd')));
 	$mDeviceID =  trim(IFilter::act(IReq::get('mDeviceID')));
 	if(empty($uname)) $this->message('用户名为空');
-	if(empty($pwd)) $this->message('密码为空'); 
+	if(empty($pwd)) $this->message('密码为空');
 	if(!$this->memberCls->login($uname,$pwd)){
 		$this->message($this->memberCls->ero());
 	}
@@ -4359,7 +4359,7 @@ function applogin(){
 	/*userid
 	/*channelid */
 	$userid = trim(IFilter::act(IReq::get('userid')));
-	 
+
 		$checkmid =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."applogin where uid='".$member['uid']."' ");
 		if(empty($checkmid)){
 			$Mdata['channelid'] = $channelid;
@@ -4376,12 +4376,12 @@ function applogin(){
 				$Mdata['userid'] = $userid;
 				$Mdata['uid']=$member['uid'];
 				$Mdata['addtime'] = time();
-				$this->mysql->update(Mysite::$app->config['tablepre'].'applogin',$Mdata,"uid='".$member['uid']."'");  
+				$this->mysql->update(Mysite::$app->config['tablepre'].'applogin',$Mdata,"uid='".$member['uid']."'");
 			}
 		}
-	 
-	
-	
+
+
+
 	unset($member['password']);
 	$member['ghtsmusic'] = Mysite::$app->config['ghtsmusic'];
 	$this->success($member);
@@ -4405,7 +4405,7 @@ function applogin(){
 			$this->message('未开启店铺');
 		}
 		$shopid = $shopinfo['id'];
-		$userinfo = $backinfo; 
+		$userinfo = $backinfo;
 		$checkcost = intval($cost);
 		if($checkcost < 100){
 			$this->message('提现金额不能少于100元');
@@ -4423,11 +4423,11 @@ function applogin(){
 	    $newdata['yue'] = $userinfo['shopcost']-$checkcost;
         $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`-'.$checkcost,"uid ='".$uid."' ");
 		$this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
-	    $orderid = $this->mysql->insertid(); 
+	    $orderid = $this->mysql->insertid();
 		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
-		$this->success($info); 
+		$this->success($info);
 	}
-	
+
 	/***
 	2016.3.5 新增
 	商家资金记录***/
@@ -4440,31 +4440,31 @@ function applogin(){
 			if($uid < 1){
 				$this->message('nologin');
 			}
-		 
+
 		  $pageshow = new page();
-	      $pageshow->setpage(IReq::get('page'),10); 
+	      $pageshow->setpage(IReq::get('page'),10);
 		  $where = " where shopuid=".$uid." ";
 		  $type = intval(IReq::get('type'));// 0 表示提出        1表示充值   2表示取消提现  3结算转入
 		  if($type == 1){
 			  $where .=" and (type = 0 or cost < 0)";
 		  }elseif($type == 2){
 			  $where .=" and type > 0 and cost > 0";
-		  } 
-		  
+		  }
+
 		  $startday = trim(IReq::get('startday'));
 		  $endday = trim(IReq::get('endday'));
 		  if( empty($startday) && empty($endday) ){//不传时间时默认显示近七天的
-			  $todaybegintime = strtotime(date('Y-m-d'));			  
-			  $zhoutime = $todaybegintime - 86400*6;			 
+			  $todaybegintime = strtotime(date('Y-m-d'));
+			  $zhoutime = $todaybegintime - 86400*6;
 			  $where .= " and addtime > ".$zhoutime;
 		  }
 		  if(!empty($startday)) $where .=" and addtime > ".strtotime($startday);
 		  if(!empty($endday)){
 			  $info = strtotime($endday)+86399;
 			  $where .=" and addtime < ".$info;
-		  } 
-		   
-	      $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize().""); 
+		  }
+
+	      $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
 	      $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shoptx    ".$where."   order by id asc  ");
 	      #print_r( $txlist);
 		  $tempdata = array();
@@ -4476,15 +4476,15 @@ function applogin(){
 				  $value['statusname'] = isset($statusarray[$value['status']])?$statusarray[$value['status']]:'未定义';
 				  $value['adddate'] = date('Y-m-d H:i:s',$value['addtime']);
 				  if($value['cost'] < 0 || $value['jsid'] == 0 ){
-					  $value['sztype'] = '支出'; 
+					  $value['sztype'] = '支出';
 				  }
 				  if($value['cost'] >= 0 && $value['jsid'] > 0 ){
-					  $value['sztype'] = '收入'; 
+					  $value['sztype'] = '收入';
 				  }
 				  $tempdata[] = $value;
 			  }
-		  } 
-		  $this->success($tempdata); 
+		  }
+		  $this->success($tempdata);
 	 }
 	 //获取提现记录
 	 function shoptxlog(){
@@ -4496,13 +4496,13 @@ function applogin(){
 			if($uid < 1){
 				$this->message('nologin');
 			}
-		 
+
 		  $pageshow = new page();
-	      $pageshow->setpage(IReq::get('page'),10); 
-		   
-	      $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  where shopuid=".$uid."  and type = 0 order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize().""); 
+	      $pageshow->setpage(IReq::get('page'),10);
+
+	      $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  where shopuid=".$uid."  and type = 0 order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
 	      $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shoptx  where shopuid=".$uid." and type = 0   order by id asc  ");
-	     
+
 		  $tempdata = array();
 		  $typearray = array(0=>'提现申请',1=>'账号充值',2=>'取消提现',3=>'店铺结算转入');
 		  $statusarray = array(0=>'空',1=>'处理中',2=>'处理成功',3=>'已取消');
@@ -4513,8 +4513,8 @@ function applogin(){
 				  $value['adddate'] = date('Y-m-d H:i:s',$value['addtime']);
 				  $tempdata[] = $value;
 			  }
-		  } 
-		  $this->success($tempdata); 
+		  }
+		  $this->success($tempdata);
 	 }
 	 /***
 		2016.3.5 店铺取消提现
@@ -4529,7 +4529,7 @@ function applogin(){
 				$this->message('nologin');
 			}
 		 $txid = trim(IFilter::act(IReq::get('txid')));
-		 
+
 		 $txinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx where id='".$txid."'  ");
 		 if(empty($txinfo)){
 			$this->message('提现信息获取失败');
@@ -4542,14 +4542,14 @@ function applogin(){
 		 }
 		 if($txinfo['shopuid'] != $uid){
 			 $this->message('该条提现记录不属于您');
-		 } 
+		 }
 		 $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$txinfo['shopuid']."'  ");
 		 if(empty($userinfo)){
 			 $this->message('用户不存在');
 		 }
 	     $this->mysql->update(Mysite::$app->config['tablepre'].'shoptx','`status`=3',"id ='".$txid."' ");
 		 $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$txinfo['cost'],"uid ='".$txinfo['shopuid']."' ");
-		  
+
 		 $newdata['cost'] = $txinfo['cost'];
 		 $newdata['type'] = 2;
 		 $newdata['status'] = 2;
@@ -4559,12 +4559,12 @@ function applogin(){
 		 $newdata['name'] = '取消'.date('Y-m-d',$txinfo['addtime']).$txinfo['name'];
 		 $newdata['yue'] = $userinfo['shopcost']+$txinfo['cost'];
 		 $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
-		 $orderid = $this->mysql->insertid(); 
+		 $orderid = $this->mysql->insertid();
 		 $info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
 		 $this->success($info);
 	 }
 	 function tjcxcost(){
-		 
+
 		 //可提现金额
 		 //总收入
 		 //支付佣金
@@ -4579,9 +4579,9 @@ function applogin(){
 		$info = $this->mysql->select_one("select sum(acountcost) as acountcost,sum(yjcost) as yjc from ".Mysite::$app->config['tablepre']."shopjs  where shopuid = ".$backinfo['uid']."  ");
 		$info['yjc'] = empty($info['yjc'])?0:$info['yjc'];
 		$newdata['zsr'] = empty($info['acountcost'])?0:$info['acountcost'];
-		$newdata['yj'] = empty($info['yjc'])?0:$info['yjc']; 
+		$newdata['yj'] = empty($info['yjc'])?0:$info['yjc'];
 		$this->success($newdata);
-	 } 
+	 }
 	function getshoploginfo(){//8.7及以后  弃用该函数
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
@@ -4606,12 +4606,12 @@ function applogin(){
 			$this->success($info);
 		}else{
 			 $txinfo['statusname'] = isset($statusarray[$txinfo['status']])?$statusarray[$txinfo['status']]:'未定义';
-			
+
 		    $txinfo['adddate'] = date('Y-m-d H:i:s',$txinfo['addtime']);
-			$this->success($txinfo); 
-		} 
+			$this->success($txinfo);
+		}
 	 }
-	 
+
 	function shoptxdetail(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
@@ -4624,7 +4624,7 @@ function applogin(){
 		$txid = trim(IFilter::act(IReq::get('txid')));
 
 		$txinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx where id='".$txid."'  ");
-		 
+
 		if(empty($txinfo)){
 			$this->message('信息获取失败');
 		}
@@ -4637,9 +4637,9 @@ function applogin(){
 				'open_acout'=>'余额支付',
 				'weixin'=>'微信支付',
 				'alipay'=>'支付宝',
-				'alimobile'=>'手机支付宝'		
+				'alimobile'=>'手机支付宝'
 			);
-			$paytype = empty($orderinfo['paytype_name'])?'未定义':$payarr[$orderinfo['paytype_name']];				 					 
+			$paytype = empty($orderinfo['paytype_name'])?'未定义':$payarr[$orderinfo['paytype_name']];
 			if($orderinfo['paytype'] == 0){
 				$paytype = '货到付款';
 			}
@@ -4650,7 +4650,7 @@ function applogin(){
 				$info[] = array('name'=>'账户支出','content'=>number_format($jsinfo['acountcost'],2));
 				$info[] = array('name'=>'支出类型','content'=>'订单佣金');
 			}
-			
+
 			$info[] = array('name'=>'订单编号','content'=>$orderinfo['dno']);
 			$info[] = array('name'=>'订单金额','content'=>$orderinfo['allcost']);
 			$info[] = array('name'=>'支付平台佣金','content'=>$jsinfo['yjcost']);
@@ -4664,19 +4664,19 @@ function applogin(){
 			$this->success($info);
 		}else{
 			//店铺提现
-			$userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$txinfo['shopuid']."'  ");			 
+			$userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$txinfo['shopuid']."'  ");
 			$ctxinfo[] = array('name'=>'账户支出','content'=>$txinfo['cost']);
 			$ctxinfo[] = array('name'=>'支出类型','content'=>'余额提现');
 			$ctxinfo[] = array('name'=>'申请时间','content'=>date('Y-m-d H:i:s',$txinfo['addtime']));
 			$ctxinfo[] = array('name'=>'收款账户','content'=>empty($userinfo['backacount'])?'暂未提供':$userinfo['backacount']);
 			$ctxinfo[] = array('name'=>'收款人','content'=>$userinfo['username']);
 			$ctxinfo[] = array('name'=>'当前状态','content'=> isset($statusarray[$txinfo['status']])?$statusarray[$txinfo['status']]:'未定义');
-			$ctxinfo[] = array('name'=>'创建时间','content'=> date('Y-m-d H:i:s',$txinfo['addtime']));			 
-			$this->success($ctxinfo); 
-		} 
+			$ctxinfo[] = array('name'=>'创建时间','content'=> date('Y-m-d H:i:s',$txinfo['addtime']));
+			$this->success($ctxinfo);
+		}
 	 }
-	
-	
+
+
 
 	function checkreg(){
 		$this->success('成功');
@@ -4690,13 +4690,13 @@ function applogin(){
 		$mapname = trim(IFilter::act(IReq::get('mapname')));
 
 		$checklogintype = $_COOKIE['app_login'];
-			
+
 	    $logintype = trim(IFilter::act(IReq::get('logintype')));
 		$phone = trim(IFilter::act(IReq::get('phone')));
-			
+
 		$uid = empty($uid)?ICookie::get('appuid'):$uid;
 		$pwd = empty($pwd)?ICookie::get('apppwd'):$pwd;
-		
+
 		if($checklogintype == 'applogin'||$logintype=='phone'){
 			 $checkphone = $_COOKIE['app_loginphone'];
 			 if(empty($checkphone)){
@@ -4708,25 +4708,25 @@ function applogin(){
 				$backarr = $member;
 				$backarr['sitephone'] = Mysite::$app->config['litel'];
 			 }
-		}else{ 
+		}else{
 			 $member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
-			
+
 			  $backarr = array('uid'=>0,'sitephone'=>Mysite::$app->config['litel']);
 			 if(!empty($member)){
 				if($member['password'] == md5($pwd)){
 					$backarr = $member;
 					$backarr['sitephone'] = Mysite::$app->config['litel'];
 					ICookie::set('appuid',$member['uid'],86400);
-					ICookie::set('apppwd',$pwd,86400); 
+					ICookie::set('apppwd',$pwd,86400);
 					ICookie::set('appmapname',$mapname,86400);
-					
+
 					ICookie::set('email',$member['email'],86400);
 					ICookie::set('memberpwd',$pwd,86400);
 					ICookie::set('membername',$member['username'],86400);
-					ICookie::set('uid',$member['uid'],86400); 
+					ICookie::set('uid',$member['uid'],86400);
 				}
 
-			} 
+			}
 		}
 		return $backarr;
 	}
@@ -4751,20 +4751,20 @@ function applogin(){
 		if(strlen($tname) < 5 || strlen($tname) > 24){
 			$this->message('账号长度应在5到24个字符之间');
 		}
-		
-		
-		$phonecls = new phonecode($this->mysql,0,$phone); 
-		if($phonecls->checkcode($code)){  
+
+
+		$phonecls = new phonecode($this->mysql,0,$phone);
+		if($phonecls->checkcode($code)){
 				if($this->memberCls->regester($email,$tname,$password,$phone,5)){
 					$this->memberCls->login($tname,$password);
 					$uid = $this->memberCls->getuid();
 					$member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
-					unset($member['password']); 
-					
+					unset($member['password']);
+
 					$tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$uid."' and status < 2 and  endtime > ".time()." ");
 					$member['logo'] = empty($member['logo'])?Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo']:Mysite::$app->config['siteurl'].$member['logo'];
 					$member['juancount'] = $tjyhj;
-					
+
 					$channelid = trim(IFilter::act(IReq::get('channelid')));
 					$userid = trim(IFilter::act(IReq::get('userid')));
 					if(!empty($channelid) && !empty($userid)){
@@ -4773,48 +4773,48 @@ function applogin(){
 							$Mdata['channelid'] = $channelid;
 							$Mdata['userid'] = $userid;
 							$Mdata['uid']=$uid;
-							$Mdata['addtime'] = time(); 
+							$Mdata['addtime'] = time();
 							$this->mysql->insert(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata);  //插入新数据
 						}else{
-							if($checkmid['channelid'] != $channelid ||  $checkmid['userid'] != $userid){ 
+							if($checkmid['channelid'] != $channelid ||  $checkmid['userid'] != $userid){
 								$Mdata['channelid'] = $channelid;
 								$Mdata['userid'] = $userid;
 								$Mdata['uid']=$uid;
 								$Mdata['addtime'] = time();
-								$this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'"); 
+								$this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'");
 							}
 						}
-					} 
+					}
 					$this->success($member);
 				}else{
 					$this->message($this->memberCls->ero());
 				}
 		}else{
 			$this->message($phonecls->getError());
-		} 
+		}
 
 	}
-	
-	
-	
-	
+
+
+
+
 	function appuserinfo(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
 		unset($backinfo['password']);
-	    $tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$backinfo['uid']."' and status < 2 and  endtime > ".time()." "); 
+	    $tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$backinfo['uid']."' and status < 2 and  endtime > ".time()." ");
 		$backinfo['logo'] = empty($backinfo['logo'])?Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo']:Mysite::$app->config['siteurl'].$backinfo['logo'];
 		$backinfo['juancount'] = $tjyhj;
 		$this->success($backinfo);
 	}
-	
+
 	function findpwd(){
-		$phone =  trim(IFilter::act(IReq::get('phone'))); 
+		$phone =  trim(IFilter::act(IReq::get('phone')));
 		$newpwd =  trim(IFilter::act(IReq::get('newpwd')));
-		$surepwd = trim(IFilter::act(IReq::get('surepwd'))); 
-		$code =  trim(IFilter::act(IReq::get('code')));  
+		$surepwd = trim(IFilter::act(IReq::get('surepwd')));
+		$code =  trim(IFilter::act(IReq::get('code')));
 	    $member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$phone."' ");
   	    if(empty($member)){
 			$this->message('用户不存在');
@@ -4830,8 +4830,8 @@ function applogin(){
 		}
 		if($newpwd != $surepwd){
 			$this->message('新密码和确认密码不一致');
-		} 
-		$phonecls = new phonecode($this->mysql,2,$phone); 
+		}
+		$phonecls = new phonecode($this->mysql,2,$phone);
 		if($phonecls->checkcode($code)){
 			$newdata['password'] = md5($newpwd);
 			$newdata['temp_password'] = '';
@@ -4874,12 +4874,12 @@ function applogin(){
 
         $this->success('success');
     }
-	
+
 	//3
-	
-	
-	
-	
+
+
+
+
 	/*
 	* 获取店铺列表
 	暂无判断  坐标所在店铺
@@ -4909,14 +4909,14 @@ function applogin(){
 				'cost'=>' order by a.limitcost asc ',
 				'is_com'=>' order by a.is_com asc '
 			);
-		}else{ 
+		}else{
 			if(empty($lat)){
 				$this->success(array());
 			}
 		}
 		$where = '';
 		$where = $showtype == 'is_com'? $where.' and a.is_com = 1 ':$where;
-	
+
 
 		// print_r($where);
 
@@ -4968,7 +4968,7 @@ function applogin(){
 			'wait'=> ' status > 0 and status < 2 and is_make = 0',
 			'waitsend'=>' status = 1 and is_make = 1',
 			'is_send'=>' status > 1 '
-		); 
+		);
 		$todatay = strtotime(date('Y-m-d',time()));
 		$todatay = $todatay - 604800;//最近一周订单
 
@@ -5027,8 +5027,8 @@ function applogin(){
 		}
 		$shopdet['id'] = $id;
 		$shopdet['shoptype']=1;
-		
-		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopinfo['admin_id']."' "); 
+
+		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopinfo['admin_id']."' ");
 		$lat = IFilter::act(IReq::get('lat'));
 		$lng = IFilter::act(IReq::get('lng'));
 		$tempinfo =   $this->pscost($shopdet,$lng,$lat);
@@ -5073,8 +5073,8 @@ function applogin(){
 				$backdata['surecost'] = $cxinfo['surecost'];
 				$backdata['downcost'] = $cxinfo['downcost'];
 				$backdata['gzdata'] = isset($cxinfo['gzdata'])?$cxinfo['gzdata']:array();
-				
-				$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopcheckinfo['admin_id']."' "); 
+
+				$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopcheckinfo['admin_id']."' ");
 				$lat = IFilter::act(IReq::get('lat'));
 				$lng = IFilter::act(IReq::get('lng'));
 
@@ -5105,7 +5105,7 @@ function applogin(){
 		$id = IFilter::act(IReq::get('id'));
 		$data['scoretocost'] = Mysite::$app->config['scoretocost'];
 		//	id	card 优惠劵卡号	card_password 优惠劵密码	status 状态，0未使用，1已绑定，2已使用，3无效	creattime 制造时间	cost 优惠金额	limitcost 购物车限制金额下限	endtime 失效时间	uid 用户ID	username 用户名	usetime 使用时间	name
-		$data['juanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan  where uid='".$backinfo['uid']."' and endtime > ".time()." and status = 1   "); 
+		$data['juanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan  where uid='".$backinfo['uid']."' and endtime > ".time()." and status = 1   ");
 		$shopinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where shopid = ".$id."   ");
 		if(empty($shopinfo)){
 			$shopinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where shopid = ".$id."   ");
@@ -5153,8 +5153,8 @@ function applogin(){
 		}
 
 
-		
-		
+
+
 		$info['shopid'] = intval(IReq::get('shopid'));//店铺ID
 		$info['remark'] = IFilter::act(IReq::get('remark'));//备注
 		$info['paytype'] =  intval(IFilter::act(IReq::get('payline')));//支付方式
@@ -5181,7 +5181,7 @@ function applogin(){
 		if(empty($shopinfo))   $this->message('店铺获取失败');
 		$lng = IFilter::act(IReq::get('lng'));
 		$lat = IFilter::act(IReq::get('lat'));
-		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopinfo['admin_id']."' "); 
+		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopinfo['admin_id']."' ");
 		$checkps = 	 $this->pscost($shopinfo,$lng,$lat);
 		if($checkps['canps'] != 1) $this->message('该店铺不在配送范围内');
 		$source =  intval(IFilter::act(IReq::get('source')));
@@ -5190,7 +5190,7 @@ function applogin(){
 			$checkps['canps']  = 1;
 			$checkps['pscost']  = $shopinfo['pscost'];
 		}
-		
+
 		if($source == 1){
 			$info['ordertype'] = 6;
 		}
@@ -5210,11 +5210,11 @@ function applogin(){
 		//area1 二级地址名称	area2 三级地址名称	area3
 		$info['areaids'] = '';
 		$paytype = $info['paytype'];
-		 
+
 
 	    $senddate = $info['senddate'];
 		$minit = $info['minit'];
-		$nowpost = strtotime($senddate.' '.$minit.':00'); 
+		$nowpost = strtotime($senddate.' '.$minit.':00');
 		$settime = time() - (10*60);
 		if($settime > $nowpost)  $this->message('提交配送时间和服务器时间相差超过10分钟下单失败');
 		$temp = strtotime($minit.':00');
@@ -5222,7 +5222,7 @@ function applogin(){
 		$tempinfo = $this->checkshopopentime($is_orderbefore,$nowpost,$shopinfo['starttime']);
 		if(!$tempinfo) $this->message('配送时间不在有效配送时间范围');
 		if($shopinfo['is_open'] != 1) $this->message('店铺暂停营业');
-		$info['sendtime'] = $nowpost; 
+		$info['sendtime'] = $nowpost;
 		$info['shopinfo'] = $shopinfo;
 		$info['allcost'] = $carinfo['list'][$info['shopid']]['sum'];
 		$info['bagcost'] = $carinfo['list'][$info['shopid']]['bagcost'];
@@ -5335,7 +5335,7 @@ function applogin(){
 			Mysite::$app->setdata($data);
 		}
 	}
-	function commentorder(){ 
+	function commentorder(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
@@ -5346,7 +5346,7 @@ function applogin(){
 				ICookie::set('membername',$backinfo['username'],86400);
 				ICookie::set('uid',$backinfo['uid'],86400);
 			}
-		} 
+		}
 	    $orderid = intval(IReq::get('orderid'));
 	    if(!empty($orderid)){
 			$order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid."");
@@ -5370,7 +5370,7 @@ function applogin(){
 	    }else{
 			$data['order'] = '';
 			Mysite::$app->setdata($data);
-	    } 
+	    }
 	}
 	function address(){
 		//
@@ -5439,9 +5439,9 @@ function applogin(){
 	}
 	/**
 	 *  @brief 保存通道号
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function appbuybaidu(){
@@ -5451,24 +5451,24 @@ function applogin(){
 		}
 		$channelid = trim(IFilter::act(IReq::get('channelid')));
 		$userid = trim(IFilter::act(IReq::get('userid')));
-		if(empty($userid)) $this->message('获取失败'); 
+		if(empty($userid)) $this->message('获取失败');
 		$checkmid =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."appbuyerlogin where uid='".$backinfo['uid']."' ");
-  		if(empty($checkmid)){ 
+  		if(empty($checkmid)){
   		    $Mdata['channelid'] = $channelid;
   		    $Mdata['userid'] = $userid;
 	        $Mdata['uid']=$backinfo['uid'];
-	        $Mdata['addtime'] = time(); 
+	        $Mdata['addtime'] = time();
             $this->mysql->insert(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata);  //插入新数据
-  		}else{  
-			if($checkmid['userid'] != $userid){ 
+  		}else{
+			if($checkmid['userid'] != $userid){
 	           $Mdata['channelid'] = $channelid;
   		       $Mdata['userid'] = $userid;
 	           $Mdata['uid']=$backinfo['uid'];
 	           $Mdata['addtime'] = time();
-			   $this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'");  
-  			} 
-  		} 
-		$this->success('操作成功'); 
+			   $this->mysql->update(Mysite::$app->config['tablepre'].'appbuyerlogin',$Mdata,"uid='".$backinfo['uid']."'");
+  			}
+  		}
+		$this->success('操作成功');
 	}
 	function dologin(){
   	 $this->memberCls->login($tname,$password);
@@ -5476,9 +5476,9 @@ function applogin(){
 	}
 	/**
 	 *  @brief 买家获取单个订单
-	 *  
-	 *  @return 
-	 *  
+	 *
+	 *  @return
+	 *
 	 *  @details Details
 	 */
 	function appbuyerone(){
@@ -5518,14 +5518,14 @@ function applogin(){
 		$backdata['id'] = $order['id'];
 		$backdata['allcost'] = $order['allcost'];
 		$backdata['shopcost'] = $order['shopcost'];
-		$backdata['shopname'] = $order['shopname']; 
+		$backdata['shopname'] = $order['shopname'];
 		$backdata['showstatus'] = $statusarr[$order['status']];
 		if($order['status'] ==  1){
 			if($order['is_make'] == 0){
 				$backdata['showstatus'] = '取消订单';
 			}elseif($order['is_make'] ==2){
 				$backdata['showstatus'] = '无效订单';
-				$backdata['status'] = 4; 
+				$backdata['status'] = 4;
 			}
 		}elseif($order['status'] == 3){
 			if(empty($order['is_ping'])){
@@ -5543,10 +5543,10 @@ function applogin(){
 		$templist[]['mytext'] = '配送时间：'.date('Y-m-d H:i:s',$order['posttime']);
 		$templist[]['mytext'] = '支付类型：'.$paytypelist[$order['paytype']];
 		$templist[]['mytext'] = '支付状态：'.$dotem;
-		$templist[]['mytext'] = '备注：'.$order['content']; 
+		$templist[]['mytext'] = '备注：'.$order['content'];
 		$templist[]['mytext'] = '店铺名：'.$order['shopname'];
 		$templist[]['mytext'] = '店铺地址：'.$order['shopaddress'];
-		$backdata['itemlist'] = $templist; 
+		$backdata['itemlist'] = $templist;
 		$templist =   $this->mysql->getarr("select id,order_id,goodsname,goodscost,goodscount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$orderid."' ");
 		$newdatalist = array();
 		$shuliang = 0;
@@ -5555,16 +5555,16 @@ function applogin(){
 			$newdatalist[] = $value;
 
 			$shuliang += $value['goodscount'];
-		} 
+		}
 		$backdata['det'] = $newdatalist;
 
 		$this->success($backdata);
 	}
 	/**
 	 *  @brief 买家关闭订单
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function appbuyerclose(){
@@ -5610,22 +5610,22 @@ function applogin(){
 	}
 	/**
 	 *  @brief 获取所有区域
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
-	function appallarea(){ 
- 		$arealist= $this->mysql->getarr("select id,name,parent_id,lat,lng,admin_id,adcode,procode from ".Mysite::$app->config['tablepre']."area where id > 0 and parent_id = 0 limit 0,1000 "); 
-		$this->success($arealist); 
+	function appallarea(){
+ 		$arealist= $this->mysql->getarr("select id,name,parent_id,lat,lng,admin_id,adcode,procode from ".Mysite::$app->config['tablepre']."area where id > 0 and parent_id = 0 limit 0,1000 ");
+		$this->success($arealist);
 	}
 	/**
 	 *  @brief 调用远程打印机
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
-	 */ 
+	 */
 	function appprint(){
 		$orderid = trim(IFilter::act(IReq::get('orderid')));
 		if(empty($orderid)) $this->message('订单ID错误');
@@ -5677,16 +5677,16 @@ $msg = '商家:'.$shopinfo['shopname'].'
 	    /*
 	    cfcode  0 发送成功 ,1发送到队列  2没找到MAC地址,403错误，,4链接出错
 	    */
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
 	/**
 	 *  @brief 获取店铺商品分类
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
-	function getshoptype(){ 
+	function getshoptype(){
 		$is_market = intval(IFilter::act(IReq::get('is_market')));
 		$goodstype  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shoptype  where parent_id = 0 and  is_search = 1  and cattype = ".$is_market." and type = 'checkbox'     ");
 		if(empty($goodstype)){
@@ -5697,15 +5697,15 @@ $msg = '商家:'.$shopinfo['shopname'].'
 	}
 	 /**
 	 *  @brief 获取店铺及商品
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
-	
+
 function getshopnew(){
 		$shopid = trim(IFilter::act(IReq::get('shopid')));
-		if(empty($shopid)) $this->message('店铺数据获取失败'); 
+		if(empty($shopid)) $this->message('店铺数据获取失败');
 		$shopinfo  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop  where id = '".$shopid."'    ");
 		if(empty($shopinfo)) $this->message('店铺数据获取失败');
 
@@ -5714,18 +5714,18 @@ function getshopnew(){
 			$goodstype =  $this->mysql->getarr("select id,name from ".Mysite::$app->config['tablepre']."goodstype where shopid = ".$shopinfo['id']."   order by orderid asc");
 		}else{
 			$goodstype =	$this->mysql->getarr("select id,name,parent_id from ".Mysite::$app->config['tablepre']."marketcate where   shopid =".$shopinfo['id']."   order by orderid asc limit 0,100");
-			 
+
 		}
-		$da = date("w"); 
+		$da = date("w");
 		$goodsinfo = array();
 		if(is_array($goodstype)){
 			foreach($goodstype as $key=>$value){//id	typeid 商品类型	name 商品名称	count 商品数量	costimg 图片地址	pointbagcost
-				if($shopinfo['shoptype'] == 0){ 
+				if($shopinfo['shoptype'] == 0){
 					$goodsdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods where typeid = ".$value['id']."  and shopid =".$shopinfo['id']." and is_live = 1 and FIND_IN_SET(".$da.",weeks) order by good_order asc");
 					$temparr = array();
 					foreach($goodsdet as $k=>$v){
-						
-						
+
+
 						if(empty($v['goodattr'])){
 							$shopdefaultattr = $this->mysql->select_one("select goodattrdefault from ".Mysite::$app->config['tablepre']."shop where id = ".$shopid." ");
 							if(!empty($shopdefaultattr)){
@@ -5740,7 +5740,7 @@ function getshopnew(){
 						$v['cost'] = $cxinfo['cxcost'];
 						$v['zhekou'] = $cxinfo['zhekou'];
 						$v['cxnum'] = intval($cxinfo['cxnum']);
-                        $v['sellcount'] = $v['sellcount'] + $v['virtualsellcount']; 
+                        $v['sellcount'] = $v['sellcount'] + $v['virtualsellcount'];
 						$v['img'] = empty($v['img'])?$v['img']:Mysite::$app->config['siteurl'].$v['img'];
 						$v['product_attr'] = !empty($v['product_attr'])?unserialize($v['product_attr']):array();
 						if(count($v['product_attr']) > 0){
@@ -5748,33 +5748,33 @@ function getshopnew(){
 							foreach($v['product_attr'] as $m=>$e){
 								$temparray[] = $e;
 							}
-							
+
 							$v['product_attr'] = $temparray;
 						}
-						
-						
-						
+
+
+
 						if($v['have_det'] ==1){
 							$v['product'] = $this->mysql->getarr("select id,attrname,attrids,stock,cost  from ".Mysite::$app->config['tablepre']."product where goodsid = ".$v['id']."  and shopid =".$shopinfo['id']."  order by id asc");
 						}else{
-							$v['product'] = array(); 
+							$v['product'] = array();
 						}
-						 
+
 						$temparr[] = $v;
 					}
 
 					$value['det'] = $temparr;
-					
+
 					$goodsinfo[] = $value;
 				}else{
 					$ios = trim(IFilter::act(IReq::get('ios')));
 					if($ios == 'marketos'){
-						 
+
 						if($value['parent_id'] > 0){
 							$goodsdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods where typeid = ".$value['id']."  and shopid =".$shopinfo['id']." and is_live = 1 and FIND_IN_SET(".$da.",weeks)  order by good_order asc ");
 							$temparr = array();
 							foreach($goodsdet as $k=>$v){
-								
+
 								if(empty($v['goodattr'])){
                                     $shopdefaultattr = $this->mysql->select_one("select goodattrdefault from ".Mysite::$app->config['tablepre']."shop where id = ".$shopid." ");
                                     if(!empty($goodsinfo)){
@@ -5783,11 +5783,11 @@ function getshopnew(){
                                         $v['goodattr'] = '份';
                                     }
                                 }
-								
+
 								$cxinfo = $this->goodscx($v);
 							$v['is_cx'] = $cxinfo['is_cx'];
 						$v['cost'] = $cxinfo['cxcost'];
-						$v['zhekou'] = $cxinfo['zhekou'];  
+						$v['zhekou'] = $cxinfo['zhekou'];
 						$v['cxnum'] = intval($cxinfo['cxnum']);
 								$v['img'] = empty($v['img'])?$v['img']:Mysite::$app->config['siteurl'].$v['img'];
 								$v['product_attr'] = !empty($v['product_attr'])?unserialize($v['product_attr']):array();
@@ -5801,7 +5801,7 @@ function getshopnew(){
 								if($v['have_det'] ==1){
 									$v['product'] = $this->mysql->getarr("select id,attrname,attrids,stock,cost  from ".Mysite::$app->config['tablepre']."product where goodsid = ".$v['id']."  and shopid =".$shopinfo['id']."  order by id asc");
 								}else{
-									$v['product'] = array(); 
+									$v['product'] = array();
 								}
 								$temparr[] = $v;
 							}
@@ -5835,13 +5835,13 @@ function getshopnew(){
 										$temparray = array();
 										foreach($v['product_attr'] as $m=>$e){
 											$temparray[] = $e;
-										} 
+										}
 										$v['product_attr'] = $temparray;
 								}
 								if($v['have_det'] ==1){
 									$v['product'] = $this->mysql->getarr("select id,attrname,attrids,stock,cost  from ".Mysite::$app->config['tablepre']."product where goodsid = ".$v['id']."  and shopid =".$shopinfo['id']."  order by id asc");
 								}else{
-									$v['product'] = array(); 
+									$v['product'] = array();
 								}
 								$temparr[] = $v;
 							}
@@ -5854,12 +5854,12 @@ function getshopnew(){
 			}
 		}
 		$backdata['goods'] = $goodsinfo;
-		$this->success($goodsinfo); 
+		$this->success($goodsinfo);
 	}
 	function goodsone(){//获取一个商品信息
 		$goodsid = trim(IFilter::act(IReq::get('goodsid')));
-		if(empty($goodsid)) $this->message('商品不存在'); 
-		
+		if(empty($goodsid)) $this->message('商品不存在');
+
 		$goodsinfo = $this->mysql->select_one("select  * from ".Mysite::$app->config['tablepre']."goods where id = ".$goodsid."   order by id asc");
 		$source = trim(IFilter::act(IReq::get('source')));
 	    /*商品简述和商品描述字段值互换开始*/
@@ -5871,25 +5871,25 @@ function getshopnew(){
 			$goodsinfo['instro'] = $descgoods;
 		}
 		$goodsinfo['descgoods'] = $instro;
-		
+
 		/*商品简述和商品描述字段值互换结束*/
 		 $cxinfo = $this->goodscx($goodsinfo);
 		$goodsinfo['is_cx'] = $cxinfo['is_cx'];
 		$goodsinfo['cost'] = $cxinfo['cxcost'];
 		$goodsinfo['zhekou'] = $cxinfo['zhekou'];
 		$goodsinfo['cxnum'] = $cxinfo['cxnum'];
-		 
-		
-		if(empty($goodsinfo)) $this->message('商品不存在');  
+
+
+		if(empty($goodsinfo)) $this->message('商品不存在');
 		$shopid = $goodsinfo['shopid'];
 		$shopinfo  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop  where id = '".$goodsinfo['shopid']."'    ");
-		if(empty($shopinfo)) $this->message('店铺数据获取失败'); 
+		if(empty($shopinfo)) $this->message('店铺数据获取失败');
 		if($shopinfo['shoptype'] == 0){
 			$shopdet  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopid."'    ");
 		}else{
 			$shopdet  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopmarket  where shopid = '".$shopid."'    ");
 		}
-		$goodsinfo['sellcount'] = $goodsinfo['sellcount'] + $goodsinfo['virtualsellcount']; 
+		$goodsinfo['sellcount'] = $goodsinfo['sellcount'] + $goodsinfo['virtualsellcount'];
         $goodsinfo['instro'] = $goodsinfo['instro'];
         // print_r($goodsinfo['instro']);
 		if(empty($shopdet)) $this->message('店铺数未开启');
@@ -5903,57 +5903,57 @@ function getshopnew(){
 				}
 					$goodsinfo['product_attr'] = $temparray;
 			}
-			
-			
+
+
 			$productlist = $this->mysql->getarr("select pro.id,pro.attrname,pro.attrids,pro.stock,pro.cost,gc.cxnum  from ".Mysite::$app->config['tablepre']."product  as pro left join ".Mysite::$app->config['tablepre']."goodscx as gc on gc.goodsid = pro.goodsid  where pro.goodsid = ".$goodsid."  and pro.shopid =".$shopinfo['id']."  order by pro.id asc");
 			$goodsinfo['product'] = array();
 			foreach($productlist as $k=>$v){
 				$tempgoods = $goodsinfo;
 				$tempgoods['cost']= $v['cost'];
-				
+
 				$cxinfo2 = $this->goodscx($tempgoods);
 				$v['oldcost'] = $v['cost'];
-				$v['cost'] = $cxinfo2['cxcost']; 
+				$v['cost'] = $cxinfo2['cxcost'];
 				$v['is_cx'] = $cxinfo2['is_cx'];
 				$v['cxnum'] = empty($v['cxnum'])?0:$v['cxnum'];
 				$goodsinfo['product'][] = $v;
 			}
-			
-           
-		
+
+
+
 		}else{
-			$goodsinfo['product'] = array(); 
+			$goodsinfo['product'] = array();
 		}
-		
- 	    $goodsinfo['img'] = !empty($goodsinfo['img'])?Mysite::$app->config['siteurl'].$goodsinfo['img']:Mysite::$app->config['siteurl'].$goodsinfo['img'];	    
-		
+
+ 	    $goodsinfo['img'] = !empty($goodsinfo['img'])?Mysite::$app->config['siteurl'].$goodsinfo['img']:Mysite::$app->config['siteurl'].$goodsinfo['img'];
+
 		/* 4.12 新增商品多图轮播展示 */
-		$tempimgs = $this->mysql->getarr("select imgurl from ".Mysite::$app->config['tablepre']."goodsimg where goodsid = ".$goodsid."  ");		
- 		
+		$tempimgs = $this->mysql->getarr("select imgurl from ".Mysite::$app->config['tablepre']."goodsimg where goodsid = ".$goodsid."  ");
+
 		$tempimgs1 = array();
  		if(!empty($tempimgs)){
 			$temparray = array();
 		    $temparray[] = array('imgurl'=>$goodsinfo['img']);
 			foreach($tempimgs as $key=>$value){
 				$temparray[] = array('imgurl'=>Mysite::$app->config['siteurl'].$value['imgurl']);
-			} 
-			$tempimgs1 = $temparray; 
+			}
+			$tempimgs1 = $temparray;
 		}else{
 			$tempimgs1[] = array('imgurl'=>$goodsinfo['img']);
 		}
  		$goodsinfo['img'] =  $tempimgs1;
-		
- 		
+
+
 		$list = $this->mysql->getarr("select a.*,b.username,b.logo,c.name from ".Mysite::$app->config['tablepre']."comment as a left join  ".Mysite::$app->config['tablepre']."member as b on a.uid = b.uid left join ".Mysite::$app->config['tablepre']."goods as c on a.goodsid = c.id  where a.goodsid=".$goodsid." and a.is_show  =0 and  a.content != ''  and  a.content is not null  order by a.id desc   limit 0,10");
 		$backdata['comment'] = array();
-		
+
 		foreach($list as $key=>$value){
 			if(IValidate::url($value['logo'])){
-				
-			}else{ 
+
+			}else{
 				$value['logo'] = empty($value['logo'])?Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo']:Mysite::$app->config['siteurl'].$value['logo'];
 			}
-			
+
 			if( !empty($value['virtualname']) ){
 				$value['username'] = $value['virtualname'];
 				$xunigoodsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods   where id = '".$value['goodsid']."'   ");
@@ -5962,12 +5962,12 @@ function getshopnew(){
 					$value['goodsname'] = $xunigoodsinfo['goodsname'].'【'.$attrname.'】';
 				}else{
 					$value['goodsname'] = $xunigoodsinfo['name'];
-				} 
+				}
 			}
 			if( empty($value['username']) ){
 				$value['username'] = '游客';
 			}
-			
+
 			$value['replycontent'] = empty($value['replycontent'])?'':$value['replycontent'];
 			$value['addtime'] = date('Y-m-d',$value['addtime']);
 			$value['replytime'] = date('Y-m-d',$value['replytime']);
@@ -5975,8 +5975,8 @@ function getshopnew(){
 		}
 		$shuliang = $this->mysql->select_one("select count(point) as pointzongshu from  ".Mysite::$app->config['tablepre']."comment where goodsid=".$goodsid." and shopid=".$shopid." order by addtime desc  ");
 		$commentlist = $this->mysql->select_one("select count(point) as zongshu from  ".Mysite::$app->config['tablepre']."comment where goodsid=".$goodsid." and shopid=".$shopid." and point= 5 order by addtime desc  ");
-	 
-		$zongshu =  $commentlist['zongshu']; 
+
+		$zongshu =  $commentlist['zongshu'];
 		$pointzongshu =  $shuliang['pointzongshu'];
 		if($pointzongshu != 0){
 			$haoping = round(($zongshu/$pointzongshu) * 100);
@@ -5986,24 +5986,24 @@ function getshopnew(){
 	    $backdata['haoping'] = $haoping;
 		$backdata['goods'] = $goodsinfo;
 		$backdata['shopinfo'] = $shopdet;
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
-	//新店铺列表获取 
+	//新店铺列表获取
 	function newsearchshopxxxx(){
-		$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1 
-		$areaid = intval(IFilter::act(IReq::get('areaid'))); //0,1 
+		$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1
+		$areaid = intval(IFilter::act(IReq::get('areaid'))); //0,1
 		$searchvalue = trim(IFilter::act(IReq::get('searchvalue')));
 		$lat = IFilter::act(IReq::get('lat'));
-		$lng = IFilter::act(IReq::get('lng')); 
+		$lng = IFilter::act(IReq::get('lng'));
 		$lat = empty($lat)?0:$lat;
 		$lng =empty($lng)?0:$lng;
 		$orderarray = array(
 			0 =>'order by  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) asc',
-			1=>' order by  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) asc ' 
+			1=>' order by  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) asc '
 		);
 		$limitarray = array(
-			0=>'', 
-		);  
+			0=>'',
+		);
 		$where = ' where  endtime > '.time().' and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < `pradiusa`*0.01094 ';
 		if($areaid > 0){
 			$where = " where   b.id in(select shopid from ".Mysite::$app->config['tablepre']."areashop where areaid = ".$areaid." ) ";
@@ -6011,42 +6011,42 @@ function getshopnew(){
 		$source =  intval(IFilter::act(IReq::get('source')));
 		$ios_waiting =   Mysite::$app->config['ios_waiting'];
 		if($source == 1 && $ios_waiting == true){
-			
+
 			$where = ' where   endtime > '.time().' ';
-		}  
+		}
 		if(empty($searchvalue)){
 			$this->message('搜索关键字未空');
 		}
-		$where .= " and shopname like '%".$searchvalue."%' "; 
+		$where .= " and shopname like '%".$searchvalue."%' ";
 		$this->pageCls->setpage(intval(IReq::get('page')),100);
-		
-		
+
+
 		$where = Mysite::$app->config['plateshopid'] > 0? $where.' and id != '.Mysite::$app->config['plateshopid'] .' ':$where;
-		
+
 		$tempdd = array();
- 
+
 		$tempdd[] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop  ".$where."  and is_recom=1  ".$orderarray[0]."   limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
 	 	 $tempdd[] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop  ".$where." and is_recom!=1  ".$orderarray[0]."   limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
-	 	
+
 		$shopdata = array();
 		$nowhour = date('H:i:s',time());
 		$nowhour = strtotime($nowhour);
 		$sellrule = new sellrule();
 		foreach($tempdd as $kv=>$list){
-			
-			foreach($list as $key=>$value){  
+
+			foreach($list as $key=>$value){
 				$newvalue['id'] = $value['id'];
 				$newvalue['shopname'] = $value['shopname'];
 				$newvalue['is_open'] = $value['is_open'];
 				$newvalue['starttime'] = $value['starttime'];
 				$newvalue['pointcount'] = $value['sellcount'];
 				$newvalue['lat'] = $value['lat'];
-				$newvalue['lng'] = $value['lng']; 
-				$newvalue['shoplogo'] = $value['shoplogo']; 
-				$newvalue['point'] = $value['point']; 
+				$newvalue['lng'] = $value['lng'];
+				$newvalue['shoplogo'] = $value['shoplogo'];
+				$newvalue['point'] = $value['point'];
 				$newvalue['pointcount'] = $value['pointcount'];
-				$newvalue['address'] = $value['address']; 
-				$newvalue['shoptype'] = $value['shoptype']; 
+				$newvalue['address'] = $value['address'];
+				$newvalue['shoptype'] = $value['shoptype'];
 				$newvalue['instro'] = strip_tags($value['instro']);
 				$delvalue = array();
 				if($value['shoptype'] == 0){
@@ -6054,15 +6054,15 @@ function getshopnew(){
 				}else{
 					$delvalue  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopmarket  where shopid = '".$value['id']."'    ");
 				}
-				if(isset($delvalue['shopid'])){ 
-						$cvalue= array_merge($newvalue,$delvalue); 
-						
-						
-						$juli = $this->GetDistance($lat, $lng, $cvalue['lat'], $cvalue['lng']); 
+				if(isset($delvalue['shopid'])){
+						$cvalue= array_merge($newvalue,$delvalue);
+
+
+						$juli = $this->GetDistance($lat, $lng, $cvalue['lat'], $cvalue['lng']);
 						$sellrule->setdata($cvalue['id'],1000,$cvalue['shoptype']);
 						$rulist = $sellrule->get_rulelist();
-						
-						
+
+
 						$tempruleids = array();
 						$temprule = array();
 						foreach($rulist as $k=>$v){
@@ -6087,7 +6087,7 @@ function getshopnew(){
 						}
 						$source =  intval(IFilter::act(IReq::get('source')));
 						$ios_waiting =   Mysite::$app->config['ios_waiting'];
-						if($source == 1 && $ios_waiting == true){ 
+						if($source == 1 && $ios_waiting == true){
 							$cvalue['canps'] = 1;
 						}
 						$cvalue['opentype'] = '1';//1营业  0未营业
@@ -6104,10 +6104,10 @@ function getshopnew(){
 						if(!empty($checkstr)){
 							$tempstr = explode('-',$checkstr);
 						}
-						$cvalue['starttime'] = count($tempstr) > 0 ? $tempstr[0]:'';  
-						$cvalue['shopimg'] = Mysite::$app->config['siteurl'].$imgurl; 
-						
-						
+						$cvalue['starttime'] = count($tempstr) > 0 ? $tempstr[0]:'';
+						$cvalue['shopimg'] = Mysite::$app->config['siteurl'].$imgurl;
+
+
 						$zongpoint = $cvalue['point'];
 						$zongpointcount = $cvalue['pointcount'];
 						if($zongpointcount != 0 ){
@@ -6115,27 +6115,27 @@ function getshopnew(){
 						}else{
 							$shopstart= 0;
 						}
-						$cvalue['point'] = 	$shopstart; 
-						
-						
-						
+						$cvalue['point'] = 	$shopstart;
+
+
+
 						$shopdata[] = $cvalue;
 				}
 			}
-		
+
 		}
-		$data['shoplist'] = $shopdata; 
-		$weekji = date('w'); 
-		$goodwhere = '';  
-		$goodssearch = $searchvalue;  
-		if(!empty($goodssearch)) $goodlistwhere=" and name like '%".$goodssearch."%' ";  
+		$data['shoplist'] = $shopdata;
+		$weekji = date('w');
+		$goodwhere = '';
+		$goodssearch = $searchvalue;
+		if(!empty($goodssearch)) $goodlistwhere=" and name like '%".$goodssearch."%' ";
 		$goodwhere = empty($goodwhere)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094) ': $goodwhere.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094) ';
-            	 
-		$list =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 ".$goodwhere." ");		
-		$nowhour = date('H:i:s',time()); 
+
+		$list =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 ".$goodwhere." ");
+		$nowhour = date('H:i:s',time());
 		$nowhour = strtotime($nowhour);
-		$goodssearchlist = array(); 
-				   
+		$goodssearchlist = array();
+
 		if(is_array($list)){
 			foreach($list as $keys=>$vatt){
 				if($vatt['id'] > 0){
@@ -6144,111 +6144,111 @@ function getshopnew(){
 					}else{
 							$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$vatt['id']."   ");
 					}
-					$checkinfo = $this->shopIsopen($vatt['is_open'],$vatt['starttime'],$shopdet['is_orderbefore'],$nowhour); 
+					$checkinfo = $this->shopIsopen($vatt['is_open'],$vatt['starttime'],$shopdet['is_orderbefore'],$nowhour);
 					$opentype = 1;
 					if($checkinfo['opentype'] != 2 && $checkinfo['opentype'] != 3){
 						$opentype = 0;
-					} 		 
+					}
 					//"id":"3101","typeid":"248","parentid":"0","name":"\u81ca\u5b50\u9762","count":"400","cost":"16.00","img":"\/upload\/pliang\/20150829103116364.jpg","point":"7","sellcount":"16","shopid":"15","uid":"6","signid":"","pointcount":"1"
 					$detaa = $this->mysql->getarr("select  * from ".Mysite::$app->config['tablepre']."goods where shopid='".$vatt['id']."'  and shoptype = ".$vatt['shoptype']."  and    FIND_IN_SET( ".$weekji." , `weeks` )  ".$goodlistwhere."   order by good_order asc ");
-						if(!empty($detaa)){ 
-					
+						if(!empty($detaa)){
+
 							foreach ( $detaa as $keyq=>$valq ){
 									if($valq['is_cx'] == 1){
 									//测算促销 重新设置金额
 										$cxdata = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodscx where goodsid=".$valq['id']."  ");
-										$newdata = getgoodscx($valq['cost'],$cxdata); 
+										$newdata = getgoodscx($valq['cost'],$cxdata);
 										$valq['zhekou'] = $newdata['zhekou'];
 										$valq['is_cx'] = $newdata['is_cx'];
 										$valq['cost'] = $newdata['cost'];
 									}
-									
+
 									$valq['product_attr'] = !empty($valq['product_attr'])?unserialize($valq['product_attr']):array();
 									if(count($valq['product_attr']) > 0){
 										$temparray = array();
 										foreach($valq['product_attr'] as $m=>$e){
 											$temparray[] = $e;
 										}
-										
+
 										$valq['product_attr'] = $temparray;
 									}
-									
-									
-									
+
+
+
 									if($valq['have_det'] ==1){
 										$valq['product'] = $this->mysql->getarr("select id,attrname,attrids,stock,cost  from ".Mysite::$app->config['tablepre']."product where goodsid = ".$valq['id']."  and shopid =".$valq['shopid']."  order by id asc");
 									}else{
-										$valq['product'] = array(); 
+										$valq['product'] = array();
 									}
-									
-									
-									
+
+
+
 									$valq['opentype'] = $opentype;
-									$valq['shoptype'] = $vatt['shoptype']; 
+									$valq['shoptype'] = $vatt['shoptype'];
                                     $imgurl = empty($valq['img'])? Mysite::$app->config['shoplogo']:$valq['img'];
 							        $valq['img'] = Mysite::$app->config['siteurl'].$imgurl;
 									$valq['instro'] = strip_tags($valq['instro']);
-									 
-									$goodssearchlist[] = $valq; 
+
+									$goodssearchlist[] = $valq;
 							}
-							
-						}	
-						
+
+						}
+
 					}
-					
-			   } 
+
+			   }
 		}
-		$data['goodslist']   = empty($goodssearchlist)?array():$goodssearchlist; 
+		$data['goodslist']   = empty($goodssearchlist)?array():$goodssearchlist;
 		$this->success($data);
 	}
 	function newsearchshop(){   //ajax搜索 商家和商品结果
-		//$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1 
-		//$areaid = intval(IFilter::act(IReq::get('areaid'))); //0,1 
-		 
+		//$shopopentype = intval(IFilter::act(IReq::get('shopopentype'))); //0,1
+		//$areaid = intval(IFilter::act(IReq::get('areaid'))); //0,1
+
 
 
 		$searchname = IFilter::act(IReq::get('searchvalue'))   ;
-		 
-         
-			
+
+
+
 		$cxsignlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodssign where type='cx' order by id desc limit 0, 100");
 		$cxarray  =  array();
 		foreach($cxsignlist as $key=>$value){
 		   $cxarray[$value['id']] = $value['imgurl'];
-		} 		
+		}
 
 		/* 搜索店铺 结果  */
-		$where = '';  
+		$where = '';
 		$lng = 0;
-		$lat = 0;  
+		$lat = 0;
 		$lng = IFilter::act(IReq::get('lng'));
 		$lat =IFilter::act(IReq::get('lat'));
 		$lng = empty($lng)?0:$lng;
 		$lat =empty($lat)?0:$lat;
-		$shopsearch = IFilter::act(IReq::get('searchvalue')); 
-		$shopsearch		 = urldecode($shopsearch); 
-		if(!empty($shopsearch)) $where=" and shopname like '%".$shopsearch."%' "; 
-		$adcode = intval(IFilter::act(IReq::get('adcode'))); 
+		$shopsearch = IFilter::act(IReq::get('searchvalue'));
+		$shopsearch		 = urldecode($shopsearch);
+		if(!empty($shopsearch)) $where=" and shopname like '%".$shopsearch."%' ";
+		$adcode = intval(IFilter::act(IReq::get('adcode')));
 		if($adcode < 1){
-			 
+
 			if( !empty($lat) &&  !empty($lng) ){
-					  $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all'); 
+					  $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all');
 						 $backinfo  = json_decode($content,true);
 						if( $backinfo['status'] == 1 && $backinfo['info'] == 'OK'){
-							$adcode = $backinfo['regeocode']['addressComponent']['adcode'];  
-						}  
-							
+							$adcode = $backinfo['regeocode']['addressComponent']['adcode'];
+						}
+
 			}
 		}
-		 
-		
+
+
 		if( $adcode > 0 ){
-			$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+			$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
 			if( !empty($areacodeone) ){
 				$adcodeid = $areacodeone['id'];
 				$pid = $areacodeone['pid'];
 				$adcode = $adcode;
-				$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
+				$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
 				if( !empty($areainfoone) ){
 					$city_id = "CITY_ID_".$areainfoone['adcode'];
 					$city_name = "CITY_NAME_".$areainfoone['name'];
@@ -6257,46 +6257,46 @@ function getshopnew(){
 					$data['areainfoone']  = $areainfoone;
 					$adcode = $areainfoone['adcode'];
 				}
-				
+
 			}
 		}
-		$this->CITY_ID = $adcode; 
-		
+		$this->CITY_ID = $adcode;
+
 		$where = empty($where)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ': $where.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ';
-            	 
-                 
+
+
 		$lng = trim($lng);
 		$lat = trim($lat);
 		$lng = empty($lng)?0:$lng;
 		$lat =empty($lat)?0:$lat;
-                      
+
 		/*获取店铺*/
 		$where = Mysite::$app->config['plateshopid'] > 0? $where.' and  id != '.Mysite::$app->config['plateshopid'] .' ':$where;
 		$pageinfo = new page();
-		$pageinfo->setpage(intval(IReq::get('page'))); 
-					  
+		$pageinfo->setpage(intval(IReq::get('page')));
+
 		$tempdd = array();
 		//and is_recom = 1
-		 
-		$tempdd[] =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and (   admin_id='".$this->CITY_ID."'  or  admin_id = 0 )     and endtime > ".time()."  ".$where." ");		
+
+		$tempdd[] =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and (   admin_id='".$this->CITY_ID."'  or  admin_id = 0 )     and endtime > ".time()."  ".$where." ");
 		#	$tempdd[] =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and (   admin_id='".$this->CITY_ID."'  or  admin_id = 0 )  and is_open = 1  and is_recom != 1 and endtime > ".time()."  ".$where." ");
-				 
-		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$adcode."' "); 		 
-				 
-		$nowhour = date('H:i:s',time()); 
+
+		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$adcode."' ");
+
+		$nowhour = date('H:i:s',time());
 		$nowhour = strtotime($nowhour);
 		$templist = array();
-		$cxclass = new sellrule();  
-		foreach($tempdd as $key=>$list){ 
+		$cxclass = new sellrule();
+		foreach($tempdd as $key=>$list){
 
 			if(is_array($list)){
-				foreach($list as $keys=>$values){   
-					if($values['id'] > 0){ 
-						$templist111 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where cattype = ".$values['shoptype']." and  parent_id = 0    order by orderid asc limit 0,1000"); 
+				foreach($list as $keys=>$values){
+					if($values['id'] > 0){
+						$templist111 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where cattype = ".$values['shoptype']." and  parent_id = 0    order by orderid asc limit 0,1000");
 						$attra = array();
 						$attra['input'] = 0;
 						$attra['img'] = 0;
-						$attra['checkbox'] = 0; 
+						$attra['checkbox'] = 0;
 						foreach($templist111 as $key=>$vall){
 							if($vall['type'] == 'input'){
 								$attra['input'] =  $attra['input'] > 0?$attra['input']:$vall['id'];
@@ -6305,12 +6305,12 @@ function getshopnew(){
 							}elseif($vall['type'] == 'checkbox'){
 								$attra['checkbox'] =  $attra['checkbox'] > 0?$attra['checkbox']:$vall['id'];
 							}
-						}  
+						}
 						if($values['shoptype'] == 1 ){
 							$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$values['id']."   ");
 						}else{
 							$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$values['id']."   ");
-						} 
+						}
 						if(empty($shopdet['limitcost'])){
 							$values['limitcost'] = 0;
 						}else{
@@ -6320,34 +6320,34 @@ function getshopnew(){
 							$values['pscost'] = 0;
 						}else{
 							$values['pscost'] = $shopdet['pscost'];
-						}	
+						}
 						if(empty($shopdet['arrivetime'])){
 							$values['arrivetime'] = 0;
 						}else{
 							$values['arrivetime'] = $shopdet['arrivetime'];
-						}				
-						$values = array_merge($values,$shopdet); 
+						}
+						$values = array_merge($values,$shopdet);
 						$values['shoplogo'] = empty($values['shoplogo'])? Mysite::$app->config['imgserver'].Mysite::$app->config['shoplogo']:Mysite::$app->config['imgserver'].$values['shoplogo'];
-						$checkinfo = $this->shopIsopen($values['is_open'],$values['starttime'],$values['is_orderbefore'],$nowhour); 
+						$checkinfo = $this->shopIsopen($values['is_open'],$values['starttime'],$values['is_orderbefore'],$nowhour);
 						$values['opentype'] = $checkinfo['opentype'];
-						$values['newstartime']  =  $checkinfo['newstartime'];  
+						$values['newstartime']  =  $checkinfo['newstartime'];
 						$attrdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopattr where  cattype = ".$values['shoptype']." and shopid = ".$values['id']."");
-						$cxclass->setdata($values['id'],1000,$values['shoptype']); 
-									  
-						$checkps = 	 $this->pscost($values,$lng,$lat); 
+						$cxclass->setdata($values['id'],1000,$values['shoptype']);
+
+						$checkps = 	 $this->pscost($values,$lng,$lat);
 						$imgurl = empty($values['shoplogo'])? Mysite::$app->config['shoplogo']:$values['shoplogo'];
-						 
-						$values['shopimg'] =  $imgurl; 
-						
-						$values['canps'] = $checkps['canps']; 
-						$values['pstype'] = $checkps['pstype']; 
+
+						$values['shopimg'] =  $imgurl;
+
+						$values['canps'] = $checkps['canps'];
+						$values['pstype'] = $checkps['pstype'];
 						$source =  intval(IFilter::act(IReq::get('source')));
 						$ios_waiting =   Mysite::$app->config['ios_waiting'];
-						if($source == 1 && $ios_waiting == true){ 
+						if($source == 1 && $ios_waiting == true){
 							$values['canps'] = 1;
 						}
 						$values['opentype'] = '1';//1营业  0未营业
-					 
+
 						$checkinfo = $this->shopIsopen($values['is_open'],$values['starttime'],$values['is_orderbefore'],$nowhour);
 
 						if($checkinfo['opentype'] != 2 && $checkinfo['opentype'] != 3){
@@ -6356,11 +6356,11 @@ function getshopnew(){
 							$values['opentype'] = $checkinfo['opentype'];
 						}
 
-						$mi = $this->GetDistance($lat,$lng, $values['lat'],$values['lng'], 1); 
+						$mi = $this->GetDistance($lat,$lng, $values['lat'],$values['lng'], 1);
 						$tempmi = $mi;
                         $juli = $mi;
 						$mi = $mi > 1000? round($mi/1000,2).'km':$mi.'m';
-														  
+
 						$values['juli'] = 		$mi;
 
                         $juliceshi = intval($juli/1000);
@@ -6388,15 +6388,15 @@ function getshopnew(){
                         }
 
 						$shopcounts = $this->mysql->select_one( "select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where status = 3 and  shopid = ".$values['id']."" );
-	 
+
 						if(empty( $shopcounts['shuliang']  )){
 							$values['ordercount'] = 0;
 						}else{
 							$values['ordercount']  = $shopcounts['shuliang'];
-						}  			
-                        						
+						}
+
 						$cxinfo = $this->mysql->getarr("select name,id,imgurl from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$values['id'].",shopid)   and status = 1   and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
-						$values['cxlist'] = $cxinfo; 						 
+						$values['cxlist'] = $cxinfo;
 						/* 店铺星级计算 */
 						$zongpoint = $values['point'];
 						$zongpointcount = $values['pointcount'];
@@ -6405,7 +6405,7 @@ function getshopnew(){
 						}else{
 							$shopstart= 0;
 						}
-						$values['point'] = 	$shopstart;	
+						$values['point'] = 	$shopstart;
 						$values['attrdet'] = array();
 						foreach($attrdet as $k=>$v){
 							if($v['firstattr'] == $attra['input']){
@@ -6414,38 +6414,38 @@ function getshopnew(){
 								$values['attrdet']['img'][] = $v['value'];
 							}elseif($v['firstattr'] == $attra['checkbox']){
 								$values['attrdet']['checkbox'][] = $v['value'];
-							} 
-						}  
+							}
+						}
 						$templist[] = $values;
 					}
-				} 
-			} 
+				}
+			}
 		}
-     
-		$data['shoplist']   = $templist; 
-	#	print_r($data['shopsearchlist']); 
+
+		$data['shoplist']   = $templist;
+	#	print_r($data['shopsearchlist']);
 		/* 搜索商品列表 */
 		$weekji = date('w');
-		$goodwhere = '';  
-		$goodssearch = IFilter::act(IReq::get('searchvalue')); 
-		//$goodssearch	 = urldecode($goodssearch); 
-		if(!empty($goodssearch)) $goodlistwhere=" and name like '%".$goodssearch."%' "; 
+		$goodwhere = '';
+		$goodssearch = IFilter::act(IReq::get('searchvalue'));
+		//$goodssearch	 = urldecode($goodssearch);
+		if(!empty($goodssearch)) $goodlistwhere=" and name like '%".$goodssearch."%' ";
 		$lng = 0;
-		$lat = 0; 
-		$lng = IFilter::act(IReq::get('lng')); 
-		$lat = IFilter::act(IReq::get('lat')); 
+		$lat = 0;
+		$lng = IFilter::act(IReq::get('lng'));
+		$lat = IFilter::act(IReq::get('lat'));
 		$lng = empty($lng)?0:$lng;
 		$lat =empty($lat)?0:$lat;
 		$goodwhere = empty($goodwhere)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ': $goodwhere.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ';
-            	        
+
 		$lng = trim($lng);
 		$lat = trim($lat);
 		$lng = empty($lng)?0:$lng;
-		$lat =empty($lat)?0:$lat; 
-		$templist11 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where  cattype = 0 and parent_id = 0 and is_main =1  order by orderid asc limit 0,1000"); 
+		$lat =empty($lat)?0:$lat;
+		$templist11 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where  cattype = 0 and parent_id = 0 and is_main =1  order by orderid asc limit 0,1000");
 		$attra['input'] = 0;
 		$attra['img'] = 0;
-		$attra['checkbox'] = 0; 
+		$attra['checkbox'] = 0;
 		foreach($templist11 as $key=>$value){
 			if($value['type'] == 'input'){
 				$attra['input'] =  $attra['input'] > 0?$attra['input']:$value['id'];
@@ -6454,30 +6454,30 @@ function getshopnew(){
 			}elseif($value['type'] == 'checkbox'){
 				$attra['checkbox'] =  $attra['checkbox'] > 0?$attra['checkbox']:$value['id'];
 			}
-		} 
+		}
 		/*获取店铺*/
 		$pageinfo = new page();
-		$pageinfo->setpage(intval(IReq::get('page')));  
-		$list =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1     and endtime > ".time()."  ".$goodwhere." ");			 					
-		#   $list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where  b.is_pass = 1  ".$tempwhere." ".$goodwhere."    order by ".$orderarray[$order]." limit ".$pageinfo->startnum().", ".$pageinfo->getsize().""); 
-		// print_r($list); 
-		$nowhour = date('H:i:s',time()); 
+		$pageinfo->setpage(intval(IReq::get('page')));
+		$list =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1     and endtime > ".time()."  ".$goodwhere." ");
+		#   $list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where  b.is_pass = 1  ".$tempwhere." ".$goodwhere."    order by ".$orderarray[$order]." limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."");
+		// print_r($list);
+		$nowhour = date('H:i:s',time());
 		$nowhour = strtotime($nowhour);
 		$goodssearchlist = array();
-		$cxclass = new sellrule(); 
+		$cxclass = new sellrule();
 		if(is_array($list)){
 			foreach($list as $keys=>$vatt){
-			 
+
 			// print_r($valq['shoplogo']);
 				if($vatt['id'] > 0){
 					$detaa = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$vatt['id']."'  and shoptype = ".$vatt['shoptype']."  and    FIND_IN_SET( ".$weekji." , `weeks` )  ".$goodlistwhere."   order by good_order asc ");
-					if(!empty($detaa)){ 
+					if(!empty($detaa)){
 							foreach ( $detaa as $keyq=>$valq ){
 								if($valq['is_cx'] == 1){
 								//测算促销 重新设置金额
 									$cxdata = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodscx where goodsid=".$valq['id']."  ");
 									$newdata = getgoodscx($valq['cost'],$cxdata);
-									
+
 									$valq['zhekou'] = $newdata['zhekou'];
 									$valq['is_cx'] = $newdata['is_cx'];
 									$valq['cost'] = $newdata['cost'];
@@ -6489,7 +6489,7 @@ function getshopnew(){
 								}else{
 									  $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$valq['shopid']."   ");
 								}
-								$checkinfo = $this->shopIsopen($vatt['is_open'],$vatt['starttime'],$shopdet['is_orderbefore'],$nowhour); 
+								$checkinfo = $this->shopIsopen($vatt['is_open'],$vatt['starttime'],$shopdet['is_orderbefore'],$nowhour);
 								if(empty($shopdet['limitcost'])){
 									$valq['limitcost'] = 0;
 								}else{
@@ -6499,12 +6499,12 @@ function getshopnew(){
 									$valq['pscost'] = 0;
 								}else{
 									$valq['pscost'] = $shopdet['pscost'];
-								}	
+								}
 								if(empty($shopdet['arrivetime'])){
 									$valq['arrivetime'] = 0;
 								}else{
 									$valq['arrivetime'] = $shopdet['arrivetime'];
-								}				
+								}
 								$valq['opentype'] = $checkinfo['opentype'];
 								#$valq['limitcost'] = $shopdet['limitcost'];
 								#$valq['pscost'] = $shopdet['pscost'];
@@ -6515,19 +6515,19 @@ function getshopnew(){
 								$valq['sellcount'] = $valq['sellcount']+$valq['virtualsellcount'];
 								$imgurl = empty($valq['img'])? Mysite::$app->config['shoplogo']:$valq['img'];
 								$valq['img'] = Mysite::$app->config['siteurl'].$imgurl;
-								$temparray[] =$valq; 
+								$temparray[] =$valq;
 								$vakk = $temparray;
-							} 
-					}	
-					$goodssearchlist = $vakk; 
+							}
+					}
+					$goodssearchlist = $vakk;
 				}
-			} 
-		} 		
-		$data['goodslist']   = $goodssearchlist; 
+			}
+		}
+		$data['goodslist']   = $goodssearchlist;
 		$this->success($data);
 	}
 	public function searchhotkey(){
-		
+
 		$searchwords = Mysite::$app->config['searchwords'];
 		$searchwords = empty($searchwords)?array():unserialize($searchwords);
 		$temparray = array();
@@ -6539,17 +6539,17 @@ function getshopnew(){
 				$temparray[] = $tempc;
 			}
 		}
-		
+
 		 $this->success($temparray);
 	}
-	
+
 	/**
 	 *  @brief 获取店铺信息
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
-	 */ 
+	 */
 	function newshopinfo(){
 		$backinfo = $this->checkappMem();
 		$shopid = trim(IFilter::act(IReq::get('shopid')));
@@ -6563,10 +6563,10 @@ function getshopnew(){
 		$shopinfo  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop  where id = '".$shopid."'    ");
 		$shopinfo['notice_info']= strip_tags($shopinfo['notice_info']);
 		if(empty($shopinfo['notice_info'])){
-		$shopinfo['notice_info']= strip_tags(Mysite::$app->config['shopnotice']);	
+		$shopinfo['notice_info']= strip_tags(Mysite::$app->config['shopnotice']);
 		}
 		if(empty($shopinfo)) $this->message('店铺数据获取失败');
- 
+
 		if($shopinfo['shoptype'] == 0){
 			$shopdet  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopid."'    ");
 		}else{
@@ -6578,30 +6578,30 @@ function getshopnew(){
 		$nowhour = date('H:i:s',time());
 		$nowhour = strtotime($nowhour);
 		$checkinfo = $this->shopIsopen($shop['is_open'],$shop['starttime'],$shop['is_orderbefore'],$nowhour);
-		$shop['opentype'] = $checkinfo['opentype']; 
-			
-		//2015.3.23修改		
+		$shop['opentype'] = $checkinfo['opentype'];
+
+		//2015.3.23修改
 		// unset($shop['intr_info']);
 		// unset($shop['cx_info']);
-		
+
 		$shop['intr_info'] = strip_tags($shop['intr_info']);
 		$shop['cx_info'] = strip_tags($shop['cx_info']);
 		$imgurl = empty($shop['shoplogo'])? Mysite::$app->config['shoplogo']:$shop['shoplogo'];
 		$shop['shopimg'] = Mysite::$app->config['siteurl'].$imgurl;
 		$juli = $this->GetDistance($lat, $lng, $shop['lat'], $shop['lng']);
 
-		$platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shop['admin_id']."' ");   
+		$platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shop['admin_id']."' ");
 			if( $shop['sendtype'] == 1 ){
 				   $valuelist =  unserialize($shop['pradiusvalue']);
 			  }else{
 				   $valuelist = unserialize($platpsinfo['radiusvalue']);
 			  }
 		#$valuelist = empty($shop['pradiusvalue'])? unserialize($this->platpsinfo['radiusvalue']):unserialize($shop['pradiusvalue']);
-		 
-		
-		 
-		
-		
+
+
+
+
+
 		$juliceshi = intval($juli/1000);
 		$shop['baidupscost'] = '不在配送区域';
 		$shop['pscost'] = '0';
@@ -6622,7 +6622,7 @@ function getshopnew(){
 		    $shop['canps'] = 1;
 		}
 		$shop['collect'] = 0;
-		if($backinfo['uid'] > 0){ 
+		if($backinfo['uid'] > 0){
 			$collect = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."collect where uid ='".$backinfo['uid']."'  and collectid = '".$shopid."' and collecttype  = 0  ");
 			if(!empty($collect)){
 				$shop['collect'] = 1;
@@ -6644,19 +6644,19 @@ function getshopnew(){
 			$shopstartx= 0;
 		}
 		$shop['pspoint'] = 	$shopstartx;
-		
+
 		 if( $shop['sendtype'] == 1 ){
 					 $shop['psimg'] = Mysite::$app->config['shoppsimg'];
-                     
+
 				}else{
-					 $shop['psimg'] = Mysite::$app->config['psimg']; 	 
+					 $shop['psimg'] = Mysite::$app->config['psimg'];
 				}
-		
+
                                 $d =date("w");
                                 if($d == 0){
                                     $d =7;
                                 }
-		
+
 		$cxrule = $this->mysql->getarr("select name,imgurl  from ".Mysite::$app->config['tablepre']."rule  where  FIND_IN_SET(".$shopid.",shopid)   and status = 1   and ( limittype = 1 or ( limittype = 2 and ".$d."  in ( limittime ) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
 		$cxinfo = array();
 		foreach($cxrule as $key=>$value){
@@ -6669,9 +6669,9 @@ function getshopnew(){
 	}
 	/**
 	 *  @brief 获取店铺10个最近评价
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function commentshop(){
@@ -6681,8 +6681,8 @@ function getshopnew(){
 		foreach($list as $key=>$value){
 			//http://
 			if(IValidate::url($value['logo'])){
-				
-			}else{ 
+
+			}else{
 				$value['logo'] = empty($value['logo'])?Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo']:Mysite::$app->config['siteurl'].$value['logo'];
 			}
 			if( !empty($value['virtualname']) ){
@@ -6693,18 +6693,18 @@ function getshopnew(){
 					$value['goodsname'] = $xunigoodsinfo['goodsname'].'【'.$attrname.'】';
 				}else{
 					$value['goodsname'] = $xunigoodsinfo['name'];
-				} 
+				}
 			}
 			if( empty($value['username']) ){
 				$value['username'] = '游客';
 			}
-			
-			
-			
+
+
+
 			 if(!empty($value['replycontent'])){
 				 $value['replytime'] = date('Y-m-d',$value['replytime']);
 			 }
-			
+
 			$value['addtime'] = date('Y-m-d',$value['addtime']);
 			$backdata[] = $value;
 		}
@@ -6712,34 +6712,34 @@ function getshopnew(){
 	}
 	/**
 	 *  @brief 获取兑换商品
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function giftlist(){
 		//获取所有礼品列表
 		//score	title	content	typeid	sell_count 销售数量	stock 库存	img
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = $pagesize > 0? $pagesize:10;
-		
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize); 
+
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 		$cximglist = $this->mysql->getarr("select id,score,title,stock,img from ".Mysite::$app->config['tablepre']."gift  order by id asc limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
 		$backdata = array();
 		foreach($cximglist as $key=>$value){
 			$value['img'] =  empty($value['img'])?Mysite::$app->config['siteurl'].Mysite::$app->config['shoplogo']:Mysite::$app->config['siteurl'].$value['img'];
 			$backdata[]= $value;
 		}
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
 	/**
 	 *  @brief 兑换礼品
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
-	 */ 
+	 */
 	function exchange(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
@@ -6788,11 +6788,11 @@ function getshopnew(){
 	}
     /**
      *  @brief 兑换记录
-     *  
+     *
      *  @return Return_Description
-     *  
+     *
      *  @details Details
-     */ 
+     */
 	function exgiftlog(){
 		$uid = intval(IReq::get('uid'));
 		$backinfo =$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid ='".$uid."' ");
@@ -6800,12 +6800,12 @@ function getshopnew(){
 			$this->message('nologin');
 		}
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = $pagesize > 0? $pagesize:10;
-		
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);  
+
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 		$backdata = array();
-		 
+
 		$lipinlist = $this->mysql->getarr("select a.*,b.title,b.img from ".Mysite::$app->config['tablepre']."giftlog  as a left join ".Mysite::$app->config['tablepre']."gift as b on a.giftid = b.id  where a.uid ='".$backinfo['uid']."'   order by a.id desc limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()." ");
 		foreach($lipinlist as $key=>$value){
 			$value['img'] =  empty($value['img'])?Mysite::$app->config['siteurl'].Mysite::$app->config['shoplogo']:Mysite::$app->config['siteurl'].$value['img'];
@@ -6816,9 +6816,9 @@ function getshopnew(){
 	}
 	/**
 	 *  @brief 礼品操作
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function controlgift(){
@@ -6826,7 +6826,7 @@ function getshopnew(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
+		}
 		$id = intval(IReq::get('id'));
 		$controlname = IFilter::act(IReq::get('controlname'));
 		if(empty($id)) $this->message('gift_emptygiftlog');
@@ -6856,9 +6856,9 @@ function getshopnew(){
 	}
 	/**
 	 *  @brief 优惠卷列表
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function myjuan(){
@@ -6867,22 +6867,22 @@ function getshopnew(){
 			$this->message('nologin');
 		}
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = $pagesize > 0? $pagesize:10;
-		
-		
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);  
+
+
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 		// 状态，0未使用，1已绑定，2已使用，3无效	 制造时间	 优惠金额	 购物车限制金额下限	 失效时间	uid 用户ID	username 用户名	usetime 使用时间	name
 		$cximglist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where uid =".$backinfo['uid']." and status=1 order by id desc   limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
 /* 		print_r($backinfo); */
-		
+
 		$backdata = array();
 		//status 状态，0未使用，1已绑定，2已使用，3无效
 		foreach($cximglist as $key=>$value){
 			if($value['endtime'] < time()){
 				$value['status'] = $value['status'] < 2?3:$value['status'];
 			}
-			
+
 			$checkpaytype = 0;
 			if($value['paytype'] =='1'){
 				$checkpaytype =1;
@@ -6892,7 +6892,7 @@ function getshopnew(){
 				$checkpaytype =3;
 			}
 			$value['paytype'] = $checkpaytype;
-			
+
 			$value['endtime'] = date('Y-m-d',$value['endtime']);
 			$backdata[] = $value;
 		}
@@ -6905,15 +6905,15 @@ function getshopnew(){
 		    }
 		}
 		$data['available'] = $available;//可用
-		$data['disabled'] = $disabled;//不可用	
-		
+		$data['disabled'] = $disabled;//不可用
+
 		$this->success($data);
 	}
 	/**
 	 *  @brief 绑定优惠券
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function savejuan(){
@@ -6953,7 +6953,7 @@ function getshopnew(){
 		$data['collectid'] = $collectid;
 		$data['collecttype'] = $collecttype;
 		$data['uid'] = $backinfo['uid'];
-		
+
 		if($collecttype == 1){
 			$goodsinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id ='".$collectid."'    ");
 		    if(empty($goodsinfo)) $this->message('商品不存在');
@@ -6964,27 +6964,27 @@ function getshopnew(){
 			$data['shopuid'] = $shopinfo['uid'];
 		}
 		$this->mysql->insert(Mysite::$app->config['tablepre'].'collect',$data);
-		$this->success('success!'); 
+		$this->success('success!');
 	}
 	function delcollect(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		 
+
 		$collectid = intval(IFilter::act(IReq::get('collectid')));
 		$collecttype = intval(IFilter::act(IReq::get('collecttype')));
 		$collect = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."collect where uid ='".$backinfo['uid']."'  and collectid = '".$collectid."' and collecttype  = '".$collecttype."'  ");
 		if(empty($collect)) $this->message('未收藏');
-		 
-	    $this->mysql->delete(Mysite::$app->config['tablepre'].'collect',"uid ='".$backinfo['uid']."' and collectid = '".$collectid."' and collecttype  = '".$collecttype."' ");   
-	 	$this->success('success!');  
+
+	    $this->mysql->delete(Mysite::$app->config['tablepre'].'collect',"uid ='".$backinfo['uid']."' and collectid = '".$collectid."' and collecttype  = '".$collecttype."' ");
+	 	$this->success('success!');
 	}
 	/**
 	 *  @brief 通过店铺ID集获取店铺信息
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function collectshop(){
@@ -6992,55 +6992,55 @@ function getshopnew(){
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-	   $templist = $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."collect  where uid ='".$backinfo['uid']."' and collecttype  = 0   ");  
+	   $templist = $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."collect  where uid ='".$backinfo['uid']."' and collecttype  = 0   ");
 	   if(count($templist) == 0) {
 		   $this->success(array());
 	   }
 	   $tempids = array();
         foreach($templist as $key=>$value){
 		  $tempids[] = $value['collectid'];
-	   } 
+	   }
 	   if(count($tempids)> 0){
 		   $where = " where id in(".join(',',$tempids).") ";
 	   }else{
 		    $this->success(array());
-	   } 
-	   
+	   }
+
 	    $lat = IFilter::act(IReq::get('lat'));
 		  $lng = IFilter::act(IReq::get('lng'));
-             
+
 
 
 		 if( !empty($lat) &&  !empty($lng) ){
-				  $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all'); 
+				  $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all');
 					 $backinfo  = json_decode($content,true);
 
 					if( $backinfo['status'] == 1 && $backinfo['info'] == 'OK'){
-						$adcode = $backinfo['regeocode']['addressComponent']['adcode']; 
-						 
+						$adcode = $backinfo['regeocode']['addressComponent']['adcode'];
+
 					}
 
-						
+
 		}
-		 
+
 		if( !empty($adcode) ){
-			$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
-			
+			$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
+
 			if( !empty($areacodeone) ){
 				$adcodeid = $areacodeone['id'];
 				$pid = $areacodeone['pid'];
 				$adcode = $adcode;
-				$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
-				
-				if( !empty($areainfoone) ){ 
-					$adcode = $areainfoone['adcode']; 
+				$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
+
+				if( !empty($areainfoone) ){
+					$adcode = $areainfoone['adcode'];
 				}
-				
+
 			}
 		}
 		if(!empty($adcode)){
-			$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$adcode."' ");   
-			$this->pageCls->setpage(intval(IReq::get('page')),100);  
+			$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$adcode."' ");
+			$this->pageCls->setpage(intval(IReq::get('page')),100);
 			$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop  ".$where."  and endtime > ".time()."  and admin_id = ".$adcode."   limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
 		}else{
 			$list = array();
@@ -7049,20 +7049,20 @@ function getshopnew(){
 		$nowhour = date('H:i:s',time());
 		$nowhour = strtotime($nowhour);
 		$sellrule = new sellrule();
-		foreach($list as $key=>$value){  
+		foreach($list as $key=>$value){
 			$newvalue['id'] = $value['id'];
 			$newvalue['shopname'] = $value['shopname'];
 			$newvalue['is_open'] = $value['is_open'];
 			$newvalue['starttime'] = $value['starttime'];
 			$newvalue['pointcount'] = $value['sellcount'];
 			$newvalue['lat'] = $value['lat'];
-			$newvalue['lng'] = $value['lng']; 
-			$newvalue['shoplogo'] = $value['shoplogo']; 
-			$newvalue['point'] = $value['point']; 
-			$newvalue['address'] = $value['address']; 
-			$newvalue['shoptype'] = $value['shoptype']; 
-			$newvalue['sellcount'] = $value['sellcount']; 
-                        $newvalue['virtualsellcounts'] = $value['virtualsellcounts']; 
+			$newvalue['lng'] = $value['lng'];
+			$newvalue['shoplogo'] = $value['shoplogo'];
+			$newvalue['point'] = $value['point'];
+			$newvalue['address'] = $value['address'];
+			$newvalue['shoptype'] = $value['shoptype'];
+			$newvalue['sellcount'] = $value['sellcount'];
+                        $newvalue['virtualsellcounts'] = $value['virtualsellcounts'];
                         $newvalue['limitcost'] = $value['limitcost'];
                         $newvalue['pscost'] = $value['pscost'];
 
@@ -7072,16 +7072,16 @@ function getshopnew(){
 			}else{
 				$delvalue  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopmarket  where shopid = '".$value['id']."'    ");
 			}
-			if(isset($delvalue['shopid'])){ 
-			        $cvalue= array_merge($newvalue,$delvalue); 
-					
-					
-					$juli = $this->GetDistance($lat, $lng, $cvalue['lat'], $cvalue['lng'],1); 
+			if(isset($delvalue['shopid'])){
+			        $cvalue= array_merge($newvalue,$delvalue);
+
+
+					$juli = $this->GetDistance($lat, $lng, $cvalue['lat'], $cvalue['lng'],1);
                                         $juli = $juli > 1000? round($juli/1000,2).'km':$juli.'m';
 					$sellrule->setdata($cvalue['id'],1000,$cvalue['shoptype']);
 					$rulist = $sellrule->get_rulelist();
-					
-					
+
+
 					//array('1'=>'赠送','2'=>'减费用','3'=>'折扣','4'=>'免配送费')
 					// $temprulelist = array();
 					// foreach($rulist  as $k=>$v){
@@ -7106,33 +7106,33 @@ function getshopnew(){
 						 $valuelist = empty($value['pradiusvalue'])? '':unserialize($value['pradiusvalue']);
 					}else{
 						 $cvalue['psimg'] = Mysite::$app->config['psimg'];
-						 $valuelist = empty($platpsinfo['radiusvalue'])? '':unserialize($platpsinfo['radiusvalue']);	 
+						 $valuelist = empty($platpsinfo['radiusvalue'])? '':unserialize($platpsinfo['radiusvalue']);
 					}*/
-                              $shopinfo = array_merge($value, $delvalue); 
-                             
-                              $checkps = $this->pscost($shopinfo,$lng,$lat); 
-            			      
+                              $shopinfo = array_merge($value, $delvalue);
+
+                              $checkps = $this->pscost($shopinfo,$lng,$lat);
+
             			       $cvalue['pscost'] = $checkps['pscost'];
-                                       
+
 			/*		 if(is_array($valuelist)){
 						foreach($valuelist as $k=>$v){
-                                                          
+
 							if($juliceshi == $k){
 							  $cvalue['pscost'] = $v;
-                                                               
+
 								$cvalue['canps'] = 1;
 							}
 						}
 					}*/
 					$source =  intval(IFilter::act(IReq::get('source')));
 					$ios_waiting =   Mysite::$app->config['ios_waiting'];
-					if($source == 1 && $ios_waiting == true){ 
+					if($source == 1 && $ios_waiting == true){
 						$cvalue['canps'] = 1;
 					}
 					$cvalue['opentype'] = '1';//1营业  0未营业
-                                        
+
                                         $cvalue['sellcount'] = $cvalue['sellcount']+$value['virtualsellcounts'];
-                                        
+
 					$imgurl = empty($cvalue['shoplogo'])? Mysite::$app->config['shoplogo']:$cvalue['shoplogo'];
 					$checkinfo = $this->shopIsopen($cvalue['is_open'],$cvalue['starttime'],$cvalue['is_orderbefore'],$nowhour);
 
@@ -7146,19 +7146,19 @@ function getshopnew(){
 					if(!empty($checkstr)){
 						$tempstr = explode('-',$checkstr);
 					}
-					$cvalue['starttime'] = count($tempstr) > 0 ? $tempstr[0]:'';  
-					$cvalue['shopimg'] = Mysite::$app->config['siteurl'].$imgurl; 
+					$cvalue['starttime'] = count($tempstr) > 0 ? $tempstr[0]:'';
+					$cvalue['shopimg'] = Mysite::$app->config['siteurl'].$imgurl;
 					$shopdata[] = $cvalue;
 			}
 		}
-	   
+
 	    $this->success($shopdata);
 	}
 	/**
 	 *  @brief 用户最近2周订单记录
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function neworder(){
@@ -7166,7 +7166,7 @@ function getshopnew(){
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		 
+
 		$ordershowtype = intval(IFilter::act(IReq::get('ordershowtype')));
 		$where = "";
 		if($ordershowtype > 0){
@@ -7184,7 +7184,7 @@ function getshopnew(){
 		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = empty($pagesize)?10:$pagesize;
 		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
-		$statusarr = array('0'=>'新订单','1'=>'待发货','2'=>'待确认','3'=>'已完成','4'=>'订单取消','5'=>'订单取消'); 
+		$statusarr = array('0'=>'新订单','1'=>'待发货','2'=>'待确认','3'=>'已完成','4'=>'订单取消','5'=>'订单取消');
 		$goshoparr = array('0'=>'新订单','1'=>'等待消费','2'=>'等待消费','3'=>'已完成','4'=>'订单取消','5'=>'订单取消');
 		/* 获取订单数:   shopname  id  shoplogo  allcost addtime  status paystatus   paytype  */
 		$nowtime = time()-14*24*60*60;
@@ -7202,7 +7202,7 @@ function getshopnew(){
 			}else{
 				$value['seestatus'] = isset($statusarr[$value['status']])?$statusarr[$value['status']]:'';
 			}
-			
+
 			$backdata[] = $value;
 			// print_r($backdata);
 		}
@@ -7210,11 +7210,11 @@ function getshopnew(){
 	}
 	/**
 	 *  @brief 订单详情
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
-	 */ 
+	 */
 	function neworderdet(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
@@ -7222,12 +7222,12 @@ function getshopnew(){
 		}
 		$orderid = IFilter::act(IReq::get('orderid'));
 		if(empty($orderid)) $this->message('订单获取失败');
-		$orderlist = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid." and buyeruid = ".$backinfo['uid']." order by id desc limit 0,20");		 
+		$orderlist = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid." and buyeruid = ".$backinfo['uid']." order by id desc limit 0,20");
 		if(empty($orderlist)) $this->message('订单为空');
 		$orderdet =$this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id=".$orderid." order by id desc limit 0,20");
-		
-		 
-		
+
+
+
 		//自动更新  订单状态可取消
 		if($orderlist['paytype'] == 1 && $orderlist['paystatus'] == 0 && $orderlist['status'] < 3){
 			$checktime = time() - $orderlist['addtime'];
@@ -7241,20 +7241,20 @@ function getshopnew(){
 				$this->mysql->update(Mysite::$app->config['tablepre'].'order',$cdata,"id='".$orderid."'");
 			    $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps',"orderid = '$orderid' and status !=3 ");
 				/*更新订单 状态说明*/
-				
+
 				$statusdata['orderid']     =  $orderid;
 				$statusdata['addtime']     =  $orderlist['addtime']+900;
 				$statusdata['statustitle'] =  "自动关闭订单";
-				$statusdata['ststusdesc']  =  "在线支付订单，未支付自动关闭"; 		
-				$this->mysql->insert(Mysite::$app->config['tablepre'].'orderstatus',$statusdata); 
+				$statusdata['ststusdesc']  =  "在线支付订单，未支付自动关闭";
+				$this->mysql->insert(Mysite::$app->config['tablepre'].'orderstatus',$statusdata);
 				$orderlist['status'] = '4';
-				
-			} 
+
+			}
 		}
-		
-		
-		 
-		
+
+
+
+
 		$orderlist['addtime'] = date('Y-m-d H:i',$orderlist['addtime']);
 		$orderlist['posttime'] = date('Y-m-d',$orderlist['posttime']).' '.$orderlist['postdate'];
 		$orderlist['sendtime'] = date('Y-m-d H:i',$orderlist['sendtime']);
@@ -7280,10 +7280,10 @@ function getshopnew(){
 				$ctaiarr[] = $value;
 			}
 		}
-		
-		 
 
-		$instrolist = array(); 
+
+
+		$instrolist = array();
 		//订单类型
 		if( $orderlist['is_goshop'] == 1 ){
 			$backdata['ordertype'] = '到店消费';
@@ -7294,41 +7294,41 @@ function getshopnew(){
 		}else{
 			$backdata['ordertype'] = '外卖';
 		}
-		 
-	 
+
+
 		$payarrr = array('0'=>'到付','1'=>'在线支付');
 		$orderpastatus = $orderlist['paystatus'] == 1?'已支付':'未支付';
 		$orderpaytype = isset($payarrr[$orderlist['paytype']])?$payarrr[$orderlist['paytype']]:'在线支付';
 		//支付状态
-		$backdata['paystatusintro'] = $orderpaytype.'('.$orderpastatus.')'; 
+		$backdata['paystatusintro'] = $orderpaytype.'('.$orderpastatus.')';
 		//商品总价
 		$backdata['shopcost'] = $orderlist['shopcost'];
-		
+
 		//配送费
-		$backdata['shopps'] = $orderlist['shopps']; 
+		$backdata['shopps'] = $orderlist['shopps'];
 		//附加配送费
-		$backdata['addpscost'] = $orderlist['addpscost']; 
-		
+		$backdata['addpscost'] = $orderlist['addpscost'];
+
 		//促销优惠
 		$backdata['cxcost'] = $orderlist['yhjcost']+$orderlist['cxcost'];
 		//打包费
-		$backdata['bagcost'] = $orderlist['bagcost']; 
+		$backdata['bagcost'] = $orderlist['bagcost'];
 		//订单总价
-		$backdata['allcost'] = $orderlist['allcost']; 
+		$backdata['allcost'] = $orderlist['allcost'];
         $backdata['shoptype'] = $orderlist['shoptype'];
 		$backdata['is_goshop'] = $orderlist['is_goshop'];
 		$backdata['pstype'] = $orderlist['pstype'];
-		$backdata['posttime'] = $orderlist['posttime']; 
-		$backdata['buyername'] = $orderlist['buyername']; 
-		$backdata['buyerphone'] = $orderlist['buyerphone']; 
-		$backdata['buyeraddress'] = $orderlist['buyeraddress']; 
+		$backdata['posttime'] = $orderlist['posttime'];
+		$backdata['buyername'] = $orderlist['buyername'];
+		$backdata['buyerphone'] = $orderlist['buyerphone'];
+		$backdata['buyeraddress'] = $orderlist['buyeraddress'];
 		$backdata['shopid'] = $orderlist['shopid'];
 		$backdata['id'] =  $orderlist['id'];
-		
-		 
-		$backdata['shopaddress'] = $orderlist['shopaddress']; 
-		$backdata['shopphone'] = $orderlist['shopphone']; 
-		$backdata['content'] = $orderlist['content'];  
+
+
+		$backdata['shopaddress'] = $orderlist['shopaddress'];
+		$backdata['shopphone'] = $orderlist['shopphone'];
+		$backdata['content'] = $orderlist['content'];
 		$backdata['dno'] =  $orderlist['dno'];
 		$backdata['addtime'] = $orderlist['addtime'];
 		$backdata['posttime'] = $orderlist['posttime'];
@@ -7339,24 +7339,24 @@ function getshopnew(){
 		if($orderlist['shoptype'] == 100){
 			$backdata['shopname'] = $orderlist['pttype'] == 1?'跑腿【帮我送】':'跑腿【帮我买】';
 		}
-		
+
 		$backdata['psuid'] = $orderlist['psuid'];
 		$backdata['psusername'] = $orderlist['psusername'];
 		$backdata['psemail'] = $orderlist['psemail'];
-		
-		
+
+
 		$backdata['statuslist'] = $ctaiarr;
-		 
+
         $backdata['allowreack'] = Mysite::$app->config['allowreback'];
 		$backdata['is_reback'] = $orderlist['is_reback'];
 		$backdata['is_print'] = $orderlist['is_print'];
 		$backdata['is_goshop'] = $orderlist['is_goshop'];
 		$backdata['status'] = $orderlist['status'];
-		$backdata['is_make'] = $orderlist['is_make']; 
+		$backdata['is_make'] = $orderlist['is_make'];
 		$backdata['paystatus'] = $orderlist['paystatus'];
 		$backdata['paytype'] = $orderlist['paytype'];
 		$backdata['is_ping'] = $orderlist['is_ping'];
-		$backdata['shopphone'] = $orderlist['shopphone']; 
+		$backdata['shopphone'] = $orderlist['shopphone'];
 		$backdata['id'] =  $orderlist['id'];
 		if($backdata['shopcost'] > 0){
 			$temp['id'] = 0;
@@ -7370,8 +7370,8 @@ function getshopnew(){
 			$temp['shopid'] = 0;
 			$orderdet[] = $temp;
 		}
-		
-		//neworderdet  
+
+		//neworderdet
 		if($backdata['shopps'] > 0){
 			$temp['id'] = 0;
 			$temp['order_id'] = 0;
@@ -7391,7 +7391,7 @@ function getshopnew(){
 			$temp['goodsid'] = 0;
 			$temp['goodsname'] = '附加配送费';
 			$temp['goodscost'] = $backdata['addpscost'];//附加配送费
-			
+
 			$temp['goodscount'] = 0;
 			$temp['status'] = 0;
 			$temp['is_send'] = 0;
@@ -7434,14 +7434,14 @@ function getshopnew(){
 			$temp['shopid'] = 0;
 			$orderdet[] = $temp;
 		}
-		
-		
-		
+
+
+
 		 $backdata['psbpsyinfo'] = array();
-			 
+
 				if(  $orderlist['status'] == 2 ||  $orderlist['status'] == 3 ){
 					if(  $orderlist['pstype'] == 2 &&  $orderlist['psuid'] > 0  ){
-						 $psbinterface = new psbinterface(); 
+						 $psbinterface = new psbinterface();
 						$backdata['psbpsyinfo'] = $psbinterface->getpsbclerkinfo($orderlist['psuid']);
 						if( !empty($backdata['psbpsyinfo']) && !empty($backdata['psbpsyinfo']['posilnglat']) ){
 							$posilnglatarr = explode(',',$backdata['psbpsyinfo']['posilnglat']);
@@ -7452,7 +7452,7 @@ function getshopnew(){
 							}else{
 								$backdata['psbpsyinfo'] = array();
 							}
-							
+
 						}
 					}else if(   $orderlist['pstype'] == 1 &&  $orderlist['psuid'] > 0  ){
 						$backdata['psbpsyinfo'] = $this->mysql->select_one("select uid,lng,lat from ".Mysite::$app->config['tablepre']."locationpsy where uid='".$orderlist['psuid']."' ");
@@ -7465,37 +7465,37 @@ function getshopnew(){
 						$backdata['psbpsyinfo'] = array();
 					}
 				}
-		
+
 		if( $backdata['psbpsyinfo'] == false ){
 			$backdata['psbpsyinfo'] = array();
 		}
-		
-		
+
+
 		$backdata['gdlist'] = $orderdet;
-	   
+
 		$this->success($backdata);
 	}
-	
+
 	function ajaxroutemapshow(){
-		
+
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		
-		$orderid = intval(IReq::get('orderid')); 
-		$order = $this->mysql->select_one("select id as orderid,dno,shopid,status,pstype,psuid,psusername,psemail,shoptype,shoplat,shoplng,buyerlat,buyerlng,psyoverlng,psyoverlat from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid.""); 
+
+		$orderid = intval(IReq::get('orderid'));
+		$order = $this->mysql->select_one("select id as orderid,dno,shopid,status,pstype,psuid,psusername,psemail,shoptype,shoplat,shoplng,buyerlat,buyerlng,psyoverlng,psyoverlat from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid."");
 		$data['psbpsyinfo'] = array();
 		if( !empty($order) ){
-			
+
 		}
-		
+
 		$data['order'] = $order;
 		$data['psbpsyinfo'] = array();
 		if(   $order['psuid'] > 0 && $order['shoptype'] != 100  ){
 					if(  $order['status'] == 2   ){
 						if(  $order['pstype'] == 2  ){
-							 $psbinterface = new psbinterface(); 
+							 $psbinterface = new psbinterface();
 							$data['psbpsyinfo'] = $psbinterface->getpsbclerkinfo($order['psuid']);
 							if( !empty($data['psbpsyinfo']) && !empty($data['psbpsyinfo']['posilnglat']) ){
 								$posilnglatarr = explode(',',$data['psbpsyinfo']['posilnglat']);
@@ -7506,7 +7506,7 @@ function getshopnew(){
 								}else{
 									$data['psbpsyinfo'] = array();
 								}
-								
+
 							}
 						}else if(   $order['pstype'] == 0    ){
 							$data['psbpsyinfo'] = $this->mysql->select_one("select uid,lng,lat from ".Mysite::$app->config['tablepre']."locationpsy where uid='".$order['psuid']."' ");
@@ -7519,49 +7519,49 @@ function getshopnew(){
 							$data['psbpsyinfo'] = array();
 						}
 					}else if(  $order['status'] == 3 &&  (  $order['pstype'] == 0 ||  $order['pstype'] == 2  ) ){
-						
+
 						$psyoverlng = $order['psyoverlng'];
 						$psyoverlat = $order['psyoverlat'];
 						$data['psbpsyinfo']['clerkid'] = $order['psuid'];
 						$data['psbpsyinfo']['posilnglat'] = $psyoverlng.','.$psyoverlat;
 						$data['psbpsyinfo']['posilnglatarr'] = explode(',',$data['psbpsyinfo']['posilnglat']);
-						
+
 					}
 				 }
-		
+
 		#print_R($data);
 		$this->success($data);
-				
+
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	/**
 	 *  @brief 买家关闭和完成订单
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
-	 
-	 
-	 
+
+
+
 	// 8.6修改
 	function userdelorder(){
 		$this->checkmemberlogin();
-		$orderid = intval(IReq::get('orderid'));  
+		$orderid = intval(IReq::get('orderid'));
 		if(empty($this->member['uid'])) $this->message('member_nologin');
 		$userctlord = new userctlord($orderid,$this->member['uid'],$this->mysql);
 		if($userctlord->delorder() == false){
 			$this->message($userctlord->Error());
 		}else{
 			$this->success('success');
-		}  
+		}
 	}
-	 
+
 	// 8.6修改
 	function newordercontrol(){
 		$backinfo = $this->checkappMem();
@@ -7573,49 +7573,49 @@ function getshopnew(){
         if(empty($orderinfo)){
 			$this->message('订单不存在');
 		}
-		$doname = IFilter::act(IReq::get('doname')); 
-		if($doname == 'closeorder'){  
+		$doname = IFilter::act(IReq::get('doname'));
+		if($doname == 'closeorder'){
 			$userctlord = new userctlord($orderid,$backinfo['uid'],$this->mysql);
 			if($userctlord->unorder() == false){
 				$this->message($userctlord->Error());
 			}else{
 				$this->success('success');
-			} 
+			}
 		}elseif($doname == 'sureorder'){
 			$userctlord = new userctlord($orderid,$backinfo['uid'],$this->mysql);
 			if($userctlord->sureorder() == false){
 				$this->message($userctlord->Error());
 			}else{
 				$this->success('success');
-			} 
-		}elseif($doname =='reback'){  
-			$drawbacklog = new drawbacklog($this->mysql,$this->memberCls); 
+			}
+		}elseif($doname =='reback'){
+			$drawbacklog = new drawbacklog($this->mysql,$this->memberCls);
  			$drawbackdata['allcost'] = $orderinfo['allcost'];
  			$drawbackdata['orderid'] = $orderinfo['id'];
- 			$drawbackdata['reason'] = trim(IFilter::act(IReq::get('reason'))); 
- 			$drawbackdata['content'] = trim(IFilter::act(IReq::get('reason'))); 
+ 			$drawbackdata['reason'] = trim(IFilter::act(IReq::get('reason')));
+ 			$drawbackdata['content'] = trim(IFilter::act(IReq::get('reason')));
   			$drawbackdata['typeid'] = $orderinfo['paytype'];
   			$drawbackdata['laiyuan'] = 'app';
   			$drawbackdata['uid'] = $backinfo['uid'];
 			$check = $drawbacklog->setsavedraw($drawbackdata)->save();
 			if($check == true){
-				$this->success('success');  
+				$this->success('success');
 			}else{
 				 $msg = $drawbacklog->GetErr();
 				$this->message($msg);
-			} 
+			}
 		}elseif($doname == 'delorder'){//删除订单
 			$userctlord = new userctlord($orderid,$backinfo['uid'],$this->mysql);
 			if($userctlord->delorder() == false){
 				$this->message($userctlord->Error());
 			}else{
 				$this->success('success');
-			}   
+			}
 		}
 	}
-	 
+
 	function rebackreason(){
-		 
+
 		$templist = Mysite::$app->config['drawsmlist'];
 		$templist = empty($templist)?array():unserialize($templist);
 		$drawsmlist = array();
@@ -7626,14 +7626,14 @@ function getshopnew(){
 				$tempc['name'] = $value;
 				$drawsmlist[] = $tempc;
 			}
-		} 
+		}
 		$this->success($drawsmlist);
 	}
 	/**
 	 *  @brief 获取订单评价信息
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function neworderpinglist(){
@@ -7778,14 +7778,14 @@ function getshopnew(){
 			$newpoint['point'] = intval($scorall['allpoint']/$shuliang);
 		}
 		$newpoint['pointcount'] = $shuliang;
-	  
+
 		//店铺销售数量
 		$chengallshu  = $this->mysql->select_one("select sum(goodscount) as shuliang from ".Mysite::$app->config['tablepre']."orderdet where order_id in (select id from ".Mysite::$app->config['tablepre']."order where status =3 and shopid = '".$orderinfo['shopid']."') ");
 		$newpoint['sellcount'] = 0 ;
 		if(isset($chengallshu['shuliang'])){
 			$newpoint['sellcount']  = intval($chengallshu['shuliang']);
-                       
-		} 
+
+		}
 		$this->mysql->update(Mysite::$app->config['tablepre'].'shop',$newpoint,"id='".$orderinfo['shopid']."'");
 		//商品评分
 		$newpoint['point'] = 5;
@@ -7809,7 +7809,7 @@ function getshopnew(){
 		//配送时间列表
 		//优惠券列表
 		//需要提交数据   lng lat  shopid goodsid  goodscount
-		 
+
 		$backinfo = $this->checkappMem();
 		/* if(empty($backinfo['uid'])){
 			$this->message('nologin');
@@ -7830,7 +7830,7 @@ function getshopnew(){
 		$lng = empty($lng)?0:$lng;
 		if(empty($shopid)) $this->message('店铺数据获取失败');
 		$shopinfo  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop  where id = '".$shopid."'    ");
-		
+
 		if(empty($shopinfo)) $this->message('店铺数据获取失败');
 		if($shopinfo['shoptype'] == 0){
 			$shopdet  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopid."'    ");
@@ -7838,7 +7838,7 @@ function getshopnew(){
 			$shopdet  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopmarket  where shopid = '".$shopid."'    ");
 		}
 		if(empty($shopdet)) $this->message('店铺数未开启');
-		$shop = array_merge($shopinfo,$shopdet); 
+		$shop = array_merge($shopinfo,$shopdet);
 		unset($shop['intr_info']);
 		unset($shop['cx_info']);
 		$shop['canps'] = 0;
@@ -7879,14 +7879,14 @@ function getshopnew(){
 		if(Mysite::$app->config['plateshopid'] ==$shopid ){
 			$shop['canps'] = 1;
 			$backdata['pscost'] = 0;
-			$backdata['canps'] = 1; 
+			$backdata['canps'] = 1;
 			$backdata['baidupscost'] = 0;
 		}
 		$cximglist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodssign  where  type = 'cx'  order by id asc limit 0,1000");
 		$ruleimg = array();
 		foreach($cximglist as $key=>$value){
 		    $ruleimg[$value['id']] = $value['imgurl'];
-		} 
+		}
 		//if(empty($ids)) $this->message('商品ID错误');
 		$tempid = explode(',',$ids);
 		$tempacout = explode(',',$idscount);
@@ -7895,18 +7895,18 @@ function getshopnew(){
 		$querids = array();
 
 		foreach($tempid as $key=>$value){
-			$checkid = intval($value); 
+			$checkid = intval($value);
 			if($checkid > 0){
 				$myidlist[$checkid] = $tempacout[$key];
 				$querids[] = $checkid;
 			}
-		} 
+		}
 		//if(count($querids) == 0) $this->message('商品数量错误');
 		if(count($querids) > 0){
 			$goodslist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods  where  id in(".join(',',$querids).") order by id asc limit 0,1000");
-			foreach($goodslist as $key=>$value){ 
+			foreach($goodslist as $key=>$value){
 				if($value['count'] < $myidlist[$value['id']]){
-					$this->message($value['name'].'库存不足'); 
+					$this->message($value['name'].'库存不足');
 				}
 				$cxinfo = $this->goodscx($value);
 				$value['is_cx'] = $cxinfo['is_cx'];
@@ -7914,11 +7914,11 @@ function getshopnew(){
 				// print_r($value['cost']);
 				$value['zhekou'] = $cxinfo['zhekou'];
 				$backdata['allcost'] += $value['cost']*$myidlist[$value['id']];
-				$backdata['bagcost'] += $value['bagcost']*$myidlist[$value['id']]; 
+				$backdata['bagcost'] += $value['bagcost']*$myidlist[$value['id']];
 			}
 		}
-		
-		$pids = IFilter::act(IReq::get('pids')); 
+
+		$pids = IFilter::act(IReq::get('pids'));
 		$pnum = IFilter::act(IReq::get('pnum'));
 		if(!empty($pids)){
 				$temppids = explode(',',$pids);
@@ -7943,21 +7943,21 @@ function getshopnew(){
 					   $dosee['gg'] = $value;
 					   $dosee['count'] = $pidtonum[$value['id']];
 					   $dosee['cost'] = $value['cost'];
-					   
+
 					   $cxinfo = $this->goodscx($dosee);
 						$dosee['is_cx'] = $cxinfo['is_cx'];
 						$dosee['cost'] = $cxinfo['cxcost'];
 
 						$dosee['zhekou'] =$cxinfo['zhekou'];
-					   
-					   
+
+
 					   $backdata['allcost'] += $dosee['cost']*intval($pidtonum[$value['id']]);
-					    $backdata['bagcost'] += $dosee['bagcost']*intval($pidtonum[$value['id']]); 
-						 
+					    $backdata['bagcost'] += $dosee['bagcost']*intval($pidtonum[$value['id']]);
+
 				   }
-				   
+
 			   }
-			
+
 		}
 
 
@@ -7966,7 +7966,7 @@ function getshopnew(){
         $sellrule =new sellrule();
         $sellrule->setdata($shop['shopid'],$backdata['allcost'],$shop['shoptype'],$backinfo['uid'],4,$paytype);
 		$ruleinfo = $sellrule->getdata();
-		
+
 		$downcost = $ruleinfo['downcost'];
         $backdata['cxdet'] = empty($ruleinfo['cxdet'])?array():$ruleinfo['cxdet'];
 		if(!empty($tempid)){
@@ -7987,11 +7987,11 @@ function getshopnew(){
 		 $d =date("w") == 0?7:date("w");
 		if(!empty($ruleinfo['cxids'])){
 			$cxrule = $this->mysql->getarr("select name,signid,controltype,presenttitle,imgurl from ".Mysite::$app->config['tablepre']."rule  where  FIND_IN_SET(".$shopid.",shopid) and status = 1   and ( limittype = 1  or ( limittype = 2 and  ".$d."  in ( limittime ) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
-			
-			$cxinfo = array(); 
+
+			$cxinfo = array();
 			foreach($cxrule as $key=>$value){
 				$value['logo'] = isset($value['imgurl'])?Mysite::$app->config['siteurl'].$value['imgurl']:'';
-				$cxinfo[] = $value; 
+				$cxinfo[] = $value;
 			}
 			$backdata['cxlist'] = $cxinfo;
 		}
@@ -8007,7 +8007,7 @@ function getshopnew(){
 		 #print_r($backdata['surecost']);
 		$backdata['downcost'] = $downcost;
 		// print_r($backdata['downcost']);
-	  //获取所有促销 
+	  //获取所有促销
 	    $nowhout = strtotime(date('Y-m-d',time()));//当天最小linux 时间
 		$timelist = !empty($shop['postdate'])?unserialize($shop['postdate']):array();
 		$data['timelist'] = array();
@@ -8033,29 +8033,29 @@ function getshopnew(){
 					$data['timelist'][] = $tempt;
 				}
 			}
-		 
+
 			$nowwhiltcheck = $nowwhiltcheck+1;
 		}
-		
-		
-		$backdata['timelist'] = $data['timelist'];  
+
+
+		$backdata['timelist'] = $data['timelist'];
 		$backdata['addpscost']=$data['timelist']['cost'];
-		 
+
 		$newjuanlist = $this->mysql->getarr("select id,creattime,endtime,cost,limitcost,name,status,paytype from ".Mysite::$app->config['tablepre']."juan  where uid='".$backinfo['uid']."' and endtime > ".time()." and status = 1   ");
-		 
+
 		$availablejuan = array();
 		$unavailablejuan = array();
 		$checkpaytype = $paytype + 1;//接口中传来的是  货到是0  在线支付是1   但是  优惠券中  支持订单类型是   货到是1 在线支付是2
-		
+
 		foreach($newjuanlist as $k=>$v){
 			$v['paytype'] = empty($v['paytype'])?'1,2':$v['paytype'];
 			$v['starttime'] = date('Y-m-d',$v['creattime']);
 			$v['endtime'] = date('Y-m-d',$v['endtime']);
-			$v['unavailable_reason'] = array();	
+			$v['unavailable_reason'] = array();
 			$paytypearr = array();
 			$paytypearr = explode(',',$v['paytype']);
 			if(($backdata['allcost'] + $backdata['bagcost']) >= $v['limitcost'] && in_array($checkpaytype,$paytypearr)){
-				$v['is_available'] = 1;			   		
+				$v['is_available'] = 1;
 			    $availablejuan[] = $v;
 			}else{
 				$v['is_available'] = 0;
@@ -8071,35 +8071,35 @@ function getshopnew(){
 				}
 				$unavailablejuan[] = $v;
 			}
-	
+
 		}
 		$backdata['yhjlist'] = array_merge($availablejuan,$unavailablejuan);
 		$backdata['availablejuancount'] = count($availablejuan);
-		
-		 
+
+
 		$backdata['sendtype'] = $shop['sendtype'];
 		# print_r($backdata);
 		$this->success($backdata);
 	}
-	
+
 	private function goodscx($goodsinfo){
-		//将规格转换为真实 数据 
+		//将规格转换为真实 数据
 		//array(1=>'买即送',2=>'限时直降',3=>'限时折扣',4=>'限时价');		cxtype
-	/* 	 
+	/*
 		 if($valq['is_cx'] == 1){
 				//测算促销 重新设置金额
 					$cxdata = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodscx where goodsid=".$valq['id']."  ");
 					$newdata = getgoodscx($valq['cost'],$cxdata);
-					
+
 					$valq['zhekou'] = $newdata['zhekou'];
 					$valq['is_cx'] = $newdata['is_cx'];
 					$valq['cost'] = $newdata['cost'];
 				} */
-		 
-		$newarray = array('cxcost'=>$goodsinfo['cost'],'oldcost'=>$goodsinfo['cost'],'zhekou'=>0,'is_cx'=>0);	
-		if($goodsinfo['is_cx'] == 1){		
+
+		$newarray = array('cxcost'=>$goodsinfo['cost'],'oldcost'=>$goodsinfo['cost'],'zhekou'=>0,'is_cx'=>0);
+		if($goodsinfo['is_cx'] == 1){
 			$cxdata =	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodscx where goodsid=".$goodsinfo['id']."  ");
-			 
+
 			$newdata = getgoodscx($goodsinfo['cost'],$cxdata);
 			$newarray['oldcost'] = $goodsinfo['cost'];
 			$newarray['cxcost'] = $newdata['cost'];
@@ -8141,7 +8141,7 @@ function getshopnew(){
 			$shopdet  = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shopmarket  where shopid = '".$shopid."'    ");
 		}
 		if(empty($shopdet)) $this->message('店铺数未开启');
-		$shop = array_merge($shopinfo,$shopdet); 
+		$shop = array_merge($shopinfo,$shopdet);
 		if($shopinfo['is_open'] != 1) $this->message('店铺未开启');
 
 		$juli = $this->GetDistance($lat, $lng, $shop['lat'], $shop['lng']);
@@ -8172,19 +8172,19 @@ function getshopnew(){
 		}
 		if(Mysite::$app->config['plateshopid'] ==$shopid ){
 			$shop['canps'] = 1;
-			$shop['pscost'] = 0; 
+			$shop['pscost'] = 0;
 			$shop['baidupscost'] = 0;
 		}
 
-		#if($shop['canps'] == 0) $this->message('不在配送区'); 
+		#if($shop['canps'] == 0) $this->message('不在配送区');
 		//if(empty($ids)) $this->message('商品ID错误');
 		$tempid = explode(',',$ids);
 		$tempacout = explode(',',$idscount);
 		//if(count($tempid) != count($tempacout)) $this->message('商品ID和商品数量错误');
 		$myidlist = array();
-		$querids = array(); 
+		$querids = array();
 		foreach($tempid as $key=>$value){
-			$checkid = intval($value); 
+			$checkid = intval($value);
 			if($checkid > 0){
 				$myidlist[$checkid] = $tempacout[$key];
 				$querids[] = $checkid;
@@ -8195,29 +8195,29 @@ function getshopnew(){
 	 	$allshu = 0;
 		$tempgooddata = array();
 		if(count($querids) > 0) {
-	 	
+
 			$goodslist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods  where  id in(".join(',',$querids).") order by id asc limit 0,1000");
-			
-			foreach($goodslist as $key=>$value){ 
+
+			foreach($goodslist as $key=>$value){
 				if($value['count'] < $myidlist[$value['id']]){
-					$this->message($value['name'].'库存不足'); 
+					$this->message($value['name'].'库存不足');
 				}
 				 $value['cxinfo'] = $this->goodscx($value);
 				 if($value['cxinfo']['is_cx'] == 1 ){
-						$value['cost'] = $value['cxinfo']['cxcost']; 
+						$value['cost'] = $value['cxinfo']['cxcost'];
 				 }
-				
-				
+
+
 				$allcost += $value['cost']*$myidlist[$value['id']];
 				$bagcost += $value['bagcost']*$myidlist[$value['id']];
-				$allshu  += $myidlist[$value['id']]; 
+				$allshu  += $myidlist[$value['id']];
 				$value['count'] = $myidlist[$value['id']];
-				$tempgooddata[] = $value; 
+				$tempgooddata[] = $value;
 			}
 		}
-	 
-		
-		$pids = IFilter::act(IReq::get('pids')); 
+
+
+		$pids = IFilter::act(IReq::get('pids'));
 		$pnum = IFilter::act(IReq::get('pnum'));
 		if(!empty($pids)){
 				$temppids = explode(',',$pids);
@@ -8235,10 +8235,10 @@ function getshopnew(){
 				  }
 			   }
 			   $whereid = join(',',$newid);
-			   
+
 			   if(!empty($whereid)){
 				   $tempclist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."product where shopid =".$shopid." and id in(".$whereid.") ");
-			 
+
 				   foreach($tempclist as $key=>$value){
 					   $dosee = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid =".$shopid." and id =".$value['goodsid']." ");
 					   $dosee['gg'] = $value;
@@ -8246,24 +8246,24 @@ function getshopnew(){
 					   $dosee['cost'] = $value['cost'];
 					   $value['cxinfo'] = $this->goodscx($dosee);
 						 if($value['cxinfo']['is_cx'] == 1 ){
-								$value['cost'] = $value['cxinfo']['cxcost']; 
+								$value['cost'] = $value['cxinfo']['cxcost'];
 						 }
 					   $dosee['gg']['cost'] = $value['cost'];
-					   
+
 					   $allcost += $value['cost']*intval($pidtonum[$value['id']]);
-					    $bagcost += $dosee['bagcost']*intval($pidtonum[$value['id']]); 
+					    $bagcost += $dosee['bagcost']*intval($pidtonum[$value['id']]);
 						  $allshu += $dosee['count'];
 						    $tempgooddata[] =$dosee;
-						 
+
 				   }
-				   
+
 			   }
-			
+
 		}
-		 
+
 		if(count($tempgooddata) == 0)$this->message('无商品在购物车');
-	
-		
+
+
 		$info['ipaddress'] = '';
 		$ip_l=new iplocation();
 		$ipaddress=$ip_l->getaddress($ip_l->getIP());
@@ -8271,9 +8271,9 @@ function getshopnew(){
 		 #  $info['ipaddress']  = $ipaddress['ip'].mb_convert_encoding($ipaddress["area1"],'UTF-8','GB2312');//('GB2312','ansi',);
 		   $info['ipaddress']  = $ipaddress['ip'] ;
 		}
-		 if($shopinfo['is_open'] != 1) $this->message('店铺暂停营业'); 
-	  
-		$tempdata = $this->getOpenPosttime($shop['is_orderbefore'],$shop['starttime'],$shop['postdate'],$sendtime,$shop['befortime']); 
+		 if($shopinfo['is_open'] != 1) $this->message('店铺暂停营业');
+
+		$tempdata = $this->getOpenPosttime($shop['is_orderbefore'],$shop['starttime'],$shop['postdate'],$sendtime,$shop['befortime']);
 		if($tempdata['is_opentime'] ==  2) $this->message('选择的配送时间段，店铺未设置');
 		if($tempdata['is_opentime'] == 3) $this->message('选择的配送时间段已超时');
 		$info['sendtime'] = $tempdata['is_posttime'];
@@ -8302,46 +8302,46 @@ function getshopnew(){
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
 			$info['ordertype'] = 6;
 		}
-		$info['othercontent'] = ''; 
+		$info['othercontent'] = '';
 		$info['shopid'] = $shopid;
-		$info['remark'] = $remark;//备注 
+		$info['remark'] = $remark;//备注
 
 		$info['cattype'] = 0;//
-		$info['userid'] = $userid; 
+		$info['userid'] = $userid;
 		$info['areaids'] = '';
 
-		 
-		    
+
+
 
 		$a = $this->mysql->select_one("select stationis_open from ".Mysite::$app->config['tablepre']."stationadmininfo  where cityid=".$adcode."");
 
-        
+
         if($a['stationis_open'] == 1) $this->message('分站已关闭');
-		  
+
 
 		$info['shopinfo'] = $shop;
 		$info['allcost'] = $allcost;
 		$info['bagcost'] = $bagcost;
 		$info['allcount'] = $allshu;
 		$info['shopps'] = $shop['pscost'];
-		$info['goodslist']   = $tempgooddata; 
+		$info['goodslist']   = $tempgooddata;
 		$info['pstype'] = $shop['sendtype'];
 		$info['cattype'] = 0;//表示不是预订
 		$info['is_goshop']=0;
 		$info['buyerlat'] = $lat;//用户lat坐标
 		$info['buyerlng'] = $lng;//用户lng坐标
 	    if($shop['limitcost'] > $info['allcost']) $this->message('商品总价低于最小起送价'.$shop['limitcost']);
-		$checkpstype = Mysite::$app->config['psbopen']; 
+		$checkpstype = Mysite::$app->config['psbopen'];
 		if($shop['sendtype'] == 2){
 			$info['pstype'] =$checkpstype == 1? 2:0;
 		}else{
 			$info['pstype'] = $shop['sendtype'];
 		}
-		
+
 		$orderclass = new orderclass();
 		$orderclass->makenormal($info);
 	    $orderid = $orderclass->getorder();
-	   
+
 		if($backinfo['uid'] ==  0){
 
 		}else{
@@ -8362,9 +8362,9 @@ function getshopnew(){
 	}
 	/**
 	 *  @brief 获取店铺时间列表
-	 *  
+	 *
 	 *  @return Return_Description
-	 *  
+	 *
 	 *  @details Details
 	 */
 	function gettimelist(){
@@ -8420,15 +8420,15 @@ function getshopnew(){
 					$tempt['d'] = date('Y-m-d',$stime);
 					$tempt['s'] = $tempt['d'].' '.$tempt['s'];
 					$tempt['i'] =  $value['i'];
-					$tempt['cost'] =  isset($value['cost'])?$value['cost']:'0'; 
-					$tempt['name'] = $stime > $checknow?$tempt['s'].'-'.$tempt['e']:'立即配送'; 
+					$tempt['cost'] =  isset($value['cost'])?$value['cost']:'0';
+					$tempt['name'] = $stime > $checknow?$tempt['s'].'-'.$tempt['e']:'立即配送';
 					$data['timelist'][] = $tempt;
 				}
 			}
-		 
+
 			$nowwhiltcheck = $nowwhiltcheck+1;
 		}
-		$backdata['timelist'] = $data['timelist']; 
+		$backdata['timelist'] = $data['timelist'];
 		$this->success($backdata);
 	}
 	function newmakezorder(){
@@ -8453,7 +8453,7 @@ function getshopnew(){
 			$info['othercontent'] = empty($peopleNum)?'':serialize(array('人数'=>$peopleNum));
 			$shopinfo=   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id where a.shopid = '".$shopid."'    ");
 			if(empty($shopinfo)) $this->message('店铺不存在');
-			/*监测验证码*/ 
+			/*监测验证码*/
 			if(empty($contactname)) 		  $this->message('emptycontact');
 			if(!IValidate::suremobi($mobile))   $this->message('errphone');
 			$info['ipaddress'] = "";
@@ -8465,14 +8465,14 @@ function getshopnew(){
 			}
 
 			if($shopinfo['is_open'] != 1) $this->message('店铺暂停营业');
-			  $tempdata = $this->getOpenPosttime($shopinfo['is_orderbefore'],$shopinfo['starttime'],$shopinfo['postdate'],$sendtime,$shopinfo['befortime']); 
+			  $tempdata = $this->getOpenPosttime($shopinfo['is_orderbefore'],$shopinfo['starttime'],$shopinfo['postdate'],$sendtime,$shopinfo['befortime']);
 			if($tempdata['is_opentime'] ==  2) $this->message('选择的配送时间段，店铺未设置');
 			if($tempdata['is_opentime'] == 3) $this->message('选择的配送时间段已超时');
 			$info['sendtime'] = $tempdata['is_posttime'];
 			$info['postdate'] = $tempdata['is_postdate'];
 			 $info['addpscost'] = $tempdata['cost'];
-	  
-	 
+
+
 			$info['userid'] = $backinfo['uid'];
 			$subtype = intval(IReq::get('subtype'));
 			$info['shopid'] = $shopid;//店铺ID
@@ -8503,28 +8503,28 @@ function getshopnew(){
 			if(count($tempid) != count($tempacout)) $this->message('商品ID和商品数量错误');
 			$querids = array();
 			foreach($tempid as $key=>$value){
-				$checkid = intval($value); 
+				$checkid = intval($value);
 				if($checkid > 0){
 					$myidlist[$checkid] = $tempacout[$key];
 					$querids[] = $checkid;
 				}
-			} 
+			}
 			if(count($querids) == 0) $this->message('商品数量错误');
 			$allcost = 0;
 			$bagcost = 0;
 			$allnum = 0;
 			$goodslist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods  where  id in(".join(',',$querids).") order by id asc limit 0,1000");
 			$tempdata = array();
-			foreach($goodslist as $key=>$value){ 
+			foreach($goodslist as $key=>$value){
 				if($value['count'] < $myidlist[$value['id']]){
-					$this->message($value['name'].'库存不足'); 
+					$this->message($value['name'].'库存不足');
 				}
 				$allcost += $value['cost']*$myidlist[$value['id']];
 				$value['count'] = $myidlist[$value['id']];
 				$allnum += $myidlist[$value['id']];
 				$tempdata[] = $value;
 			}
-			$pids = IFilter::act(IReq::get('pids')); 
+			$pids = IFilter::act(IReq::get('pids'));
 			$pnum = IFilter::act(IReq::get('pnum'));
 			if(!empty($pids)){
 					$temppids = explode(',',$pids);
@@ -8548,13 +8548,13 @@ function getshopnew(){
 						   $dosee = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid =".$info['shopid']." and id =".$value['goodsid']." ");
 						   $dosee['gg'] = $value;
 						   $dosee['count'] = $pidtonum[$value['id']];
-						   $allcost += $dosee['cost']*intval($pidtonum[$value['id']]); 
+						   $allcost += $dosee['cost']*intval($pidtonum[$value['id']]);
 							  $allnum += $dosee['count'];
 								$tempdata[] =$dosee;
 					   }
-					   
+
 				   }
-				
+
 			}
 			$info['allcost'] = $allcost;
 			$info['goodslist']   = $tempdata;
@@ -8565,28 +8565,28 @@ function getshopnew(){
 		$info['pstype'] = 0;
 		$info['cattype'] = 1;//表示不是预订
 		$info['is_goshop']=1;
-		$info['subtype'] = $subtype; 
+		$info['subtype'] = $subtype;
 		$orderclass = new orderclass();
 		$orderclass->orderyuding($info);
 		$orderid = $orderclass->getorder();
-	    
-		$this->success($orderid); 
+
+		$this->success($orderid);
 		exit;
 	}
 	function sendregphone(){
-		$phone = IReq::get('phone');  
-	    $type = intval(IFilter::act(IReq::get('type'))); 
+		$phone = IReq::get('phone');
+	    $type = intval(IFilter::act(IReq::get('type')));
 		if($type == 8){
-			$phone = IReq::get('tphone');  
+			$phone = IReq::get('tphone');
 		}
-		$phonecls = new phonecode($this->mysql,$type,$phone); 
+		$phonecls = new phonecode($this->mysql,$type,$phone);
 
 		if($phonecls->sendcode()){
-             
+
 			$this->success($phonecls->getCode());
 		}else{
 			$this->message($phonecls->getError());
-		} 
+		}
 	}
 	function saveask(){
 		$backinfo = $this->checkappMem();
@@ -8618,19 +8618,19 @@ function getshopnew(){
 		}
 		$this->success($data);
 	}
-	 
+
 	function searchmap(){
 		$searchvalue = trim(IFilter::act(IReq::get('searchvalue')));
 		//http://api.map.baidu.com/place/v2/search?q=饭店&region=北京&output=json&ak=E4805d16520de693a3fe707cdc962045&
-	     $content =   file_get_contents('http://api.map.baidu.com/place/v2/search?ak='.Mysite::$app->config['baidumapkey'].'&output=json&query='.$searchvalue.'&page_size=12&page_num=0&scope=1&region='.Mysite::$app->config['cityname']); 
+	     $content =   file_get_contents('http://api.map.baidu.com/place/v2/search?ak='.Mysite::$app->config['baidumapkey'].'&output=json&query='.$searchvalue.'&page_size=12&page_num=0&scope=1&region='.Mysite::$app->config['cityname']);
 	   echo $content;
 	   exit;
-	} 
+	}
 	function updateimg(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}   
+		}
 		$goodsid = intval(IReq::get('goodsid'));
 		$goodsinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id='".$goodsid."' ");
 		$json = new Services_JSON();
@@ -8644,30 +8644,30 @@ function getshopnew(){
 		}else{
 			$data['img'] = $filepath.$file[0]['saveName'];
 			if(!empty($goodsinfo)){
-				$this->mysql->update(Mysite::$app->config['tablepre'].'goods',$data,"id='".$goodsid."'  "); 
+				$this->mysql->update(Mysite::$app->config['tablepre'].'goods',$data,"id='".$goodsid."'  ");
 			}
 			$this->success($data);
-		} 
+		}
 	}
 	function shoptj(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  
-        $shopinfo = $this->mysql->select_one("select id,shoptype,is_selfsitecx from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");        
+		}
+        $shopinfo = $this->mysql->select_one("select id,shoptype,is_selfsitecx from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 	 	$data['is_selfsitecx'] = 1;
 		if($shopinfo['shoptype'] == 1){
-			$detailinfo = $this->mysql->select_one("select is_hui from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopinfo['id']."' ");     
+			$detailinfo = $this->mysql->select_one("select is_hui from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopinfo['id']."' ");
 		}else{
-			$detailinfo = $this->mysql->select_one("select is_hui from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopinfo['id']."' ");  
+			$detailinfo = $this->mysql->select_one("select is_hui from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopinfo['id']."' ");
 		}
 		$data['is_hui'] = empty($detailinfo['is_hui'])?0:$detailinfo['is_hui'];
-		$starttime = strtotime(date('Y-m-d',time())); 
-     	$endtime = strtotime(date('Y-m-d',time()))+86399; 	
-		$where2 = ' and addtime  > '.$starttime.' and addtime < '.$endtime;		
-		$yuetj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and   status = 3 ".$where2."  order by id asc  limit 0,1000");		
-		$total =  $this->mysql->select_one("select sum(acountcost) as total from ".Mysite::$app->config['tablepre']."shopjs  where shopuid = '".$backinfo['uid']."'" .$where2." ");		        
-		$data['allcost'] = empty($total['total'])?0:round($total['total'],2);	//营业额（即扣除佣金后的纯收入）	         
+		$starttime = strtotime(date('Y-m-d',time()));
+     	$endtime = strtotime(date('Y-m-d',time()))+86399;
+		$where2 = ' and addtime  > '.$starttime.' and addtime < '.$endtime;
+		$yuetj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and   status = 3 ".$where2."  order by id asc  limit 0,1000");
+		$total =  $this->mysql->select_one("select sum(acountcost) as total from ".Mysite::$app->config['tablepre']."shopjs  where shopuid = '".$backinfo['uid']."'" .$where2." ");
+		$data['allcost'] = empty($total['total'])?0:round($total['total'],2);	//营业额（即扣除佣金后的纯收入）
 		$data['yuecost'] = intval($yuetj['shuliang']); //订单数
 		#$data['allcost'] = round($yuetj['doallcost'],2);//营业额（即扣除佣金后的纯收入）
 		$data['shopcost'] = $backinfo['shopcost'];//账户余额
@@ -8688,19 +8688,19 @@ function getshopnew(){
 					$data['plateshopid'] = $plateshopid;
 					$data['plateshopname'] = $shopinfo['shopname'];
 				}
-				
+
 			}
-			
+
 		}
-		
-		$this->success($data); 
+
+		$this->success($data);
 	}
 	//2016 1.27改
 	function newshoptj(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  		
+		}
 		//日统计
 		$daytime = date('Y-m-d',time());
 		$daytime = strtotime($daytime);
@@ -8710,7 +8710,7 @@ function getshopnew(){
 		$alltj=  $this->mysql->counts("select  * from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and status = 3  ".$wheredaytime." order by id asc  limit 0,1000");
 		$data['daycost'] = round($yuetj['doallcost'],2);
 		$data['daycount'] = $alltj;
-		
+
 		//周统计
 		$weektime = date('Y-m-d',time());
 		$weektime = strtotime($weektime);
@@ -8720,7 +8720,7 @@ function getshopnew(){
 		$alltj=  $this->mysql->counts("select  * from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and status = 3  ".$whereweektime." order by id asc  limit 0,1000");
 		$data['weekcost'] = round($yuetj['doallcost'],2);
 		$data['weekcount'] = $alltj;
-		
+
 		//月统计
 		$monthtime = date('Y-m-d',time());
 		$monthtime = strtotime($monthtime);
@@ -8729,15 +8729,15 @@ function getshopnew(){
 		$yuetj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and   status = 3 ".$wheremonthtime." order by id asc  limit 0,1000");
 		$alltj=  $this->mysql->counts("select  * from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and status = 3  ".$wheremonthtime." order by id asc  limit 0,1000");
 		$data['monthcost'] = round($yuetj['doallcost'],2);
-		$data['monthcount'] = $alltj; 
-		//日  周  30天  指定天数 
-		$this->success($data); 
+		$data['monthcount'] = $alltj;
+		//日  周  30天  指定天数
+		$this->success($data);
 	}
 	function shoptjsearch(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  
+		}
 		$startday = IFilter::act(IReq::get('startday'));
 		$endday = IFilter::act(IReq::get('endday'));
 		$starttime = strtotime($startday);
@@ -8746,8 +8746,8 @@ function getshopnew(){
 		$yuetj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and   status = 3 ".$wheremonthtime." order by id asc  limit 0,1000");
 		$alltj=  $this->mysql->counts("select  * from ".Mysite::$app->config['tablepre']."order  where shopuid = '".$backinfo['uid']."'  and status = 3  ".$wheremonthtime." order by id asc  limit 0,1000");
 		$data['searchcost'] = round($yuetj['doallcost'],2);
-		$data['searchcount'] = $alltj; 
-		$this->success($data); 
+		$data['searchcount'] = $alltj;
+		$this->success($data);
 	}
 
 	function subshow(){
@@ -8755,24 +8755,24 @@ function getshopnew(){
 		if(empty($backinfo['uid'])){
 			 $this->message('nologin');
 		}
-		$orderid = intval(IReq::get('orderid'));  
-		$userid = empty($backinfo['uid'])?0:$backinfo['uid']; 
-		$orderid = intval(IReq::get('orderid')); 
+		$orderid = intval(IReq::get('orderid'));
+		$userid = empty($backinfo['uid'])?0:$backinfo['uid'];
+		$orderid = intval(IReq::get('orderid'));
 		if(empty($orderid)) $this->message('订单获取失败');
-		 
-	   if($orderid < 1){ 
+
+	   if($orderid < 1){
 	  	 echo '订单获取失败';
 		 exit;
 	   }
-	  
-		$order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid."");   
+
+		$order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid."");
 		$order['ps'] = $order['shopps'];
-		// 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagc 
-		if(empty($order)){ 
+		// 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagc
+		if(empty($order)){
 			echo '获取定单失败';
-		} 
-		$orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$order['id']."'");  
-		$order['cp'] = count($orderdet); 
+		}
+		$orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$order['id']."'");
+		$order['cp'] = count($orderdet);
 		$buyerstatus= array(
 		'0'=>'等待处理',
 		'1'=>'订餐成功处理中',
@@ -8780,30 +8780,30 @@ function getshopnew(){
 		'3'=>'订单完成',
 		'4'=>'订单已取消',
 		'5'=>'订单已取消'
-		); 
-		$paylist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."paylist  where  type=0 or type=2 order by id asc limit 0,50"); 
-		 
+		);
+		$paylist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."paylist  where  type=0 or type=2 order by id asc limit 0,50");
+
 		$data['paylist'] = $paylist;
 		$order['status'] = $buyerstatus[$order['status']];
 		$order['showpaytype'] = $order['paytype'] == 1?'在线支付':'货到支付';
 		$order['showpaystatus'] = $order['paystatus']==1?'已支付':'未支付';
 		$order['addtime'] = date('Y-m-d H:i:s',$order['addtime']);
-		$order['posttime'] = date('Y-m-d H:i:s',$order['posttime']); 
+		$order['posttime'] = date('Y-m-d H:i:s',$order['posttime']);
 		$data['order'] = $order;
 		$data['orderdet'] = $orderdet;
-		 
-		Mysite::$app->setdata($data); 
+
+		Mysite::$app->setdata($data);
 	}
-	function postmsg(){ 
+	function postmsg(){
 	    $orderid = intval(IReq::get('orderid'));
 		if(empty($orderid)) {
 			echo '订单号错误';
 			exit;
-		} 
+		}
 		//$info =  mysql_query("SELECT * from `".$cfg['tablepre']."onlinelog` where id = '".$out_trade_no."' ");
-	 
-		 
-		 $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."'  ");  
+
+
+		 $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."'  ");
 		if(empty($orderinfo)){
 		   echo '支付记录不存在';
 		   exit;
@@ -8811,34 +8811,34 @@ function getshopnew(){
 		if($orderinfo['is_print'] == 0 && $orderinfo['paystatus'] == 1){
 				$orderclass = new orderclass();
 				$orderclass->sendmess($orderinfo['id']);
-				
+
 		        $this->mysql->update(Mysite::$app->config['tablepre'].'order',array('is_print'=>1),"id ='".$orderinfo['id']."' ");
 	    }
-		
+
 		$this->success('success');
 	}
 	function gotopay(){
-		 
-		 $orderid = intval(IReq::get('orderid')); 
-	   		$payerrlink = IUrl::creatUrl('app/subshow/orderid/'.$orderid);    
-			$errdata = array('paysure'=>false,'reason'=>'','url'=>''); 
-	     
+
+		 $orderid = intval(IReq::get('orderid'));
+	   		$payerrlink = IUrl::creatUrl('app/subshow/orderid/'.$orderid);
+			$errdata = array('paysure'=>false,'reason'=>'','url'=>'');
+
 		  if(empty($orderid)){
-				$backurl = IUrl::creatUrl('wxsite/index');  
+				$backurl = IUrl::creatUrl('wxsite/index');
 				$errdata['url'] = $backurl;
 				$errdata['reason'] = '订单获取失败';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);   
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
 
-		  } 
-	 	$userid = empty($this->member['uid'])?0:$backinfo['uid']; 
+		  }
+	 	$userid = empty($this->member['uid'])?0:$backinfo['uid'];
 		if($userid == 0){
 			$neworderid = ICookie::get('orderid');
 			if($orderid != $neworderid) {
 				$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '订单操作无权限';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);    
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
 			}
 		}
 		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid."  ");  //获取主单
@@ -8846,85 +8846,85 @@ function getshopnew(){
 		if(empty($orderinfo)){
 			$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '订单数据获取失败';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);  
-		} 
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+		}
 		if($userid > 0){
 			if($orderinfo['buyeruid'] !=  $userid){
 				$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '订单不属于您';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);  
-			} 
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+			}
 		}
 		if($orderinfo['paytype'] == 0){
-			 
+
 				$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '此订单是货到支付订单不可操作';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);  
-			  
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+
 		}
 		if($orderinfo['status']  > 2){
-			 
+
 				$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '此订单已发货或者其他状态不可操作';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);  
-			 
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+
 		}
 		//
 		$paydotype = IFilter::act(IReq::get('paydotype'));
-		 
-	 
+
+
 		 $paylist = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."paylist where  loginname = '".$paydotype."'   order by id asc limit 0,50");
-		 
+
 		if(empty($paylist)){
 			$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '不存在的支付类型';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata);  
-		}			 
-		 
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+		}
+
 		if($orderinfo['paystatus'] == 1){
 			$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '此订单已支付';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata); 
-		 
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+
 		}
 		$paydir = hopedir.'/plug/pay/'.$paydotype;
 	 	if(!file_exists($paydir.'/pay.php'))
-		{ 
+		{
 			$errdata['url'] = $payerrlink;
 				$errdata['reason'] = '支付方式文件不存在';
-				$errdata['paysure'] = false;  
-				$this->showpayhtml($errdata); 
-			 
-		} 
+				$errdata['paysure'] = false;
+				$this->showpayhtml($errdata);
+
+		}
 		$dopaydata = array('type'=>'order','upid'=>$orderid,'cost'=>$orderinfo['allcost'],'source'=>3);//支付数据   返回数据为3
-		include_once($paydir.'/pay.php');   
+		include_once($paydir.'/pay.php');
 		//调用方式  直接调用支付方式
 		exit;
 	}
 	function showpayhtml($data){//定义函数
 		$tempcontent = '';
-		//array('paysure'=>false,'reason'=>'','url'=>''); 
+		//array('paysure'=>false,'reason'=>'','url'=>'');
 		 $tempjs = '';
 		if($data['paysure'] == true){
 		$tempcontent = '<div style="margin-top:50px;background-color:#fff;">
 			 <div style="height:30px;width:80%;padding-left:10%;padding-right:10%;padding-top:10%;">
 			    <span style="background:url(\'http://'.Mysite::$app->config['siteurl'].'/upload/images/order_ok.png\') left no-repeat;height:30px;width:30px;background-size:100% 100%;display: inline-block;"></span>
 				<div style="position:absolute;margin-left:50px;  margin-top: -30px; font-size: 20px;  font-weight: bold;  line-height: 20px;">恭喜您，支付订单成功</div>
-				
-			    
+
+
 			</div>
 			<div style="width:80%;margin:0px auto;padding-top:10px;"><font style="font-size:12px;">单号:</font><span style="padding-left:20px;font-size:12px;display: inline-block;">'.$data['reason']['dno'].'</span></div>
-			<div style="width:80%;margin:0px auto;padding-top:10px;"><font style="font-size:12px;">总价:</font><span style="padding-left:20px;color:red;font-weight:bold;font-size:15px;">￥'.$data['reason']['allcost'].'元</span></div> 
+			<div style="width:80%;margin:0px auto;padding-top:10px;"><font style="font-size:12px;">总价:</font><span style="padding-left:20px;color:red;font-weight:bold;font-size:15px;">￥'.$data['reason']['allcost'].'元</span></div>
 			<div style="width:80%;margin:0px auto;padding-top:30px;text-align:right;"><span style="font-size:20px;color:#fff;padding:5px;background-color:red;" onClick="window.waimai.goCtrl(\'orderdet\',\'0\');">立即返回</span></div>
 	   </div>';
 	   $tempjs='window.onload=function(){
-					 
+
 					window.waimai.goCtrl(\'paydo\',\'0\');
 				}';
 		}else{//
@@ -8932,41 +8932,41 @@ function getshopnew(){
 			 <div style="height:30px;width:80%;padding-left:10%;padding-right:10%;padding-top:10%;">
 			    <span style="background:url(\''.Mysite::$app->config['siteurl'].'/upload/images/nocontent.png\') left no-repeat;height:30px;width:30px;background-size:100% 100%;display: inline-block;"></span>
 				<div style="position:absolute;margin-left:50px;  margin-top: -30px; font-size: 20px;  font-weight: bold;  line-height: 20px;">sorry,支付订单失败</div>
-				
-			    
+
+
 			</div>
-			<div style="width:80%;margin:0px auto;padding-top:10px;"><font style="font-size:12px;">原因:</font><span style="padding-left:20px;font-size:12px;display: inline-block;">'.$data['reason'].'</span></div> 
+			<div style="width:80%;margin:0px auto;padding-top:10px;"><font style="font-size:12px;">原因:</font><span style="padding-left:20px;font-size:12px;display: inline-block;">'.$data['reason'].'</span></div>
 			<div style="width:80%;margin:0px auto;padding-top:30px;text-align:right;"><span style="font-size:20px;color:#fff;padding:5px;background-color:red;  cursor: pointer;" onClick="window.waimai.goCtrl(\'closeshow\',\'0\');">立即返回</span></div>
 	   </div>';
-		} 
+		}
 		//onClick="windwo.waimai.goCtrl('closeshow','0');"
 		$html = '<!DOCTYPE html>
 <html>
 <head>
-   <meta charset="UTF-8">  
+   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-	<title>支付返回信息</title> 
-	 
-	 
- 
+	<title>支付返回信息</title>
+
+
+
  <script>
  	 '.$tempjs.'
 </script>
 
- 
+
 </head>
-<body style="height:100%;width:100%;margin:0px;"> 
+<body style="height:100%;width:100%;margin:0px;">
    <div style="max-width:400px;margin:0px;margin:0px auto;min-height:300px;"> '.$tempcontent.'    </div>
-	 
+
 </body>
-</html>'; 
+</html>';
 print_r($html);
-exit; 
+exit;
     }
-	
+
 	/*****  2015.6.6 新增加超市分类和超市商品管理***/
     // $listtype = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid = '".$shopid."'  order by orderid asc  ");
-	// $listtype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid = '".$shopid."' and parent_id =".$newtopid." order by orderid asc  ");  
+	// $listtype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid = '".$shopid."' and parent_id =".$newtopid." order by orderid asc  ");
 	/*
 	* 超市商家获取一级商品分类
 	2015-12-26修改
@@ -8981,13 +8981,13 @@ exit;
 		if($shopinfo['shoptype'] !=1) $this->message('店铺不是超市店铺');
 		$shoptype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = 0 order by orderid desc");
 		$tempc = array();
-		foreach($shoptype as $key=>$value){ 
-			$value['shuliang'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid in(select id from ".Mysite::$app->config['tablepre']."marketcate where parent_id =".$value['id'].") order by id desc"); 
+		foreach($shoptype as $key=>$value){
+			$value['shuliang'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid in(select id from ".Mysite::$app->config['tablepre']."marketcate where parent_id =".$value['id'].") order by id desc");
 			$tempc[] = $value;
-		} 
-		
-		
-		
+		}
+
+
+
 		$this->success($tempc);
 	}
 	/*
@@ -9005,22 +9005,22 @@ exit;
 		$id = intval(IFilter::act(IReq::get('id')));
 		if(empty($id)) $this->message('删除ID获取失败');
 		//增加个check  判断是否
-		$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc"); 
+		$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc");
 		if(empty($nowtype)) $this->message('商品分类不存在');
 		if($nowtype['parent_id'] != 0) $this->message('当前分类不是一级分类');
 		if($nowtype['parent_id'] == 0){
-		   $checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id=".$id." order by id desc"); 
+		   $checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id=".$id." order by id desc");
 			if(!empty($checkdata)) $this->message('该分类下有下级分类删除失败，删除失败');
 		}else{
-			$checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid=".$id." order by id desc"); 
+			$checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid=".$id." order by id desc");
 			if(!empty($checkdata)) $this->message('该分类下有商品，删除失败');
 		}
 		$this->mysql->delete(Mysite::$app->config['tablepre']."marketcate"," shopid='".$shopinfo['id']."' and id=".$id." ");
 		$shoptype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = 0 order by orderid desc");
-		$this->success($shoptype); 
+		$this->success($shoptype);
 	}
 	/*
-	* 超市 商家添加一级商品分类 
+	* 超市 商家添加一级商品分类
 	2015-12-26修改
 	*/
 	function addMarketFgoostype(){
@@ -9038,15 +9038,15 @@ exit;
 		if(empty($name)) $this->message('分类名称不能为空');
 		$newdata['shopid'] = $shopinfo['id'];
 		$newdata['name'] = $name;
-		$newdata['orderid'] = $orderid; 
+		$newdata['orderid'] = $orderid;
 		$newdata['parent_id'] = 0;
 /* 		$newdata['bagcost'] = intval(IFilter::act(IReq::get('bagcost')));
 		$newdata['uid'] = $backinfo['uid']; */
 		if($id > 0){
-			$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc"); 
+			$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc");
 			if(empty($nowtype))$this->message('编辑一级分类不存在');
 			if($nowtype['parent_id'] > 0) $this->message('当前分类不是一级分类');
-			if($nowtype['shopid'] != $nowtype['shopid']) $this->message('当前分类不属于该店铺管理'); 
+			if($nowtype['shopid'] != $nowtype['shopid']) $this->message('当前分类不属于该店铺管理');
 		}
 		if(empty($id)){
 			//新增
@@ -9076,11 +9076,11 @@ exit;
 		if($shopinfo['shoptype'] !=1) $this->message('店铺不是超市店铺');
 		$shoptype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = ".$ftype." order by orderid desc");
 		$tempc = array();
-		foreach($shoptype as $key=>$value){ 
-			$value['shuliang'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid   =".$value['id']."  order by id desc"); 
+		foreach($shoptype as $key=>$value){
+			$value['shuliang'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid   =".$value['id']."  order by id desc");
 			$tempc[] = $value;
-		}  
-		
+		}
+
 		$this->success($tempc);
 	}
 	/*
@@ -9099,29 +9099,29 @@ exit;
 		$shopinfo= $this->mysql->select_one("select is_open as shopopentype,starttime as opentime,shopname,id,address as shopaddress,phone as shopphone,shoptype from ".Mysite::$app->config['tablepre']."shop where uid='".$backinfo['uid']."' ");
 		if(empty($shopinfo)) $this->message('获取店铺资料失败');
 		if($shopinfo['shoptype'] !=1) $this->message('店铺不是超市店铺');
-		
-		$parenttype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$ftype." order by id desc"); 
+
+		$parenttype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$ftype." order by id desc");
 		if(empty($parenttype)) 			$this->message('上级分类不存在');
-		if($parenttype['parent_id'] !=0) $this->message('上级分类不是一级分类'); 
+		if($parenttype['parent_id'] !=0) $this->message('上级分类不是一级分类');
 		$id = intval(IFilter::act(IReq::get('id')));
 		if(empty($id)) $this->message('删除ID获取失败');
 		//增加个check  判断是否
-		$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc"); 
+		$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc");
 		if(empty($nowtype)) $this->message('商品分类不存在');
-		if($nowtype['parent_id'] ==0) $this->message('商品分类不是二级分类'); 
+		if($nowtype['parent_id'] ==0) $this->message('商品分类不是二级分类');
 		if($nowtype['parent_id'] == 0){
-		   $checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id=".$id." order by id desc"); 
+		   $checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id=".$id." order by id desc");
 			if(!empty($checkdata)) $this->message('该分类下有下级分类删除失败，删除失败');
 		}else{
-			$checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid=".$id." order by id desc"); 
+			$checkdata =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and typeid=".$id." order by id desc");
 			if(!empty($checkdata)) $this->message('该分类下有商品，删除失败');
 		}
 		$this->mysql->delete(Mysite::$app->config['tablepre']."marketcate"," shopid='".$shopinfo['id']."' and id=".$id." ");
 		$shoptype =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and parent_id = '".$ftype."'  order by orderid desc");
-		$this->success($shoptype); 
+		$this->success($shoptype);
 	}
 	/*
-	* 超市 商家添加二级商品分类 
+	* 超市 商家添加二级商品分类
 	2015-12-26修改
 	*/
 	function addMarketTgoostype(){
@@ -9143,17 +9143,17 @@ exit;
 		if(empty($name)) $this->message('分类名称不能为空');
 		$newdata['shopid'] = $shopinfo['id'];
 		$newdata['name'] = $name;
-		$newdata['orderid'] = $orderid; 
+		$newdata['orderid'] = $orderid;
 		$newdata['parent_id'] = $ftype;
 /* 		$newdata['bagcost'] = intval(IFilter::act(IReq::get('bagcost')));
 		$newdata['uid'] = $backinfo['uid']; */
-		$parenttype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$ftype." order by id desc"); 
+		$parenttype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$ftype." order by id desc");
 		if(empty($parenttype)) 			$this->message('上级分类不存在');
 		if($parenttype['parent_id'] !=0) $this->message('上级分类不是一级分类');
 		if($id > 0){
-			$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc"); 
+			$nowtype = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where shopid='".$shopinfo['id']."' and id=".$id." order by id desc");
 			if($nowtype['parent_id'] == 0) $this->message('当前分类不是二级分类');
-			if($nowtype['shopid'] != $nowtype['shopid']) $this->message('当前分类不属于该店铺管理'); 
+			if($nowtype['shopid'] != $nowtype['shopid']) $this->message('当前分类不属于该店铺管理');
 		}
 		if(empty($id)){
 			//新增
@@ -9168,30 +9168,30 @@ exit;
 	//获取网站最新配置   ---- 获取网站加载模板
 	function getnewconfig(){
 		//	name 模块名称--固定写	imgurl 模块图标	is_display 0不在首页展示 1在首页展示	cnname 中文名称（统一录入 无ID 仅name关键字）	ctlname ctlname	is_install 0.APP完
-	     
-		$config = new config('appset.php',hopedir);   
-	    $tempinfo = $config->getInfo(); 
+
+		$config = new config('appset.php',hopedir);
+	    $tempinfo = $config->getInfo();
 		$data = $tempinfo;
         $data['mobilemodule']= '1';
-		
+
 		$data['is_openOnlinePay'] = Mysite::$app->config['open_acout'];
 		$data['is_openDapPay'] = Mysite::$app->config['is_daopay'];
-		 
-		
+
+
 		$data['color'] = Mysite::$app->config['color'];
-		
+
 		if( $data['color'] == 'red' ){
 			#$data['colorName'] = '_'.$data['color'];
 			$data['colorName'] = '';
 			$data['color'] = '#FF6E6E';
   			$data['ioscolor'] = '255,110,110';
-			
+
 		}else{
-			if( $data['color'] == 'green' ){ 
+			if( $data['color'] == 'green' ){
 				$data['colorName'] = '_'.$data['color'];
 				$data['color'] =  '#00CD85';
  				$data['ioscolor'] = '0,205,133';
- 			}else if( $data['color'] == 'yellow' ){ 
+ 			}else if( $data['color'] == 'yellow' ){
 				$data['colorName'] = '_'.$data['color'];
 				$data['color'] =  '#FF7600';
  				$data['ioscolor'] = '255,118,0';
@@ -9201,9 +9201,9 @@ exit;
 				$data['color'] = '#FF6E6E';
  				$data['ioscolor'] = '255,110,110';
 			}
-			
+
 		}
-		
+
 	    $this->success($data);
 		//推荐外卖商家
 //热卖外卖商家
@@ -9217,66 +9217,66 @@ exit;
 	function getnewadv(){
 	    $data['appmodule'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."appmudel  order by orderid asc");
 		$data['appadv'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."appadv  order by orderid asc");
-	//    $data['ztylist'] =   $this->mysql->getarr("select id,name,indeximg as img,showtype,cx_type,is_custom from ".Mysite::$app->config['tablepre']."specialpage where is_show=1 and cx_type<>9 and ((is_custom =0 ) or (  is_custom =1 and showtype =1) )  order by orderid  asc"); 
-	   
-	 
-			
-	   $data['ztylist'] =   $this->mysql->getarr("select id,name,indeximg as img,showtype,cx_type,is_custom from ".Mysite::$app->config['tablepre']."specialpage where is_show=1 and ((is_custom =0 ) or (  is_custom =1 and showtype =1) or (cx_type = 9) )  order by orderid  asc"); 
+	//    $data['ztylist'] =   $this->mysql->getarr("select id,name,indeximg as img,showtype,cx_type,is_custom from ".Mysite::$app->config['tablepre']."specialpage where is_show=1 and cx_type<>9 and ((is_custom =0 ) or (  is_custom =1 and showtype =1) )  order by orderid  asc");
 
-			
-		 
+
+
+	   $data['ztylist'] =   $this->mysql->getarr("select id,name,indeximg as img,showtype,cx_type,is_custom from ".Mysite::$app->config['tablepre']."specialpage where is_show=1 and ((is_custom =0 ) or (  is_custom =1 and showtype =1) or (cx_type = 9) )  order by orderid  asc");
+
+
+
 
 		$this->success($data);
 	}
-	
-	
-	
+
+
+
 	function foodshow(){  	//菜品详情
 		 $shopshowtype = ICookie::get('shopshowtype');
 		$sellcount = intval(IReq::get('sellcount') );
 		$id = intval( IReq::get('id') );
 		$foodshow = $this->mysql->select_one( "select * from  ".Mysite::$app->config['tablepre']."goods where id= ".$id."  " );
 		$shopid = $foodshow['shopid'];
-		$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   "); 
+		$shopdet  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   ");
 		if( empty($shopdet)){
-			$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   "); 
-		} 
-		 
+			$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   ");
+		}
+
 		$data['shopdet'] = $shopdet;
-		$data['foodshow']  = $foodshow; 
+		$data['foodshow']  = $foodshow;
 		$data['sellcount'] = $sellcount;
 	#	print_r( $shopdet);
 		Mysite::$app->setdata($data);
 	#	print_r($foodshow);
    }
-   
+
    //新增 获取城市平台配送配送地图范围
    function getWaimaiPsrange(){
-	   
-	  
-	  
+
+
+
 	   $adcode = intval(IReq::get('adcode'));
 	   $cityId = 0;
 	   $waimai_psrangearr = array();
 	   if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
 				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
 					if( !empty($areainfoone) ){
-						$cityId = $areainfoone['adcode']; 
+						$cityId = $areainfoone['adcode'];
  					}else{
 						$cityId = $areacodeone['id'];
 					}
 				}
-		} 
-		
+		}
+
 		$ddd = array();
-		
+
 	   if( $cityId > 0 ){
 		   $waimai_psrange = '';
-		   $platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityId."' ");   
+		   $platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityId."' ");
 		   if( !empty($platpsinfo) ){
 			   $waimai_psrange = $platpsinfo['waimai_psrange'];
 			   $waimai_psrangearr = explode('#',$waimai_psrange);
@@ -9293,121 +9293,121 @@ exit;
 					    $ddd[] = $cccc;
 				   }
 			   }
- 		   }	   
+ 		   }
 	   }
-	   
+
 	 # print_R($ddd);
 	   $this->success($ddd);
    }
-   
+
    //判断一个点是否在多边形中
-   function pointInPolygon($checkdata,$lat,$lng){  
-		 
+   function pointInPolygon($checkdata,$lat,$lng){
+
 		foreach($checkdata as $key=>$value){
 		   if(count($value) < 3) continue;
 		   $i = 0;
 		   $j=count($value)-1;
-			$oddNodes=false; 
-		   for ($i=0;$i<count($value); $i++) { 
+			$oddNodes=false;
+		   for ($i=0;$i<count($value); $i++) {
  			if((	($value[$i]['lat']< $lat && $value[$j]['lat'] >=$lat)  ||   ($value[$j]['lat']<$lat && $value[$i]['lat']>=$lat) )  ){//&&  ($value[$i]['lat']<=$lat || $value[$j]['lat']<=$lat)
 				$aaa = $value[$i]['lng']+($lat-$value[$i]['lat'])/($value[$j]['lat']-$value[$i]['lat'])*($value[$j]['lng']-$value[$i]['lng']);
  				if(   $aaa  < $lng) {
   					$oddNodes=!$oddNodes;
 				}
 			}
-				
-				
+
+
 				$j=$i;
-		   }   
+		   }
 		   if($oddNodes == true){
 			 return true;
 		   }
-			
+
 		}
 		return false;
-		//return oddNodes; 
+		//return oddNodes;
 	}
     //判断传入的城市code是否存在和设置配送范围
    function checkCityCode($adcode,$lng,$lat){
  	  $canps = false;
-	  
+
  	   $cityId = 0;
 	   $waimai_psrangearr = array();
 	   if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
 				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
 					if( !empty($areainfoone) ){
-						$cityId = $areainfoone['adcode']; 
+						$cityId = $areainfoone['adcode'];
  					}
 				}
-		} 
-		
+		}
+
 		$ddd = array();
-		 
+
 	   if( $cityId > 0 ){
 		   $waimai_psrange = '';
-		   $platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityId."' ");   
+		   $platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityId."' ");
 		   if( !empty($platpsinfo) ){
 			   $waimai_psrange = $platpsinfo['waimai_psrange'];
-			 
+
  			   if(!empty($waimai_psrange)){
-	  //[[113.816474,34.841423],[113.794501,34.686865],[113.654426,34.615693],[113.500617,34.633774],[113.379767,34.772641],[113.368781,34.896633],[113.517097,34.966437],[113.695624,34.967563],[113.73957,34.948429],[113.797248,34.892128],[113.817847,34.839169]]#[[113.707984,34.577258],[113.937324,34.487883],[113.941443,34.631514]]  
-				   
+	  //[[113.816474,34.841423],[113.794501,34.686865],[113.654426,34.615693],[113.500617,34.633774],[113.379767,34.772641],[113.368781,34.896633],[113.517097,34.966437],[113.695624,34.967563],[113.73957,34.948429],[113.797248,34.892128],[113.817847,34.839169]]#[[113.707984,34.577258],[113.937324,34.487883],[113.941443,34.631514]]
+
 				    $info = explode('#',$waimai_psrange);
  					$ddata = array();
 					if( !empty($info) ){
 						foreach($info as $key=>$value){
 							if(!empty($value)){
-							   $tempinfo = substr($value,1,strlen($value)-2); 
+							   $tempinfo = substr($value,1,strlen($value)-2);
 								if(!empty($tempinfo)){
 									$adata = array();
 									$tem = explode('],',$tempinfo);
 									foreach($tem as $k=>$v){
 										if(!empty($v)){
-											$tempbb = substr($v,1,strlen($v)-2); 
+											$tempbb = substr($v,1,strlen($v)-2);
 											$tempbb = explode(',',$tempbb);
 											$cnew = array('lng'=>$tempbb[0],'lat'=>$tempbb[1]);
 											#$cnew = array('lng'=>$tempbb[1],'lat'=>$tempbb[0]);
 											$adata[] =  $cnew;
 										}
-										 
+
 									}
 									if(count($adata) > 0){
 										$ddata[] = $adata;
 									}
-								} 
+								}
 							}
 						}
-					}  
-				
+					}
+
 					if( !empty($ddata) ){
 						$result = $this->pointInPolygon($ddata,$lat,$lng);
-						   
+
 						return $result;
 					}
-			   } 
- 		   }	   
-	   } 
-	   
-	   
+			   }
+ 		   }
+	   }
+
+
 	  return $canps;
    }
    function getplatpsinfo($adcode){
 	   $platpsinfo = array();
-	   $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+	   $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
 				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
 					if(!empty($areainfoone)){
 						$cityid = $areainfoone['adcode'];
 					}else{
 						$cityid = $areacodeone['id'];;
 					}
-					$platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityid."' ");   
+					$platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityid."' ");
  					$this->platpsinfo = $platpsinfo;
 				}
    }
@@ -9415,36 +9415,36 @@ exit;
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
-		
+		}
+
 		$shopid = intval(IReq::get('shopid'));
 		$adcode = intval(IReq::get('adcode'));
-	
+
 		if( !empty($adcode) ){
-			$this->getplatpsinfo($adcode); 
+			$this->getplatpsinfo($adcode);
 		 }
-			 
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage($page,$pagesize);  
- 	 
- 		
-		
-		$shopinfo  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   "); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage($page,$pagesize);
+
+
+
+		$shopinfo  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   ");
 		if( empty($shopinfo)){
-			$shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   "); 
+			$shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where a.shopid = ".$shopid."   ");
 		}
 		if(!empty($adcode)){
-			 
+
 		}else{
 			if(!empty($shopinfo)){
-				$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopinfo['admin_id']."' "); 
+				$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$shopinfo['admin_id']."' ");
 			}
 		}
-		
-		
-		$this->pageCls->setpage(intval(IReq::get('page')),10); 
+
+
+		$this->pageCls->setpage(intval(IReq::get('page')),10);
 		/* 获取订单数:   shopname  id  shoplogo  allcost addtime  status paystatus   paytype  */
 		$nowtime = time()-14*24*60*60;
 		//  从地图选择的地址
@@ -9452,7 +9452,7 @@ exit;
 		$temparr = $this->mysql->getarr("select id,username,address,phone,contactname,`default`,sex,bigadr,detailadr,lat,lng,tag from ".Mysite::$app->config['tablepre']."address where  userid = ".$backinfo['uid']."   order by id desc  limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
 		if( !empty($temparr) ){
 			foreach($temparr as $key=>$value){
-				if( !empty($shopid)  && !empty($shopinfo) ){ 
+				if( !empty($shopid)  && !empty($shopinfo) ){
 					$value['adcode'] = '';
 					 if( $shopinfo['sendtype'] == 1 ){
 							$psdata = $this->pscost($shopinfo,$value['lng'],$value['lat']);
@@ -9479,30 +9479,30 @@ exit;
 							$value['canps'] = 0;
 							$value['juli'] = 0;
 						}
-					 } 
-					
+					 }
+
 				}else{
 					$value['canps'] = 2;
 				}
-				
+
 				if( !empty($value['lng']) &&  !empty($value['lat']) ){
-				   $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$value['lng'].','.$value['lat'].'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all'); 
+				   $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$value['lng'].','.$value['lat'].'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all');
 					   $backinfo  = json_decode($content,true);
-					    
+
 					  if( $backinfo['status'] == 1 && $backinfo['info'] == 'OK'){
-						 $value['adcode'] = $backinfo['regeocode']['addressComponent']['adcode']; 
+						 $value['adcode'] = $backinfo['regeocode']['addressComponent']['adcode'];
 						 $orderlist[] = $value;
-					  }  
-						
+					  }
+
 				}
-				
-				
+
+
 			}
-			
+
 		}
-	 
+
 		if(empty($orderlist)) $this->success(array());
-		$backdata = $orderlist; 
+		$backdata = $orderlist;
 		$this->success($backdata);
 	}
 	function deladdress(){
@@ -9511,7 +9511,7 @@ exit;
 			$this->message('nologin');
 		}
 		$addresid = intval(IReq::get('addresid'));
-	    $this->mysql->delete(Mysite::$app->config['tablepre']."address"," id='".$addresid."' and  userid = '".$backinfo['uid']."'"); 
+	    $this->mysql->delete(Mysite::$app->config['tablepre']."address"," id='".$addresid."' and  userid = '".$backinfo['uid']."'");
 		$this->success('操作成功');
 	}
 	function addaddress(){
@@ -9521,7 +9521,7 @@ exit;
 		}
 		$addresid = intval(IReq::get('addresid'));
 		$data['username'] = $backinfo['username'];//隐藏的
-		
+
 		$data['phone'] = trim(IReq::get('addressphone'));
 		$data['contactname'] = trim(IReq::get('contactname'));
 		$data['default'] = intval(IReq::get('default'));
@@ -9530,18 +9530,18 @@ exit;
 		$data['detailadr'] = trim(IReq::get('detailadr'));
 		$data['lat'] = trim(IReq::get('lat'));
 		$data['lng'] = trim(IReq::get('lng'));
-		$data['address'] = $data['bigadr'].$data['detailadr']; 
+		$data['address'] = $data['bigadr'].$data['detailadr'];
 		$data['tag'] = intval(IReq::get('tag'));
-		
+
 		if(empty($data['contactname'])) $this->message('联系人信息不能为空');
 		if(empty($data['phone'])) $this->message('请填写手机号');
-		if(!IValidate::suremobi($data['phone'])) $this->message('手机号格式不正确'); 
+		if(!IValidate::suremobi($data['phone'])) $this->message('手机号格式不正确');
 //		if(empty($data['bigadr'])) $this->message('请选择地址');
 		if(empty($data['lat'])) $this->message('坐标获取失败');
 		if(empty($data['lng'])) $this->message('坐标获取失败');
 		if(empty($data['detailadr'])) $this->message('请填写具体地址');
 		if(empty($data['address'])) $this->message('地区信息不能为空');
-		
+
 	    if($data['default'] ==1){
 			$cdata['default'] = 0;
 			$this->mysql->update(Mysite::$app->config['tablepre'].'address',$cdata,"  userid = '".$backinfo['uid']."'   ");
@@ -9549,14 +9549,14 @@ exit;
 		if($addresid == 0){
 			//新增
 			$data['userid'] =$backinfo['uid'];
-			 
+
 			$this->mysql->insert(Mysite::$app->config['tablepre']."address",$data);
 			$this->success('新增成功');
 		}else{
 			//编辑
 			$this->mysql->update(Mysite::$app->config['tablepre'].'address',$data,"id='".$addresid."' and userid = '".$backinfo['uid']."'   ");
 			$this->success('编辑成功');
-		} 
+		}
 	}
 	function setdefaddress(){
 		$backinfo = $this->checkappMem();
@@ -9564,20 +9564,20 @@ exit;
 			$this->message('nologin');
 		}
 	    $addresid = intval(IReq::get('addresid'));
-		
-			
+
+
 	    $checkinfo =  $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."address where id= '".$addresid."' and  userid = ".$backinfo['uid']."   order by id desc  limit 0,10");
 		if(empty($checkinfo)){
 			$this->message('地址信息不存在');
-		} 
+		}
 			$cdata['default'] = 0;
 			$this->mysql->update(Mysite::$app->config['tablepre'].'address',$cdata,"  userid = '".$backinfo['uid']."'   ");
 			$this->mysql->update(Mysite::$app->config['tablepre'].'address',array('default'=>1)," id='".$addresid."' and  userid = '".$backinfo['uid']."'   ");
-       $this->success('操作成功');   
+       $this->success('操作成功');
    }
-   
-   
-    
+
+
+
 	//充值卡充值
 	function exchangcard(){
 		$backinfo = $this->checkappMem();
@@ -9606,95 +9606,95 @@ exit;
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		
-		 
+
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = $pagesize > 0? $pagesize:10;
-		
-		$this->pageCls->setpage($page,$pagesize);  
+
+		$this->pageCls->setpage($page,$pagesize);
 		$backdata = array();
-	 
+
 		$memberlog = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."memberlog   where userid ='".$backinfo['uid']."' and   type=2   order by id desc limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()." ");
-		
+
 		foreach($memberlog as $key=>$value){
 			 $value['addtime'] = date('Y-m-d H:i',$value['addtime']);
 			 $backdata[] = $value;
 		}
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
-	
+
 	function scorelog(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		
-		 
+
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = $pagesize > 0? $pagesize:10;
-		
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);  
+
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 		$backdata = array();
 		//
 		$memberlog = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."memberlog   where userid ='".$backinfo['uid']."' and   type=1   order by id desc limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()." ");
-		
+
 		foreach($memberlog as $key=>$value){
 			 $value['addtime'] = date('Y-m-d H:i',$value['addtime']);
 			 $backdata[] = $value;
 		}
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
 	function pingall(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		
-		
+
+
 		$orderid = intval( IFilter::act(IReq::get('orderid')) );
-		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid."");  
-		if($orderinfo['is_ping'] == 1) $this->message('order_isping');		
-	    if(empty($orderinfo)) $this->message('获取此订单失败'); 
-		$orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$orderinfo['id']."'");  
-		$data['orderid'] =   $orderinfo['id']; 
-		 
+		$orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$backinfo['uid']."' and id = ".$orderid."");
+		if($orderinfo['is_ping'] == 1) $this->message('order_isping');
+	    if(empty($orderinfo)) $this->message('获取此订单失败');
+		$orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$orderinfo['id']."'");
+		$data['orderid'] =   $orderinfo['id'];
+
 		$data['shopid'] = $orderinfo['shopid'];
 		if(empty($backinfo['uid'])) $this->message('获取用户失败');
 		$data['uid'] = $backinfo['uid'];
 		$data['addtime'] = time();
 		$data['is_show'] = 0;
 		$shoppointnum =  trim( IFilter::act(IReq::get('shoppointnum')) );
-		$shopsudupointnum =  intval( IFilter::act(IReq::get('shopsudupointnum')) ); 
-		
+		$shopsudupointnum =  intval( IFilter::act(IReq::get('shopsudupointnum')) );
+
 		if(empty($shoppointnum)) $this->message('请评论总体评价');
 		if(empty($shopsudupointnum)) $this->message('请评论配送服务');
 		$pointdata['point'] = $shoppointnum;
 		$this->mysql->update(Mysite::$app->config['tablepre'].'order',$pointdata,"id='".$orderinfo['id']."'");
-		
-		
+
+
 	    foreach($orderdet as $key=>$value){
 			$data['point'] = intval( IFilter::act(IReq::get('goodsid_'.$value['id'])) );
 			$data['content'] =  trim( IFilter::act(IReq::get('content_'.$value['id'])) );
 			$data['orderdetid'] = $value['id'];
 			$data['goodsid'] =   $value['goodsid'];
-			 
+
 			if(!empty($data['point']) || !empty($data['content']) ){
 				$this->mysql->insert(Mysite::$app->config['tablepre'].'comment',$data);
 				$udata['status'] = 1;
 				$this->mysql->update(Mysite::$app->config['tablepre'].'orderdet',$udata,"id='".$value['id']."'");
-				
-				
+
+
 						  //商品评分
-				  $goodinfo  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id='".$value['goodsid']."'  "); 
-				  $goodpointcount = $goodinfo['pointcount']; 
+				  $goodinfo  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where id='".$value['goodsid']."'  ");
+				  $goodpointcount = $goodinfo['pointcount'];
 				  $goodnewpoint['point'] = intval($goodinfo['point']+$data['point']);
 				  $goodnewpoint['pointcount'] = intval($goodpointcount+1);
 				   $this->mysql->update(Mysite::$app->config['tablepre'].'goods',$goodnewpoint,"id='".$value['goodsid']."'");
-					
-				
-				
+
+
+
 				 /*写日志*/
 				  $issong = 1;
 				  if(intval(Mysite::$app->config['commentday']) > 0){//检测是否赠送积分
@@ -9731,31 +9731,31 @@ exit;
 						 $this->memberCls->addlog($backinfo['uid'],1,1,$scoreadd,'评价商品','评价商品'.$orderdet['goodsname'].'获得'.$scoreadd.'积分',$memberallcost);
 					   }
 				  }
-				  
-				  
-				  
-				  
-				
-				
-				
+
+
+
+
+
+
+
 			}
 		}
-	
-		  
+
+
 			$this->mysql->update(Mysite::$app->config['tablepre'].'order','`is_ping`=1',"id='".$orderinfo['id']."'");
-		  
-		  
-		  
-		  
+
+
+
+
 			$ordCls = new orderclass();
 			$ordCls->writewuliustatus($orderinfo['id'],11,$orderinfo['paytype']);  // 用户已评价订单，完成订单
-		 
+
 
 		// 查询子订单是否所有的状态都为 1，  是的话更新订单标志
 	  $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$orderinfo['id']."' and status = 0");
 	  if($shuliang < 1)//订单已评价完毕
-	  { 
-		  
+	  {
+
 	     if(intval(Mysite::$app->config['commentscore']) > 0 && $issong ==  1){//扩张积分 大于0
 				   $scoreadd = intval(Mysite::$app->config['commentscore'])*$orderinfo['allcost'];
 				   $checktime = date('Y-m-d',time());
@@ -9779,25 +9779,25 @@ exit;
 				 }
 			 }
 		  }
-		   
+
 		  $shopinfo  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
 		    $shuliangx = $shopinfo['point'];
 		  $pointcount = $shopinfo['pointcount'];
 		  $psservicepoint = $shopinfo['psservicepoint'];
 		  $psservicepointcount = $shopinfo['psservicepointcount'];
-	
+
 		  $newpoint['point'] = intval($shoppointnum+$shuliangx);
 		  $newpoint['pointcount'] = intval($pointcount+1);
 		  $newpoint['psservicepoint'] = intval($psservicepoint+$psservicepointcount);
 		  $newpoint['psservicepointcount'] = intval($psservicepointcount+1);
-		  
-			
+
+
 		   $tjshop  = $this->mysql->select_one("select sum(goodscount) as sellcount from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$orderinfo['id']."'  ");
 			if(!empty($tjshop) && $tjshop['sellcount'] > 0){
-				 $newpoint['sellcount'] = $shopinfo['sellcount']+$tjshop['sellcount']; 
+				 $newpoint['sellcount'] = $shopinfo['sellcount']+$tjshop['sellcount'];
 			}
-	 
-	
+
+
 		  $this->mysql->update(Mysite::$app->config['tablepre'].'shop',$newpoint,"id='".$orderinfo['shopid']."'");
 		$this->mysql->update(Mysite::$app->config['tablepre'].'orderps','`status`=3',"orderid='".$orderinfo['id']."'");
 	$psbinterface = new psbinterface();
@@ -9809,9 +9809,9 @@ exit;
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$type = IFilter::act(IReq::get('type')); 
+		$type = IFilter::act(IReq::get('type'));
 		$cost= IFilter::act(IReq::get('cost'));
-		$orderid = IFilter::act(IReq::get('orderid')); 
+		$orderid = IFilter::act(IReq::get('orderid'));
 		$alipaydata = array(
 						'paytype'=>'order',
 						'orderid'=>$orderid,
@@ -9824,34 +9824,34 @@ exit;
 						'PARTNER'=>'',
 						'Notify_Url'=>Mysite::$app->config['siteurl'].'/plug/pay/alipayapp/notify_url.php',
 					  );
-		$platedata = array( 
-						'acountcost'=>$backinfo['cost'], 
+		$platedata = array(
+						'acountcost'=>$backinfo['cost'],
 						'support'=>0,
-					  );	
-		$weixindata = array( 
+					  );
+		$weixindata = array(
 						'appid'=>'',
 						'noncestr'=>'',
 						'package'=>'Sign=WXPay',
 						'partnerid'=>'',
 						'prepayid'=>'',
 						'timestamp'=>'',
-						'sign'=>'', 
+						'sign'=>'',
 						'support'=>0,
 					  );
-		$weixindir = hopedir.'/plug/pay/weixinapp/'; 			  
+		$weixindir = hopedir.'/plug/pay/weixinapp/';
 		$weixincheck = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."paylist where  loginname ='weixinapp'   order by id asc limit 0,1");
 		$alipaychek = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."paylist where  loginname ='alipayapp'   order by id asc limit 0,1");
 		$acountpaychek = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."paylist where  loginname ='open_acout'   order by id asc limit 0,1");
 		$allcost = 0;
-		 
+
 		$titlename = "在线充值";
-		if($type == 'acount'){//余额充值 
+		if($type == 'acount'){//余额充值
 		    $allcost = $cost;
 			$titlename = "在线充值";
 			if(!empty($alipaychek)){
-				$dopaydata = array('type'=>'acount','upid'=>$backinfo['uid'],'cost'=>$cost,'source'=>0,'status'=>0,'addtime'=>time());//支付数据  
+				$dopaydata = array('type'=>'acount','upid'=>$backinfo['uid'],'cost'=>$cost,'source'=>0,'status'=>0,'addtime'=>time());//支付数据
 				$this->mysql->insert(Mysite::$app->config['tablepre'].'onlinelog',$dopaydata);
-				$newid = $this->mysql->insertid(); 
+				$newid = $this->mysql->insertid();
 				$alipaydata['paytype'] = 'acount';
 				$alipaydata['allcost'] = $cost;
 				$alipaydata['wmrid']=$newid;
@@ -9861,12 +9861,12 @@ exit;
 				$alipaydata['PARTNER'] = $alidatat['partner'];
 			}
 			if(!empty($weixincheck)){
-			 
+
 				require_once $weixindir."lib/WxPay.Api.php";
-				//require_once $weixindir."WxPay.JsApiPay.php";   
+				//require_once $weixindir."WxPay.JsApiPay.php";
 				$dno = 'acount_'.$backinfo['uid'];
 				$dtime = time();
-				$acountid = 'acount_'.time(); 
+				$acountid = 'acount_'.time();
 				//②、统一下单
 				$input = new WxPayUnifiedOrder();
 				$input->SetBody("账号充值的".$backinfo['username']);
@@ -9878,28 +9878,28 @@ exit;
 				$input->SetTimeStamp($dtime);
 				$input->SetGoods_tag('在线充值');
 				$input->SetNotify_url(Mysite::$app->config['siteurl']."/plug/pay/weixinapp/notify.php");
-				$input->SetTrade_type("APP");  
+				$input->SetTrade_type("APP");
 				//$input->SetOpenid($openId);
-			    
-				$ordermm = WxPayApi::unifiedOrder($input); 
+
+				$ordermm = WxPayApi::unifiedOrder($input);
 				if($ordermm['error'] ==true){
-					//2次签名 
+					//2次签名
 					//print_r($ordermm);
 					$weixindata= $ordermm['inputdata'];
-					$weixindata['support'] = 1; 
-					
+					$weixindata['support'] = 1;
+
 				}else{
-					
-					
-					
+
+
+
 				}
 			}
-			 
-			
+
+
 		}elseif($type == 'order'){//支付订单
-		   
+
 			$orderinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where  id ='".$orderid."'   order by id asc limit 0,1");
-			
+
 			if($orderinfo['paytype'] == 1 && $orderinfo['paystatus'] == 0 && $orderinfo['status'] < 3){
 				$checktime = time() - $orderinfo['addtime'];
 				if($checktime > 900){
@@ -9908,7 +9908,7 @@ exit;
                         $jdata['status'] =1;
                         $this->mysql->update(Mysite::$app->config['tablepre'].'juan',$jdata,"id='".$orderinfo['yhjids']."'");
                     }
-					
+
 					$cdata['status'] = 4;
 					$this->mysql->update(Mysite::$app->config['tablepre'].'order',$cdata,"id='".$orderid."'");
 					$this->mysql->delete(Mysite::$app->config['tablepre'].'orderps',"orderid = '$orderid' and status != 3 ");
@@ -9916,11 +9916,11 @@ exit;
 					$statusdata['orderid']     =  $orderid;
 					$statusdata['addtime']     =  $orderinfo['addtime']+900;
 					$statusdata['statustitle'] =  "自动关闭订单";
-					$statusdata['ststusdesc']  =  "在线支付订单，未支付自动关闭"; 		
-					$this->mysql->insert(Mysite::$app->config['tablepre'].'orderstatus',$statusdata); 
-					$orderinfo['status'] = '4'; 
-				} 
-			} 
+					$statusdata['ststusdesc']  =  "在线支付订单，未支付自动关闭";
+					$this->mysql->insert(Mysite::$app->config['tablepre'].'orderstatus',$statusdata);
+					$orderinfo['status'] = '4';
+				}
+			}
 			if(empty($orderinfo))$this->message('订单不存在');
 			if($orderinfo['paytype'] != 1) $this->message('订单不是在线支付订单');
 			if($orderinfo['status'] > 1) $this->message('订单状态不能支付');
@@ -9929,18 +9929,18 @@ exit;
 			/*
 			$checktime = time()-15*60;
 			if($orderinfo['addtime'] < $checktime){
-				 $newdata['status'] = 4; 
+				 $newdata['status'] = 4;
 				$this->mysql->update(Mysite::$app->config['tablepre'].'order',$newdata,"id='".$orderid."'");
-				$orderCLs = new orderclass(); 
-				$orderCLs->writewuliustatus($orderinfo['id'],16,$orderinfo['paytype']);  //在线支付成功状态	 
+				$orderCLs = new orderclass();
+				$orderCLs->writewuliustatus($orderinfo['id'],16,$orderinfo['paytype']);  //在线支付成功状态
 				$this->message('订单在15分钟内未支付已取消');
 			} */
 			$titlename = $orderinfo['dno'];
 			$allcost = $orderinfo['allcost'];
-			if(!empty($alipaychek)){  
-				$dopaydata = array('type'=>'order','upid'=>$orderid,'cost'=>$orderinfo['allcost'],'source'=>0,'status'=>0,'addtime'=>time());//支付数据 
+			if(!empty($alipaychek)){
+				$dopaydata = array('type'=>'order','upid'=>$orderid,'cost'=>$orderinfo['allcost'],'source'=>0,'status'=>0,'addtime'=>time());//支付数据
 				$this->mysql->insert(Mysite::$app->config['tablepre'].'onlinelog',$dopaydata);
-				$newid = $this->mysql->insertid(); 
+				$newid = $this->mysql->insertid();
 				$alipaydata['allcost'] = $orderinfo['allcost'];
 				$alipaydata['wmrid']=$newid;
 				$alipaydata['support'] = 1;
@@ -9954,7 +9954,7 @@ exit;
 			}
 			if(!empty($weixincheck)){
 				require_once $weixindir."lib/WxPay.Api.php";
-				//require_once $weixindir."WxPay.JsApiPay.php"; 
+				//require_once $weixindir."WxPay.JsApiPay.php";
 				//②、统一下单
 				$dtime = time();
 				$input = new WxPayUnifiedOrder();
@@ -9967,36 +9967,36 @@ exit;
 				$input->SetTimeStamp($dtime);
 				$input->SetGoods_tag('订餐');
 				$input->SetNotify_url(Mysite::$app->config['siteurl']."/plug/pay/weixinapp/notify.php");
-				$input->SetTrade_type("APP"); 
+				$input->SetTrade_type("APP");
 				//$url = Mysite::$app->config['siteurl'].'/plug/pay/weixin/jsapi.php';
-				//print_r($input); 
-				 $ordermm = WxPayApi::unifiedOrder($input); 
+				//print_r($input);
+				 $ordermm = WxPayApi::unifiedOrder($input);
 				if($ordermm['error'] ==true){
-					//2次签名 
+					//2次签名
 					//print_r($ordermm);
 					$weixindata= $ordermm['inputdata'];
-					$weixindata['support'] = 1; 
-					
+					$weixindata['support'] = 1;
+
 				}else{
-					
-					
-					
+
+
+
 				}
-				 
+
 			}
-			
-			
-		}elseif($type == 'yhorder'){//支付订单  
+
+
+		}elseif($type == 'yhorder'){//支付订单
 		    $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophuiorder where uid='".$backinfo['uid']."' and id = ".$orderid."");
 			if(empty($orderinfo)) $this->message('订单不存在');
 			if($orderinfo['status'] ==1) $this->message('订单已处理不能支付');
-			if($orderinfo['paytstatus'] ==1) $this->message('订单已支付不能重复支付'); 
+			if($orderinfo['paytstatus'] ==1) $this->message('订单已支付不能重复支付');
 			$titlename = '优惠买单'.$orderinfo['id'];
 			$allcost = $orderinfo['sjcost'];
-			if(!empty($alipaychek)){  
-				$dopaydata = array('type'=>'yhorder','upid'=>$orderid,'cost'=>$orderinfo['sjcost'],'source'=>0,'status'=>0,'addtime'=>time());//支付数据 
+			if(!empty($alipaychek)){
+				$dopaydata = array('type'=>'yhorder','upid'=>$orderid,'cost'=>$orderinfo['sjcost'],'source'=>0,'status'=>0,'addtime'=>time());//支付数据
 				$this->mysql->insert(Mysite::$app->config['tablepre'].'onlinelog',$dopaydata);
-				$newid = $this->mysql->insertid(); 
+				$newid = $this->mysql->insertid();
 				$alipaydata['allcost'] = $orderinfo['sjcost'];
 				$alipaydata['wmrid']=$newid;
 				$alipaydata['support'] = 1;
@@ -10012,7 +10012,7 @@ exit;
 			}
 			if(!empty($weixincheck)){
 				require_once $weixindir."lib/WxPay.Api.php";
-				//require_once $weixindir."WxPay.JsApiPay.php"; 
+				//require_once $weixindir."WxPay.JsApiPay.php";
 				//②、统一下单
 				$dtime = time();
 				$input = new WxPayUnifiedOrder();
@@ -10025,29 +10025,29 @@ exit;
 				$input->SetTimeStamp($dtime);
 				$input->SetGoods_tag('订餐');
 				$input->SetNotify_url(Mysite::$app->config['siteurl']."/plug/pay/weixinapp/notify.php");
-				$input->SetTrade_type("APP");  
-				 $ordermm = WxPayApi::unifiedOrder($input); 
-				if($ordermm['error'] ==true){ 
+				$input->SetTrade_type("APP");
+				 $ordermm = WxPayApi::unifiedOrder($input);
+				if($ordermm['error'] ==true){
 					$weixindata= $ordermm['inputdata'];
-					$weixindata['support'] = 1; 
-					
-				}else{ 
-					
+					$weixindata['support'] = 1;
+
+				}else{
+
 				}
-				 
-			} 
+
+			}
 		}else{
 			$this->message('未定义的支付');
-		}  
+		}
 		$backdata=array(
 					'alipay'=>$alipaydata,
 					'plate'=>$platedata,
 					'weixin'=>$weixindata,
 					'allcost'=>$allcost,//待支付总金额
 					'titlename'=>$titlename
-		 );  	 
+		 );
 		$this->success($backdata);
-		
+
 	}
 //账号余额支付  8.6修改
 	function appacoutpay(){
@@ -10056,38 +10056,38 @@ exit;
 			$this->message('nologin');
 		}
 		if($this->checksession()){
-			$type = IFilter::act(IReq::get('type')); 
+			$type = IFilter::act(IReq::get('type'));
 			$cost= IFilter::act(IReq::get('cost'));
-			$orderid = IFilter::act(IReq::get('orderid')); 
-			if($type == 'order'){//支付订单 
+			$orderid = IFilter::act(IReq::get('orderid'));
+			if($type == 'order'){//支付订单
 				$orderinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where  id ='".$orderid."'   order by id asc limit 0,1");
-				
+
 				if(empty($orderinfo))$this->message('订单不存在');
 				if($orderinfo['paytype'] != 1) $this->message('订单不是在线支付订单');
 				if($orderinfo['status'] > 1) $this->message('订单状态不能支付');
 				if($orderinfo['is_make'] ==2) $this->message('商家不受理该订单不能支付');
 				if($orderinfo['paystatus'] ==1) $this->message('订单已支付不能重复支付');
-			
+
 				/*
 				$checktime = time()-15*60;
 				if($orderinfo['addtime'] < $checktime){
-					 $newdata['status'] = 4; 
+					 $newdata['status'] = 4;
 					$this->mysql->update(Mysite::$app->config['tablepre'].'order',$newdata,"id='".$orderid."'");
-					$orderCLs = new orderclass(); 
-					$orderCLs->writewuliustatus($orderinfo['id'],16,$orderinfo['paytype']);  //在线支付成功状态	 
+					$orderCLs = new orderclass();
+					$orderCLs->writewuliustatus($orderinfo['id'],16,$orderinfo['paytype']);  //在线支付成功状态
 					$this->message('订单在15分钟内未支付已取消');
 				} */
 				if(Mysite::$app->config['open_acout'] != 1) $this->message('网站开启支付');
-			
+
 				if($backinfo['cost'] < $orderinfo['allcost']) $this->message('账号余额不足');
-	 
-	
+
+
 				$this->mysql->update(Mysite::$app->config['tablepre'].'member','`cost`=`cost`-'.$orderinfo['allcost'],"uid ='".$backinfo['uid']."' ");
-				//更新订单数据 
+				//更新订单数据
 				$orderdata['paystatus'] = 1;
 				if($orderinfo['status'] == 0){
-				   $orderdata['status'] = 1; 
-				} 
+				   $orderdata['status'] = 1;
+				}
 				$orderdata['paytype_name'] = 'open_acout';
 				$this->mysql->update(Mysite::$app->config['tablepre'].'order',$orderdata,"id ='".$orderid."' ");
 
@@ -10095,40 +10095,40 @@ exit;
 				$this->memberCls->addlog($backinfo['uid'],2,2,$orderinfo['allcost'],'余额支付订单','支付订单'.$orderinfo['dno'].'帐号金额减少'.$orderinfo['allcost'].'元', $accost);
 				$this->memberCls->addmemcostlog($orderinfo['buyeruid'],$backinfo['username'],$backinfo['cost'],2,$orderinfo['allcost'],$accost,"下单余额消费",$backinfo['uid'],$backinfo['username']);
 				$checkflag = false;
-				$orderCLs = new orderclass(); 
-					 $orderCLs->writewuliustatus($orderinfo['id'],3,$orderinfo['paytype']);  //在线支付成功状态	 
+				$orderCLs = new orderclass();
+					 $orderCLs->writewuliustatus($orderinfo['id'],3,$orderinfo['paytype']);  //在线支付成功状态
 					  if($orderinfo['is_make']  == 1 ){
-					 $orderCLs->writewuliustatus($orderinfo['id'],4,$orderinfo['paytype']);  //商家自动确认接单	  
+					 $orderCLs->writewuliustatus($orderinfo['id'],4,$orderinfo['paytype']);  //商家自动确认接单
 					  $auto_send = Mysite::$app->config['auto_send'];
 						  if($auto_send == 1){
 							 $orderCLs->writewuliustatus($orderinfo['id'],6,$orderinfo['paytype']);//订单审核后自动 商家接单后自动发货
 						  }else{
 							  if($orderinfo['shoptype'] != 100){
-									  if($orderinfo['pstype'] == 0 ){//网站配送自动生成配送费 
+									  if($orderinfo['pstype'] == 0 ){//网站配送自动生成配送费
 									      $orderpsinfo  =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."orderps where  orderid ='".$orderid."'   ");
 										  if(empty($orderpsinfo)){
-											  
+
 											  $psdata['orderid'] = $orderinfo['id'];
 											  $psdata['shopid'] = $orderinfo['shopid'];
 											  $psdata['status'] =0;
 											  $psdata['dno'] = $orderinfo['dno'];
 											  $psdata['addtime'] = time();
-											  $psdata['pstime'] = $orderinfo['posttime']; 
+											  $psdata['pstime'] = $orderinfo['posttime'];
                                                                                         $admin_id = $orderinfo['admin_id'];
                                                                                         $psset = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."platpsset  where cityid= '".$admin_id."'   ");
                                                                                         $checkpsyset = $psset['psycostset'];
                                                                                         $bilifei =$psset['psybili']*0.01*$orderinfo['allcost'];
-                                                                                        $psdata['psycost'] = $checkpsyset == 1?$psset['psycost']:$bilifei; 
+                                                                                        $psdata['psycost'] = $checkpsyset == 1?$psset['psycost']:$bilifei;
 
-											  $this->mysql->insert(Mysite::$app->config['tablepre'].'orderps',$psdata);  //写配送订单  
-										  
+											  $this->mysql->insert(Mysite::$app->config['tablepre'].'orderps',$psdata);  //写配送订单
+
 										  }
-										  $checkflag = true; 
+										  $checkflag = true;
 									  }elseif($orderinfo['pstype'] == 2){
 										  $checkflag = false;
 											$psbinterface = new psbinterface();
 											if($psbinterface->psbnoticeorder($orderid)){
-												
+
 											}
 										}
 								  }else{
@@ -10143,13 +10143,13 @@ exit;
 					$checkflag = false;
 					$psbinterface = new psbinterface();
 					if($psbinterface->paotuitopsb($orderid)){
-						
+
 					}
 				}
 			}
 
-				$orderCLs->sendmess($orderid); 
-				$membertinfo=   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where  uid ='".$backinfo['uid']."'   order by uid asc limit 0,1"); 
+				$orderCLs->sendmess($orderid);
+				$membertinfo=   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where  uid ='".$backinfo['uid']."'   order by uid asc limit 0,1");
 				if($checkflag == true){
 					$psylist =  $this->mysql->getarr("select a.*  from ".Mysite::$app->config['tablepre']."apploginps as a left join ".Mysite::$app->config['tablepre']."member as b on a.uid = b.uid where b.admin_id = ".$orderinfo['admin_id']."");
 				    $newarray = array();
@@ -10159,66 +10159,66 @@ exit;
 					  }
 				    }
 				    if(count($newarray) > 0){
-					  $psCls = new apppsyclass(); 
+					  $psCls = new apppsyclass();
 					  $psCls->sendmsg(join(',',$newarray),'','订单提醒','有新订单可以处理',1);
 				    }
 				}
 				$this->success($membertinfo['cost']);
 			}elseif($type == 'yhorder'){
-				$orderinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophuiorder where  id ='".$orderid."'   order by id asc limit 0,1"); 
-				if(empty($orderinfo))$this->message('订单不存在'); 
-				if($orderinfo['status'] == 1) $this->message('订单状态不能支付'); 
-				if($orderinfo['paystatus'] ==1) $this->message('订单已支付不能重复支付'); 
-				if(Mysite::$app->config['open_acout'] != 1) $this->message('网站开启支付'); 
-				if($backinfo['cost'] < $orderinfo['sjcost']) $this->message('账号余额不足'); 
+				$orderinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophuiorder where  id ='".$orderid."'   order by id asc limit 0,1");
+				if(empty($orderinfo))$this->message('订单不存在');
+				if($orderinfo['status'] == 1) $this->message('订单状态不能支付');
+				if($orderinfo['paystatus'] ==1) $this->message('订单已支付不能重复支付');
+				if(Mysite::$app->config['open_acout'] != 1) $this->message('网站开启支付');
+				if($backinfo['cost'] < $orderinfo['sjcost']) $this->message('账号余额不足');
 				$this->mysql->update(Mysite::$app->config['tablepre'].'member','`cost`=`cost`-'.$orderinfo['sjcost'],"uid ='".$backinfo['uid']."' ");
-				//更新订单数据 
-				$orderdata['paystatus'] = 1; 
-			    $orderdata['status'] = 1;   
-				$this->mysql->update(Mysite::$app->config['tablepre'].'shophuiorder',$orderdata,"id ='".$orderid."' "); 
+				//更新订单数据
+				$orderdata['paystatus'] = 1;
+			    $orderdata['status'] = 1;
+				$this->mysql->update(Mysite::$app->config['tablepre'].'shophuiorder',$orderdata,"id ='".$orderid."' ");
 				$accost = $backinfo['cost']-$orderinfo['sjcost'];
 				$this->memberCls->addlog($backinfo['uid'],2,2,$orderinfo['sjcost'],'余额支付订单','余额优惠买单'.$orderinfo['id'].'帐号金额减少'.$orderinfo['sjcost'].'元', $accost);
 				$this->memberCls->addmemcostlog($orderinfo['uid'],$backinfo['username'],$backinfo['cost'],2,$orderinfo['sjcost'],$accost,"下单优惠买单",$backinfo['uid'],$backinfo['username']);
 				$membertinfo=   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where  uid ='".$backinfo['uid']."'   order by uid asc limit 0,1");
-				
-				if($orderinfo['uid'] > 0){ 
+
+				if($orderinfo['uid'] > 0){
 					if($orderinfo['givejifen'] > 0){
-						$sorce = $orderinfo['givejifen']; 
+						$sorce = $orderinfo['givejifen'];
 								$this->mysql->update(Mysite::$app->config['tablepre'].'member','`score`=`score`+'.$sorce,"uid ='".$membertinfo['uid']."' ");
-								$allscore = $membertinfo['score']+$sorce; 
+								$allscore = $membertinfo['score']+$sorce;
 								$this->memberCls->addlog($membertinfo['uid'],1,1,$orderinfo['allcost'],'优惠买单','支付成功'.$orderinfo['dno'].'帐号赠送积分增加'.$sorce.'', $allscore);
-					} 
-				} 
-				  
-				
-				$this->success($membertinfo['cost']); 
-			}else{ 
+					}
+				}
+
+
+				$this->success($membertinfo['cost']);
+			}else{
 				$this->message('未定义的支付');
-			} 
+			}
 		}else{
 			$this->message('请稍后在试');
 		}
 	}
-	 
+
 	function  checksession(){
-		 session_start(); 
+		 session_start();
 		 $time = $_SESSION['expire_time'];
 		 if(empty($token)){
-			 $_SESSION['token'] =time(); 
+			 $_SESSION['token'] =time();
 			 return true;
 		 }elseif($time -3 > time()){
-			  $_SESSION['token'] =time(); 
+			  $_SESSION['token'] =time();
 			 return true;
 		 }else{
 			 return false;
-		 } 
-	} 
-           
+		 }
+	}
+
 	function single(){
 		$code = trim(IFilter::act(IReq::get('code')));
 		$data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
-		
-	     Mysite::$app->setdata($data); 
+
+	     Mysite::$app->setdata($data);
 	}
 	function specialpage(){
 
@@ -10230,31 +10230,31 @@ exit;
 		$data['lat'] = $lat;
 		$data['lng'] = $lng;
 		$data['mapname'] = $mapname;
-		ICookie::set('lng',$lng,2592000);  
-		ICookie::set('lat',$lat,2592000);  
-		ICookie::set('mapname',$mapname,2592000);  
-		
+		ICookie::set('lng',$lng,2592000);
+		ICookie::set('lat',$lat,2592000);
+		ICookie::set('mapname',$mapname,2592000);
+
 		$data['latx'] = $lat;
-		$data['lngx'] = $lng; 
-	 
+		$data['lngx'] = $lng;
+
 		if( !empty($lat) &&  !empty($lng) ){
-				  $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all'); 
+				  $content =   file_get_contents('https://restapi.amap.com/v3/geocode/regeo?output=json&location='.$lng.','.$lat.'&key='.Mysite::$app->config['map_webservice_key'].'&radius=1000&extensions=all');
 					 $backinfo  = json_decode($content,true);
 					if( $backinfo['status'] == 1 && $backinfo['info'] == 'OK'){
-						$adcode = $backinfo['regeocode']['addressComponent']['adcode']; 
-						 
-					}  
-						
+						$adcode = $backinfo['regeocode']['addressComponent']['adcode'];
+
+					}
+
 		}
-		
-		
+
+
 		if( !empty($adcode) ){
-			$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+			$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
 			if( !empty($areacodeone) ){
 				$adcodeid = $areacodeone['id'];
 				$pid = $areacodeone['pid'];
 				$adcode = $adcode;
-				$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");   
+				$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
 				if( !empty($areainfoone) ){
 					$city_id = "CITY_ID_".$areainfoone['adcode'];
 					$city_name = "CITY_NAME_".$areainfoone['name'];
@@ -10263,17 +10263,17 @@ exit;
 					$data['areainfoone']  = $areainfoone;
 					$adcode = $areainfoone['adcode'];
 				}
-				
+
 			}
 		}
-		$data['ctidx'] = $adcode; 
-		
+		$data['ctidx'] = $adcode;
+
 		$ztyinfo = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."specialpage where id = ".$id."  ");
 		$data['ztyinfo'] = $ztyinfo;
                 #sprint_R($data['ztyinfo']);exit;
 		$data['addressname'] = ICookie::get('addressname');
-		 
-		
+
+
 		if($ztyinfo['is_custom'] == 1 && $ztyinfo['showtype'] == 0 && $ztyinfo['cx_type'] > 5 ){
             if($ztyinfo['listids']=='marketshop'){
                 $link = IUrl::creatUrl('wxsite/marketshop');
@@ -10294,10 +10294,10 @@ exit;
 //				$link = IUrl::creatUrl('wxsite/marketlist');
 //			}
 			if($ztyinfo['cx_type'] == 8){
-				$link = IUrl::creatUrl('wxsite/dingtai'); 
+				$link = IUrl::creatUrl('wxsite/dingtai');
 			}
 			if($ztyinfo['cx_type'] == 9){
-				$link = IUrl::creatUrl('wxsite/paotui'); 
+				$link = IUrl::creatUrl('wxsite/paotui');
 			}
             //8.7专题页修改
             if($ztyinfo['cx_type'] == 11){
@@ -10308,8 +10308,8 @@ exit;
 
 		$speciallist = $this->getztyshowlist($ztyinfo['is_custom'],$ztyinfo['showtype'],$ztyinfo['cx_type'],$ztyinfo['listids'],$lat,$lng);
 
-		#print_r($speciallist);		
-		 
+		#print_r($speciallist);
+
 		 $data['speciallist'] = $speciallist;
 		Mysite::$app->setdata($data);
 	}
@@ -10320,35 +10320,35 @@ exit;
 		   $cxarray[$value['id']] = $value['imgurl'];
 		}
 		$weekji = date('w');
-		$nowhour = date('H:i:s',time()); 
+		$nowhour = date('H:i:s',time());
          $nowhour = strtotime($nowhour);
           $templist = array();
-           $cxclass = new sellrule(); 
-		    $where = '';  
- 				 
+           $cxclass = new sellrule();
+		    $where = '';
+
     $where = empty($where)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094) ': $where.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094) ';
-            	 
-            	         
-            	       
-                 
+
+
+
+
 					  $pageinfo = new page();
 					 $pageinfo->setpage(intval(IReq::get('page')),100000000);
 
 
-if($showtype == 0){    // 店铺 
+if($showtype == 0){    // 店铺
        if($is_custom == 0 ){   //自定义专题页情况下
 			if(!empty($listids)){
-				$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where id in (".$listids.") ".$where."  order by sort asc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ");   		   
+				$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where id in (".$listids.") ".$where."  order by sort asc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ");
 			}else{
 				$list = array();
 			}
 	   }
 	   if($is_custom == 1 ){  // 系统默认  cx_type 店铺 1为推荐店铺  2为满减商家 3为打折商家 4免配送费     //  private $rulecontrol = array('1'=>'赠送','2'=>'减费用','3'=>'折扣','4'=>免配送费);
-		   switch ($cx_type){ 
-			case 1: 
+		   switch ($cx_type){
+			case 1:
 				$ztywhere =  "  and  is_recom = 1   ";
 				$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 ".$ztywhere."  ".$where."   order by sort asc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
-				break; 
+				break;
 			case 2:
 				$list = $this->getdycxshops(2);
 				break;
@@ -10361,20 +10361,20 @@ if($showtype == 0){    // 店铺
 			case 5:
 				$list = $this->getdycxshops(1);
 				break;
-			default : 
+			default :
 				$list = array();
-				break; 
-			}  
-	   } 
-            	   
+				break;
+			}
+	   }
+
                if(is_array($list)){
-            	foreach($list as $keys=>$values){  
-            	if($values['id'] > 0){						
-				$templist111 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where cattype = ".$values['shoptype']." and  parent_id = 0    order by orderid asc limit 0,1000"); 
+            	foreach($list as $keys=>$values){
+            	if($values['id'] > 0){
+				$templist111 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where cattype = ".$values['shoptype']." and  parent_id = 0    order by orderid asc limit 0,1000");
 						$attra = array();
             			 $attra['input'] = 0;
             			 $attra['img'] = 0;
-            			 $attra['checkbox'] = 0; 
+            			 $attra['checkbox'] = 0;
             			 foreach($templist111 as $key=>$vall){
             			 	  if($vall['type'] == 'input'){
             			 	   $attra['input'] =  $attra['input'] > 0?$attra['input']:$vall['id'];
@@ -10383,11 +10383,11 @@ if($showtype == 0){    // 店铺
             			 	  }elseif($vall['type'] == 'checkbox'){
             			 	  	$attra['checkbox'] =  $attra['checkbox'] > 0?$attra['checkbox']:$vall['id'];
             			 	  }
-            			 } 
-						
-										
-										
-										
+            			 }
+
+
+
+
 										/* 店铺星级计算 */
 									$zongpoint = $values['point'];
 									$zongpointcount = $values['pointcount'];
@@ -10396,50 +10396,50 @@ if($showtype == 0){    // 店铺
 									}else{
 										$values['shopstart'] = 0;
 									}
-		 
+
 										if($values['shoptype'] == 1 ){
 											$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$values['id']."   ");
 										}else{
 											$shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$values['id']."   ");
 										}
-										if(!empty($shopdet)){ 
+										if(!empty($shopdet)){
 									 	$values = array_merge($values,$shopdet);
 										}
             			    			$values['shoplogo'] = empty($values['shoplogo'])? Mysite::$app->config['imgserver'].Mysite::$app->config['shoplogo']:Mysite::$app->config['imgserver'].$values['shoplogo'];
-            			          $checkinfo = $this->shopIsopen($values['is_open'],$values['starttime'],$values['is_orderbefore'],$nowhour); 
+            			          $checkinfo = $this->shopIsopen($values['is_open'],$values['starttime'],$values['is_orderbefore'],$nowhour);
             			          $values['opentype'] = $checkinfo['opentype'];
-            			          $values['newstartime']  =  $checkinfo['newstartime'];  
+            			          $values['newstartime']  =  $checkinfo['newstartime'];
             			          $attrdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopattr where  cattype = ".$values['shoptype']." and shopid = ".$values['id']."");
             			          $cxclass->setdata($values['id'],1000,$values['shoptype']);
 								  if(empty($this->platpsinfo)){
-										$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$values['admin_id']."' "); 
-								  
+										$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$values['admin_id']."' ");
+
 								  }
 
             			          $checkps = $this->pscost($values,$lng,$lat);
             			          $values['pscost'] = $checkps['pscost'];
 
-								  
-								  	  $mi = $this->GetDistance($lat,$lng, $values['lat'],$values['lng'], 1); 
+
+								  	  $mi = $this->GetDistance($lat,$lng, $values['lat'],$values['lng'], 1);
 									$tempmi = $mi;
 								  $mi = $mi > 1000? round($mi/1000,2).'km':$mi.'m';
-													  
+
 									$values['juli'] = 		$mi;
-								  
+
 								    $firstday = strtotime( date('Y-m-01 00:00:00', strtotime(date("Y-m-d H:i:s")))	);   //当月第一天
 									$lastday = strtotime( date('Y-m-d 00:00:00',strtotime("$firstday +1 month -1 day"))	);  //当月最后一天
-								 
+
 	 $shopcounts = $this->mysql->select_one( "select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where suretime >= ".$firstday." and suretime <= ".$lastday."  and status = 3 and  shopid = ".$values['id']."" );
 								#	print_r(  $shopcounts );
 									if(empty( $shopcounts['shuliang']  )){
 										$values['ordercount'] = 0;
 									}else{
 										$values['ordercount']  = $shopcounts['shuliang'];
-									} 
-								  			  
+									}
+
 								      $cxinfo = $this->mysql->getarr("select name,id,imgurl from ".Mysite::$app->config['tablepre']."rule  where  FIND_IN_SET(".$values['id'].",shopid)   and status = 1   and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
-								      $values['cxlist'] = $cxinfo;								    
-							
+								      $values['cxlist'] = $cxinfo;
+
 								    /* 店铺星级计算 */
 								$zongpoint = $values['point'];
 								$zongpointcount = $values['pointcount'];
@@ -10448,7 +10448,7 @@ if($showtype == 0){    // 店铺
 								}else{
 									$shopstart= 0;
 								}
-									$values['point'] = 	$shopstart;	
+									$values['point'] = 	$shopstart;
 								     $values['attrdet'] = array();
             			          foreach($attrdet as $k=>$v){
             			          	   if($v['firstattr'] == $attra['input']){
@@ -10457,16 +10457,16 @@ if($showtype == 0){    // 店铺
             			          	   	$values['attrdet']['img'][] = $v['value'];
             			          	   }elseif($v['firstattr'] == $attra['checkbox']){
             			          	   	 	$values['attrdet']['checkbox'][] = $v['value'];
-            			          	   } 
+            			          	   }
             			          }
-						 
+
             			          $templist[] = $values;
             			     }
-            	       } 
+            	       }
             	    }
-		    
-	   
-	   
+
+
+
 }
 
 
@@ -10475,44 +10475,44 @@ if($showtype == 1){    // 加载商品
 	 if($is_custom == 0 ){   //自定义专题页情况下
 			if(!empty($listids)){
  				$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  ".$where."    order by id desc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ");
-				 
+
 			}else{
 				$list = array();
 			}
-			 
+
 	   }
 	   if($is_custom == 1 ){  // 系统默认  cx_type 商品1为折扣
-		   switch ($cx_type){ 
-			case 1:  
+		   switch ($cx_type){
+			case 1:
 				$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  ".$where."   order by id desc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ");
 				break;
-			default : 
+			default :
 				$list = array();
-				break; 
-			}  
-	   } 
-	  
+				break;
+			}
+	   }
+
 			if(is_array($list)){
-            			    foreach($list as $keys=>$vatt){  
-            			     
+            			    foreach($list as $keys=>$vatt){
+
            if($vatt['id'] > 0){
 			   if($is_custom == 0){
 					$detaa = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods where  id in (".$listids.")  and shopid='".$vatt['id']."'  and shoptype = ".$vatt['shoptype']."  and    FIND_IN_SET( ".$weekji." , `weeks` )  ".$goodlistwhere."   order by good_order asc  limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
-			
+
 			  }else{
 					$detaa = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$vatt['id']."'  and shoptype = ".$vatt['shoptype']."  and    FIND_IN_SET( ".$weekji." , `weeks` )  ".$goodlistwhere."   order by good_order asc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
 			   }
-			   
+
 					if(!empty($detaa)){
-						 
-				
-					
+
+
+
 						foreach ( $detaa as $keyq=>$valq ){
 							if($valq['is_cx'] == 1){
 							//测算促销 重新设置金额
 								$cxdata = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goodscx where goodsid=".$valq['id']."  ");
 								$newdata = getgoodscx($valq['cost'],$cxdata);
-								
+
 								$valq['zhekou'] = $newdata['zhekou'];
 								$valq['is_cx'] = $newdata['is_cx'];
 								$valq['cost'] = $newdata['cost'];
@@ -10522,73 +10522,73 @@ if($showtype == 1){    // 加载商品
 							}else{
 								  $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$valq['shopid']."   ");
 							}
-							$checkinfo = $this->shopIsopen($vatt['is_open'],$vatt['starttime'],$shopdet['is_orderbefore'],$nowhour); 
+							$checkinfo = $this->shopIsopen($vatt['is_open'],$vatt['starttime'],$shopdet['is_orderbefore'],$nowhour);
             			    $valq['opentype'] = $checkinfo['opentype'];
             			    $valq['shopname'] = $vatt['shopname'];
 						//	print_r($valq['is_cx']);
-							if(  $is_custom == 1){	
-								if(  $valq['is_cx'] == 1 ){	
-									 $templist[]  = $valq;  
+							if(  $is_custom == 1){
+								if(  $valq['is_cx'] == 1 ){
+									 $templist[]  = $valq;
 								}
 							}else{
 								$templist[]  = $valq;
 							}
 						}
-						
-					 }	
-			 
-				 
+
+					 }
+
+
 									}
-            	       } 
+            	       }
             	    }
 
 
-} 
+}
 	   $data = $templist;
-	  
+
 	  return $data;
-	   
+
 	}
 	function fabupaotui(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		if($backinfo['uid'] == 0)  $this->message('未登陆'); 
-		
-		
+		if($backinfo['uid'] == 0)  $this->message('未登陆');
+
+
 		$adcode = trim(IReq::get('adcode'));
 		if(empty($adcode)){
 			$this->message('获取所在城市失败');
 		}
-		
+
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( empty($areainfoone) ){
 						 $this->message('选择的城市暂未开通');
  					}
 				}
 		}
-		
-		$ptinfoset = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset where cityid = ".$areainfoone['adcode']." "); 
+
+		$ptinfoset = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset where cityid = ".$areainfoone['adcode']." ");
 		if( empty($ptinfoset) ){
 			$this->message('获取跑腿规则失败~');
 		}
-		
+
 		$data['admin_id'] = $areainfoone['adcode'];
-		
-		
+
+
 		$demandcontent = trim(IFilter::act(IReq::get('demandcontent')));  // 需求内容
-		 // 取货地址： 地址 补充地址  lng lat 
-	//	$getaddress = trim(IReq::get('getaddress')); 
+		 // 取货地址： 地址 补充地址  lng lat
+	//	$getaddress = trim(IReq::get('getaddress'));
 		$getdetaddress = trim(IReq::get('getdetaddress'));
 		$getlng = trim(IReq::get('getlng'));
 		$getlat = trim(IReq::get('getlat'));
-		 // 收货地址： 地址 补充地址  lng lat 
+		 // 收货地址： 地址 补充地址  lng lat
 	//	$shouaddress = trim(IReq::get('shouaddress'));
 		$shouetaddress = trim(IReq::get('shouetaddress'));
 		$shoulng = trim(IReq::get('shoulng'));
@@ -10597,12 +10597,12 @@ if($showtype == 1){    // 加载商品
 	    $data['movegoodstype'] = trim(IReq::get('movegoodstype'));//类型
 		$data['movegoodscost'] = trim(IReq::get('movegoodscost'));//价值
 		$default = trim(IReq::get('default'));  // 取货电话
-		
+
 		$getphone = trim(IReq::get('getphone'));  // 取货电话
 		$shouphone = trim(IReq::get('shouphone'));  // 收货电话
 		$minit = trim(IReq::get('minit'));			// 收/取 货时间
-		$ptkg = intval(IReq::get('ptkg'));	// 货 公斤 数 
-		$farecost = trim(IReq::get('farecost'));		// 加价（小费） 
+		$ptkg = intval(IReq::get('ptkg'));	// 货 公斤 数
+		$farecost = trim(IReq::get('farecost'));		// 加价（小费）
 		$pttype = trim(IReq::get('pttype'));		// 	1为帮我送 2为帮我买
 		$paytype = 1;		//  支付方式，默认为在线支付
 
@@ -10614,61 +10614,61 @@ if($showtype == 1){    // 加载商品
 		if( empty($shouetaddress) )  $this->message("获取收货地址失败,请重新获取");
 		if( empty($shoulng) )  $this->message("获取收货地址失败,请重新获取");
 		if( empty($shoulat) )  $this->message("获取收货地址失败,请重新获取");
-		
+
 		if($farecost < 0) $this->message("加价格式错误");
 
 		if($pttype==1){
 			if( empty($getphone) )  $this->message("请填写取货电话");
-			if(!IValidate::suremobi($getphone))   $this->message('请输入正确的手机号'); 	
+			if(!IValidate::suremobi($getphone))   $this->message('请输入正确的手机号');
 		}
 		if( empty($shouphone) )  $this->message("请填写收货电话");
-		if(!IValidate::suremobi($shouphone))   $this->message('请输入正确的手机号'); 	
+		if(!IValidate::suremobi($shouphone))   $this->message('请输入正确的手机号');
 
 		if( $minit == 0 ){
 			 $data['sendtime'] = time();
 			 $data['postdate'] = '立即取货';
-		}else{ 
-			$tempdata = $this->getOpenPosttime($ptinfoset['is_ptorderbefore'],time(),$ptinfoset['postdate'],$minit,$ptinfoset['pt_orderday']); 
+		}else{
+			$tempdata = $this->getOpenPosttime($ptinfoset['is_ptorderbefore'],time(),$ptinfoset['postdate'],$minit,$ptinfoset['pt_orderday']);
 		    if($tempdata['is_opentime'] ==  2) $this->message('选择的配送时间段，店铺未设置');
 			if($tempdata['is_opentime'] == 3) $this->message('选择的配送时间段已超时');
 			$data['sendtime'] = $tempdata['is_posttime'];
-			$data['postdate'] = $tempdata['is_postdate']; 
-			//$data['shopps'] = $tempdata['cost']; 
+			$data['postdate'] = $tempdata['is_postdate'];
+			//$data['shopps'] = $tempdata['cost'];
 		}
 
 		$data['pttype'] = $pttype;  // 1为帮我送  2为帮我买
 
 		$data['content'] = $demandcontent;
 		if($default == 1){
-			$data['shopaddress']  = "就近购买";   
+			$data['shopaddress']  = "就近购买";
 		}else{
-		$data['shopaddress']  = $getdetaddress;  } 
-		$data['buyeraddress']  = $shouetaddress;  
+		$data['shopaddress']  = $getdetaddress;  }
+		$data['buyeraddress']  = $shouetaddress;
 		if($pttype==1){
 			$data['shopphone']  = $getphone;			//取件电话
 		}
 		$data['buyerphone']  = $shouphone;			//收件电话
 		$data['addtime'] = time();
 		$data['ordertype'] = 4;//订单类型
-		
-		
+
+
 		$userAgent = $_SERVER['HTTP_USER_AGENT'];
 		if(strpos($userAgent,"iPhone") || strpos($userAgent,"iPad") || strpos($userAgent,"iPod")){
 			$data['ordertype'] =6;
 
 		}
 		$data['shoptype'] = 100;//订单类型
-		$data['paytype'] = $paytype; 
-		$data['paystatus'] = 0;  
-		$data['ptkg'] = $ptkg;  
+		$data['paytype'] = $paytype;
+		$data['paystatus'] = 0;
+		$data['ptkg'] = $ptkg;
 		$data['dno'] = time().rand(1000,9999);
 		$data['pstype']  = 1;
 		$data['buyeruid']  = $backinfo['uid'];
-		$data['buyername'] = $backinfo['username']; 
+		$data['buyername'] = $backinfo['username'];
 		/* 计算两点之间的距离  并且 判断是否与前台的  千米距离金额是否一致 */
-		$juli = $this->GetDistance($getlat,$getlng, $shoulat,$shoulng, 1,1); 
-		$tempmi = $juli; 	
-		$juli = round($juli/1000,1); 
+		$juli = $this->GetDistance($getlat,$getlng, $shoulat,$shoulng, 1,1);
+		$tempmi = $juli;
+		$juli = round($juli/1000,1);
 		$tmpallkmcost =  0;
 		if( $juli <= $ptinfoset['km']  ){
 			$tmpallkmcost = $ptinfoset['kmcost'];
@@ -10677,7 +10677,7 @@ if($showtype == 1){    // 加载商品
 			$addnum = ceil( ($addjuli/$ptinfoset['addkm']));
 			$addcost = $addnum*$ptinfoset['addkmcost'];
 			$tmpallkmcost = $ptinfoset['kmcost']+$addcost;
-		}  
+		}
 		$data['ptkm'] = $juli;
 		/* 计算重量  并且 判断是否与前台的  公斤金额是否一致 */
 		$tmpallkgcost =  0;
@@ -10685,58 +10685,58 @@ if($showtype == 1){    // 加载商品
 			$tmpallkgcost = $ptinfoset['kgcost'];
 		}else{
 			$addkg = $ptkg-$ptinfoset['kg'];
-			$addkgnum = ceil( ($addkg/$ptinfoset['addkg'])); 
-			$addkgcost = $addkgnum*$ptinfoset['addkgcost']; 
-			$tmpallkgcost = $ptinfoset['kgcost']+$addkgcost; 
-		} 
+			$addkgnum = ceil( ($addkg/$ptinfoset['addkg']));
+			$addkgcost = $addkgnum*$ptinfoset['addkgcost'];
+			$tmpallkgcost = $ptinfoset['kgcost']+$addkgcost;
+		}
 		$data['allkgcost'] = $tmpallkgcost;
 		$data['allkmcost'] = $tmpallkmcost;
 		$data['farecost'] = $farecost;
 		if($pttype == 2){
-		$data['allcost'] = $farecost+$tmpallkmcost;	
+		$data['allcost'] = $farecost+$tmpallkmcost;
 		}else{
 		$data['allcost'] = $farecost+$tmpallkgcost+$tmpallkmcost;
 		}
-		
+
 		$data['buyerlng'] = $getlng;
 		$data['buyerlat'] = $getlat;
 		$data['shoplng'] = $shoulng;
 		$data['shoplat'] = $shoulat;
-		
-		 
+
+
 		$data['status'] = 0;
 		$data['ipaddress'] = "";
-		$ip_l=new iplocation(); 
-		$ipaddress=$ip_l->getaddress($ip_l->getIP());  
+		$ip_l=new iplocation();
+		$ipaddress=$ip_l->getaddress($ip_l->getIP());
 		if(isset($ipaddress["area1"])){
 			#$data['ipaddress']  = $ipaddress['ip'].mb_convert_encoding($ipaddress["area1"],'UTF-8','GB2312');//('GB2312','ansi',);
 			$data['ipaddress']  = $ipaddress['ip'] ;
-		} 
-		
+		}
+
 		$this->mysql->insert(Mysite::$app->config['tablepre'].'order',$data);
-		$orderid = $this->mysql->insertid();  
+		$orderid = $this->mysql->insertid();
 		/* 写订单物流 状态 */
 		/* 第一步 提交成功 */
 		$orderClass = new orderClass();
-		$orderClass->writewuliustatus($orderid,1,$data['paytype']); 
+		$orderClass->writewuliustatus($orderid,1,$data['paytype']);
 		$this->success($orderid);
-		
-		
+
+
 	}
 	function paotuitime(){
-		
+
 		$adcode = trim(IReq::get('adcode'));
 		$weight = trim(IReq::get('weight'));
 		if(empty($adcode)){
 			$this->message('获取所在城市失败');
 		}
-		
+
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( empty($areainfoone) ){
  						 $this->message('选择的城市暂未开通');
  					}
@@ -10744,20 +10744,20 @@ if($showtype == 1){    // 加载商品
 					$this->message('获取所在城市失败~');
 				}
 		}
-		
-		$ptinfoset = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset where cityid = ".$areainfoone['adcode']." "); 
+
+		$ptinfoset = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset where cityid = ".$areainfoone['adcode']." ");
 		if( empty($ptinfoset) ){
 			$this->message('获取跑腿规则失败~');
 		}
  		  $postdate =  $ptinfoset['postdate'];
 		  $befortime = $ptinfoset['pt_orderday'];
-		  
+
 		$nowhout = strtotime(date('Y-m-d',time()));//当天最小linux 时间
 		$timelist = !empty($postdate)?unserialize($postdate):array();
 		$pstimelist = array();
 		$checknow = time();
-		
-		 
+
+
 		$whilestatic = $befortime;
 		$nowwhiltcheck = 0;
 		while($whilestatic >= $nowwhiltcheck){
@@ -10772,15 +10772,15 @@ if($showtype == 1){    // 加载商品
 					$tempt['e'] = date('H:i',$nowhout+$value['e']);
 					$tempt['d'] = date('Y-m-d',$stime);
 					$tempt['i'] =  $value['i'];
-					$tempt['cost'] =  isset($value['cost'])?$value['cost']:'0'; 
+					$tempt['cost'] =  isset($value['cost'])?$value['cost']:'0';
 					$tempt['name'] = $stime > $checknow?$tempt['s'].'-'.$tempt['e']:'立即配送';
 					$pstimelist[] = $tempt;
 				}
 			}
-		 
+
 			$nowwhiltcheck = $nowwhiltcheck+1;
 		}
-		
+
 		$data['pstimelist'] = $pstimelist;
 		$data['minkg'] = $ptinfoset['kg'];
 		$data['minkgcost'] = $ptinfoset['kgcost'];
@@ -10793,26 +10793,26 @@ if($showtype == 1){    // 加载商品
 		}else{
 			$pscost = $data['minkgcost'] + ceil(($weight - $data['minkg'])/$addkg)*$addkgcost;
 		}
-		$data['pscost'] = $pscost;	
-		
-		
-		
+		$data['pscost'] = $pscost;
+
+
+
 		$this->success($data);
 	}
-	 
+
 	function paotuiajax(){
-			
+
 		$adcode = trim(IReq::get('adcode'));
 		if(empty($adcode)){
 			$this->message('获取所在城市失败');
 		}
-		
+
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( empty($areainfoone) ){
  						 $this->message('选择的城市暂未开通');
  					}
@@ -10820,26 +10820,26 @@ if($showtype == 1){    // 加载商品
 					$this->message('获取所在城市失败~');
 				}
 		}
-		
-		$ptinfoset = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset where cityid = ".$areainfoone['adcode']." "); 
+
+		$ptinfoset = $this->mysql->select_one(" select * from ".Mysite::$app->config['tablepre']."paotuiset where cityid = ".$areainfoone['adcode']." ");
 		if( empty($ptinfoset) ){
 			$this->message('获取跑腿规则失败~');
 		}
-		
-		
+
+
  		$getlng = trim(IReq::get('getlng'));
 		$getlat = trim(IReq::get('getlat'));
 		$shoulng = trim(IReq::get('shoulng'));
 		$shoulat = trim(IReq::get('shoulat'));
-		$ptkg = intval(IReq::get('ptkg'));	 
+		$ptkg = intval(IReq::get('ptkg'));
 	    if( empty($getlng) )  $this->message("获取取货地址失败,请重新获取");
 		if( empty($getlat) )  $this->message("获取取货地址失败,请重新获取");
 		if( empty($shoulng) )  $this->message("获取收货地址失败,请重新获取");
 		if( empty($shoulat) )  $this->message("获取收货地址失败,请重新获取");
-		
-		$juli = $this->GetDistance($getlat,$getlng, $shoulat,$shoulng, 1,1); 
-		$tempmi = $juli; 	
-		$juli = round($juli/1000,1); 
+
+		$juli = $this->GetDistance($getlat,$getlng, $shoulat,$shoulng, 1,1);
+		$tempmi = $juli;
+		$juli = round($juli/1000,1);
 		$tmpallkmcost =  0;
 		if( $juli <= $ptinfoset['km']  ){
 			$tmpallkmcost = $ptinfoset['kmcost'];
@@ -10848,17 +10848,17 @@ if($showtype == 1){    // 加载商品
 			$addnum = round( ($addjuli/$ptinfoset['addkm']));
 			$addcost = $addnum*$ptinfoset['addkmcost'];
 			$tmpallkmcost = $ptinfoset['kmcost']+$addcost;
-		}   
+		}
 		/* 计算重量  并且 判断是否与前台的  公斤金额是否一致 */
 		$tmpallkgcost =  0;
 		if( $ptkg <= $ptinfoset['kg']  ){
 			$tmpallkgcost = $ptinfoset['kgcost'];
 		}else{
 			$addkg = $ptkg-$ptinfoset['kg'];
-			$addkgnum = round( ($addkg/$ptinfoset['addkg'])); 
-			$addkgcost = $addkgnum*$ptinfoset['addkgcost']; 
-			$tmpallkgcost = $ptinfoset['kgcost']+$addkgcost; 
-		} 
+			$addkgnum = round( ($addkg/$ptinfoset['addkg']));
+			$addkgcost = $addkgnum*$ptinfoset['addkgcost'];
+			$tmpallkgcost = $ptinfoset['kgcost']+$addkgcost;
+		}
 		$backdata['allkgcost'] = $tmpallkgcost;
 		$backdata['allkmcost'] = $tmpallkmcost;
 		$backdata['juli'] = $juli.'';
@@ -10875,15 +10875,15 @@ if($showtype == 1){    // 加载商品
 				 $v['cattypename'] = $v['cattype'] == 0?'外卖':'超市';
 				 $catlist[] = $v;
 			}
-		} 
+		}
 		$this->success($catlist);
 	}
 	function checkopen(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  
-		$checkshopin = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  uid='".$backinfo['uid']."' "); 
+		}
+		$checkshopin = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  uid='".$backinfo['uid']."' ");
 		if(empty($checkshopin)){
 			$this->success('waitopen');
 		}else{
@@ -10895,52 +10895,52 @@ if($showtype == 1){    // 加载商品
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}  
+		}
 		$sdata['shopname'] = IReq::get('shopname');//店铺名称
 		$sdata['address'] = IReq::get('shopaddress');//店铺地址
 		$sdata['shoplicense']  = IReq::get('shoplicense');//商家营业执照
-		$attrid =  intval(IReq::get('attrid')); 
-		
+		$attrid =  intval(IReq::get('attrid'));
+
 		$checkshopin = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  uid='".$backinfo['uid']."' ");
 		if(!empty($checkshopin)){
 			$this->message('商家已开店');
-		} 
+		}
 		if(empty($sdata['shopname']))  $this->message('shop_emptyname');
 		if(empty($sdata['shoplicense'])) $this->message('请上传营业执照');
 		$shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  shopname='".$sdata['shopname']."'  ");
 		if(!empty($shopinfo)) $this->message('shop_repeatname');
-		
-		
-	 
+
+
+
 		$sdata['uid'] = $backinfo['uid'];
 		$sdata['maphone'] =  $backinfo['phone'];
 		$sdata['addtime'] = time();
-		$sdata['email'] =  $backinfo['email'];    
+		$sdata['email'] =  $backinfo['email'];
 		$sdata['admin_id'] = 0;
 		$nowday = 24*60*60*365;
-		$sdata['endtime'] = time()+$nowday;   
+		$sdata['endtime'] = time()+$nowday;
 		$checkshoptype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptype where id=".$attrid."  ");
 		if(empty($checkshoptype))  $this->message("获取店铺分类失败");
 
 		$sdata['shoptype']  = $checkshoptype['cattype'];   // 店铺大类型 0为外卖 1为超市
-		
-		$this->mysql->insert(Mysite::$app->config['tablepre'].'shop',$sdata); 
-		$shopid = $this->mysql->insertid(); 
+
+		$this->mysql->insert(Mysite::$app->config['tablepre'].'shop',$sdata);
+		$shopid = $this->mysql->insertid();
 		$attrdata['shopid'] = $shopid;
 		$attrdata['cattype'] = $checkshoptype['cattype'];
 		$attrdata['firstattr'] = $checkshoptype['parent_id'];
 		$attrdata['attrid'] = $checkshoptype['id'];
-		$attrdata['value'] = $checkshoptype['name']; 
+		$attrdata['value'] = $checkshoptype['name'];
 
-		$this->mysql->insert(Mysite::$app->config['tablepre'].'shopattr',$attrdata); 
-		$this->mysql->update(Mysite::$app->config['tablepre'].'member',array('shopid'=>$shopid),"uid='".$this->member['uid']."'"); 
-		$this->success('success'); 
+		$this->mysql->insert(Mysite::$app->config['tablepre'].'shopattr',$attrdata);
+		$this->mysql->update(Mysite::$app->config['tablepre'].'member',array('shopid'=>$shopid),"uid='".$this->member['uid']."'");
+		$this->success('success');
 	}
 	function updatezhizhao(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		}    
+		}
 		$json = new Services_JSON();
 		$uploadpath = 'upload/user/';
 		$filepath = '/upload/user/';
@@ -10950,11 +10950,11 @@ if($showtype == 1){    // 加载商品
 			$this->message($upload->errmsg());
 
 		}else{
-			$data['logo'] = $filepath.$file[0]['saveName']; 
+			$data['logo'] = $filepath.$file[0]['saveName'];
 			$this->success($data);
-		} 
+		}
 	}
-	//2016-3 结束 
+	//2016-3 结束
 	function paotuiorder(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
@@ -10971,7 +10971,7 @@ if($showtype == 1){    // 加载商品
 		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = empty($pagesize)?10:$pagesize;
 		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
-		$statusarr = array('0'=>'新订单','1'=>'等待取货','2'=>'确认取货','3'=>'已送达','4'=>'关闭','5'=>'关闭'); 
+		$statusarr = array('0'=>'新订单','1'=>'等待取货','2'=>'确认取货','3'=>'已送达','4'=>'关闭','5'=>'关闭');
 		$goshoparr = array('0'=>'新订单','1'=>'等待购买','2'=>'等待送货','3'=>'已送达','4'=>'关闭','5'=>'关闭');
 		/* 获取订单数:   shopname  id  shoplogo  allcost addtime  status paystatus   paytype  */
 		$nowtime = time()-14*24*60*60;
@@ -10979,17 +10979,17 @@ if($showtype == 1){    // 加载商品
 		if(empty($orderlist)) $this->success(array());
 		$backdata = array();
 		//status 状态，0未使用，1已绑定，2已使用，3无效
-		foreach($orderlist as $key=>$value){ 
+		foreach($orderlist as $key=>$value){
 			$value['addtime'] = date('Y-m-d H:i:s',$value['addtime']);
 		    if($value['pttype'] == 1){
 				$value['seestatus'] = isset($statusarr[$value['status']])?$statusarr[$value['status']]:'';
 			}else{
 				$value['seestatus'] = isset($goshoparr[$value['status']])?$goshoparr[$value['status']]:'';
-			} 
+			}
 			if($value['is_reback'] == 1){
 				$value['seestatus'] = "退款中";
 			}
-			 
+
 			$backdata[] = $value;
 		}
 		$this->success($backdata);
@@ -10998,16 +10998,16 @@ if($showtype == 1){    // 加载商品
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
+		}
 		$orderid = intval(IFilter::act(IReq::get('orderid')));
 		$where = " and id = '".$orderid."' and shoptype = 100 ";
-		 
-		$statusarr = array('0'=>'新订单','1'=>'等待取货','2'=>'确认取货','3'=>'已送达','4'=>'关闭','5'=>'关闭'); 
+
+		$statusarr = array('0'=>'新订单','1'=>'等待取货','2'=>'确认取货','3'=>'已送达','4'=>'关闭','5'=>'关闭');
 		$goshoparr = array('0'=>'新订单','1'=>'等待购买','2'=>'等待送货','3'=>'已送达','4'=>'关闭','5'=>'关闭');
 		/* 获取订单数:   shopname  id  shoplogo  allcost addtime  status paystatus   paytype  */
 		$nowtime = time()-14*24*60*60;
 		$orderinfo = $this->mysql->select_one("select  * from ".Mysite::$app->config['tablepre']."order where  buyeruid = ".$backinfo['uid']." ".$where." order by id desc  ");
-		if(empty($orderinfo)){ 
+		if(empty($orderinfo)){
 			$this->message('订单不存在');
 		}
 		$orderinfo['addtime'] = date('Y-m-d H:i:s',$orderinfo['addtime']);
@@ -11015,24 +11015,24 @@ if($showtype == 1){    // 加载商品
 			$orderinfo['seestatus'] = isset($statusarr[$orderinfo['status']])?$statusarr[$orderinfo['status']]:'';
 		}else{
 			$orderinfo['seestatus'] = isset($goshoparr[$orderinfo['status']])?$goshoparr[$orderinfo['status']]:'';
-		}  
+		}
 		$this->success($orderinfo);
 	}
 
 	/* 2016.3.29  WMR8.2版本更新 */
-	function getNotice(){  // 获取首页一条通知 
-	
+	function getNotice(){  // 获取首页一条通知
+
 		$adcode = trim(IFilter::act(IReq::get('adcode')));
-		
+
 		$cityid = 0;
 		$cityinfo = array();
-		
+
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( !empty($areainfoone) ){
 						$city_id = "CITY_ID_".$areainfoone['adcode'];
 						$city_name = "CITY_NAME_".$areainfoone['name'];
@@ -11041,36 +11041,36 @@ if($showtype == 1){    // 加载商品
 						$cityinfo = $areainfoone;
  					}
 				}
-		}  
-		if( !empty($cityinfo) ){ 
+		}
+		if( !empty($cityinfo) ){
 			$cityid = $cityinfo['adcode'];
 		}
-		$data['cityinfo'] = $cityinfo; 
+		$data['cityinfo'] = $cityinfo;
 		if( $cityid == 0 ){
 			$citywhere = '     ';
 		}else{
 			$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  ";
 		}
-		
+
 	    $data['noticeInfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information where type = 1 ".$citywhere."  order by orderid asc limit 1");
 		$data['noticeInfo']['addtime'] = date("Y-m-d",$data['noticeInfo']['addtime']);
-		 $data['noticeInfo']['content'] = strip_tags($data['noticeInfo']['content']); 
+		 $data['noticeInfo']['content'] = strip_tags($data['noticeInfo']['content']);
 		$this->success($data);
-	}	
-	
-	function getNoticeList(){  // 获取通知列表 
-		
+	}
+
+	function getNoticeList(){  // 获取通知列表
+
 		$adcode = trim(IFilter::act(IReq::get('adcode')));
-		
+
 		$cityid = 0;
 		$cityinfo = array();
-		
+
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( !empty($areainfoone) ){
 						$city_id = "CITY_ID_".$areainfoone['adcode'];
 						$city_name = "CITY_NAME_".$areainfoone['name'];
@@ -11079,18 +11079,18 @@ if($showtype == 1){    // 加载商品
 						$cityinfo = $areainfoone;
  					}
 				}
-		}  
-		if( !empty($cityinfo) ){ 
+		}
+		if( !empty($cityinfo) ){
 			$cityid = $cityinfo['adcode'];
 		}
-		$data['cityinfo'] = $cityinfo; 
+		$data['cityinfo'] = $cityinfo;
 		if( $cityid == 0 ){
 			$citywhere = '   ';
 		}else{
 			$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  ";
 		}
-	
-	
+
+
 		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = empty($pagesize)?10:$pagesize;
 		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
@@ -11098,35 +11098,35 @@ if($showtype == 1){    // 加载商品
 		$data['noticeList'] = array();
 		foreach($noticeList as $key=>$value){
 			$value['addtime'] = date("Y-m-d",$value['addtime']);
-			$value['content'] = $value['content']; 
+			$value['content'] = $value['content'];
 			$data['noticeList'][] = $value;
 		}
 		$this->success($data);
-	}	
+	}
 	function getoneNotice(){  // 获取某条网站通知详情
 		$id = intval(trim(IReq::get('id')));
 		$data['onenoticeInfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information where type = 1 and id = ".$id." order by orderid asc limit 1");
 		$data['onenoticeInfo']['addtime'] = date("Y-m-d",$data['onenoticeInfo']['addtime']);
-		$data['onenoticeInfo']['content'] = $data['onenoticeInfo']['content']; 
+		$data['onenoticeInfo']['content'] = $data['onenoticeInfo']['content'];
 		$this->success($data);
-		
+
 	}
-	 
-	 
-	function getLifehelpList(){  // 获取生活服务列表 
-	
-		
+
+
+	function getLifehelpList(){  // 获取生活服务列表
+
+
 		$adcode = trim(IFilter::act(IReq::get('adcode')));
-		
+
 		$cityid = 0;
 		$cityinfo = array();
-		
+
 		if( !empty($adcode) ){
-				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  "); 
+				$areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areacode where id=".$adcode."  ");
   				if( !empty($areacodeone) ){
 					$adcodeid = $areacodeone['id'];
 					$pid = $areacodeone['pid'];
-   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  "); 
+   					$areainfoone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  adcode=".$adcodeid." or adcode=".$pid."  ");
   					if( !empty($areainfoone) ){
 						$city_id = "CITY_ID_".$areainfoone['adcode'];
 						$city_name = "CITY_NAME_".$areainfoone['name'];
@@ -11135,18 +11135,18 @@ if($showtype == 1){    // 加载商品
 						$cityinfo = $areainfoone;
  					}
 				}
-		}  
-		if( !empty($cityinfo) ){ 
+		}
+		if( !empty($cityinfo) ){
 			$cityid = $cityinfo['adcode'];
 		}
-		$data['cityinfo'] = $cityinfo; 
+		$data['cityinfo'] = $cityinfo;
 		if( $cityid == 0 ){
 			$citywhere = '     ';
 		}else{
 			$citywhere =  " and ( cityid = '".$cityid."'  or cityid = 0 )  ";
 		}
-		
-	
+
+
 		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
 		$pagesize = empty($pagesize)?10:$pagesize;
 		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
@@ -11154,20 +11154,20 @@ if($showtype == 1){    // 加载商品
 		$data['lifehelpList'] = array();
 		foreach($lifehelpList as $key=>$value){
 			$value['addtime'] = date("Y-m-d",$value['addtime']);
-			//$value['content'] = strip_tags($value['content']); 
+			//$value['content'] = strip_tags($value['content']);
 			$data['lifehelpList'][] = $value;
 		}
 		$this->success($data);
-	}	
+	}
 	function getoneLifehelp(){  // 获取某条生活服务详情
 		$id = intval(trim(IReq::get('id')));
 		$data['lifeassinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information where type = 2 and id = ".$id." order by orderid asc limit 1");
 		$data['lifeassinfo']['addtime'] = date("Y-m-d",$data['lifeassinfo']['addtime']);
 		# print_r($this->dip2px());
 		Mysite::$app->setdata($data);//$this->success($data);
-		
+
 	}
-	
+
 	/* 获取某店铺下 实景图列表 */
     function getShopRealInfo(){
 		$shopid = intval(trim(IReq::get('shopid')));
@@ -11177,18 +11177,18 @@ if($showtype == 1){    // 加载商品
 			$value['imgcount'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."shoprealimg where parent_id = ".$value['id']."   order by id asc   ");
 			$value['imglist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoprealimg where parent_id = ".$value['id']."   order by id asc   ");
 			$shopRealInfo[] = $value;
-		} 
+		}
 		$data['shopRealInfo'] = $shopRealInfo;
 		$this->success($data);
-		
+
 	}
 	/* 4.6新增 获取网站电话 */
 	function getSiteTel(){
 		$litel = Mysite::$app->config['litel'];
 		$this->success($litel);
 	}
-	
-		
+
+
 	/* 4.9 举报商家页面 */
 	   function shopreport(){
          $shopid = intval(IReq::get(shopid));
@@ -11202,16 +11202,16 @@ if($showtype == 1){    // 加载商品
 			foreach($typelist as $key=>$value){
 				$tempd = array('id'=>$i,'name'=>$value);
 				$tempc[$i] = $tempd;
-				 
+
 				$i++;
 			}
 		}
-		 
-		
-		$data['typelist'] = $tempc; 
+
+
+		$data['typelist'] = $tempc;
         $data['shopname'] = $shopname;
         $this->success($data);
-    } 
+    }
     function saveshopreport(){
         $typeidContent = IFilter::act(IReq::get('typeidContent'));
         $shopname = IFilter::act(IReq::get('shopname'));
@@ -11230,33 +11230,33 @@ if($showtype == 1){    // 加载商品
         $this->mysql->insert(Mysite::$app->config['tablepre'].'shopreport',$arr);
         $this->success('success');
     }
-	/** 	
-     * @userapi 
+	/**
+     * @userapi
      * @name qq获取绑定手机号返回信息
      * @other 2017/8/19   赵
      * @phonecode  手机验证码  必传
 	 * @phone 手机号          必传
 	 * @openid qq登陆openid   必传
-     * @datatype 固定值 json 必传  
+     * @datatype 固定值 json 必传
 	*{
 	*	"error": false,
 	*	"msg": {
-	*		"uid": "2989",【用户uid】 
+	*		"uid": "2989",【用户uid】
 	*		"username": "aedf4b77",【账号名称】
-	*		"phone": "18638005332",【绑定手机号】 
+	*		"phone": "18638005332",【绑定手机号】
 	*		"score": "10",【积分】
 	*		"cost": "0.00",【余额】
 	*       "temp_password":"",【未设置密码的快捷登陆账号密码】
-	*		"logo": "http://qzapp.qlogo.cn/qzapp/101416262/5D5E1ECC63F45FBBE40429C16F0DD2F6/100",【头像】 
+	*		"logo": "http://qzapp.qlogo.cn/qzapp/101416262/5D5E1ECC63F45FBBE40429C16F0DD2F6/100",【头像】
 	*		"juancount": 0【所拥有的优惠券张数】
 	*	}
-	*}   
+	*}
 	*/
 	function qqlogin(){
 		$phonecode =  IFilter::act(IReq::get('phonecode'));
 		$openid =  IFilter::act(IReq::get('openid'));
 		$phone =  IFilter::act(IReq::get('phone'));
-		$phonecls = new phonecode($this->mysql,7,$phone); 
+		$phonecls = new phonecode($this->mysql,7,$phone);
 		if($phonecls->checkcode($phonecode)){
 			include_once(hopedir.'/plug/login/qqapp/ghqqappOauth.php');
 			$ghqqappOauth = new ghqqappOauth($this->mysql,$this->memberCls);
@@ -11264,42 +11264,42 @@ if($showtype == 1){    // 加载商品
 				$this->success($ghqqappOauth->getuserinfo());
 			}else{
 				$this->message($ghqqappOauth->geterr());
-			} 
-		}else{ 
+			}
+		}else{
 			$this->message($phonecls->getError());
 		}
-		
+
 	}
-	/** 	
-     * @userapi 
+	/**
+     * @userapi
      * @name 拉取qq账号信息
      * @other 2017/8/19   赵
-     * @access_token  qq登陆token  必传 
-	 * @openid qq登陆openid   必传 
-     * @datatype 固定值 json 必传  
+     * @access_token  qq登陆token  必传
+	 * @openid qq登陆openid   必传
+     * @datatype 固定值 json 必传
 	 *情况1   当账号已绑定手机
 	*{
 	*	"error": false,
 	*	"msg": {
-	*		"uid": "2989",【用户uid】 
+	*		"uid": "2989",【用户uid】
 	*		"username": "aedf4b77",【账号名称】
-	*		"phone": "18638005332",【绑定手机号】 
+	*		"phone": "18638005332",【绑定手机号】
 	*		"score": "10",【积分】
 	*		"cost": "0.00",【余额】
 	*       "temp_password":"",【未设置密码的快捷登陆账号密码】
-	*		"logo": "http://qzapp.qlogo.cn/qzapp/101416262/5D5E1ECC63F45FBBE40429C16F0DD2F6/100",【头像】 
+	*		"logo": "http://qzapp.qlogo.cn/qzapp/101416262/5D5E1ECC63F45FBBE40429C16F0DD2F6/100",【头像】
 	*		"juancount": 0【所拥有的优惠券张数】
 	*	}
-	*} 
+	*}
 	*情况2   账号未绑定手机
 	*{
 	*	"error": false,
 	*	"msg": {
-	*	  "phone": "",   
+	*	  "phone": "",
 	*	}
 	*}
 	*/
-	function qqinfo(){ 
+	function qqinfo(){
 		$access_token =  IFilter::act(IReq::get('access_token'));
 		$openid =  IFilter::act(IReq::get('openid'));
 		include_once(hopedir.'/plug/login/qqapp/ghqqappOauth.php');
@@ -11308,45 +11308,45 @@ if($showtype == 1){    // 加载商品
 			$this->success($ghqqappOauth->getuserinfo());
 		}else{
 			$this->message($ghqqappOauth->geterr());
-		} 
+		}
 	}
-	/** 	
-     * @userapi 
+	/**
+     * @userapi
      * @name 获取第三方登陆列表
-     * @other 2017/8/19   赵  
-     * @datatype 固定值 json 必传  
+     * @other 2017/8/19   赵
+     * @datatype 固定值 json 必传
 	*{
 	*	"error": false,
 	*	"msg": {
-	*		"wxappid": "321321321",【微信app登陆appid】 未空时不能使用微信app登陆 
-	*		"qqappid": "f4243242",【qqapp登陆appid】未空时不能使用QQ app登陆  
+	*		"wxappid": "321321321",【微信app登陆appid】 未空时不能使用微信app登陆
+	*		"qqappid": "f4243242",【qqapp登陆appid】未空时不能使用QQ app登陆
 	*	}
-	*}   
+	*}
 	*/
-	function loginapi(){ 
+	function loginapi(){
 		$data['wxappid'] = '';
 		$data['qqappid'] = '';
 		$checkfile = hopedir.'/plug/pay/weixinapp/lib/WxPay.Config.php';
 		if(file_exists($checkfile)){
 			include_once(hopedir.'/plug/pay/weixinapp/lib/WxPay.Config.php');
-			$data['wxappid'] = WxPayConfig::APPID;			 
-		} 
+			$data['wxappid'] = WxPayConfig::APPID;
+		}
 		$checkfile2 = hopedir.'/plug/login/qqapp/ghqqappOauth.php';
 		if(file_exists($checkfile2)){
 		    include_once(hopedir.'/plug/login/qqapp/ghqqappOauth.php');
-			 $ghqqappOauth = new ghqqappOauth($this->mysql,$this->memberCls);  
+			 $ghqqappOauth = new ghqqappOauth($this->mysql,$this->memberCls);
 			 $data['qqappid'] =$ghqqappOauth->getappid();
 		}
-	    $this->success($data); 
+	    $this->success($data);
 	}
 	function wxlogin(){
 		//微信发起调用成功绑定手机号---
 		$phonecode =  IFilter::act(IReq::get('phonecode'));
 		$openid =  IFilter::act(IReq::get('openid'));
 		$phone =  IFilter::act(IReq::get('phone'));
-		$phonecls = new phonecode($this->mysql,7,$phone); 
+		$phonecls = new phonecode($this->mysql,7,$phone);
 		if($phonecls->checkcode($phonecode)){
-			 
+
 		     $oauthinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxappoauth where openid='".$openid."'  ");
 			if(empty($openid)){
 				$this->message('未提交微信openid');
@@ -11363,40 +11363,40 @@ if($showtype == 1){    // 加载商品
 		    $phonemember =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$phone."'  ");
 			if(empty($phonemember)){
 				//写新用户数据到 用户表中
-				 $temp_password = rand(100000,999999);  
+				 $temp_password = rand(100000,999999);
 				 $checkstr = md5($phone);
 				 $arr['username'] = substr($checkstr,0,8);
 				 $arr['phone'] = $phone;
 				 $arr['address'] = '';
 				 $arr['password'] = md5($temp_password);
 				 $arr['email'] = '';
-				 $arr['creattime'] = time(); 
+				 $arr['creattime'] = time();
 				 $arr['score']  = $score == 0?Mysite::$app->config['regesterscore']:$score;
-				 $arr['logintime'] = time(); 
+				 $arr['logintime'] = time();
 				 $arr['logo'] = Mysite::$app->config['userlogo'];
 				 $arr['loginip'] = IClient::getIp();
 				 $arr['group'] = 5;
-				 $arr['cost'] = 0; 
+				 $arr['cost'] = 0;
 				 $arr['parent_id'] =0;
 				 $arr['temp_password'] = $temp_password;
-				 $this->mysql->insert(Mysite::$app->config['tablepre'].'member',$arr);   
-				 $uid = $this->mysql->insertid(); 
+				 $this->mysql->insert(Mysite::$app->config['tablepre'].'member',$arr);
+				 $uid = $this->mysql->insertid();
 				 if($arr['score'] > 0){
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
-				 } 
-				 $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );  	   
-                 $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );	   
+				 }
+				 $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );
+                 $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );
 		 if($juansetinfo['status'] ==1 && !empty($juaninfo)){
-	 	   //注册送优惠券		   		   	  
-		   foreach($juaninfo as $key=>$value){			   
-			   $juandata['uid'] = $uid;// 用户ID	
+	 	   //注册送优惠券
+		   foreach($juaninfo as $key=>$value){
+			   $juandata['uid'] = $uid;// 用户ID
 			   $juandata['username'] = $arr['username'];// 用户名
-			   $juandata['name'] = $value['name'];//  优惠券名称 
-			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效	
+			   $juandata['name'] = $value['name'];//  优惠券名称
+			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
 			   $juandata['card'] = $nowtime.rand(100,999);
 			   $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
-			   $juandata['limitcost']	= $value['limitcost'];	
-			   
+			   $juandata['limitcost']	= $value['limitcost'];
+
 			   if($juansetinfo['timetype'] == 1){
 					$juandata['creattime'] = time();
 					$date = date('Y-m-d',$juandata['creattime']);
@@ -11410,15 +11410,15 @@ if($showtype == 1){    // 加载商品
 				    $juandata['cost'] = $value['cost'];
 			   }else{
 					$juandata['cost'] = rand($value['costmin'],$value['costmax']);
-			   }			   			   		  	    		   
-			   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);			   
-		   } 
+			   }
+			   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);
+		   }
        }
 			     $phonemember = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
-		   
-			}  
+
+			}
 			$cnewdata['uid'] = $phonemember['uid'];
-		    $this->mysql->update(Mysite::$app->config['tablepre'].'wxappoauth',$cnewdata,"openid='".$openid."'");   
+		    $this->mysql->update(Mysite::$app->config['tablepre'].'wxappoauth',$cnewdata,"openid='".$openid."'");
 		    $oauthinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxappoauth where openid='".$openid."'  ");
 		    $oauthinfo['phone'] = $phone;
 			$tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$phonemember['uid']."' and status < 2 and  endtime > ".time()." ");
@@ -11429,13 +11429,13 @@ if($showtype == 1){    // 加载商品
 				$oauthinfo['logo'] = Mysite::$app->config['siteurl'].$oauthinfo['logo'];
 				$expire = time() + 86400; // 设置24小时的有效期
 				setcookie("app_login", "app_login", $expire);
-				setcookie("app_loginphone", $phonemember['phone'], $expire); 
+				setcookie("app_loginphone", $phonemember['phone'], $expire);
 			}
 		    $this->success($oauthinfo);
 		}else{
 			$this->message($phonecls->getError());
 		}
-		
+
 	}
 	function wxappset(){
 		$checkfile = hopedir.'/plug/pay/weixinapp/lib/WxPay.Config.php';
@@ -11444,7 +11444,7 @@ if($showtype == 1){    // 加载商品
 			 $this->success(WxPayConfig::APPID);
 		}else{
 			$this->message('网站未使用APP登录');
-		} 
+		}
 	}
 	function wxinfo(){
 		//微信获取用户信息 写数据到
@@ -11453,11 +11453,11 @@ if($showtype == 1){    // 加载商品
 		include_once(hopedir.'/plug/pay/weixinapp/lib/WxPay.Config.php');
 		//print_r(WxPayConfig::APPID);//静态变脸的调用
 		//WxPayConfig::APPSECRET
-		  
-		//获取 access_token  
+
+		//获取 access_token
 		$userinfo = array();
-		$token_link = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.WxPayConfig::APPID.'&secret='.WxPayConfig::APPSECRET.'&code='.$code.'&grant_type=authorization_code'; 
-		$token =json_decode($this->curl_get_content($token_link), TRUE); 
+		$token_link = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.WxPayConfig::APPID.'&secret='.WxPayConfig::APPSECRET.'&code='.$code.'&grant_type=authorization_code';
+		$token =json_decode($this->curl_get_content($token_link), TRUE);
 	    if(isset($token['access_token'])){
 			$userinfo['openid'] = $token['openid'];
 			$userinfo['unionid'] = $token['unionid'];
@@ -11467,104 +11467,104 @@ if($showtype == 1){    // 加载商品
 			if($expires_in < 1){
 				//刷新CODE
 				$refresh_link = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?appid='.WxPayConfig::APPID.'&grant_type=refresh_token&refresh_token='.$userinfo['refresh_token'];
-			    $refresh =json_decode($this->curl_get_content($refresh_link), TRUE); 
+			    $refresh =json_decode($this->curl_get_content($refresh_link), TRUE);
 				if(isset($refresh['access_token'])){
 					$userinfo['openid'] = $refresh['openid'];
 					$userinfo['unionid'] = $refresh['unionid'];
 					$userinfo['access_token'] = $refresh['access_token'];
 					$userinfo['refresh_token'] = $refresh['refresh_token'];
-					$expires_in = $refresh['expires_in']; 
+					$expires_in = $refresh['expires_in'];
 				}else{
 					$this->message($refresh['errcode']);
-				} 
+				}
 			}
-			
+
 		}else{
 			$this->message($token['errcode']);
 		}
 		//校研 openid
-		
+
 		$check_link = 'https://api.weixin.qq.com/sns/auth?access_token='.$userinfo['access_token'].'&openid='.$userinfo['openid'];
-		$checkopen =json_decode($this->curl_get_content($check_link), TRUE); 
+		$checkopen =json_decode($this->curl_get_content($check_link), TRUE);
 		if($checkopen['errcode'] == 0){
-			
-		}else{ 
+
+		}else{
 			$this->message($checkopen['errcode']);
-		} 
-		
+		}
+
 		//获取用户信息
 		$getlink = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$userinfo['access_token'].'&openid='.$userinfo['openid'];
-		$wxuser =json_decode($this->curl_get_content($getlink), TRUE); 
-		 
-		
+		$wxuser =json_decode($this->curl_get_content($getlink), TRUE);
+
+
 		if(isset($wxuser['openid'])){
-			 
+
 			/*
 			 [openid] => oHBxnv1_CHEb5EMs5Rf4TM8fCJlU [nickname] => 潇湘雨 [sex] => 1 [language] => zh_CN [city] => Zhengzhou [province] => Henan [country] => CN [headimgurl] => http://wx.qlogo.cn/mmopen/kAcicic6Sn2KxTVJjHbaNr6mqvSo5w7HK8iaEsMStX74drvnHd8iarPMkMV5YVcwWk1nhWTHjc4kJhicLHIIGEvt4fUEUrdCJrNicD/0 [privilege] => Array ( ) [unionid] => oK4VYt9Y59KxJoSLAZi5tVh0BmoE
 			 */
-			 
-			
-			
-			
+
+
+
+
 		}else{
-			$this->message($wxuser['errcode']); 
+			$this->message($wxuser['errcode']);
 		}
 		//  [openid] => oHBxnv1_CHEb5EMs5Rf4TM8fCJlU [nickname] => 潇湘雨 [sex] => 1 [language] => zh_CN [city] => Zhengzhou [province] => Henan [country] => CN [headimgurl] => http://wx.qlogo.cn/mmopen/kAcicic6Sn2KxTVJjHbaNr6mqvSo5w7HK8iaEsMStX74drvnHd8iarPMkMV5YVcwWk1nhWTHjc4kJhicLHIIGEvt4fUEUrdCJrNicD/0 [privilege] => Array ( ) [unionid] => oK4VYt9Y59KxJoSLAZi5tVh0BmoE
 		//wxuser
 		//构造微信APP登录 xiaozu_wxappoauth
 		$wxoauth['openid'] = $wxuser['openid'];
 		$wxoauth['username'] = $wxuser['nickname'];
-	 
-		 
-		 //openId 
+
+
+		 //openId
 		 //username
 		 //imgurl
-		 //uid 
+		 //uid
          //
         $oauthinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxappoauth where openid='".$wxuser['openid']."'  ");
 		if(empty($checkuser)){
 			$newdata['openid'] = $wxuser['openid'];
 			$newdata['username'] =  $wxuser['nickname'];
 			$newdata['imgurl'] = $wxuser['headimgurl'];
-			$newdata['uid'] = 0; 
-			$this->mysql->insert(Mysite::$app->config['tablepre'].'wxappoauth',$newdata); 
-			 
-			$oauthinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxappoauth where openid='".$wxuser['openid']."'  "); 
-			if(!empty($oauthinfo['logo'])){ 
+			$newdata['uid'] = 0;
+			$this->mysql->insert(Mysite::$app->config['tablepre'].'wxappoauth',$newdata);
+
+			$oauthinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxappoauth where openid='".$wxuser['openid']."'  ");
+			if(!empty($oauthinfo['logo'])){
 				$oauthinfo['logo'] = preg_match('/(http:\/\/)|(https:\/\/)/i',$oauthinfo['logo'])?$oauthinfo['logo']:Mysite::$app->config['siteurl'].$oauthinfo['logo'];
 			}else{
 				$oauthinfo['logo'] = Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo'];
 			}
-		} 
+		}
 		if($oauthinfo['uid'] > 0){
 			$checkuserinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid=".$oauthinfo['uid']."  ");
-			$oauthinfo['phone'] = $checkuserinfo['phone']; 
+			$oauthinfo['phone'] = $checkuserinfo['phone'];
 		    if(!empty($checkuserinfo)&& !empty($checkuserinfo['phone'])){
-				unset($checkuserinfo['password']); 
-				$oauthinfo = array_merge($checkuserinfo,$oauthinfo); 
-				if(!empty($oauthinfo['logo'])){ 
+				unset($checkuserinfo['password']);
+				$oauthinfo = array_merge($checkuserinfo,$oauthinfo);
+				if(!empty($oauthinfo['logo'])){
 					$oauthinfo['logo'] = preg_match('/(http:\/\/)|(https:\/\/)/i',$oauthinfo['logo'])?$oauthinfo['logo']:Mysite::$app->config['siteurl'].$oauthinfo['logo'];
 				}else{
 					$oauthinfo['logo'] = Mysite::$app->config['siteurl'].Mysite::$app->config['userlogo'];
 				}
 				$tjyhj = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan where uid='".$oauthinfo['uid']."' and status < 2 and  endtime > ".time()." ");
 				$oauthinfo['juancount'] = $tjyhj;
-				 
+
 				$expire = time() + 86400; // 设置24小时的有效期
 				setcookie("app_login", "app_login", $expire);
-				setcookie("app_loginphone", $checkuserinfo['phone'], $expire); 
+				setcookie("app_loginphone", $checkuserinfo['phone'], $expire);
 			}
-			 
+
 		}else{
 			$oauthinfo['phone'] = '';
 		}
-		
-		
+
+
 		//oauthinfo
-		$this->success($oauthinfo); 
+		$this->success($oauthinfo);
 	}
- 
-	
+
+
 	public function bluetooth_data(){
 		$dno =  IFilter::act(IReq::get('dno'));
 		$orderinfo = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."order  where dno= '".$dno."'   ");
@@ -11581,28 +11581,28 @@ if($showtype == 1){    // 加载商品
 		$orderpastatus = $orderinfo['paystatus'] == 1?'已支付':'未支付';
 		$orderpaytype = isset($payarrr[$orderinfo['paytype']])?$payarrr[$orderinfo['paytype']]:'在线支付';
 		$backdata['top'] = $shopinfo['shopname'];
-		$backdata['body'] = '订餐热线:'.Mysite::$app->config['litel'].' 
-订单状态：'.$orderpaytype.',('.$orderpastatus.')  
-姓名：'.$orderinfo['buyername'].' 
-电话：'.$orderinfo['buyerphone'].' 
-地址：'.$orderinfo['buyeraddress'].' 
-下单时间：'.date('m-d H:i',$orderinfo['addtime']).' 
-配送时间:'.date('m-d H:i',$orderinfo['posttime']).' 
- 
-******************************* 
+		$backdata['body'] = '订餐热线:'.Mysite::$app->config['litel'].'
+订单状态：'.$orderpaytype.',('.$orderpastatus.')
+姓名：'.$orderinfo['buyername'].'
+电话：'.$orderinfo['buyerphone'].'
+地址：'.$orderinfo['buyeraddress'].'
+下单时间：'.date('m-d H:i',$orderinfo['addtime']).'
+配送时间:'.date('m-d H:i',$orderinfo['posttime']).'
+
+*******************************
 '.$temp_content.'
-******************************* 
- 
-配送费：'.$orderinfo['shopps'].'元 
-合计：'.$orderinfo['allcost'].'元 
-※※※※※※※※※※※※※※ 
-谢谢惠顾，欢迎下次光临 
-订单编号'.$orderinfo['dno'].' 
-备注'.$orderinfo['content'].' 
-'; 
-		$this->success($backdata); 
-		
-		
+*******************************
+
+配送费：'.$orderinfo['shopps'].'元
+合计：'.$orderinfo['allcost'].'元
+※※※※※※※※※※※※※※
+谢谢惠顾，欢迎下次光临
+订单编号'.$orderinfo['dno'].'
+备注'.$orderinfo['content'].'
+';
+		$this->success($backdata);
+
+
 	}
 	/* 8.3新增   2016-06-04  zem */
  function memcard(){
@@ -11610,7 +11610,7 @@ if($showtype == 1){    // 加载商品
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-	  
+
 	  $rechargelist = $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."rechargecost where cost > 0 order by orderid asc limit 0,100");
 	  $data['rechargelist'] = array();
 	  foreach($rechargelist as $key=>$value ){
@@ -11622,7 +11622,7 @@ if($showtype == 1){    // 加载商品
 			  $totalsendcost = $totalsendcost+$value['sendjuancost'];
 		  }
 		  $value['totalsendcost'] = $totalsendcost;
-		  
+
 		  $tempname = '充值'.$value['cost'].'元';
 		   if( $value['is_sendcost'] == 1  || $value['is_sendjuan'] == 1  ){
 			   $tempname .= '赠送';
@@ -11637,13 +11637,13 @@ if($showtype == 1){    // 加载商品
 			   $tempname .= $value['sendjuancost'].'元优惠券';
 		   }
 		  $value['juanname'] = $tempname;
-		  
+
 		  $data['rechargelist'][] = $value;
 	  }
-	  
-	 $this->success($data); 
-	  
-	 
+
+	 $this->success($data);
+
+
    }
 
 
@@ -11679,7 +11679,7 @@ if($showtype == 1){    // 加载商品
         $shopxinxi = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 and ".time()." < endtime and is_open =1  ".$where);
 
         $list = array();
-        foreach ($shopxinxi as $key=>$value){ 
+        foreach ($shopxinxi as $key=>$value){
             $shoplists = array();
             if($value['shoptype'] == 0){
                 $shopfast =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where shopid = ".$value['id']." and  is_hui=1 and is_shophui=1 ");
@@ -11703,13 +11703,13 @@ if($showtype == 1){    // 加载商品
         $nowhour = date('H:i:s',time());
         $nowhour = strtotime($nowhour);
         $templist = array();
-		
+
         if(is_array($list)){
             foreach($list as $keys=>$values){
                 if($values['id'] > 0){
 					 $shopshui = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophui where  status = 1 and shopid = ".$values['id']."");
 					 if(!empty($shopshui)){
-                    
+
 						$values['shopshui']=$shopshui;
 						$firstday = strtotime( date('Y-m-01 00:00:00', strtotime(date("Y-m-d H:i:s")))	);   //当月第一天
 						$shopcounts = $this->mysql->select_one( "select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where suretime >= ".$firstday."   and status = 3 and  shopid = ".$values['id']."" );
@@ -11722,29 +11722,29 @@ if($showtype == 1){    // 加载商品
 						$lat = IFilter::act(IReq::get('lat'));
 						$lng = empty($lng)?0:$lng;
 						$lat =empty($lat)?0:$lat;
-						
+
 						$mi = $this->GetDistance($lat,$lng, $values['lat'],$values['lng'], 1);
-						
+
 						$mi = $mi > 1000? round($mi/1000,2).'km':$mi.'m';
 						$values['juli'] = $mi;//店铺距离
 						$values['shoplogo'] = empty($values['shoplogo'])? Mysite::$app->config['imgserver'].Mysite::$app->config['shoplogo']:Mysite::$app->config['imgserver'].$values['shoplogo'];
 						$checkinfo = $this->shopIsopen($values['is_open'],$values['starttime'],$values['is_orderbefore'],$nowhour);
 						$values['opentype'] = $checkinfo['opentype'];
 						$values['newstartime']  =  $checkinfo['newstartime'];
-						 
+
 						$attrdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopattr where  cattype = 0 and shopid = ".$values['id']."");
 						if(empty($this->platpsinfo)){
-							$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$$this->platpsinfo['admin_id']."' "); 
+							$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$$this->platpsinfo['admin_id']."' ");
 						}
 						$checkps = 	 $this->pscost($values,$lng,$lat);
-						 
+
 						$values['pscost'] = $checkps['pscost'];
-					   
-						
+
+
 						$cxinfo = $this->mysql->getarr("select name,id,imgurl from ".Mysite::$app->config['tablepre']."rule  where  FIND_IN_SET(".$values['id'].",shopid)   and status = 1   and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
-					   
+
 						$cxinfodd = $cxinfo;
-						 
+
 						 $values['cxlist'] = $cxinfodd;
 						/* 店铺星级计算 */
 						$zongpoint = $values['point'];
@@ -11815,16 +11815,16 @@ if($showtype == 1){    // 加载商品
 
         $cxinfo = $this->mysql->getarr("select name,id,imgurl from ".Mysite::$app->config['tablepre']."rule where   FIND_IN_SET(".$shopinfo['id'].",shopid)   and status = 1   and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
         $cxlist = array();
-        $data['shophui'][] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophui where  status = 1 and shopid = ".$shopinfo['id']."");      
+        $data['shophui'][] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophui where  status = 1 and shopid = ".$shopinfo['id']."");
         $data['cxlist'] = $cxinfo;
 
         $areaid = ICookie::get('myaddress');
 
         $newshoparray = array_merge($shopinfo,$shopdet);
-		
-		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$newshoparray['admin_id']."' "); 
-		
-		
+
+		$this->platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$newshoparray['admin_id']."' ");
+
+
         $tempinfo =   $this->pscost($newshoparray);
         $backdata['pstype'] = $tempinfo['pstype'];
         $backdata['pscost'] = $tempinfo['pscost'];
@@ -11839,7 +11839,7 @@ if($showtype == 1){    // 加载商品
 
     //8.3新增app闪惠买单页面接口
     function huisubshow(){
-		$backinfo = $this->checkappMem(); 
+		$backinfo = $this->checkappMem();
         $id = intval(IReq::get('shopid'));
         $list = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$id."'");
         $data['shopid'] = $list['id'];
@@ -11897,7 +11897,7 @@ if($showtype == 1){    // 加载商品
         $data['is_shophui'] = $is_shophui;
         $data['shophuiinfo'] = $shophuiinfo;
         $data['shopinfo'] = $shopinfo;
-		$data['acountcost'] = empty($backinfo['cost'])?0:$backinfo['cost']; 
+		$data['acountcost'] = empty($backinfo['cost'])?0:$backinfo['cost'];
         $paylist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."paylist where  loginname ='weixinapp' or loginname ='alipayapp' or loginname ='open_acout' order by id asc limit 0,50");
         if(is_array($paylist)){
             $data['paylist'] = $paylist;
@@ -11933,11 +11933,11 @@ if($showtype == 1){    // 加载商品
         }
         if(empty($xfcost)) $this->message('消费金额为空');
 		if($xfcost > 0){
-			
+
 		}else{
 			$this->message('消费金额必须大于0');
 		}
-      
+
 
 
         $shopone = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$shopid."' "); // 店铺信息\
@@ -11947,50 +11947,50 @@ if($showtype == 1){    // 加载商品
         }else{
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop as a left join ".Mysite::$app->config['tablepre']."shopmarket as b on a.id = b.shopid where a.id='".$shopid."' "); // 店铺信息
         }
-		
+
         if( $shopinfo['is_shophui'] == 1 ){
-            
+
                 $shophuiinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophui where shopid='".$shopid."' ");  //闪慧信息
                 if(!empty($shophuiinfo)  && $shophuiinfo['shopid'] == $shopid) {
-					 
+
 					if( $shophuiinfo['controltype'] == 2 ){
-						 
+
 						$checkcost = $shophuiinfo['mjlimitcost']; // 每满费用金额
 						if( $xfcost >= $checkcost  ){
-							$yhcost = $shophuiinfo['controlcontent']; 
-						}else{ 
-						} 
+							$yhcost = $shophuiinfo['controlcontent'];
+						}else{
+						}
 						$data['huilimitcost'] = $shophuiinfo['mjlimitcost'];
-						
+
 					}
 					if( $shophuiinfo['controltype'] == 3 ){
-						 
+
 						$checkcost = $shophuiinfo['limitzhekoucost']; // 打折金额限制
 						if( $xfcost >= $checkcost  ){
 							$yhcost = $xfcost*((100-$shophuiinfo['controlcontent'])/100);
-							 
+
 						}else{
-						 
+
 						}
-						
+
 						$data['huilimitcost'] = $shophuiinfo['limitzhekoucost'];
-						
+
 					}
-					
-					
-					
+
+
+
                     $data['huilimitcost'] = $shophuiinfo['limitzhekoucost'];
                     $data['huiid'] = $shophuiinfo['id'];
                     $data['huiname'] = $shophuiinfo['name'];
                     $data['huitype'] = $shophuiinfo['controltype'];
                     $data['huicost'] = $shophuiinfo['controlcontent'];
-					
-					
-					
-					
-					
-					
-					
+
+
+
+
+
+
+
 
 
                 }else{
@@ -12000,11 +12000,11 @@ if($showtype == 1){    // 加载商品
                     $data['huilimitcost'] = '';
                     $data['huicost'] = '';
                 }
-            
+
         }
 		 if($yhcost > $xfcost){
 			 $this->message('优惠金额不能大于消费总金额');
-			 
+
 		 }
 	    $sjcost = $xfcost-$yhcost;
         $data['uid'] = $uid;
@@ -12016,7 +12016,7 @@ if($showtype == 1){    // 加载商品
         $data['buyorderphone'] = $buyorderphone;
         $data['yhcost'] = $yhcost;
         $data['sjcost'] = $sjcost;
-		
+
         if( $shopinfo['is_shgift'] == 1 ){
             $data['givejifen'] = floor($sjcost/$shopinfo['sendgift']);
         }else{
@@ -12044,62 +12044,62 @@ if($showtype == 1){    // 加载商品
 
 	/* 8.3 新增下单分享优惠券数据 */
 	function ordersharejuan(){
-		
+
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$orderid = intval(IFilter::act(IReq::get('orderid')));		
-		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' " );  	   
-        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc " );		
+		$orderid = intval(IFilter::act(IReq::get('orderid')));
+		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' " );
+        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc " );
 		$shareinfo = $this->mysql->select_one("select title,img,`describe`  from ".Mysite::$app->config['tablepre']."juanshowinfo where type=2 order by orderid asc  ");
 		$shareinfo['img'] = Mysite::$app->config['siteurl'].$shareinfo['img'];
-		$shareinfo['link'] = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=sharehb&did='.$orderid;		 				
+		$shareinfo['link'] = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=sharehb&did='.$orderid;
 		if( !empty($juaninfo) && $juansetinfo['status'] == 1 &&  !empty($shareinfo)  ){
 			$data['shareinfo'] = $shareinfo;
 		}else{
 			$this->message('下单关闭分享图标');
-		}	 
+		}
 		$this->success($data);
-		
+
 	}
-	
+
 	/* 8.3 新增会员推广分享优惠券数据 */
 	function memsharejuan(){
-		
+
 		$backinfo = $this->checkappMem();
-		
+
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
 		}
-		$jiamiuidkey = base64_encode($backinfo['uid']); 		 
-		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 5 or name = '邀请好友送红包' " );  	   
+		$jiamiuidkey = base64_encode($backinfo['uid']);
+		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 5 or name = '邀请好友送红包' " );
         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 5 or name= '邀请好友送红包' order by id asc " );
 		$shareinfo = $this->mysql->select_one("select  title,img,`describe`  from ".Mysite::$app->config['tablepre']."juanshowinfo where type=3 order by orderid asc  ");
- 		$shareinfo['img'] = Mysite::$app->config['siteurl'].$shareinfo['img'];		
-		$shareinfo['link'] = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=memsharehb&key='.$jiamiuidkey;		 		
+ 		$shareinfo['img'] = Mysite::$app->config['siteurl'].$shareinfo['img'];
+		$shareinfo['link'] = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=memsharehb&key='.$jiamiuidkey;
 		if(!empty($juaninfo) && $juansetinfo['status'] == 1 &&  !empty($shareinfo)  ){
 			$data['shareinfo'] = $shareinfo;
 		}else{
 			$this->message('会员推广关闭分享图标');
-		}	 
+		}
 		$this->success($data);
-		
+
 	}
-	
-	
+
+
 	function memsharej(){   //会员中心推广分享优惠券页面
-		
+
 		$backinfo = $this->checkappMem();
-		
+
  		$jiamiuidkey = base64_encode($backinfo['uid']);  //  base64_decode
 		$data['jiamiuidkey'] = $jiamiuidkey;
   		$wxclass = new wx_s();
 		$signPackage = $wxclass->getSignPackage();
  		$data['signPackage'] = $signPackage;
-		$juansetinfo = $this->mysql->select_one("select status from ".Mysite::$app->config['tablepre']."alljuanset where type = 5 or name = '邀请好友送红包' " );  	   
+		$juansetinfo = $this->mysql->select_one("select status from ".Mysite::$app->config['tablepre']."alljuanset where type = 5 or name = '邀请好友送红包' " );
         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 5 or name= '邀请好友送红包' order by id asc " );
-		$shareinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."juanshowinfo where type=3 order by orderid asc  ");		 
+		$shareinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."juanshowinfo where type=3 order by orderid asc  ");
 		if( empty($shareinfo) ){
 			$shareinfo['title'] = Mysite::$app->config['sitename'];
 			$shareinfo['img'] = Mysite::$app->config['sitelogo'];
@@ -12108,7 +12108,7 @@ if($showtype == 1){    // 加载商品
 		$data['shareinfo'] = $shareinfo;
 
 		$memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid=".$backinfo['uid']."  ");
-        
+
 		$historyphone =   $_COOKIE['historyphone'];  //  ICookie::get('historyphone');
  		if( !empty($historyphone) ){
 			$juanlist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where shareuid=".$backinfo['uid']."  and bangphone = '".$historyphone."' ");
@@ -12120,36 +12120,36 @@ if($showtype == 1){    // 加载商品
 		$data['juanlist'] = $juanlist;
 		$data['memberinfo'] = $memberinfo;
 		Mysite::$app->setdata($data);
-		
+
 	}
 		/* 8.3  会员中心推广分享优惠券页面 */
 	function memsharejMMM(){   //会员忠心推广分享优惠券页面
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
+		}
  		$jiamiuidkey = base64_encode($backinfo['uid']);  //  base64_decode
 		$data['jiamiuidkey'] = $jiamiuidkey;
-  	 
+
 		$shareinfo = $this->mysql->select_one("select  *  from ".Mysite::$app->config['tablepre']."juanshowinfo where type=3 order by orderid asc  ");
-		
+
 		$shareinfo['link'] = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=memsharehb&key='.$jiamiuidkey;
 		$data['shareinfo'] = $shareinfo;
-		
+
 		$userextensionsharejuan = Mysite::$app->config['userextensionsharejuan'];
- 		
+
 		$where = "  where type=3 and addtime < ".time()." and endtime > ".time()." and is_open = 1 and juannum = 1 ";
  		$checkinfosendjuan = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."juanrule ".$where." order by orderid asc ");
-	 
-	 
+
+
 		if( !empty($checkinfosendjuan) && $userextensionsharejuan == 0 &&  !empty($shareinfo)  ){
 			$data['shareinfo'] = $shareinfo;
 		}else{
 			$this->message('优惠券已经领取完毕');
 		}
-	 
+
    		$this->success($data);
-		
+
 	}
 
 
@@ -12211,39 +12211,39 @@ if($showtype == 1){    // 加载商品
         $data['goodssearchlist'] = $temparray;
         $this->success($data);
     }
-	
+
 	//2016-6.14  新增 取单的提醒功能
-	
+
 	function txingorder(){
 		 $orderid = IFilter::act(IReq::get('orderid'));
-		 
+
 		 if(empty($orderid)){
 			 $this->message('订单错误');
 		 }
-		 $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."'"); 
+		 $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."'");
 		 if(empty($orderinfo)) $this->message('订单不存在');
 		 $orderps = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."orderps where orderid='".$orderid."'");
 		 if(empty($orderps)) $this->message('配送单不存在');
-		 if($orderps['status'] > 2) $this->message('订单已配送'); 
+		 if($orderps['status'] > 2) $this->message('订单已配送');
 		 if(empty($orderinfo['psuid'])) $this->message('配送员还未抢单');
-		 $psylist =  $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."apploginps  where uid='".$orderinfo['psuid']."' "); 
+		 $psylist =  $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."apploginps  where uid='".$orderinfo['psuid']."' ");
 		  if(!empty($psylist)){
-			$psCls = new apppsyclass(); 
+			$psCls = new apppsyclass();
 			$psCls->sendmsg($psylist['userid'],'','取单提醒',$orderinfo['shopname'].'需要您取单',1);
- 		  } 
+ 		  }
 		 $this->success('ok');
 	}
-	
+
 	function shopyhorderlist(){
 		$backinfo = $this->checkapp();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
-		} 
+		}
 		$shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where uid = '".$backinfo['uid']."' ");
 		if(empty($shopinfo)){
 				$this->message('店铺不存在');
 		}
-		 
+
 		$where =" where shopid = '".$shopinfo['id']."' and paystatus = 1 ";
 		$startday = trim(IReq::get('startday'));
 		$endday = trim(IReq::get('endday'));
@@ -12251,15 +12251,15 @@ if($showtype == 1){    // 加载商品
 		if(!empty($endday)){
 			  $info = strtotime($endday)+86399;
 			  $where .=" and addtime < ".$info;
-		} 
-		
-		
-		
-	 
+		}
+
+
+
+
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 	    $tempcxlist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shophuiorder  ".$where." order by id desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
 		$backdata = array();
 		if(is_array($tempcxlist)){
@@ -12267,14 +12267,14 @@ if($showtype == 1){    // 加载商品
 				$shoptemp = $this->mysql->select_one("select shoplogo from ".Mysite::$app->config['tablepre']."shop where id = ".$value['shopid']."");
 				$imgurl = empty($shoptemp['shoplogo'])? Mysite::$app->config['shoplogo']:$shoptemp['shoplogo'];
 				$value['shoplogo'] =  Mysite::$app->config['siteurl'].$imgurl;
-				$value['addtime'] =  date('Y-m-d H:i:s',$value['addtime']); 
-				$backdata[] = $value; 
+				$value['addtime'] =  date('Y-m-d H:i:s',$value['addtime']);
+				$backdata[] = $value;
 			}
 		}
-		 
-		$this->success($backdata);  
+
+		$this->success($backdata);
 	}
-	
+
 	function getonehuiorder(){
 		$orderid = intval(IReq::get('orderid'));
 		if($orderid < 1){
@@ -12283,11 +12283,11 @@ if($showtype == 1){    // 加载商品
 		$checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophuiorder  where  id = ".$orderid." ");
 		if(empty($checkinfo)){
 			$this->message('订单不存在');
-		} 
+		}
 		$checkinfo['addtime'] = date('Y-m-d',$checkinfo['addtime']);
-		$this->success($checkinfo); 
+		$this->success($checkinfo);
 	}
-	
+
 	function useryhorderlist(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
@@ -12300,11 +12300,11 @@ if($showtype == 1){    // 加载商品
 		if(!empty($endday)){
 			  $info = strtotime($endday)+86399;
 			  $where .=" and addtime < ".$info;
-		} 
+		}
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
 	    $tempcxlist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shophuiorder  ".$where." order by id desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
 		$backdata = array();
 		if(is_array($tempcxlist)){
@@ -12312,12 +12312,12 @@ if($showtype == 1){    // 加载商品
 				$shoptemp = $this->mysql->select_one("select shoplogo from ".Mysite::$app->config['tablepre']."shop where id = ".$value['shopid']."");
 				$imgurl = empty($shoptemp['shoplogo'])? Mysite::$app->config['shoplogo']:$shoptemp['shoplogo'];
 				$value['shoplogo'] =  Mysite::$app->config['siteurl'].$imgurl;
-				$value['addtime'] =  date('Y-m-d H:i:s',$value['addtime']); 
-				$backdata[] = $value; 
+				$value['addtime'] =  date('Y-m-d H:i:s',$value['addtime']);
+				$backdata[] = $value;
 			}
 		}
-		 
-		$this->success($backdata); 
+
+		$this->success($backdata);
 	}
 	//删除优惠订单id
 	function delyhorder(){
@@ -12350,43 +12350,43 @@ if($showtype == 1){    // 加载商品
         $backdata['giftinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."gift where id = ".$id);
         $this->success($backdata);
     }
-	 
-	/** 	
-     * @userapi 
+
+	/**
+     * @userapi
      * @name 分享设置
-     * @other 2017/8/19   赵 
-     * @datatype 固定值 json 必传  
+     * @other 2017/8/19   赵
+     * @datatype 固定值 json 必传
 	*{
 	*	"error": false,
 	*	"msg": {
-	*		"ymengkey": "2989",【友盟账号id】 
+	*		"ymengkey": "2989",【友盟账号id】
 	*		"qqshareappid": "",【qq分享id】 为空时不能分享
-	*		"qqsharekey": "",【qq分享key】 
+	*		"qqsharekey": "",【qq分享key】
 	*		"wxshareappid": "",【微信分享id】为空时不能分享
-	*		"wxsharekey": "",【微信分享key】 
+	*		"wxsharekey": "",【微信分享key】
 	*	}
-	*}   
+	*}
 	*/
 	function sharesetxxx(){
 		$backdata = array(
-			'ymengkey'=> Mysite::$app->config['ymengkey'], 
+			'ymengkey'=> Mysite::$app->config['ymengkey'],
 			'qqshareappid'=> Mysite::$app->config['qqshareappid'],
 			'qqsharekey'=> Mysite::$app->config['qqsharekey'],
 			'wxshareappid'=>'',
 			'wxsharekey'=>'',
-		); 
-		 
-		$weixindir = hopedir.'/plug/pay/weixinapp/lib/WxPay.Config.php'; 
+		);
+
+		$weixindir = hopedir.'/plug/pay/weixinapp/lib/WxPay.Config.php';
 		if(file_exists($weixindir)){
 			include_once($weixindir);
 			$backdata['wxshareappid'] = WxPayConfig::APPID;
 			$backdata['wxsharekey'] = WxPayConfig::APPSECRET;
 		}
-		$this->success($backdata); 
+		$this->success($backdata);
 	}
-	 
+
 	  /*获取所有历史订单  商家端  2019-09-29 */
-	 
+
 	 function allorder(){
 		$statusarr = array('0'=>'新订单','1'=>'待发货','2'=>'待完成','3'=>'完成','4'=>'关闭','5'=>'关闭');
 		$gostatusarr = array('0'=>'新订单','1'=>'待消费','2'=>'待消费','3'=>'已消费','4'=>'关闭','5'=>'关闭');
@@ -12402,20 +12402,20 @@ if($showtype == 1){    // 加载商品
 		if(!empty($endday)){
 			  $info = strtotime($endday)+86399;
 			  $where .=" and addtime < ".$info;
-		} 
+		}
 		$where .= " and status = 3 and is_reback = 0 and is_make = 1 ";
 		$page = intval(IFilter::act(IReq::get('page')));
-		$pagesize = intval(IFilter::act(IReq::get('pagesize'))); 
-		$pagesize = $pagesize > 0? $pagesize:10; 
-		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);   
-  		
+		$pagesize = intval(IFilter::act(IReq::get('pagesize')));
+		$pagesize = $pagesize > 0? $pagesize:10;
+		$this->pageCls->setpage(intval(IReq::get('page')),$pagesize);
+
 		$orderlist =  $this->mysql->getarr("select id,addtime,posttime,paytype,paystatus,dno,is_reback,allcost,status,is_make,daycode,buyeruid,is_goshop,buyername,buyerphone,buyeraddress,postdate from ".Mysite::$app->config['tablepre']."order where shopuid = ".$backinfo['uid']." ".$where." order by addtime desc  limit   ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."   ");   /* and posttime < ".$endtime." */
 		$backdatalist = array();
 		foreach($orderlist as $key=>$value){
 			if($value['is_goshop'] == 1){
 				$value['showstatus'] = $gostatusarr[$value['status']];
 			}else{
-				$value['showstatus'] = $statusarr[$value['status']]; 
+				$value['showstatus'] = $statusarr[$value['status']];
 			}
 			$value['is_yuding'] = $value['posttime'] - $value['addtime'] > 1800?'1':'2';
 			$value['addtime'] = date('H:i:s',$value['addtime']);
@@ -12441,7 +12441,7 @@ if($showtype == 1){    // 加载商品
 			$checkuid = intval($value['buyeruid']);
 			if($checkuid > 0){
 				$value['orderNum'] = $this->mysql->counts("select  * from ".Mysite::$app->config['tablepre']."order where buyeruid = ".$value['buyeruid']."  and status = 3 ");
-		
+
 			}else{
 				$value['orderNum'] =  0;
 			}
@@ -12450,37 +12450,37 @@ if($showtype == 1){    // 加载商品
 				if($value['is_make'] == 0){
 					$value['showstatus'] = $value['is_goshop']  == 1?'新订台订单':'新订单';
 				}elseif($value['status'] !=1){
-					$value['showstatus'] = $value['is_goshop']  == 1?'商家取消订单':'取消制作'; 
+					$value['showstatus'] = $value['is_goshop']  == 1?'商家取消订单':'取消制作';
 				}
 			}
 			$backdatalist[] = $value;
 		}
 		$this->success($backdatalist);
 	}
-	 
-	 
-		
-//新增函数 
-	
-	function adrmap(){ 
+
+
+
+//新增函数
+
+	function adrmap(){
 		$ghlnglat = trim(IFilter::act(IReq::get('ghlnglat')));
  		$data['ghlnglat'] = $ghlnglat;
 		Mysite::$app->setdata($data);
 	}
-	 
-	 function ptadrmap(){ 
+
+	 function ptadrmap(){
 		$ghlnglat = trim(IFilter::act(IReq::get('ghlnglat')));
  		$data['ghlnglat'] = $ghlnglat;
 		Mysite::$app->setdata($data);
-	} 
-	
+	}
+
 	function regtokenerr(){
 		logwrite('注册苹果失败');
 		$this->success('操作成功');
 	}
-	
-	
-	function checkorderclose(){ 
+
+
+	function checkorderclose(){
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
@@ -12493,37 +12493,37 @@ if($showtype == 1){    // 加载商品
 		$ids = array_filter($ids);
 		if(count($ids) == 0){
 			$this->message('emptyorderid2');
-		} 
+		}
 		//print_r($ids);
-		$orderlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."order where id in(".join(',',$ids).") order by id asc"); 
+		$orderlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."order where id in(".join(',',$ids).") order by id asc");
         $newids = array();
 		$checktime = time()-15*60;
 		//print_r($orderlist);
-		foreach($orderlist as $key=>$orderinfo){ 
+		foreach($orderlist as $key=>$orderinfo){
 			if($orderinfo['addtime'] < $checktime && $orderinfo['paytype'] == 1 && $orderinfo['paystatus'] == 0 && $orderinfo['status'] < 2){
-				$newdata['status'] = 4; 
+				$newdata['status'] = 4;
 				$this->mysql->update(Mysite::$app->config['tablepre'].'order',$newdata,"id='".$orderinfo['id']."'");
-				$orderCLs = new orderclass(); 
-				$orderCLs->writewuliustatus($orderinfo['id'],16,$orderinfo['paytype']);  //在线支付成功状态	  
+				$orderCLs = new orderclass();
+				$orderCLs->writewuliustatus($orderinfo['id'],16,$orderinfo['paytype']);  //在线支付成功状态
 				$newids[] = $orderinfo['id'];
-			} 
+			}
 		}
 		if(count($newids) == 0){
 			$this->message('emptyorderid3');
 		}
 		$this->success(join(',',$newids));
-		
+
 	}
-	
-	
+
+
 	function shopneed(){
 		$shopuid = intval(IFilter::act(IReq::get('uid')));
 		$daymintime = strtotime(date('Y-m-d',time()));
 	    $tempshu =  $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order where shopuid='".$shopuid."' and  status > 0  and  status <  3 and is_make = 0 and posttime > ".$daymintime." limit 0,1000");
 	    $hidecount = isset($tempshu['shuliang'])?$tempshu['shuliang']:0;
-	    $this->success($hidecount); 
+	    $this->success($hidecount);
 	}
-	 
-	
-	
+
+
+
 }

@@ -2495,6 +2495,7 @@ class method extends wxbaseclass
         $data['ojuan'] = $ojuan;
         Mysite::$app->setdata($data);
     }
+
     public function cart_ajax_list()
     {
         $shopid = intval(IReq::get('shopid'));
@@ -7707,12 +7708,71 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $data['goods_list'] = $goods_list;
         Mysite::$app->setdata($data);
     }
+    public function coupon()
+    {
+        $data['list'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where endtime > ".time()." and status = 1 and  uid = ".$this->member['uid']." ");
+        Mysite::$app->setdata($data);
+    }
     public function getCoupon()
     {
         $time = time();
         $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 AND count > 0 AND endtime > $time AND starttime <= $time order by id asc ");
-
+        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 AND count > 0 AND endtime > $time AND starttime <= $time order by id asc ");
+        foreach ($juaninfo as $key => $value) {
+            $user_juan = $this->mysql->select_one("SELECT * FROM ".Mysite::$app->config['tablepre']."juan WHERE alljuanid = ".$value['id']." AND uid = ".$this->member['uid']." ");
+            if(!empty($user_juan))
+            {
+                $juaninfo[$key]['is_user_juan'] = 1;
+            }else{
+                $juaninfo[$key]['is_user_juan'] = 10;
+            }
+            $juaninfo[$key]['user_juan'] = $user_juan;
+        }
+        $data['juaninfo'] = $juaninfo;
         Mysite::$app->setdata($data);
+    }
+    public function getCouponSubmit()
+    {
+        $id = intval(IReq::get('id'));
+        $nowtime = time();
+        $user_juan = $this->mysql->select_one("SELECT * FROM ".Mysite::$app->config['tablepre']."juan WHERE alljuanid = $id AND uid = ".$this->member['uid']." ");
+        if($user_juan){
+            $this->message("您已领过该券");
+        }
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."alljuan WHERE id = $id";
+        $juaninfo = $this->mysql->select_one($sql);
+        if($juaninfo['count'] <= 0)
+        {
+            $this->message("该优惠券已领完");
+        }else{
+            $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6" );
+            $juandata['uid'] = $this->member['uid'];// 用户ID
+            $juandata['username'] = $this->member['username'];// 用户名
+            $juandata['name'] = $juansetinfo['name'];//  优惠券名称
+            $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
+            $juandata['card'] = $nowtime.rand(100,999);
+            $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
+            $juandata['limitcost']	= $juaninfo['limitcost'];
+            $juandata['alljuanid'] = $id;
+
+            if($juansetinfo['timetype'] == 1){
+                 $juandata['creattime'] = time();
+                 $date = date('Y-m-d',$juandata['creattime']);
+                 $endtime = strtotime($date) + ($juansetinfo['days']-1)*24*60*60 + 86399;
+                 $juandata['endtime'] = $endtime;
+            }else{
+                 $juandata['creattime'] = $juaninfo['starttime'];
+                 $juandata['endtime'] =  $juaninfo['endtime'];
+            }
+            if($juansetinfo['costtype'] == 1){
+                 $juandata['cost'] = $juaninfo['cost'];
+            }else{
+                 $juandata['cost'] = rand($value['costmin'],$juaninfo['costmax']);
+            }
+            $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);
+            $data['count'] = $juaninfo['count'] - 1;
+            $this->mysql->update(Mysite::$app->config['tablepre'].'alljuan',$data,"id='".$id."'");
+            $this->success('success');
+        }
     }
 }

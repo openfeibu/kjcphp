@@ -10,14 +10,50 @@
         <p>满<{$items['limitcost']}>元减<{$items['cost']}>元</p>
         <span>有效期至：<{date('Y-m-d',$items['endtime'])}></span>
       </div>
-      <div class="coupon_button coupon_button_get fb-inlineBlock">
+      <{if $items['is_user_juan'] == 1}>
+      <div class="coupon_button coupon_button_ed fb-inlineBlock" >
+        已领取
+      </div>
+      <{else}>
+      <div class="coupon_button coupon_button_get fb-inlineBlock" id="<{$items['id']}>">
         领取
       </div>
+      <{/if}>
     </div>
     <{/foreach}>
     <{else}>
     <div class="noPro">暂无可领取优惠券</div>
     <{/if}>
   </div>
+<{/block}>
+<{block name=end_script}>
+<script>
+$(function(){
+    $('.coupon_button_get').click(function(){
+        $F.loading();
+        url = siteurl+'/index.php?ctrl=wxsite&action=getCouponSubmit&datatype=json&random=@random@';
+        url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+        id = $(this).attr('id');
+        $.ajax({         //script定义
+            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            dataType: "json",
+            async:true,
+            data:{'id':id},
+            success:function(content) {
+                if(content.error ==  false){
+                    $.toast('添加成功','text');
+                    window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=getCoupon' ;
+                }else{
+                    $.toast(content.msg,'text');
+                }
+                $F.closeLoading();
+            },
+            error:function(){
+                $F.closeLoading();
+            }
+        });
+    });
+});
+</script>
 <{/block}>
 <{block name=footer}><{/block}>
