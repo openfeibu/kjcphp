@@ -44,7 +44,6 @@
         $('#total_money').text(0.00);
 
         if(datas.flag == false){
-            console.log($('#total_money'));
         //    if($('#total_money').html() != undefined){
                 if(Number(datas.content.sumcount)>0){
                     $(".shop-car-icon").addClass("active");
@@ -58,6 +57,7 @@
                 $('#total_money').text(shijicost.toFixed(2));
                 html = "";
                 $('.shop-pro-all').find('.addCar').addClass("emptyCar").find(".Cinput").text(0);
+
                 $.each(datas.content.list, function(i,val){
                     html +='<dd proid="'+val.id+'">';
                     html +='    <div class="car-name fb-inlineBlock">';
@@ -82,8 +82,8 @@
                     }
 
                     html +='</dd>';
-                    $('.car-list dl').html(html);
 
+                    $('.car-list dl').html(html);
                     if($('#gidli_'+val.id).html() != undefined){
                         //$('#gshu_'+val.id).val(val.count);
                         if($('#gidli_'+val.id).find('.addC').attr('have_det'))
@@ -93,6 +93,11 @@
 
                     }
                 });
+                if(datas.content.list.length == 0){
+                  //没有商品
+                  $('.car-list dl').html('');
+                  closeCar();
+                }
                 if(Number(datas.content.sum) >= Number(shoplimitcost)){
                     $(".shop-buy").addClass("active").html("去结算");
                     if(shopis_open !=2 && shopis_open !=3){
@@ -192,11 +197,8 @@
           <{else}>
               <{if $goods['have_det'] == 1 }>
               <div class="addCar emptyCar" maxnum="65535">
-                <div class="prevC no_prevC"></div>
-                <div class="Cinput">
-                  0
-                </div>
-                <div class="addC" id="<{$goods['id']}>" ></div>
+                
+                <div class="addC checkType" id="<{$goods['id']}>" >可选规格</div>
               </div>
               <{else}>
               <div class="addCar emptyCar " maxnum="65535">
@@ -246,11 +248,9 @@
           <{else}>
               <{if $items['have_det'] == 1 }>
               <div class="addCar emptyCar" maxnum="65535">
-                <div class="prevC no_prevC"></div>
-                <div class="Cinput">
-                  0
-                </div>
-                <div class="addC" id="<{$items['id']}>" ></div>
+
+                <div class="addC checkType" id="<{$items['id']}>" >可选规格</div>
+
               </div>
               <{else}>
               <div class="addCar emptyCar " maxnum="65535">
@@ -487,7 +487,7 @@
             maxNum = addCar.attr("maxNum"),
             nowNum = num + 1;
         //            carts = JSON.parse(window.localStorage.cart);
-        if ($(this).parents(".addCar").find(".prevC").hasClass("no_prevC")) {
+        if ($(this).hasClass("checkType")) {
         //    openType(addCar);
             openType(proid);
             return false;
@@ -613,7 +613,8 @@
         if(checkhavedet == 1){
             removeoneproduct($(this).attr('product_id'),$(this).attr('data-shopid'),1);
         }else{
-        	removeonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1,this);
+
+        	 removeonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1,this);
         }
 
         // if (nowNum == 0) {

@@ -60,3 +60,16 @@
 .shop_map ul li .map_update a{display: block;width: 100%;height: 100%;}
 
 .main_header{padding-bottom: 0 !important}
+
+.shop-detail .shop-detail-con .shop-pro-all dl dd .addCar .checkType {
+    width: 1.4rem !important;
+    height: 0.5rem !important;
+    background: none !important;
+    border-radius: 0.5rem;
+    line-height: 0.5rem;
+    border:1px solid #ff3156;
+    color: #ff3156;
+    font-size: 0.24rem;
+    text-align: center;
+    margin-bottom: 0.2rem;
+}

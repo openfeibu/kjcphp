@@ -54,36 +54,55 @@ function freshcartdata(datas,$payflag){
 }
 
 function uponeproduct(gid,tshopid,num){
+    $F.loading();
 	var url= siteurl+'/index.php?ctrl=site&action=addcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&gdtype=2&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    var bk = ajaxback(url,'');
-    if(bk.flag == false){
-        freshcart();
-    }else{
-    	$.toast(bk.content,'text');
-    }
+     fbajaxback(url, '',function(backmessage){
+        if(backmessage.flag == false){
+            $F.closeLoading();
+            freshcart();
+            return true;
+        }else{
+            $.toast(backmessage.content,'text');
+            return false;
+        }
+ 
+     })
+  
 }
 function removeoneproduct(gid,tshopid,num){
+    $F.loading();
     url = siteurl+'/index.php?ctrl=site&action=downcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&gdtype=2&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    var bk = ajaxback(url,'');
-    if(bk.flag == false){
-        freshcart();
-    }else{
-        $.toast(bk.content,'text');
-    }
+     fbajaxback(url, '',function(backmessage){
+        if(backmessage.flag == false){
+            $F.closeLoading();
+            freshcart();
+            return true;
+        }else{
+            $.toast(backmessage.content,'text');
+            return false;
+        }
+ 
+     })
+    // var bk = ajaxback(url,'');
+    // if(bk.flag == false){
+    //     freshcart();
+    // }else{
+    //     $.toast(bk.content,'text');
+    // }
 }
 function addonedish(gid,tshopid,num,obj){
     $F.loading();
     var url= siteurl+'/index.php?ctrl=site&action=addcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    $F.loading();
     fbajaxback(url, '',function(backmessage){
        if(backmessage.flag == false){
         // if($('#total_money').html() != undefined){
         //     //cartimg($('#gid_'+gid),gid);
         // }else{
         //     // $('#loading').hide();
+            $F.closeLoading();
             freshcart();
             return true;
         //}
@@ -101,8 +120,8 @@ function removeonedish(gid,tshopid,num){
     $F.loading();
     fbajaxback(url, '',function(backmessage){
         if(backmessage.flag == false){
-
             freshcart();
+
             return true;
         }else{
             $.toast(backmessage.content,'text');
