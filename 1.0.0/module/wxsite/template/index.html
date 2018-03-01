@@ -18,7 +18,7 @@
   <div class="banner">
     <div class="swiper-container swiper-container-banner">
       <div class="swiper-wrapper">
-         <{load_data assign="list" table="adv"    fileds="*"  limit="5" where="advtype='weixinlb' and  module='<{$sitetemp}>' " }> 
+         <{load_data assign="list" table="adv"    fileds="*"  limit="5" where="advtype='weixinlb' and  module='<{$sitetemp}>' " }>
           <{foreach from=$list['list'] item=items}>
            <div class="swiper-slide"><a href="<{$items['linkurl']}>"><img src="<{$items['img']}>" alt=""></a></div>
            <!-- <div class="wrap" ><a href="<{$items['linkurl']}>"><img src="<{$items['img']}>" style="width:100%; height:70px;" alt=""></a></div> -->
@@ -40,7 +40,7 @@
     </ul>
   </div>
   <div class="pic_discount">
-    <a href=""><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/pic_discount.jpg" alt=""></a>
+    <a href="<{ofunc type=url link="/wxsite/discount"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/pic_discount.jpg" alt=""></a>
   </div>
   <div class="shop_group">
     <div class="shop_group_title">附近商家</div>
