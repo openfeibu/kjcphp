@@ -1,16 +1,16 @@
- <{extends file="<{$tempdir}>/public/wxsite.html"}>  
-<{block name=extendcss}> 
+ <{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=extendcss}>
  <link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/juan.css">
 <{/block}>
- <{block name=extendjs}> 
-  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>   
- 
- <script>  
+ <{block name=extendjs}>
+  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>
+
+ <script>
   function showorder(obj){
 
-  	window.location.href=siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+$(obj).attr('orderid')+'&random=@random@';  //'ordershow.html?orderid='+$(obj).attr('orderid');//  	alert($(obj).attr('orderid')); 
+  	window.location.href=siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+$(obj).attr('orderid')+'&random=@random@';  //'ordershow.html?orderid='+$(obj).attr('orderid');//  	alert($(obj).attr('orderid'));
 
-  } 
+  }
 </script>
 
 <{/block}>
@@ -27,7 +27,7 @@
 </div>
  <{/block}>
 <{block name=sitetitle}><{$sitename}><{/block}>
-<{block name=myScrolljs}><script> 
+<{block name=myScrolljs}><script>
 		var myScroll;
 function loaded() {
 	myScroll = new iScroll('wrapper', {
@@ -41,11 +41,11 @@ function loaded() {
 		}
 	});
 }
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false); 
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
 </script>
 <{/block}>
-<{block name=blockcontent}> 
+<{block name=blockcontent}>
 <style>
 .canuse{
 height: 36px;width:49%;display:inline-block;border-right:1px solid #F0F0F0;font-size: 14px;
@@ -56,19 +56,19 @@ height: 36px;width:49%;display:inline-block;font-size: 14px;
 .can{
 color:#ff8600
 }
-</style> 
+</style>
 <div style='background-color: #fff;height: 36px;text-align:center;line-height: 36px;'>
-		<div class='canuse can'>可使用</div>	
+		<div class='canuse can'>可使用</div>
 		<div class='nouse'>已失效</div>
 	</div>
  <div id="wrapper" style="top:77px;">
 	<div id="scroller">
-	
+
 <div class="discouponCon">
- 
+
  <div class="discouponBox canuselist">
   <{if !empty($pcjuan['list'])}>
-  <{foreach from=$pcjuan['list'] key=key item=items}>     
+  <{foreach from=$pcjuan['list'] key=key item=items}>
   <div class="discoupon" juanid="<{$items['id']}>" style='background-color: #fff; border-radius:0'>
    <div style='padding-bottom: 5px;'>
     <div style='display:inline-block;text-align:center;width:30%;margin-top: 10px;'>
@@ -76,35 +76,35 @@ color:#ff8600
 	<p><div style='text-align:center;font-size:11px;background-color: #FFE4E1;border-radius: 25px;height: 22px;margin-left: 5px;'>满<{$items['limitcost']}>元可用</div></p>
 	</div>
 	<div style='display:inline-block;text-align:center'>
-	<ul>	   
+	<ul>
 	  <li style='font-size: 14px; font-weight:bold;text-align:left'><{$items['name']}>
-	  <{if $items['endtime']-time()<86400 }><span style='color:red;float: right;font-weight: normal;font-size: 12px; '>即将过期</span><{/if}></li>	
-	  <li style='font-size: 11px;'>有效期：<{date('Y-m-d',$items['creattime'])}>至<{date('Y-m-d',$items['endtime'])}></li>		  
+	  <{if $items['endtime']-time()<86400 }><span style='color:red;float: right;font-weight: normal;font-size: 12px; '>即将过期</span><{/if}></li>
+	  <li style='font-size: 11px;'>有效期：<{date('Y-m-d',$items['creattime'])}>至<{date('Y-m-d',$items['endtime'])}></li>
 	</ul>
 	</div>
    </div>
-   <{assign var=paytypearr value=","|explode:$items['paytype']}> 
+   <{assign var=paytypearr value=","|explode:$items['paytype']}>
 	<{if (in_array(1,$paytypearr ) &&  in_array(2,$paytypearr )) or empty($items['paytype'])}>
-	
-	<{else}>	
+
+	<{else}>
    <div class="discouponB" style='height:30px;line-height:30px;border-top:1px #F0F0F0 dashed;font-size: 11px;'>
    &bull;&nbsp;&nbsp;<{if  in_array(1,$paytypearr ) &&  !(in_array(2,$paytypearr ))  }>仅限在线支付订单使用<{/if}>
-   <{if  in_array(2,$paytypearr ) &&  !(in_array(1,$paytypearr ))  }>仅限货到付款订单使用<{/if}>      
-   </div>	
-	<{/if}>	
-  </div> 
-   <{/foreach}>  
+   <{if  in_array(2,$paytypearr ) &&  !(in_array(1,$paytypearr ))  }>仅限货到付款订单使用<{/if}>
+   </div>
+	<{/if}>
+  </div>
+   <{/foreach}>
   <{else}>
       <div align='center' style='margin-top: 50%;'>
 	  <img  src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/wujuan.png" style='width:72px;height:80px'>
 	<p style='color:#999;font-size:12px'>无此类型优惠券~</p></div>
     <{/if}>
  </div>
- 
+
  <div class="discouponBox nouselist" style='display:none'>
   <{if !empty($pcjuan['nouselist'])}>
-  <{foreach from=$pcjuan['nouselist'] key=key item=items}>   
-  
+  <{foreach from=$pcjuan['nouselist'] key=key item=items}>
+
   <div class="discoupon" juanid="<{$items['id']}>" style='background-color: #fff; border-radius:0'>
    <div style='padding-bottom: 5px;'>
     <div style='display:inline-block;text-align:center;width:30%;margin-top: 10px;'>
@@ -112,60 +112,60 @@ color:#ff8600
 	<p><div style='text-align:center;font-size:11px;background-color: #F0F0F0;border-radius: 25px;height: 22px;margin-left: 5px;'>满<{$items['limitcost']}>元可用</div></p>
 	</div>
 	<div style='display:inline-block;text-align:center'>
-	<ul>	   
+	<ul>
 	  <li style='font-size: 14px; font-weight:bold;text-align:left'><{$items['name']}>
-	   <span style='color:red;float: right;font-weight: normal;font-size: 12px; '><{if $items['endtime']-time()<0 }>已过期<{else}>已使用<{/if}></span></li>	
-	  <li style='font-size: 11px;'>有效期：<{date('Y-m-d',$items['creattime'])}>至<{date('Y-m-d',$items['endtime'])}></li>	
+	   <span style='color:red;float: right;font-weight: normal;font-size: 12px; '><{if $items['endtime']-time()<0 }>已过期<{else}>已使用<{/if}></span></li>
+	  <li style='font-size: 11px;'>有效期：<{date('Y-m-d',$items['creattime'])}>至<{date('Y-m-d',$items['endtime'])}></li>
 	</ul>
 	</div>
    </div>
-   <{assign var=paytypearr value=","|explode:$items['paytype']}> 
+   <{assign var=paytypearr value=","|explode:$items['paytype']}>
 	<{if (in_array(1,$paytypearr ) &&  in_array(2,$paytypearr )) or empty($items['paytype'])}>
-	
-	<{else}>	
+
+	<{else}>
 		<div class="discouponB" style='height:30px;line-height:30px;border-top:1px #F0F0F0 dashed;font-size: 11px;'>
 		&bull;&nbsp;&nbsp;<{if  in_array(1,$paytypearr ) &&  !(in_array(2,$paytypearr ))  }>仅限货到付款订单使用<{/if}>
-		<{if  in_array(2,$paytypearr ) &&  !(in_array(1,$paytypearr ))  }>仅限在线支付订单使用<{/if}>      
-		</div>	
-	<{/if}>	
-  </div> 
-   <{/foreach}>    
+		<{if  in_array(2,$paytypearr ) &&  !(in_array(1,$paytypearr ))  }>仅限在线支付订单使用<{/if}>
+		</div>
+	<{/if}>
+  </div>
+   <{/foreach}>
     <{else}>
 	<div align='center' style='margin-top: 50%;'>
 	<img  src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/wujuan.png" style='width:72px;height:80px'>
 	<p style='color:#999;font-size:12px'>无此类型优惠券~</p>
 	</div>
 	<{/if}>
-	
+
  </div>
 </div>
 
 
-	 
+
  <div style="clear:both;height:20px;"></div>
- 
-<!--<div class='canuse can'>可使用</div>	
+
+<!--<div class='canuse can'>可使用</div>
 		<div class='nouse'>已失效</div>-->
- 
+
 <script>
 	function changeto(obj){
 	  var pobj = $(obj).parent();
 	  $(pobj).find('.list').toggle();
 	}
-	
-	$('.canuse').live('click',function(){       
+
+	$('.canuse').live('click',function(){
 		$(this).addClass("can");
 		$('.nouse').removeClass("can");
 		$('.nouselist').hide();
 		$('.canuselist').show();
 	})
-	$('.nouse').live('click',function(){       
+	$('.nouse').live('click',function(){
 		$(this).addClass("can");
 		$('.canuse').removeClass("can");
 		$('.canuselist').hide();
 		$('.nouselist').show();
 	})
-	 
+
 </script>
 
 

@@ -1,0 +1,23 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+  <div class="coupon">
+    <{if !empty($juaninfo)}>
+    <{foreach from=$juaninfo item=items}>
+    <div class="coupon_item">
+      <div class="img fb-inlineBlock"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/ic_coupon_2.png" alt=""></div>
+      <div class="text fb-inlineBlock">
+        <p>满<{$items['limitcost']}>元减<{$items['cost']}>元</p>
+        <span>有效期至：<{date('Y-m-d',$items['endtime'])}></span>
+      </div>
+      <div class="coupon_button coupon_button_get fb-inlineBlock">
+        领取
+      </div>
+    </div>
+    <{/foreach}>
+    <{else}>
+    <div class="noPro">暂无可领取优惠券</div>
+    <{/if}>
+  </div>
+<{/block}>
+<{block name=footer}><{/block}>

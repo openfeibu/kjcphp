@@ -7707,12 +7707,12 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $data['goods_list'] = $goods_list;
         Mysite::$app->setdata($data);
     }
-    public function coupon()
+    public function getCoupon()
     {
         $time = time();
         $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6");
         $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 AND count > 0 AND endtime > $time AND starttime <= $time order by id asc ");
-        var_dump($data['juaninfo']);exit;
+
         Mysite::$app->setdata($data);
     }
 }
