@@ -120,6 +120,7 @@ function removeonedish(gid,tshopid,num){
     $F.loading();
     fbajaxback(url, '',function(backmessage){
         if(backmessage.flag == false){
+             $F.closeLoading();
             freshcart();
 
             return true;
@@ -132,16 +133,20 @@ function removeonedish(gid,tshopid,num){
 
 }
 function delshopcart(){
+     $F.loading();
     var url= siteurl+'/index.php?ctrl=site&action=clearcart&shopid='+shopid+'&num=1&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    var bk = ajaxback(url,'');
-    if(bk.flag == false){
-        freshcart();
-    }else{
-        $.toast(bk.content,'text');
-    }
+    fbajaxback(url, '',function(backmessage){
+        if(backmessage.flag == false){
+             $F.closeLoading();
+            freshcart();
+            return true;
+        }else{
+            $.toast(backmessage.content,'text');
+            return false;
+        }
+     })
 
-    return false;
 }
 function doselectjuan1(){
 
