@@ -2,6 +2,7 @@
 
 <script>
 function detfreshproduct() {
+
     var foodid = <{$foodshow['id']}>;
     var obj = $('.productinfobox .type_con');
     var tarray = new Array();
@@ -78,7 +79,7 @@ function detfreshproduct() {
     }
 
 }
-function initshop(datas){
+function initshop1(datas){
     $('.cartshuliang').hide();
     $('.cartshuliang').text(0);
     $('#total_count').text(0);
@@ -144,19 +145,19 @@ function initshop(datas){
         }
     }
 }
-function checkcartifempty(){    //检查购物车是否为空
-    if ($('#total_count').html() == 0){
-        $(".ordeilpaymenshop").hide();
-        $(".emptycartBg").show();
-        $(".ordeilpaymen").hide();
-        $(".emptyordeilpaymen").show();
-    } else{
-        $(".ordeilpaymenshop").show();
-        $(".emptycartBg").hide();
-        $(".ordeilpaymen").show();
-        $(".emptyordeilpaymen").hide();
-    }
-}
+// function checkcartifempty(){    //检查购物车是否为空
+//     if ($('#total_count').html() == 0){
+//         $(".ordeilpaymenshop").hide();
+//         $(".emptycartBg").show();
+//         $(".ordeilpaymen").hide();
+//         $(".emptyordeilpaymen").show();
+//     } else{
+//         $(".ordeilpaymenshop").show();
+//         $(".emptycartBg").hide();
+//         $(".ordeilpaymen").show();
+//         $(".emptyordeilpaymen").hide();
+//     }
+// }
 
     var shopid = <{$shopinfo['id']}> ;
 
@@ -296,8 +297,8 @@ function detuponeproduct(gid, tshopid, num){
     url = url.replace('@random@', 1 + Math.round(Math.random() * 1000));
     var bk = ajaxback(url, '');
     if (bk.flag == false){
-        detfreshproduct();
         freshcart();
+        detfreshproduct();
         return true;
     } else{
         $.toast(bk.content,'text');

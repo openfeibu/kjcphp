@@ -51,7 +51,8 @@
                 }else{
                     $(".shop-car-icon").removeClass("active")
                 }
-                $('#total_count').text(datas.content.sumcount);
+                $('#total_count').show().text(datas.content.sumcount);
+
                 checkcartifempty();
                 var shijicost = datas.content.sum;
                 $('#total_money').text(shijicost.toFixed(2));
@@ -112,8 +113,9 @@
 
     }
     function checkcartifempty(){    //检查购物车是否为空
+     
     	if( $('#total_count').html() == 0 ){
-    		<!-- $(".ordeilpaymenshop").hide(); -->
+    	  $(".ordeilpaymenshop").hide(); 
     		$(".emptycartBg").show();
     		$(".ordeilpaymen").hide();
     		$(".emptyordeilpaymen").show();
