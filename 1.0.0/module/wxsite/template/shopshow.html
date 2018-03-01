@@ -168,9 +168,8 @@
       </ul>
     </div>
     <div class="shop-pro-all" onscroll="bindscroll($(this))" loca="true" style="display: block;">
-      <!--没有商品-->
-      <div id="noPro" style="display: none">没有商品哟</div>
-      <!--没有商品-->
+        
+
        <{if !empty($goodstype) }>
       <dl>
         <{if !empty($cx_goods_list) }>
@@ -211,6 +210,7 @@
           <{/if}>
         </dd>
         <{/foreach}>
+
         <{/if}>
   	    <{foreach from=$goodstype key=mykey item=itv}>
         <div class="pro_label"><{$itv['name']}></div>
@@ -267,6 +267,10 @@
         <{/foreach}>
         <{/foreach}>
       </dl>
+       <{else}>
+        <!--没有商品-->
+        <div id="noPro" style="display: block">没有商品哟</div>
+        <!--没有商品-->
       <{/if}>
       <div class="weui-loadmore weui-loadmore_line">
         <span class="weui-loadmore__tips">已经到底了</span>
