@@ -38,5 +38,25 @@
 
   </div>
 </div>
+<script>
+  $(".weui-cell_access").on("click",function(){
+    var text = $(this).find(".weui-cell__ft").text();
+    $.prompt({
+      title: '',
+      text: '签名',
+      input: text,
+      empty: true, // 是否允许为空
+      onOK: function (input) {
+        //点击确认
+        $.toast("修改成功","text")
+      },
+      onCancel: function () {
+        //点击取消
+        
+      }
+    });
+  })
+  
+</script>
 <{/block}>
 <{block name=footer}><{/block}>
