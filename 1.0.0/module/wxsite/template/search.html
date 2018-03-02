@@ -16,7 +16,7 @@
     </form>
     <a href="javascript:" class="" id="searchCancel">搜索</a>
   </div>
-  <div class='noPro' style="display:block;">没有相关的数据</div>
+  <!-- <div class='noPro' style="display:block;">没有相关的数据</div> -->
 
 </div>
 <script>
@@ -32,7 +32,7 @@
         var url = '<{ofunc type=url link="/wxsite/searchresult"}>';
         $.post(url, {'searchname':searchname},function (data, textStatus){
             $('.noPro').remove();
-            $('.search').append(data);
+            $('.search').find(".shop_group").remove().end().append(data);
             $F.closeLoading();
         }, 'html');
     }else{
