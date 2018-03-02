@@ -3446,7 +3446,8 @@ class method extends wxbaseclass
         $weixindir = hopedir.'/plug/pay/weixin/';
 		require_once $weixindir."lib/WxPay.Api.php";
 		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
-        $wxopenid = ICookie::get('wxopenid');
+        $tools = new JsApiPay();
+		$openId = $tools->GetOpenid();
         $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
         $data['error'] = false;
         $data['msg'] = '';
