@@ -20,8 +20,11 @@ function freshcart($payflag){
 }
 
 function freshcartdata(datas,$payflag){
+    $('#foodslist').html('');
+    var juancost = Number($("#juancost").val());//优惠券
     $.each(datas.content.list, function(i,val){
         var htmls = template.render('cartlist', {list:val});
+        htmls = '<div class="orderDetail_pro">'+htmls + "</div>"
         $('#foodslist').append(htmls);
     });
     if(datas.content.bagcost != 0){
@@ -29,16 +32,16 @@ function freshcartdata(datas,$payflag){
                     +'<p>餐盒费</p>'
                     +'<span>￥'+datas.content.bagcost+'</span>'
                     +'</div>';
-        $('#foodslist').after(temp_htmls);
+        $('#foodslist').append(temp_htmls);
     }
     /*==================追加配送费信息===================*/
     if(datas.content.pscost != 0){
         $('input[name="pscost"]').val(datas.content.pscost);
-        temp_htmls = '￥'+datas.content.pscost;
-        $('#addressprice').find('span').html(temp_htmls);
+        temp_htmls = '<div class="orderDetail_item"><p>配送费</p><span>￥' +datas.content.pscost+'</span></div>';
+        $('#foodslist').append(temp_htmls);
     }else{
-        temp_htmls = '￥0';
-        $('#addressprice').find('span').html(temp_htmls);
+        temp_htmls = '<div class="orderDetail_item"><p>配送费</p><span>￥' +0+'</span></div>';
+        $('#foodslist').append(temp_htmls);
     }
     /*==============遍历追加优惠活动信息===============*/
 
@@ -48,7 +51,7 @@ function freshcartdata(datas,$payflag){
             $('#addressprice').after(htmls);
         });
     }
-    var allcost1 = (Number(datas.content.sum)+Number(datas.content.bagcost)-Number(datas.content.downcost)).toFixed(2);
+    var allcost1 = (Number(datas.content.sum)+Number(datas.content.bagcost)-Number(juancost)-Number(datas.content.downcost)).toFixed(2);
     var allcost = allcost1>0?allcost1:0;
     $('.surecost').text('￥'+allcost);
 }
@@ -212,33 +215,7 @@ function doselectjuan1(){
     }
 }
 
-function  orderSubmit(){
-    var buyerlng = $('input[name="addresslng"]').val();
-    var buyerlat = $('input[name="addresslat"]').val();
-    if(checknext ==  false){
-        checknext = true;
-        url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
-        url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-        $.ajax({         //script定义
-            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
-            dataType: "json",
-            async:true,
-            data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
-            success:function(content) {
-                if(content.error ==  false){
-                    window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=subshow&orderid='+content.msg ;//.html?orderid='+datas.data;
-                }else{
-                    $.toast(content.msg,'text');
-                    return false;
-                }
-            },
-            error:function(){
 
-            }
-        });
-         setTimeout("myyanchi()", 500 );
-    }
-}
 function myyanchi(){
     checknext = false;
 }
