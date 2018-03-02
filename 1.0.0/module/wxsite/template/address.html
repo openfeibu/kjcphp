@@ -16,7 +16,7 @@
       <{foreach from=$arealist key=mykey item=items}>
       <li class="clearfix <{if $items['default'] == 1}>active<{/if}>">
         <div class="map_default" gid="<{$items['id']}>"></div>
-        <a href="<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress&id=<{$items['id']}>">
+        <a class="addresschange" gid="<{$items['id']}>" shopid="<{$shopid}>" >
           <div class="orderDetail_address">
             <div class="orderDetail_address_con">
               <p><span><{$items['contactname']}></span>&nbsp;&nbsp;<{$items['phone']}></p>
@@ -35,7 +35,7 @@
   $(".shopMap .map_default").on("click",function(){
     var that = $(this);
     var i = that.index(".shopMap .map_default");
-    
+
     var info = {'tijiao':'do','default':'1','addressid':$(this).attr('gid'),'what':'default'};
     var url = siteurl+'/index.php?ctrl=area&action=editaddress&random=@random@&datatype=json';
         url = url.replace('@random@', 1+Math.round(Math.random()*1000));
@@ -45,19 +45,7 @@
           that.parents("li").addClass("active").siblings("li").removeClass("active");
         }else{
           $.toast(backinfo.content,'text');
-        } 
-    var url = siteurl+'/index.php?ctrl=shop&action=addcollect&datatype=json&collectid='+shopid+'&type=0';
-      var backinfo = ajaxback(url,{});
-      if(backinfo.flag == false){
-          $(this).toggleClass("shop_like_ed");
-          if($(this).hasClass("shop_like_ed")){
-            $.toast('收藏成功','text');
-          }else{
-            $.toast('取消收藏成功','text');
-          }
-      }else{
-          $.toast(backinfo.content,'text');
-      }
+        }
   })
   $(".map_delete").on("click",function(){
     var that = $(this);
@@ -80,7 +68,29 @@
       onCancel: function () {
       }
     });
-  })
+
+});
+$(".addresschange").on("click",function(){
+    $F.loading();
+    var that = $(this);
+    shopid = that.attr('shopid');
+    gid = that.attr('gid');
+    if(shopid){
+        var info = {'tijiao':'do','default':'1','addressid':$(this).attr('gid'),'what':'default'};
+        var url = siteurl+'/index.php?ctrl=area&action=editaddress&random=@random@&datatype=json';
+            url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+        fbajaxback(url,info,function (backinfo){
+            if(backinfo.flag ==  false){
+                window.location.href = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+shopid;
+            }else{
+                $.toast(backinfo.content,'text');
+            }
+        });
+
+    }else{
+        window.location.href = siteurl+"/index.php?ctrl=wxsite&action=editaddress&id="+gid;
+    }
+});
 </script>
 <{/block}>
 <{block name="footer"}><{/block}>

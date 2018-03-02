@@ -1622,6 +1622,7 @@ class method extends wxbaseclass
         ;
         $waimai_psrangearr = explode('#', $waimai_psrangearr);
         $data['waimai_psrange_arr'] = $waimai_psrangearr;
+        $data['shopid'] = $id;
         Mysite::$app->setdata($data);
     }
     public function getjuan()
@@ -1916,7 +1917,7 @@ class method extends wxbaseclass
     public function address()
     {
         $this->checkwxweb();
-
+        $shopid = IReq::get('shopid');
         $link = IUrl::creatUrl('wxsite/shoplist');
         if ($this->member['uid'] == 0) {
             $this->message('', $link);
@@ -1937,6 +1938,7 @@ class method extends wxbaseclass
         }
         $data['arealist'] = $tarelist;
         $data['areaarr'] = $arelist;
+        $data['shopid'] = $shopid;
         Mysite::$app->setdata($data);
     }
     public function editaddress()
