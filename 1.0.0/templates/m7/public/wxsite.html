@@ -57,9 +57,9 @@
   <{block name=footer}>
   <footer>
     <ul>
-      <li class="active" ><a href="<{ofunc type=url link="/wxsite/index"}>">首页</a></li>
-      <li><a href="<{ofunc type=url link="/wxsite/order"}>">订单</a></li>
-      <li><a href="<{ofunc type=url link="/wxsite/member"}>">我的</a></li>
+      <li <{if $Taction == 'index'}>class="active" <{/if}>><a href="<{ofunc type=url link="/wxsite/index"}>">首页</a></li>
+      <li <{if $Taction == 'order'}>class="active" <{/if}>><a href="<{ofunc type=url link="/wxsite/order"}>">订单</a></li>
+      <li <{if $Taction == 'member'}>class="active" <{/if}>><a href="<{ofunc type=url link="/wxsite/member"}>">我的</a></li>
     </ul>
   </footer>
   <{/block}>
