@@ -30,6 +30,7 @@
 <script>
 $(function(){
     $('.coupon_button_get').click(function(){
+        var that = $(this);
         $F.loading();
         url = siteurl+'/index.php?ctrl=wxsite&action=getCouponSubmit&datatype=json&random=@random@';
         url = url.replace('@random@', 1+Math.round(Math.random()*1000));
@@ -42,7 +43,8 @@ $(function(){
             success:function(content) {
                 if(content.error ==  false){
                     $.toast('添加成功','text');
-                    window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=getCoupon' ;
+                    that.addClass("coupon_button_ed").removeClass("coupon_button_get").text("已领取")
+                    // window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=getCoupon' ;
                 }else{
                     $.toast(content.msg,'text');
                 }
