@@ -148,16 +148,16 @@ freshpage();
         if(_this.loading) return;
         loadmore(_this);
     });
-$(".order_button_pay").on('click',function(){
+$("body").on('click','.order_button_pay',function(){
     orderid = $(this).attr('orderid');
     url = siteurl+'/index.php?ctrl=wxsite&action=pay&random=@random@';
     $.ajax({         //script定义
         url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
         dataType: "json",
         async:true,
-        data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
+        data:{orderid:orderid},
         success:function(content) {
-            console.log(content);return false;
+            console.log(content);
             if(content.error ==  false){
                 wxdata = content.wxdata;
                 callpay();
