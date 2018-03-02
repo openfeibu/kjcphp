@@ -16,31 +16,31 @@ class WxPayConfig
 
 	//微信公众号身份的唯一标识。审核通过后，在微信发送的邮件中查看
 
-	const APPID = 'wx18c32a5a03f29767';
+	const APPID = 'wx10c8c1db760ebfb2';
 
 	//受理商ID，身份标识
 
-	const MCHID = '1490042492';
+	const MCHID = '1422653602';
 
 	//商户支付密钥Key。审核通过后，在微信发送的邮件中查看
 
-	const KEY = 'youwozai888youwozai888youwozai88';
+	const KEY = 'XomEXFYJjm6NSkkGmYDKqWbObpTodkds';
 
 	//JSAPI接口中获取openid，审核后在公众平台开启开发模式后可查看
 
-	const APPSECRET = '9694fc43c594c620765b5cfde1441c96'; 
+	const APPSECRET = '3dedc7cf9546acf1bb097de4fbac01f5';
 
-	  
+
 
 	const SSLCERT_PATH = '/plug/pay/weixin/cert/apiclient_cert.pem';
 
 	const SSLKEY_PATH = '/plug/pay/weixin/cert/apiclient_key.pem';
 
-	
 
-	
 
-	
+
+
+
 
 	//=======【curl代理设置】===================================
 
@@ -60,7 +60,7 @@ class WxPayConfig
 
 	const CURL_PROXY_PORT = 0;
 
-	
+
 
 	//=======【上报信息配置】===================================
 
@@ -80,14 +80,14 @@ class WxPayConfig
 
 	const REPORT_LEVENL = 0;
 
-	
 
-	
 
-	
+
+
+
 
 }
 
-	
+
 
 ?>
