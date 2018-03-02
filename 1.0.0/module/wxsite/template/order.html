@@ -148,8 +148,62 @@ freshpage();
         if(_this.loading) return;
         loadmore(_this);
     });
+$(".order_button_pay").on('click',function(){
+    orderid = $(this).attr('orderid');
+    url = siteurl+'/index.php?ctrl=wxsite&action=pay&random=@random@';
+    $.ajax({         //script定义
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        dataType: "json",
+        async:true,
+        data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
+        success:function(content) {
+            console.log(content);return false;
+            if(content.error ==  false){
+                wxdata = content.wxdata;
+                callpay();
+            }else{
+                $.toast(content.msg,'text');
+                return false;
+            }
+        },
+        error:function(){
+            //$.toast(content.msg,'text');
+        }
+    });
+});
+function jsApiCall()
+{
+    WeixinJSBridge.invoke(
+        'getBrandWCPayRequest',
+        wxdata,
+        function(res){
+            WeixinJSBridge.log(res.err_msg);
+            var dostring = res.err_msg;
+            var temparr = dostring.split(':');
+            if(temparr.length == 2){
+                if(temparr[1] == 'ok'){
+                    window.location.reload();
+                }
+            }else{
+                $.toast(res.err_msg,'text');
+            }
+        }
+    );
 
-
+}
+function callpay()
+{
+    if (typeof WeixinJSBridge == "undefined"){
+        if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+        }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+        }
+    }else{
+        jsApiCall();
+    }
+}
 </script>
 
 <{/block}>

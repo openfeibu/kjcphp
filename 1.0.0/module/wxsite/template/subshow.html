@@ -1,14 +1,14 @@
- <{extends file="<{$tempdir}>/public/wxsite.html"}>  
-<{block name=extendcss}> 
-<link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/mycss.css">   
-<link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/order.css">  
+ <{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=extendcss}>
+<link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/mycss.css">
+<link rel="stylesheet"  href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/css/order.css">
 <{/block}>
- <{block name=extendjs}> 
+ <{block name=extendjs}>
   <{if empty($order)}>
   <script>
-$(function(){  
-       error($('#supplierlist'),'未获取到订单'); 
-	  
+$(function(){
+       error($('#supplierlist'),'未获取到订单');
+
 });
   </script>
   <{/if}>
@@ -29,14 +29,14 @@ $(function(){
 <{/block}>
 
 <{block name=myScrolljs}>
-<script> 
- 
+<script>
+
  $(function(){
 	   <{if ($order['paytype'] == 1 && $order['paystatus'] == 1) || $order['paytype'] == 0 }>
-	
+
 		var url = '<{ofunc type=url link="/wxsite/ordershow/orderid/<{$order['id']}>"}>';
  		 window.location.href= url;
-	
+
 	<{/if}>
  });
 		var myScroll;
@@ -52,17 +52,17 @@ function loaded() {
 		}
 	});
 }
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false); 
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
 </script>
  <{/block}>
-<{block name=blockcontent}> 
-  
+<{block name=blockcontent}>
 
-	 <div id="wrapper" style="top:40px;"> 
+
+	 <div id="wrapper" style="top:40px;">
 	<div id="scroller">
-	
-	
+
+
 <{if $order['paytype'] == 1 && $order['paystatus'] == 0}>
 <!--订单名称-->
   <div class="balchaordcon">
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 2
 </div>
 <{/if}>
 <{/foreach}>
- 
+
 <{foreach from=$paylist   item=items}>
 <{if  $items['loginname'] == 'open_acout' && $member['uid'] > 0   }>
 <{if $member['cost'] >= $order['allcost']}>
@@ -118,29 +118,29 @@ document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 2
  <{/foreach}>
 <input type="hidden" name="paydotype" value="">
 <div class="intexchabutt" id="dopay" style="margin-top:20px;"><input type="button" value="确认支付" class="intexbg1"></div>
- 
-	 
-<script type="text/javascript">  
+
+
+<script type="text/javascript">
 $(".balchapayma").bind('click',function(){
 	$(".balchacirc1").removeClass('balchacirc2');
 	$(this).find('.balchacirc1').addClass('balchacirc2');
 	$('input[name="paydotype"]').val($(this).attr('data'));
-}); 
+});
 var waitdopaytime = <{$order['addtime']+900-time()}>;//等待支付时间
 var biaoqianval = false;
 function bqzhi(){
 	biaoqianval  = false;
-} 
+}
 function downtime(){
 	waitdopaytime = Number(waitdopaytime)-1;
 }
 var nowbid = "";
-$(function(){  
+$(function(){
 	setInterval("downtime()", 1000);
-	$('#dopay').bind("click", function() {    
+	$('#dopay').bind("click", function() {
 	   if(biaoqianval == false){
-			biaoqianval  = true; 
-			setTimeout("bqzhi()", 500 ); 
+			biaoqianval  = true;
+			setTimeout("bqzhi()", 500 );
 			if(waitdopaytime < 1){
 				Tmsg('下单后15分钟未支付该订单，订单可能关闭,请重新下单');
 				return;
@@ -150,22 +150,22 @@ $(function(){
 				   return;
 				}
 				if($('input[name="paydotype"]').val() == 'weixin'){
-					  var uass = window.navigator.userAgent.toLowerCase(); 
-						if(uass.match(/MicroMessenger/i) == 'micromessenger'){ 
+					  var uass = window.navigator.userAgent.toLowerCase();
+						if(uass.match(/MicroMessenger/i) == 'micromessenger'){
 							callpay();
 						}
 				}else{
 					 var url = '<{ofunc type=url link="/wxsite/gotopay/orderid/<{$order['id']}>/paydotype/@paydotype@"}>';
-					 url = url.replace('@paydotype@', $('input[name="paydotype"]').val());  
+					 url = url.replace('@paydotype@', $('input[name="paydotype"]').val());
 					 window.location.href= url;
-				} 
-			}				
-       	} 
+				}
+			}
+       	}
 	});
 });
 function jsApiCall()
 	{
-	
+
 	<{if isset($wxdata)}>
 		WeixinJSBridge.invoke(
 			'getBrandWCPayRequest',
@@ -178,7 +178,7 @@ function jsApiCall()
 				if(temparr.length == 2){
 				  // Tmsg(temparr[1]);
 				   if(temparr[1] == 'ok'){
-				      window.location.reload(); 
+				      window.location.reload();
 				   }
 				}else{
 				   Tmsg(res.err_msg);
@@ -199,21 +199,19 @@ function jsApiCall()
 		    if( document.addEventListener ){
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
 		    }else if (document.attachEvent){
-		        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+		        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
 		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
 		    }
 		}else{
 		    jsApiCall();
 		}
 	}
-	 
-</script>  
+
+</script>
  	<{/if}>
 
 </div>
 
 </div>
- 
+
 <{/block}>
- 
-	

@@ -29,6 +29,7 @@ var backtype = 0;
     $(function(){
         // maketime();
 		 freshcart();
+        // getjuaninfo();
      });
 </script>
 <script id="cartlist" type="text/html">
@@ -52,6 +53,9 @@ var backtype = 0;
 </div>
 </script>
     <div class="c_orderDetail">
+    <input type="hidden" name="yhjcost" value="0" />
+    <input type="hidden" name="juanid" data="0" id="juanid" value="0">
+    <input type="hidden" name="juancost" id="juancost" value="0">
       <div class="checkMap" >
         <a href="<{$siteurl}>/index.php?ctrl=wxsite&action=address&shopid=<{$shopid}>">
           <div class="usermap">
@@ -67,10 +71,11 @@ var backtype = 0;
       </div>
       <div class="orderDetail_top">
         <div class="orderDetail_shopName"><{$shopinfo['shopname']}></div>
-        <div class="orderDetail_pro" id="foodslist">
+        <div id="foodslist">
+        <div class="orderDetail_pro">
 
         </div>
-        <div class="orderDetail_item" id="addressprice">
+        <div class="orderDetail_item">
           <p>配送费</p>
           <span>￥0</span>
         </div>
@@ -78,9 +83,14 @@ var backtype = 0;
           <p>商家优惠</p>
           <span>-￥5</span>
         </div> -->
+        </div>
         <div class="orderDetail_item fsMain checkDiscount">
           <p>优惠券</p>
+          <{if $juancount}>
+          <span><{$juancount}>张可用</span>
+          <{else}>
           <span>暂无可用</span>
+          <{/if}>
         </div>
         <div class="orderDetail_money">
           <p>实付<span class="surecost">￥0</span></p>
@@ -111,20 +121,119 @@ var backtype = 0;
     cols: [
       {
         textAlign: 'center',
-        values: ['1', '2', '3', '4', '5', '6', '7'],
-        displayValues: ['满6元-1元', '满6元-2元', '满6元-3元', '满6元-4元', '满6元-5元', '满6元-6元', '满7元-7元']
+        values: [
+            <{foreach from=$juanlist item=items }>
+            "<{$items['cost']}>,<{$items['id']}>",
+            <{/foreach}>
+        ],
+        displayValues: [
+            <{foreach from=$juanlist item=items }>
+            "满<{$items['limitcost']}>元-<{$items['cost']}>元",
+            <{/foreach}>
+        ],
       }
     ],
     onClose:function(picker){
-      var val = parseFloat(picker.value[0]);
-      $.alert(val)
+      var valArr = picker.value[0].split(",");
+      var val = parseFloat(valArr[0]);
       $(".checkDiscount span").text("-￥"+val);
-      console.log(count,val)
-      $(".orderDetail_money span").text("￥"+(count-val));
-      $(".c_orderDetail_button span").text("￥"+(count-val));
-//      $.alert(val.displayValue)
+      $('#juanid').val(valArr[1]);
+      $('#juancost').val(val);
+	  $('input[name="yhjcost"]').val(val);
+      freshcart(1);
     }
   });
+  function  orderSubmit(){
+      var buyerlng = $('input[name="addresslng"]').val();
+      var buyerlat = $('input[name="addresslat"]').val();
+      if(checknext ==  false){
+          checknext = true;
+          url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
+          url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+          $.ajax({         //script定义
+              url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+              dataType: "json",
+              async:true,
+              data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
+              success:function(content) {
+                  if(content.error ==  false){
+                      window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=subshow&orderid='+content.msg ;//.html?orderid='+datas.data;
+                  }else{
+                      $.toast(content.msg,'text');
+                      return false;
+                  }
+              },
+              error:function(){
+
+              }
+          });
+           setTimeout("myyanchi()", 500 );
+      }
+  }
+
+    function  orderSubmit(){
+        var buyerlng = $('input[name="addresslng"]').val();
+        var buyerlat = $('input[name="addresslat"]').val();
+        if(checknext ==  false){
+            checknext = true;
+            url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
+            url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+            $.ajax({         //script定义
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                async:true,
+                data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
+                success:function(content) {
+                    console.log(content);return false;
+                    if(content.error ==  false){
+                        wxdata = content.wxdata;
+                        callpay();
+                    }else{
+                        $.toast(content.msg,'text');
+                        return false;
+                    }
+                },
+                error:function(){
+                    //$.toast(content.msg,'text');
+                }
+            });
+             setTimeout("myyanchi()", 500 );
+        }
+    }
+    function jsApiCall()
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            wxdata,
+            function(res){
+                WeixinJSBridge.log(res.err_msg);
+                var dostring = res.err_msg;
+                var temparr = dostring.split(':');
+                if(temparr.length == 2){
+                    if(temparr[1] == 'ok'){
+                        window.location.reload();
+                    }
+                }else{
+                    $.toast(res.err_msg,'text');
+                }
+            }
+        );
+
+    }
+  	function callpay()
+  	{
+  		if (typeof WeixinJSBridge == "undefined"){
+  		    if( document.addEventListener ){
+  		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+  		    }else if (document.attachEvent){
+  		        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+  		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+  		    }
+  		}else{
+  		    jsApiCall();
+  		}
+  	}
+
 </script>
 <{/block}>
 <{block name="footer"}><{/block}>

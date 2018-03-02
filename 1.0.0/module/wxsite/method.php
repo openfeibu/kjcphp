@@ -1531,6 +1531,7 @@ class method extends wxbaseclass
         //	id	card 优惠劵卡号	card_password 优惠劵密码	status 状态，0未使用，1已绑定，2已使用，3无效	creattime 制造时间	cost 优惠金额	limitcost 购物车限制金额下限	endtime 失效时间	uid 用户ID	username 用户名	usetime 使用时间	name
         $data['juanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan  where uid='".$this->member['uid']."' and endtime > ".time()." and status = 1   ");
 
+        $data['juancount'] = !empty($data['juanlist']) ? count($data['juanlist']) : 0;
         //id	juanid	fafangtime	uid 顾客uid	username 顾客姓名	juanname 优惠卷名称	juancost 面值	juanlimitcost 限制金额	endtime 过期时间	lqstatus 默认0是未领取 1是用户已领取	status 状态 0未使，1已使用，2无效	juanshu 优惠卷数量	usetime 优惠卷使用时间
         $data['wxjuanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."wxuserjuan  where uid='".$this->member['uid']."' and endtime > ".time()." and lqstatus = 1 and status = 0   ");
 
@@ -1550,10 +1551,6 @@ class method extends wxbaseclass
         if ($shopinfo['is_open'] == 0  || $shopinfo['is_pass'] == 0) {
             $data['is_open'] = 0;
         }
-
-
-
-
 
         $nowhout = strtotime(date('Y-m-d', time()));//当天最小linux 时间
         $timelist = !empty($shopinfo['postdate'])?unserialize($shopinfo['postdate']):array();
@@ -2528,7 +2525,8 @@ class method extends wxbaseclass
             } else {
                 $platform=2;//微信
             }
-            $paytype = intval(IReq::get('paytype'));
+        //    $paytype = intval(IReq::get('paytype'));
+            $paytype = 1;
             $cxclass->setdata($shopid, $carinfo['sum'], $carinfo['shopinfo']['shoptype'], $this->member['uid'], $platform, $paytype);
             $cxinfo = $cxclass->getdata();
             #print_r($cxinfo);
@@ -2592,7 +2590,8 @@ class method extends wxbaseclass
             } else {
                 $platform=2;//微信
             }
-            $paytype = intval(IReq::get('paytype'));
+            //$paytype = intval(IReq::get('paytype'));
+            $paytype = 1;
             $cxclass->setdata($shopid, $carinfo['sum'], $carinfo['shopinfo']['shoptype'], $this->member['uid'], $platform, $paytype);
             $cxinfo = $cxclass->getdata();
             #print_r($cxinfo);
@@ -3235,12 +3234,8 @@ class method extends wxbaseclass
             $this->message('', $link);
         }
     }
-
     /* 发布跑腿 end   */
-
-
-
-
+    /* 提交订单 start */
     public function makeorder()
     {
         $this->checkwxweb();
@@ -3249,8 +3244,6 @@ class method extends wxbaseclass
                 $this->message('未登陆');
             }
         }
-
-
         if (empty($this->member['uid']) || $this->member['uid'] ==  0) {
             $addressinfo  = null;
             $cdata['id'] = 0;
@@ -3269,8 +3262,6 @@ class method extends wxbaseclass
         if (empty($addressinfo)) {
             $this->message('未设置默认地址');
         }
-
-
         $info['buyerlng'] = IFilter::act(IReq::get('buyerlng'));
         $info['buyerlat'] = IFilter::act(IReq::get('buyerlat'));
 
@@ -3289,7 +3280,7 @@ class method extends wxbaseclass
 
         $info['username'] = $addressinfo['contactname'];
         $info['mobile'] = $addressinfo['phone'];
-        $info['addressdet'] = $addressinfo['address'];
+        $info['addressdet'] = $addressinfo['addressdet'];
 
         $info['shopid'] = intval(IReq::get('shopid'));//店铺ID
         $info['remark'] = IFilter::act(IReq::get('remark'));//备注
@@ -3344,9 +3335,10 @@ class method extends wxbaseclass
         if (!IValidate::suremobi($info['mobile'])) {
             $this->message('请输入正确的手机号');
         }
+        /*
         if (empty($info['addressdet'])) {
             $this->message('详细地址为空');
-        }
+        }*/
         $info['userid'] = !isset($this->member['score'])?'0':$this->member['uid'];
         if (Mysite::$app->config['allowedguestbuy'] != 1) {
             if ($info['userid']==0) {
@@ -3440,10 +3432,53 @@ class method extends wxbaseclass
             ICookie::set('orderid', $orderid, 86400);
         }
         $smardb->DelShop($info['shopid']);
-        $this->success($orderid);
+        echo $this->createOrder($orderid);exit;
+    }
+    public function pay()
+    {
+        $orderid = intval(IReq::get('orderid'));
+        echo $this->createOrder($orderid);exit;
+    }
+    public function createOrder($orderid)
+    {
+        error_reporting(-1);
+        ini_set('display_errors',1);
+        $weixindir = hopedir.'/plug/pay/weixin/';
+		require_once $weixindir."lib/WxPay.Api.php";
+		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
+        $wxopenid = ICookie::get('wxopenid');
+        $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
+        $data['error'] = false;
+        $data['msg'] = '';
+        //②、统一下单
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody("支付订单".$order['dno']);
+        $input->SetAttach($order['dno']);
+        $input->SetOut_trade_no($order['id']);
+        $input->SetTotal_fee($order['allcost']*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetTimeStamp(time());
+        $input->SetGoods_tag('订餐');
+        $input->SetNotify_url(Mysite::$app->config['siteurl']."/plug/pay/weixin/notify.php");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($wxopenid);
+        try{
+			$ordermm = WxPayApi::unifiedOrder($input);
+			if($ordermm['return_code'] == 'SUCCESS'){
+				$jsApiParameters = $tools->GetJsApiParameters($ordermm);
+				$data['wxdata'] = $jsApiParameters;
+			}else{
+                $data['error'] = true;
+				$data['msg']  = $ordermm['return_msg'];
+			}
+
+		}catch (Exception $e) {
+		    $data['msg'] = $e->getmessage();
+		}
+        return json_encode($data);
         exit;
     }
-
 
     public function makeorder2()
     {
@@ -7686,8 +7721,6 @@ CREATE TABLE `xiaozu_shophuiorder` (
     }
     public function discountlistdata()
     {
-        error_reporting(-1);
-        ini_set('display_errors',1);            //错误信息
         $pageinfo = new page();
         $pageinfo->setpage(intval(IReq::get('page')));
         $nowtime = time();
