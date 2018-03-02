@@ -22,7 +22,7 @@ function freshcart($payflag){
 function freshcartdata(datas,$payflag){
     $.each(datas.content.list, function(i,val){
         var htmls = template.render('cartlist', {list:val});
-        $('#foodslist').html(htmls);
+        $('#foodslist').append(htmls);
     });
     if(datas.content.bagcost != 0){
         temp_htmls = '<div class="orderDetail_item">'
@@ -66,9 +66,9 @@ function uponeproduct(gid,tshopid,num){
             $.toast(backmessage.content,'text');
             return false;
         }
- 
+
      })
-  
+
 }
 function removeoneproduct(gid,tshopid,num){
     $F.loading();
@@ -83,7 +83,7 @@ function removeoneproduct(gid,tshopid,num){
             $.toast(backmessage.content,'text');
             return false;
         }
- 
+
      })
     // var bk = ajaxback(url,'');
     // if(bk.flag == false){
