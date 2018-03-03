@@ -3515,6 +3515,7 @@ class method extends wxbaseclass
 			}
 
 		}catch (Exception $e) {
+            $data['error'] = true;
 		    $data['msg'] = $e->getmessage();
 		}
         return json_encode($data);
