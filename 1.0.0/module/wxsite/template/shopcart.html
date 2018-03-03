@@ -97,7 +97,7 @@ var backtype = 0;
         </div>
       </div>
       <div class="orderDetail_mask">
-        <textarea placeholder="备注（选填）"></textarea>
+        <textarea placeholder="备注（选填）" name="remark" id="remark"></textarea>
       </div>
       <div class="c_orderDetail_button">
         <div class="c_money fb-fl">
@@ -146,6 +146,7 @@ var backtype = 0;
   function  orderSubmit(){
       var buyerlng = $('input[name="addresslng"]').val();
       var buyerlat = $('input[name="addresslat"]').val();
+	  var remark = $('input[name="remark"]').val();
       if(checknext ==  false){
           checknext = true;
           url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
@@ -154,7 +155,7 @@ var backtype = 0;
               url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
               dataType: "json",
               async:true,
-              data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
+              data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat,'remark':remark},
               success:function(content) {
                   if(content.error ==  false){
                       window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=subshow&orderid='+content.msg ;//.html?orderid='+datas.data;
@@ -174,6 +175,7 @@ var backtype = 0;
     function  orderSubmit(){
         var buyerlng = $('input[name="addresslng"]').val();
         var buyerlat = $('input[name="addresslat"]').val();
+		$F.loading();
         if(checknext ==  false){
             checknext = true;
             url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
@@ -184,16 +186,16 @@ var backtype = 0;
                 async:true,
                 data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
                 success:function(content) {
-                    console.log(content);return false;
+					$F.closeLoading();
                     if(content.error ==  false){
-                        wxdata = content.wxdata;
+                        wxdata = eval('('+ content.wxdata +')');
                         callpay();
                     }else{
                         $.toast(content.msg,'text');
-                        return false;
                     }
                 },
                 error:function(){
+					$F.loading();
                     //$.toast(content.msg,'text');
                 }
             });

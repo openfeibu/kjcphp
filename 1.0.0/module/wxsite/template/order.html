@@ -159,7 +159,7 @@ $("body").on('click','.order_button_pay',function(){
         success:function(content) {
             console.log(content);
             if(content.error ==  false){
-                wxdata = content.wxdata;
+                wxdata = eval('('+ content.wxdata +')');
                 callpay();
             }else{
                 $.toast(content.msg,'text');

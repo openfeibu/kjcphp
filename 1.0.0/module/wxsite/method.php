@@ -3321,7 +3321,7 @@ class method extends wxbaseclass
 
         $info['shopid'] = intval(IReq::get('shopid'));//店铺ID
         $info['remark'] = IFilter::act(IReq::get('remark'));//备注
-        $info['paytype'] =  IFilter::act(IReq::get('paytype'));//支付方式
+        $info['paytype'] =  1;//支付方式
         $info['dikou'] =  intval(IReq::get('dikou'));//抵扣金额
 
     //	 $info['senddate'] = date('Y-m-d',time());// IFilter::act(IReq::get('senddate'));
