@@ -1,7 +1,7 @@
 <{if !empty($orderlist) }>
  <{foreach from=$orderlist item=items }>
  <div class="orderList_item">
-   <a href="">
+   <a href="<{ofunc type=url link="/wxsite/ordershow/orderid/<{$items['id']}>"}>">
      <div class="img"><img src="<{if $items['shoplogo']}><{$items['shoplogo']}><{else}><{$shoplogo}><{/if}>" alt=""></div>
      <div class="text">
        <div class="text_top fb-clearfix">

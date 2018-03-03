@@ -2095,42 +2095,11 @@ class method extends wxbaseclass
 
     public function order()
     {
-		 $weixindir = hopedir.'/plug/pay/weixin/';
+		$weixindir = hopedir.'/plug/pay/weixin/';
 		require_once $weixindir."lib/WxPay.Api.php";
 		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
         $tools = new JsApiPay();
-		$openId = $tools->GetOpenid();
-		$orderid = '32941';
-        $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
-        $data['error'] = false;
-        $data['msg'] = '';
-        //②、统一下单
-        $input = new WxPayUnifiedOrder();
-        $input->SetBody("支付订单".$order['dno']);
-        $input->SetAttach($order['dno']);
-        $input->SetOut_trade_no($order['id']);
-        $input->SetTotal_fee($order['allcost']*100);
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetTimeStamp(time());
-        $input->SetGoods_tag('订餐');
-        $input->SetNotify_url(Mysite::$app->config['siteurl']."/plug/pay/weixin/notify.php");
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($wxopenid);
-        try{
-			$ordermm = WxPayApi::unifiedOrder($input);
-			if($ordermm['return_code'] == 'SUCCESS'){
-				$jsApiParameters = $tools->GetJsApiParameters($ordermm);
-				$data['wxdata'] = $jsApiParameters;
-			}else{
-                $data['error'] = true;
-				$data['msg']  = $ordermm['return_msg'];
-			}
-
-		}catch (Exception $e) {
-		    $data['msg'] = $e->getmessage();
-		}
-
+	//	$openId = $tools->GetOpenid();
         $order = new orderclass();
         $this->checkwxweb();
         $link = IUrl::creatUrl('wxsite/index');
@@ -2153,7 +2122,7 @@ class method extends wxbaseclass
         $order_status = IReq::get('order_status');
         switch ($order_status) {
             case '1':
-                $where .= " AND paystatus = 0 AND status = 1";
+                $where .= " AND paystatus = 0";
                 break;
             case '3':
                 //待发货，已发货，待收货
@@ -3317,7 +3286,7 @@ class method extends wxbaseclass
 
         $info['username'] = $addressinfo['contactname'];
         $info['mobile'] = $addressinfo['phone'];
-        $info['addressdet'] = $addressinfo['addressdet'];
+        $info['addressdet'] = $addressinfo['detailadr'];
 
         $info['shopid'] = intval(IReq::get('shopid'));//店铺ID
         $info['remark'] = IFilter::act(IReq::get('remark'));//备注
@@ -3372,10 +3341,10 @@ class method extends wxbaseclass
         if (!IValidate::suremobi($info['mobile'])) {
             $this->message('请输入正确的手机号');
         }
-        /*
+
         if (empty($info['addressdet'])) {
             $this->message('详细地址为空');
-        }*/
+        }
         $info['userid'] = !isset($this->member['score'])?'0':$this->member['uid'];
         if (Mysite::$app->config['allowedguestbuy'] != 1) {
             if ($info['userid']==0) {
@@ -3513,7 +3482,6 @@ class method extends wxbaseclass
                 $data['error'] = true;
 				$data['msg']  = $ordermm['return_msg'];
 			}
-
 		}catch (Exception $e) {
             $data['error'] = true;
 		    $data['msg'] = $e->getmessage();
