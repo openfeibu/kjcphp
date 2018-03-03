@@ -376,7 +376,7 @@ function freshcart($payflag){
 	if($('#shocart').html() == undefined){
 		initshop(bk);
 	}else{
-	    freshcartdata(bk,$payflag);
+	   // freshcartdata(bk,$payflag);
 	}
 }
 function showpsts(){
