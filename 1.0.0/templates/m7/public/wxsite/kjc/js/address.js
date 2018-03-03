@@ -21,7 +21,7 @@ function loadaddreslist(){ 	//记载购物车 地址有关信息
 	                html += '</div>';
 	                return false;
 				}
-                  
+
 
 			});
             $('.orderDetail_address').html(html);
