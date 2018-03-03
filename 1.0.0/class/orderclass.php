@@ -654,7 +654,6 @@ $ch = curl_init($url);
         $data['addtime'] = time();
         $data['posttime'] = $info['sendtime'];//: 配送时间
 
-
         //送达时间
         $sdtime = $info['shopinfo']['arrivetime']*60;
         //制作时间
@@ -1375,44 +1374,69 @@ $ch = curl_init($url);
             }
         }
     }
-	public function handleOrderStatus($order)
-	{
-	    $status = '';
-	    if($order['is_reback'] == 0)
-	    {
-	        if($order['status'] == 1)
-	        {
-	            if($order['is_make'] == 0)
-	            {
-	                $status = "待确认";
-	            }else if($order['is_make'] == 1)
-	            {
-	                $status = Mysite::$app->config['buyerstatus'][$order['status']];
-	            }
-	        }else if($order['status'] == 2)
-	        {
-	            $status = "已发货";
-	        }else if($order['status'] == 3)
-	        {
-	            $status = "已完成";
-	        }else if($order['status'] == 3)
-	        {
-	            $status = "已取消";
-	        }
-	    }else{
-	        if($order['is_reback'] == 1)
-	        {
-	            $status = "已申请退款等待平台处理";
-	        }else if($order['is_reback'] == 2)
-	        {
-	            $status = "已退款";
-	        }else if($order['is_reback'] == 4)
-	        {
-	            $status = "已申请退款等待商家处理";
-	        }else{
-	            $status = "待处理";
-	        }
-	    }
-	    return $status;
-	}
+    public function handleOrderStatus($order)
+    {
+        $status = '';
+        if ($order['status'] == 0) {
+            $status = "待付款";
+        }
+        if ($order['status'] == 1 && $order['is_reback'] ==0) {
+            if ($order['is_make'] == 0) {
+                $status = "待商家确认";
+            } elseif ($order['is_make'] == 1) {
+                $status = '待发货';
+            }
+        }else if($order['status'] ==1 && $order['is_reback'] ==1){
+            $status = "退款中";
+        }else if($order['status'] ==1 && $order['is_reback'] ==2){
+            $status = "已退款";
+        }else if($order['status'] ==1 && $order['is_reback'] ==3){
+            $status = "拒绝退款";
+        }else if($order['status'] ==1 && $order['is_reback'] ==4){
+            $status = "退款中";
+        }
+        if($order['status'] == 2){
+            $status = "已收货";
+        }
+        if($order['status'] == 3){
+            $status = "已收货";
+        }
+        if($order['status'] == 4 && $order['is_reback'] !=2){
+            $status = "已取消";
+        }else if($order['status'] == 4 && $order['is_reback'] ==2){
+            $status = "已退款";
+        }
+        if($order['status'] == 5){
+            $status = "已退款";
+        }
+        /*
+        if ($order['is_reback'] == 0) {
+            if ($order['status'] == 0) {
+                $status = "待付款";
+            } else if ($order['status'] == 1) {
+                if ($order['is_make'] == 0) {
+                    $status = "待商家确认";
+                } elseif ($order['is_make'] == 1) {
+                    $status = '待发货';
+                }
+            } elseif ($order['status'] == 2) {
+                $status = "已发货";
+            } elseif ($order['status'] == 3) {
+                $status = "已完成";
+            } else{
+                $status = "已取消";
+            }
+        } else {
+            if ($order['is_reback'] == 1) {
+                $status = "退款中";
+            } elseif ($order['is_reback'] == 2) {
+                $status = "已退款";
+            } elseif ($order['is_reback'] == 4) {
+                $status = "退款中";
+            } else {
+                $status = "待处理";
+            }
+        }*/
+        return $status;
+    }
 }
