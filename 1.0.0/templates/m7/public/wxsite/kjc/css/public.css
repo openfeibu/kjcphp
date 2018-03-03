@@ -73,3 +73,14 @@
     text-align: center;
     margin-bottom: 0.2rem;
 }
+
+.orderDetail .orderDetail_button_ed{
+   width: 100%;
+    height: 0.95rem;
+    background: #cdcdcd;
+    font-size: 0.32rem;
+    color: #fff;
+    border-radius: 5px;
+    line-height: 0.95rem;
+    text-align: center;
+}
