@@ -189,6 +189,7 @@ var backtype = 0;
 					$F.closeLoading();
                     if(content.error ==  false){
                         wxdata = eval('('+ content.wxdata +')');
+						orderid = content.orderid;
                         callpay();
                     }else{
                         $.toast(content.msg,'text');
@@ -211,13 +212,16 @@ var backtype = 0;
                 WeixinJSBridge.log(res.err_msg);
                 var dostring = res.err_msg;
                 var temparr = dostring.split(':');
+				window.location.href = siteurl + '/index.php?ctrl=wxsite&action=ordershow&orderid='+orderid;
+				/*
                 if(temparr.length == 2){
-                    if(temparr[1] == 'ok'){
-                        window.location.reload();
+                    if(temparr[1] == 'ok' || temparr[1] == 'cancel'){
+                        window.location.href = siteurl + '/index.php?ctrl=wxsite&action=ordershow&orderid='+orderid;
                     }
                 }else{
                     $.toast(res.err_msg,'text');
                 }
+				*/
             }
         );
 

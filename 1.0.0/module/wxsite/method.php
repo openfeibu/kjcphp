@@ -3489,6 +3489,7 @@ class method extends wxbaseclass
         $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
         $data['error'] = false;
         $data['msg'] = '';
+		$data['orderid'] = $orderid;
         //②、统一下单
         $input = new WxPayUnifiedOrder();
         $input->SetBody("支付订单".$order['dno']);
