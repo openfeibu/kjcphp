@@ -1,4 +1,4 @@
-<{extends file="<{$tempdir}>/public/admin.html"}> 
+<{extends file="<{$tempdir}>/public/admin.html"}>
 <{block name=extendjs}>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/jquery.PrintArea.js" type="text/javascript" language="javascript"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
@@ -11,51 +11,51 @@
 		border-top:1px solid gray;
 	}
 </style>
-     <div style="width:100%;margin-top:-10px;"> 
-      	
+     <div style="width:100%;margin-top:-10px;">
+
       	<div class="search">
-      		 
-            
+
+
             <div class="search_content">
-            	 
+
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/order/module/orderlist"}>">
             	  <label>查询类型：</label>
             	  <select name="querytype">
             	  	<option value="0">未选择</option>
             	  	<option value="mb.username"  <{if $querytype == 'mb.username'}>selected<{/if}>>会员名</option>
-            	  	<option value="ord.shopname"  <{if $querytype == 'ord.shopname'}>selected<{/if}>>店铺名称</option> 
+            	  	<option value="ord.shopname"  <{if $querytype == 'ord.shopname'}>selected<{/if}>>店铺名称</option>
             	  	<option value="ord.buyername"  <{if $querytype == 'ord.buyername'}>selected<{/if}>>买家联系人</option>
             	  	<option value="ord.buyerphone"  <{if $querytype == 'ord.buyerphone'}>selected<{/if}>>买家联系电话</option>
             	  	<option value="ord.dno"  <{if $querytype == 'ord.dno'}>selected<{/if}>>订单编号</option>
             	  </select>
             	  <label>查询条件：</label>
             	   <input type="text" name="searchvalue" value="<{$searchvalue}>">
-            	   
+
             	   <select name="orderstatus">
-            	   	  <option value="all">选择订单状态</option> 
+            	   	  <option value="all">选择订单状态</option>
 			   		 	  	  <option value="1" <{if $orderstatus == '1'}>selected<{/if}>>未处理</option>
 			   		 	  	  <option value="2" <{if $orderstatus == '2'}>selected<{/if}>>已审核订单</option>
 			   		 	      <option value="3" <{if $orderstatus == '3'}>selected<{/if}>>已发货</option>
 			   		 	  	  <option value="4" <{if $orderstatus == '4'}>selected<{/if}>>已完成</option>
 			   		 	  	  <option value="5" <{if $orderstatus == '5'}>selected<{/if}>>已关闭</option>
             	  </select>
-            	  
-            	   从<input class="Wdate datefmt" type="text" name="starttime" id="starttime" value="<{$starttime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />  
-			   		 	  到<input class="Wdate datefmt" type="text" name="endtime" id="endtime" value="<{$endtime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />                  
 
-            	  
-            	    <input type="submit" value="提交查询" class="button">  
-            	 
+            	   从<input class="Wdate datefmt" type="text" name="starttime" id="starttime" value="<{$starttime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />
+			   		 	  到<input class="Wdate datefmt" type="text" name="endtime" id="endtime" value="<{$endtime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />
+
+
+            	    <input type="submit" value="提交查询" class="button">
+
             	 </form>
             </div>
-        
+
       	</div>
-      	
-      	
-      	
+
+
+
            <div class="tags">
 
-      	 	 
+
 
           <div id="tagscontent">
 
@@ -67,23 +67,23 @@
                 <{if empty($list)}>
 					<div style="font-size:16px; margin:20px 0px 0px 20px;">暂无数据</div>
                 <{/if}>
-                  <{foreach from=$list key=myid item=items}>  
-			   		 
+                  <{foreach from=$list key=myid item=items}>
+
  <{if !empty($items['shopid']) && $items['shoptype'] != '100'   }>
-					 
-					 
+
+
 			   		 <table class="table table-bordered" width=95% style="font-size:12px;margin-top:5px;text-align:left;margin-left:20px;" id="order_area_<{$items['id']}>" onMouseover="colorred(this);" onMouseout="tcolorred(this);">
 	<{if $items['is_goshop'] == 1}>
 		             <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">单号：<{$items['dno']}><font color=red>预订<{if $items['allcost'] == 0}>座位<{else}>座位和菜品<{/if}></font></td>
 		             	<td colspan="2" style="text-align:left;">创建时间：<{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}></td>
 		             	<td colspan="2" style="text-align:left;">订单状态: <font color=blue>
-			
+
 			<{if $items['is_make'] < 2 }>
 				<{if $items['status'] == 1 }>
 					等待用户到店消费
 				<{elseif $items['status'] == 0  }>
-					等待处理	
+					等待处理
 				<{elseif $items['status'] == 2 || $items['status'] ==3 }>
 					已完成，用户已消费
 				<{elseif $items['status'] == 4  }>
@@ -92,7 +92,7 @@
 					管理员已取消订单
 				<{/if}>
 			<{else}>
-				
+
 				卖家已取消订单
 
 			<{/if}>
@@ -101,7 +101,7 @@
 		             <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">店铺名称：<{$items['shopname']}></td>
 		             	<td colspan="2" style="text-align:left;">店铺地址：<{$items['shopaddress']}></td>
-		             	<td colspan="2" style="text-align:left;">店铺电话: <{$items['shopphone']}></td> 
+		             	<td colspan="2" style="text-align:left;">店铺电话: <{$items['shopphone']}></td>
 		            </tr>
 		            <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">消费时间：<{$items['posttime']|date_format:"%Y-%m-%d"}> <{$items['postdate']}></td>
@@ -109,16 +109,16 @@
 		             	<td colspan="2" style="text-align:left;">下单来源: <{$ordertypearr[$items['ordertype']]}><{$items['ipaddress']}></td>
 		            </tr>
 		            <tr style="height:20px;line-height:20px;">
-		             	<td colspan="2" style="text-align:left;">订单类型：预订</td>   
+		             	<td colspan="2" style="text-align:left;">订单类型：预订</td>
 		             	<td colspan="2" style="text-align:left;">ip信息：<{preg_replace('/[^\.0123456789]/s', '',$items['ipaddress'])}></td>
 		            </tr>
                 <tr style="height:20px;line-height:20px;">
-		             	<td colspan="2" style="text-align:left;">联系人：<{$items['buyername']}>[<{if empty($items['acountname'])}>游客<{else}>帐号:<{$items['acountname']}><{/if}>]</td>  
-		             	<td colspan="2" style="text-align:left;">联系电话：<{$items['buyerphone']}></td> 
-		             	<td colspan="2" style="text-align:left;"> <{assign var=showother value=$items['othertext']|unserialize}>   
+		             	<td colspan="2" style="text-align:left;">联系人：<{$items['buyername']}>[<{if empty($items['acountname'])}>游客<{else}>帐号:<{$items['acountname']}><{/if}>]</td>
+		             	<td colspan="2" style="text-align:left;">联系电话：<{$items['buyerphone']}></td>
+		             	<td colspan="2" style="text-align:left;"> <{assign var=showother value=$items['othertext']|unserialize}>
 		            		 		  	 <{foreach from=$showother key=mytest item=itc}>
 		            		 		  	<font color=red> <{$mytest}></blue>:<{$itc}> </font>
-		            		 		  	 <{/foreach}></td>  
+		            		 		  	 <{/foreach}></td>
 		            </tr>
 	 <{else}>
 		             <tr style="height:20px;line-height:20px;">
@@ -143,7 +143,7 @@
 		             <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">店铺名称：<{$items['shopname']}></td>
 		             	<td colspan="2" style="text-align:left;">店铺地址：<{$items['shopaddress']}></td>
-		             	<td colspan="2" style="text-align:left;">店铺电话: <{$items['shopphone']}></td> 
+		             	<td colspan="2" style="text-align:left;">店铺电话: <{$items['shopphone']}></td>
 		            </tr>
 		            <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">支付方式：<font color=red><{$paytypearr[$items['paytype']]|default:'未定义'}><{if !empty($items['paytype_name'])}>(<{$payway[$items['paytype_name']]}>)<{/if}></font></td>
@@ -154,20 +154,20 @@
                                 <{if $items['is_hand']  != 1 }>
 		             	<td colspan="2" style="text-align:left;">配送时间：<{$items['posttime']|date_format:"%Y-%m-%d"}> <{$items['postdate']}></td>
 		             	<{/if}>
-                                <td colspan="2" style="text-align:left;">订单类型：<{if $items['is_hand']  == 1 }>自提<{else}><{$shoptype[$items['shoptype']]}><{/if}></td>   
+                                <td colspan="2" style="text-align:left;">订单类型：<{if $items['is_hand']  == 1 }>自提<{else}><{$shoptype[$items['shoptype']]}><{/if}></td>
 		             	<td colspan="2" style="text-align:left;">ip信息：<{preg_replace('/[^\.0123456789]/s', '',$items['ipaddress'])}></td>
 		            </tr>
                             <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">联系人：<{$items['buyername']}>[<{if empty($items['acountname'])}>游客<{else}>帐号:<{$items['acountname']}><{/if}>]</td>
-		             	<td colspan="2" style="text-align:left;">消费地址：<{$items['buyeraddress']}></td>   
-		             	<td colspan="2" style="text-align:left;">联系电话：<{$items['buyerphone']}></td> 
+		             	<td colspan="2" style="text-align:left;">消费地址：<{$items['buyeraddress']}></td>
+		             	<td colspan="2" style="text-align:left;">联系电话：<{$items['buyerphone']}></td>
 		            </tr>
 	                   <{/if}>
                            <{if $items['is_hand']  != 1 }>
 	                    <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">配送时间：<{if empty($items['posttime'])}>--<{else}><{$items['posttime']|date_format:"%Y-%m-%d %H:%M:%S"}><{/if}></td>
-		             	<td colspan="2" style="text-align:left;">发货时间：<{if empty($items['sendtime'])}>--<{else}><{$items['sendtime']|date_format:"%Y-%m-%d %H:%M:%S"}><{/if}></td>   
-		             	<td colspan="2" style="text-align:left;">完成时间：<{if empty($items['suretime'])}>--<{else}><{$items['suretime']|date_format:"%Y-%m-%d %H:%M:%S"}><{/if}></td> 
+		             	<td colspan="2" style="text-align:left;">发货时间：<{if empty($items['sendtime'])}>--<{else}><{$items['sendtime']|date_format:"%Y-%m-%d %H:%M:%S"}><{/if}></td>
+		             	<td colspan="2" style="text-align:left;">完成时间：<{if empty($items['suretime'])}>--<{else}><{$items['suretime']|date_format:"%Y-%m-%d %H:%M:%S"}><{/if}></td>
 		            </tr>
                             <{/if}>
 
@@ -180,7 +180,7 @@
 						 </tr>
 						 <{/if}>
 
-		            <tr> 
+		            <tr>
 		            </tr>
 		            <{if !empty($items['detlist'])}>
 		            <tr style="height:20px;line-height:20px;">
@@ -189,17 +189,17 @@
 		            			<tr style="height:20px;line-height:20px;">
 		            				<td style="border:none;padding:0px;color:gray;text-align:left;" width="45%">名称</td>
 		            				<td style="border:none;padding:0px;color:gray;" width="15%">价格</td>
-		            				<td style="border:none;padding:0px;color:gray;">数量</td> 
+		            				<td style="border:none;padding:0px;color:gray;">数量</td>
 		            			</tr>
-		            			<{foreach from=$items['detlist'] item=value}>  
+		            			<{foreach from=$items['detlist'] item=value}>
 		            			<tr style="height:20px;line-height:20px;"><td style="border:none;padding:0px;color:gray;text-align:left;"><{$value['goodsname']}><{if $value['is_send'] == 1}><font color=red>[赠品]</font><{/if}></td>
 		            				  <td style="border:none;padding:0px;color:gray;"><{$value['goodscost']}>元</td>
 		            				  <td style="border:none;padding:0px;color:gray;"><{$value['goodscount']}>份</td>
-		            				  </tr> 
-		            				<{/foreach}>  
-		            				 
-		            	    
-		            		   
+		            				  </tr>
+		            				<{/foreach}>
+
+
+
 		            		 </table>
 		            	</td>
 		            	<td colspan="3" style="text-align:left;color:gray;" valign=top>
@@ -222,7 +222,7 @@
 		            		 		  <td style="border:none;padding:0px;color:gray;"><font color=red><{$items['addpscost']}></font>元</td>
 		            		 		   </tr>
 		            		 		<{/if}>
-		            		 	 
+
 		            		 		<{if $items['scoredown'] > 0}>
 		            		   	<tr style="height:20px;line-height:20px;">
 		            		 		  <td style="border:none;padding:0px;color:gray;" width="100px;">积分低扣</td>
@@ -246,7 +246,7 @@
 		            		 		  <td style="border:none;padding:0px;color:gray;" width="100px;">打包费</td>
 		            		 		  <td style="border:none;padding:0px;color:gray;"><font color=red><{$items['bagcost']}></font>元</td>
 		            		 		   </tr>
-		            		 		   
+
 		            		 		<{/if}>
 		            		 		<tr style="height:20px;line-height:20px;">
 		            		 		  <td style="border:none;padding:0px;color:gray;" width="100px;">应收</td>
@@ -256,43 +256,43 @@
 		            		 		<tr style="height:20px;line-height:20px;">
 		            		 		  <td style="border:none;padding:0px;color:gray;" width="100px;">备注</td>
 		            		 		  <td style="border:none;padding:0px;color:gray;"><{$items['content']}></td>
-		            		 	   </tr> 
+		            		 	   </tr>
 		            		 	   <{/if}>
 		            		 	   <{if !empty($items['othertext'])}>
 		            		 		<tr style="height:20px;line-height:20px;" valign=top>
-		            		 		  <td style="border:none;padding:0px;color:gray;" width="100px;">其他说明</td> 
+		            		 		  <td style="border:none;padding:0px;color:gray;" width="100px;">其他说明</td>
 		            		 		  <td style="border:none;padding:0px;color:gray;">
-		            		 		  	<{assign var=showother value=$items['othertext']|unserialize}>   
+		            		 		  	<{assign var=showother value=$items['othertext']|unserialize}>
 		            		 		  	 <{foreach from=$showother key=mytest item=itc}>
 		            		 		  	  <{$mytest}>:<{$itc}>，
 		            		 		  	 <{/foreach}>
 		            		 		  	</td>
-		            		 	   </tr> 
+		            		 	   </tr>
 		            		 	   <{/if}>
-		            		 </table> 
-		            		 
+		            		 </table>
+
 		            		</td>
 		            </tr>
 		             <{/if}>
 		            <tr >
-		              <td colspan="6" style="text-align:left;" class="order_control"> 
-		              	<{if $items['status'] == 0 }> 
-		              	<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="#">关闭订单</a>    
+		              <td colspan="6" style="text-align:left;" class="order_control">
+		              	<{if $items['status'] == 0 }>
+		              	<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="#">关闭订单</a>
 		              	  <{if $items['paytype']=='0'}><a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/pass/datatype/json"}>">通过审核</a>     <{/if}>
 		              	<{/if}>
 			           <{if $items['is_goshop'] != 1}>
 		              	<{if $items['status'] == 1}>
-		              	 	<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="javascript:void(0);">关闭订单</a>  
-		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/send/datatype/json"}>">配送发货</a>     
+		              	 	<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="javascript:void(0);">关闭订单</a>
+		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/send/datatype/json"}>">配送发货</a>
 							<{if $items['psbflag'] ==2}>
-									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a> 
+									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a>
 							<{/if}>
 						<{/if}>
 		              	<{if $items['status'] == 2}>
 		              	  	<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="javascript:void(0);"><{if $items['paystatus'] != 1}>关闭订单<{/if}></a>
-		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/over/datatype/json"}>">完成订单</a> 
+		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/over/datatype/json"}>">完成订单</a>
 								<{if $items['psbflag'] ==2}>
-									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a> 
+									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a>
 							    <{/if}>
 						<{/if}>
 						<{if $items['status'] == 3 }>
@@ -300,28 +300,28 @@
 						<{/if}>
 			<{else}>
 				<{if $items['is_make'] < 2 }>
-			
+
 					<{if $items['status'] == 1 || $items['status'] == 2}>
-								<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="javascript:void(0);">关闭订单</a>  
-								<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/over/datatype/json"}>">完成订单</a> 
+								<a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="javascript:void(0);">关闭订单</a>
+								<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/over/datatype/json"}>">完成订单</a>
 					<{/if}>
 					<{if $items['status'] == 3 }>
 								<font color=#FBA101><{if $items['is_acceptorder']  == 1 }>用户已确认收货<{else}>用户未确认收货<{/if}></font>
 					 <{/if}>
-					
-					
+
+
 				<{else}>
-					<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/del/datatype/json"}>">删除</a>  
+					<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/del/datatype/json"}>">删除</a>
 
 				<{/if}>
-			
-			
+
+
 			<{/if}>
 		              	<{if $items['status'] == 4 || $items['status'] == 5 }>
-		              	 <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/del/datatype/json"}>">删除</a>  
+		              	 <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/del/datatype/json"}>">删除</a>
 		              	<{/if}>
-		              	<a href="javascript:void(0);"  onclick="printorder(<{$items['id']}>,0);">A4打印订单</a>	
-							<a href="javascript:void(0);"  onclick="printorder(<{$items['id']}>,1);">小票打印订单</a>	
+		              	<a href="javascript:void(0);"  onclick="printorder(<{$items['id']}>,0);">A4打印订单</a>
+							<a href="javascript:void(0);"  onclick="printorder(<{$items['id']}>,1);">小票打印订单</a>
 		              	<{if $items['wxstatus'] ==  1}>
 		              	商家已确认订单
 		              	<{elseif $items['wxstatus'] == 2}>
@@ -344,11 +344,11 @@
 
 						  <{/if}> <{elseif $items['status'] ==4 }>买家取消订单
 						  <{elseif $items['status'] ==5 }>卖家取消订单<{/if}><{/if}>
-		              
 
-					  
-	<{if $items['is_reback']  == 2 }><font color=blue>已退款成功 <input type="button" onclick="showqzdrawbutton(<{$items['id']}>);" value="查看退款记录" class="button"></font><{/if}>						  
-	<{if $items['is_reback']  == 3 }><font color=blue>拒绝退款 <input type="button" onclick="showqzdrawbutton(<{$items['id']}>);" value="查看退款记录" class="button"> </font><{/if}>						  
+
+
+	<{if $items['is_reback']  == 2 }><font color=blue>已退款成功 <input type="button" onclick="showqzdrawbutton(<{$items['id']}>);" value="查看退款记录" class="button"></font><{/if}>
+	<{if $items['is_reback']  == 3 }><font color=blue>拒绝退款 <input type="button" onclick="showqzdrawbutton(<{$items['id']}>);" value="查看退款记录" class="button"> </font><{/if}>
 	<{if $items['is_reback']  != 2 }>
 						  <{if $items['status'] != 2 && $items['is_acceptorder']  != 1 && $items['is_reback']  != 3  && $items['paystatus']  != 0}>
 						  <input type="button" onclick="qzdrawbutton(<{$items['id']}>);" value="退款" class="button">
@@ -358,13 +358,13 @@
 
 
 					  </td>
-		            </tr>     
-		            </table> 
-					
+		            </tr>
+		            </table>
+
 					<{else}>
-						
-	 <table class="table table-bordered" width=95% style="font-size:12px;margin-top:5px;text-align:left;margin-left:20px;" id="order_area_<{$items['id']}>" onMouseover="colorred(this);" onMouseout="tcolorred(this);">					
-					
+
+	 <table class="table table-bordered" width=95% style="font-size:12px;margin-top:5px;text-align:left;margin-left:20px;" id="order_area_<{$items['id']}>" onMouseover="colorred(this);" onMouseout="tcolorred(this);">
+
 		  <tr style="height:20px;line-height:20px;">
 		             	<td colspan="2" style="text-align:left;">单号：<{$items['dno']}><font color=red>跑腿<{if $items['pttype']  == 1 }>【帮我送】<{/if}><{if $items['pttype']  == 2 }>【帮我买】<{/if}></font></td>
 		             	<td colspan="2" style="text-align:left;">创建时间：<{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}></td>
@@ -379,14 +379,14 @@
 							<{/if}>
 							<{if $items['status'] ==2}>订单完成<{/if}>
 							<{if $items['status'] ==3}>订单完成<{/if}>
-							<{if $items['status'] ==4 && $items['is_reback'] !=2}>买家取消订单  
+							<{if $items['status'] ==4 && $items['is_reback'] !=2}>买家取消订单
 							<{elseif $items['status'] ==4 && $items['is_reback'] ==2}> 已完成用户退款处理<{/if}>
 							<{if $items['status'] ==5}>管理员已退款<{/if}>
 						</font>
-                    
+
 						</font></td>
 		            </tr>
-				 
+
 		             <tr style="height:20px;line-height:20px;">
 					 <td colspan="2" style="text-align:left;"><{if $items['pttype']  == 1 }>取货时间<{/if}><{if $items['pttype']  == 2 }>收货时间<{/if}>：<{$items['posttime']|date_format:"%Y-%m-%d"}> <{$items['postdate']}></td>
 		             	<td colspan="2" style="text-align:left;">支付方式：<font color=red><{$paytypearr[$items['paytype']]|default:'未定义'}><{if !empty($items['paytype_name'])}>(<{$payway[$items['paytype_name']]}>)<{/if}></font></td>
@@ -398,32 +398,32 @@
                      <{if $items['pttype'] == 1 }>
                         <td colspan="2" style="text-align:left;">物品类型：<{$items['movegoodstype']}></td>
 		             <{/if}>
-		             	
+
 		            </tr>
 				<tr style="height:20px;line-height:20px;">
 		             <{if $items['pttype'] == 1 }>	<td colspan="2" style="text-align:left;">取货电话: <{$items['shopphone']}></td> <{/if}>
-		             	<td colspan="2" style="text-align:left;">收货电话: <{$items['buyerphone']}></td> 
-		             	<td colspan="2" style="text-align:left;">联系人: <{$items['buyername']}></td> 
+		             	<td colspan="2" style="text-align:left;">收货电话: <{$items['buyerphone']}></td>
+		             	<td colspan="2" style="text-align:left;">联系人: <{$items['buyername']}></td>
 		            </tr>
-			    <{if $items['pttype'] == 1 }>	   
+			    <{if $items['pttype'] == 1 }>
 			    <tr style="height:20px;line-height:20px;">
-				
+
 		             	<td colspan="2" style="text-align:left;">总重量：<{$items['ptkg']}>公斤</td>
                         <td colspan="2" style="text-align:left;">公斤金额：<{$items['allkgcost']}>元</td>
 						<td colspan="2" style="text-align:left;">物品价值：<{$items['movegoodscost']}></td>
 		        </tr>
-                 <{/if}>            
-					 	 
+                 <{/if}>
+
 				<tr style="height:20px;line-height:20px;">
-						<td colspan="2" style="text-align:left;">距离: <{$items['ptkm']}>千米</td> 
+						<td colspan="2" style="text-align:left;">距离: <{$items['ptkm']}>千米</td>
 						<td colspan="2" style="text-align:left;">千米金额: <{$items['allkmcost']}>元</td>
 						<{if $items['farecost'] != 0}><td colspan="2" style="text-align:left;color:red;">小费: <{$items['farecost']}>元</td><{/if}>
  		             	<td colspan="2" style="text-align:left;">里程总金额：<{$items['allcost']}>元</td>
  		            </tr>
-					 
+
 		            <tr style="height:20px;line-height:20px;">
 		             	   	<td colspan="2" style="text-align:left;">下单来源: <{$ordertypearr[$items['ordertype']]}></td>
-		             	<td colspan="2" style="text-align:left;">订单类型：跑腿<{if $items['pttype']  == 1 }>【帮我送】<{/if}><{if $items['pttype']  == 2 }>【帮我买】<{/if}></td>   
+		             	<td colspan="2" style="text-align:left;">订单类型：跑腿<{if $items['pttype']  == 1 }>【帮我送】<{/if}><{if $items['pttype']  == 2 }>【帮我买】<{/if}></td>
 		             	<td colspan="2" style="text-align:left;">ip信息：<{preg_replace('/[^\.0123456789]/s', '',$items['ipaddress'])}></td>
 		            </tr>
                 <tr style="height:20px;line-height:20px;">
@@ -434,11 +434,11 @@
 					<!--</style>-->
 		             	<td colspan="6" style="text-align:left; " id="hovercss" ><font color="red">跑腿需求：<{$items['content']}></font></td>
 		            </tr>
-	 
+
 		     <tr >
-		              <td colspan="6" style="text-align:left;" class="order_control"> 
-		            
-					
+		              <td colspan="6" style="text-align:left;" class="order_control">
+
+
 						<{if $items['status'] == 0 }>
                           <{if $items['paystatus'] == 0}>
                           <a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="#">关闭订单</a>
@@ -449,29 +449,29 @@
                           <{if $items['paystatus'] == 0}>
                           <a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="#">关闭订单</a>
                           <{/if}>
-		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/send/datatype/json"}>">配送发货</a>     
+		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/send/datatype/json"}>">配送发货</a>
 							<{if $items['psbflag'] ==2}>
-									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a> 
+									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a>
 						    <{/if}>
 						<{/if}>
 		              	<{if $items['status'] == 2}>
                           <{if $items['paystatus'] == 0}>
                           <a onclick="unorder(<{$items['id']}>,<{$items['dno']}>);" href="#">关闭订单</a>
                           <{/if}>
-		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/over/datatype/json"}>">完成订单</a>     
+		              	    <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/over/datatype/json"}>">完成订单</a>
 							<{if $items['psbflag'] ==2}>
-									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a> 
+									<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/resend/datatype/json"}>">重发配送单</a>
 							    <{/if}>
 						<{/if}>
 						<{if $items['status'] == 3 }>
 								<font color=#FBA101><{if $items['is_acceptorder']  == 1 }>用户已确认收货<{else}>用户未确认收货<{/if}></font>
 						<{/if}>
 		              	<{if $items['status'] == 4 || $items['status'] == 5 }>
-		              	 <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/del/datatype/json"}>">删除</a>  
+		              	 <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/order/module/ordercontrol/id/<{$items['id']}>/type/del/datatype/json"}>">删除</a>
 		              	<{/if}>
-					
-						
-							     	<a href="javascript:void(0);"  onclick="paotuiprintorder(<{$items['id']}>,0);">A4打印订单</a>	
+
+
+							     	<a href="javascript:void(0);"  onclick="paotuiprintorder(<{$items['id']}>,0);">A4打印订单</a>
 							<a href="javascript:void(0);"  onclick="paotuiprintorder(<{$items['id']}>,1);">小票打印订单</a>
 
 
@@ -481,22 +481,22 @@
 		              	   下单IP：<{preg_replace('/[^\.0123456789]/s', '',$items['ipaddress'])}>
 
 					</td>
-		            </tr> 
-	 
-	 
+		            </tr>
+
+
 	 </table>
 		<{/if}>
 		          <{/foreach}>
-		          
-		          
-		          
 
-                <div class="blank20"></div> 
+
+
+
+                <div class="blank20"></div>
 
                 </form>
 
                 <div class="page_newc">
-                 	    
+
                        <div class="show_page"><ul><{$pagecontent}></ul></div>
                  </div>
                 <div class="blank20"></div>
@@ -509,7 +509,7 @@
 
         </div>
 
-        
+
   </div>
   <div id="print_area" style="display:none;font-size:40px;"></div>
  </div>
@@ -526,19 +526,19 @@
        $(obj).find("#hovercss").removeClass("sdsdsdsd");
    }
     function closeddraw(){
-   
+
 	   window.location.reload();
-   
+
    }
    function unorder(orderid,dno)
-	 { 
+	 {
 	 	   var dialog =  art.dialog({
 	 	   	id:'coslid',
         title:'取消订单'+dno,
            content: '<div>关闭订单理由</div> <div><textarea name="reason" id="reason" style="height:40px;"></textarea></div><div class="btn_wuxiao hc_listfoods_menus_foods hcl_food_lists_cont_div_order2 hcl_food_lists_cont_div_order4 hc_listfoods_menus_foods2" style="width:65px;float:left;" onclick="sureclose('+orderid+');">提交关闭</div>'
         });
 	 }
-	 
+
 	 function sureclose(orderid)
 	 {
 	 	  var reasons = $('#reason').val();
@@ -549,24 +549,24 @@
 	 	    var url = siteurl+'/index.php?ctrl=adminpage&action=order&module=ordercontrol&type=un&id='+orderid+'&reasons='+reasons+'&datatype=json&random=@random@';
 	 	    $.ajax({
      type: 'get',
-     async:false, 
-     url: url.replace('@random@', 1+Math.round(Math.random()*1000)), 
-     dataType: 'json',success: function(content) {  
+     async:false,
+     url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+     dataType: 'json',success: function(content) {
      	if(content.error == false){
      		diasucces('操作成功','');
      	}else{
      		if(content.error == true)
      		{
-     			diaerror(content.msg); 
+     			diaerror(content.msg);
      		}else{
-     			diaerror(content); 
+     			diaerror(content);
      		}
-     	} 
+     	}
 		},
-    error: function(content) { 
-    	diaerror('数据获取失败'); 
+    error: function(content) {
+    	diaerror('数据获取失败');
 	  }
-   });   
+   });
 	 	 }
 	 }
 	 function selectdo(msg){
@@ -576,52 +576,52 @@ function openlink(newlinkes){
 					window.location.href=newlinkes;
 }
 function dofirch(obj){
-	gorefresh(); 
+	gorefresh();
 }
   function printorder(orderid,printtype)   //正常订单
 	{
 	    if(printtype == 1){//小票打印
-			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=orderprint&orderid='+orderid+'&printtype='+printtype,{height:'600px',width:'400px'},false); 
+			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=orderprint&orderid='+orderid+'&printtype='+printtype,{height:'600px',width:'400px'},false);
 		 }else{
-		   mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=orderprint&orderid='+orderid+'&printtype='+printtype,{height:'690px',width:'794px'},false);  
+		   mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=orderprint&orderid='+orderid+'&printtype='+printtype,{height:'690px',width:'794px'},false);
 		 }
 	   /*
 		$('#print_area').html('');
 	 $('#order_area_'+orderid).clone().appendTo($('#print_area'));
 	 $("#print_area").find('.order_control').remove();
-	  $("#print_area").printArea();  */ 
+	  $("#print_area").printArea();  */
   }
-  
+
  function paotuiprintorder(orderid,printtype)		// 跑腿
 	{
 	    if(printtype == 1){//小票打印
-			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=paotuiorderprint&orderid='+orderid+'&printtype='+printtype,{height:'600px',width:'400px'},false); 
+			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=paotuiorderprint&orderid='+orderid+'&printtype='+printtype,{height:'600px',width:'400px'},false);
 		 }else{
-		   mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=paotuiorderprint&orderid='+orderid+'&printtype='+printtype,{height:'690px',width:'794px'},false);  
+		   mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=paotuiorderprint&orderid='+orderid+'&printtype='+printtype,{height:'690px',width:'794px'},false);
 		 }
 	   /*
 		$('#print_area').html('');
 	 $('#order_area_'+orderid).clone().appendTo($('#print_area'));
 	 $("#print_area").find('.order_control').remove();
-	  $("#print_area").printArea();  */ 
-  }  
-  
+	  $("#print_area").printArea();  */
+  }
+
 
  function qzdrawbutton(orderid)		//退款操作
 	{
-	  
-			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=draworderinfo&orderid='+orderid,{height:'600px',width:'400px'},false); 
-		 
-  }  
-  
+
+			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=draworderinfo&orderid='+orderid,{height:'600px',width:'400px'},false);
+
+  }
+
 
  function showqzdrawbutton(orderid)		// 查看退款记录
 	{
-	  
-			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=showdraworderlog&orderid='+orderid,{height:'400px',width:'600px'},false); 
-		 
-  }  
-  
+
+			mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=showdraworderlog&orderid='+orderid,{height:'400px',width:'600px'},false);
+
+  }
+
   function print_all_area()
   {
   	$('#print_area').html($('#all_area').html());
@@ -632,15 +632,15 @@ function dofirch(obj){
   	 if(confirm('确认手动操作?\n 操作后将删除待审核和已关闭订单,\n 也将根据设置的自动发货天数自动发货和完成')){
   	 	var dourl = '<{ofunc type=url link="/adminpage/order/module/autodel"}>';
   	 	window.location.href= dourl;
-  	 	
-  	} 
+
+  	}
   }
    var mydialog;
 	 function psorder(orderid,dno){
 	   //审核订单
-	   mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=psuser&module=selectps&orderid='+orderid,{height:'550px',width:'850px'},false); 
-	 	 mydialog.title('设置配送员'); 
-	 	  
+	   mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=psuser&module=selectps&orderid='+orderid,{height:'550px',width:'850px'},false);
+	 	 mydialog.title('设置配送员');
+
 	 }
  </script>
 <{/block}>
