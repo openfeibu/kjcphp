@@ -118,9 +118,9 @@
 
     }
     function checkcartifempty(){    //检查购物车是否为空
-     
+
     	if( $('#total_count').html() == 0 ){
-    	  $(".ordeilpaymenshop").hide(); 
+    	  $(".ordeilpaymenshop").hide();
     		$(".emptycartBg").show();
     		$(".ordeilpaymen").hide();
     		$(".emptyordeilpaymen").show();
@@ -173,7 +173,7 @@
       </ul>
     </div>
     <div class="shop-pro-all" onscroll="bindscroll($(this))" loca="true" style="display: block;">
-        
+
 
        <{if !empty($goodstype) }>
       <dl>
@@ -197,7 +197,7 @@
           <{else}>
               <{if $goods['have_det'] == 1 }>
               <div class="addCar emptyCar" maxnum="65535">
-                
+
                 <div class="addC checkType" id="<{$goods['id']}>" >可选规格</div>
               </div>
               <{else}>

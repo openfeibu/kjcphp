@@ -143,38 +143,10 @@ var backtype = 0;
       freshcart(1);
     }
   });
-  function  orderSubmit(){
-      var buyerlng = $('input[name="addresslng"]').val();
-      var buyerlat = $('input[name="addresslat"]').val();
-	  var remark = $('input[name="remark"]').val();
-      if(checknext ==  false){
-          checknext = true;
-          url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
-          url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-          $.ajax({         //script定义
-              url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
-              dataType: "json",
-              async:true,
-              data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat,'remark':remark},
-              success:function(content) {
-                  if(content.error ==  false){
-                      window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=subshow&orderid='+content.msg ;//.html?orderid='+datas.data;
-                  }else{
-                      $.toast(content.msg,'text');
-                      return false;
-                  }
-              },
-              error:function(){
-
-              }
-          });
-           setTimeout("myyanchi()", 500 );
-      }
-  }
-
     function  orderSubmit(){
         var buyerlng = $('input[name="addresslng"]').val();
         var buyerlat = $('input[name="addresslat"]').val();
+        var remark = $('input[name="remark"]').val();
 		$F.loading();
         if(checknext ==  false){
             checknext = true;
@@ -184,7 +156,7 @@ var backtype = 0;
                 url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
                 dataType: "json",
                 async:true,
-                data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat},
+                data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat,'remark':remark},
                 success:function(content) {
 					$F.closeLoading();
                     if(content.error ==  false){
@@ -241,6 +213,5 @@ var backtype = 0;
   	}
 
 </script>
-
 <{/block}>
 <{block name="footer"}><{/block}>

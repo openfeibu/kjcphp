@@ -2130,14 +2130,14 @@ class method extends wxbaseclass
 		}catch (Exception $e) {
 		    $data['msg'] = $e->getmessage();
 		}
-		
+
         $order = new orderclass();
         $this->checkwxweb();
         $link = IUrl::creatUrl('wxsite/index');
         if ($this->member['uid'] == 0) {
             $this->message('', $link);
         }
-		
+
     }
     public function userorder()
     {
@@ -3480,7 +3480,7 @@ class method extends wxbaseclass
     {
         error_reporting(-1);
         ini_set('display_errors',1);
-		
+
         $weixindir = hopedir.'/plug/pay/weixin/';
 		require_once $weixindir."lib/WxPay.Api.php";
 		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
