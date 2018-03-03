@@ -2095,12 +2095,49 @@ class method extends wxbaseclass
 
     public function order()
     {
+		 $weixindir = hopedir.'/plug/pay/weixin/';
+		require_once $weixindir."lib/WxPay.Api.php";
+		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
+        $tools = new JsApiPay();
+		$openId = $tools->GetOpenid();
+		$orderid = '32941';
+        $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
+        $data['error'] = false;
+        $data['msg'] = '';
+        //②、统一下单
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody("支付订单".$order['dno']);
+        $input->SetAttach($order['dno']);
+        $input->SetOut_trade_no($order['id']);
+        $input->SetTotal_fee($order['allcost']*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetTimeStamp(time());
+        $input->SetGoods_tag('订餐');
+        $input->SetNotify_url(Mysite::$app->config['siteurl']."/plug/pay/weixin/notify.php");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($wxopenid);
+        try{
+			$ordermm = WxPayApi::unifiedOrder($input);
+			if($ordermm['return_code'] == 'SUCCESS'){
+				$jsApiParameters = $tools->GetJsApiParameters($ordermm);
+				$data['wxdata'] = $jsApiParameters;
+			}else{
+                $data['error'] = true;
+				$data['msg']  = $ordermm['return_msg'];
+			}
+
+		}catch (Exception $e) {
+		    $data['msg'] = $e->getmessage();
+		}
+		
         $order = new orderclass();
         $this->checkwxweb();
         $link = IUrl::creatUrl('wxsite/index');
         if ($this->member['uid'] == 0) {
             $this->message('', $link);
         }
+		
     }
     public function userorder()
     {
@@ -3446,8 +3483,9 @@ class method extends wxbaseclass
         $weixindir = hopedir.'/plug/pay/weixin/';
 		require_once $weixindir."lib/WxPay.Api.php";
 		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
+		$wxopenid = ICookie::get('wxopenid');
         $tools = new JsApiPay();
-		$openId = $tools->GetOpenid();
+		// $openId = $tools->GetOpenid();
         $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
         $data['error'] = false;
         $data['msg'] = '';
@@ -3759,7 +3797,7 @@ class method extends wxbaseclass
                 $input = new WxPayUnifiedOrder();
                 $input->SetBody("支付订单".$order['dno']);
                 $input->SetAttach($order['dno']);
-                $input->SetOut_trade_no($order['id']);
+                $input->SetOut_trade_no(rand(10000,20000));
                 $input->SetTotal_fee($order['allcost']*100);
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
@@ -3772,6 +3810,7 @@ class method extends wxbaseclass
 
                 try {
                     $ordermm = WxPayApi::unifiedOrder($input);
+					//var_dump($ordermm);exit;
                     if ($ordermm['return_code'] == 'SUCCESS') {
                         $jsApiParameters = $tools->GetJsApiParameters($ordermm);
 
@@ -4045,35 +4084,62 @@ class method extends wxbaseclass
         $color = Mysite::$app->config['color'];
         if ($color == 'green') {
             $colorhtml = '<style>
+
 									.titCon {
+
 									    background-color: #01cd88!important;
+
 									}
+
 									.cipuSubsucCon .cipuSubsucBot b{
+
 										background: #01cd88!important;
+
 										border: 1px solid #01cd88!important;
+
 									}
+
+
 
 							</style>';
         } elseif ($color == 'yellow') {
             $colorhtml = '<style>
+
 									.titCon {
+
 									    background-color: #ff7600!important;
+
 									}
+
 									.cipuSubsucCon .cipuSubsucBot b{
+
 										background: #ff7600!important;
+
 										border: 1px solid #ff7600!important;
+
 									}
+
+
 
 							</style>';
         } else {
             $colorhtml = '<style>
+
 									.titCon {
+
 									    background-color: #ff6e6e!important;
+
 									}
+
 									.cipuSubsucCon .cipuSubsucBot b{
+
 										background: #ff6e6e!important;
+
 										border: 1px solid #ff6e6e!important;
+
 									}
+
+
 
 							</style>';
         }
@@ -4081,74 +4147,138 @@ class method extends wxbaseclass
 
         if ($data['paysure'] == true) {
             $tempcontent = '<div class="titCon">
+
 							<div class="titBox">
 
+
+
 								 <div class="titC" style= "width: 100%;">
+
 										<h2 style="t">支付结果</h2></div>
 
+
+
 							</div>
+
 						</div>
+
 						<div class="cipuSubsucCon">
+
 								<div class="cipuSubsucTop">
+
 									<i style="background-image: url(/upload/images/icon_zfcg.png);"></i>
+
 									<h2>订单支付成功</h2>
+
 								</div>
+
 								<div class="cipuSubsucCen">
+
 									<ul>
+
 										<li>订单标号：<span style="color: #333;">'.$data['reason']['dno'].'</span></li>
+
 										<li>订单金额：<span>￥'.$data['reason']['allcost'].'元</span></li>
+
 									</ul>
+
 								</div>
+
 								<div class="cipuSubsucBot">
+
 										<a href="'.Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action='.$act.'&orderid='.$data['id'].'"  style="color:#fff;text-decoration:none;"><span> 查看订单</span></a>
+
 									<b><a href="'.Mysite::$app->config['siteurl'].'" style="color:#fff;text-decoration:none;">返回首页</a></b>
+
 								</div>
+
 							</div>';
         } else {
             $tempcontent = '<div class="titCon">
+
 							<div class="titBox">
 
+
+
 								 <div class="titC" style= "width: 100%;">
+
 										<h2>支付结果</h2></div>
 
+
+
 							</div>
+
 						</div>
+
 						<div class="cipuSubsucCon">
+
 								<div class="cipuSubsucTop">
+
 									<i style="background-image: url(/upload/images/icon_zfcg.png);"></i>
+
 									<h2>订单支付失败</h2>
+
 								</div>
+
 								<div class="cipuSubsucCen">
+
 									<h3 style="color:red;">原因:'.$data['reason'].'</h3>
+
 								</div>
+
 								<div class="cipuSubsucBot">
+
 									<a href="'.Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action='.$act.'&orderid='.$data['id'].'"  style="color:#fff;text-decoration:none;"><span> 查看订单</span></a>
+
 									<b><a href="'.Mysite::$app->config['siteurl'].'" style="color:#fff;text-decoration:none;">返回首页</a></b>
+
 								</div>
+
 							</div>';
         }
 
         $html = '<!DOCTYPE html>
+
 <html>
+
 <head>
+
    <meta charset="UTF-8">
 
+
+
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+
 	<title>支付返回信息</title>
+
+
 
 	 '.$colorhtml.'
 
+
+
  <script>
 
+
+
 </script>
+
 <link rel="stylesheet" href="/templates/m7/public/wxsite/css/pay-font-awesome.css"/>
+
 <link rel="stylesheet" href="/templates/m7/public/wxsite/css/pay-font-awesome.min.css"/>
+
 <link rel="stylesheet" href="/templates/m7/public/wxsite/css/pay-index.css"/>
+
 </head>
+
 <body style="height:100%;width:100%;margin:0px;">
+
    <div style="max-width:400px;margin:0px;margin:0px auto;min-height:300px;"> '.$tempcontent.'    </div>
 
+
+
 </body>
+
 </html>';
         print_r($html);
         exit;
