@@ -138,33 +138,44 @@ body{
 }
 
 .signup_container{
-	width:340px;
+/*	width:340px;
 	height: auto;
 	margin:5% auto 0;
 	padding-bottom: 20px;
 	background: #EDEDED;
 	text-align: center;
 	border-radius: 8px;
-	box-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+	box-shadow: 1px 2px 4px rgba(0,0,0,0.6);*/
 	-webkit-user-select:none;
 	-ms-user-select:none;
+	    width: 300px;
+    height: 280px;
+    overflow: hidden;
+    padding: 40px;
+    background: #fff;
+    box-shadow: 0 -15px 30px #293846;
+    border-radius: 5px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -190px;
+    margin-top: -250px;
 }
 
 
 h1.signup_title{
-	background:#19B4EA;
-	width: 100%;
-	height:70px;
-	font: 26px/1.4 "microsoft yahei";
-	text-align: left;
-	text-indent:20px;
-	letter-spacing:3px;
-	color:#FDFDFD;
-	line-height: 70px;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
+	    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+        color: #098ac4;
 }
-
+.signup_title em {
+    display: block;
+    font-size: 12px;
+    margin-top: 8px;
+    font-weight: bold;
+}
 .signup_container img{
 	margin:20px 0 0;
 }
@@ -172,22 +183,22 @@ h1.signup_title{
 .signup_container .copyright{
 	margin:20px 0;
 	color: #ABABAB;
+	text-align: center;
 }
 
 .signup_forms{
-	width:260px;
-	margin:30px auto 0;
-	padding: 0;
-	text-align: left;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	box-shadow: inset 0 1px 3px rgba(0,0,0,0.36),0 1px 0 rgba(255,255,255,0.15);
+
 }
 
 .signup_forms .form_row {
 	position:relative;
-	border-top:1px solid #CCC;
-	border-top:1px solid rgba(0,0,0,0.12);
+	margin: 10px 0;
+    height: 40px;
+    overflow: hidden;
+    clear: both;
+    position: relative;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
 }
 
 .signup_forms label {
@@ -195,21 +206,19 @@ h1.signup_title{
 }
 
 .signup_forms input{
-	width:100%;
-	padding: 10px 0;
-	text-indent: 40px;
-	display:block;
-	margin:0;
-	border:0;
-	outline: none;
-	font:bold 14px/1.4 "microsoft yahei";
-	line-height:25px;
-	color: #888;
+	    font-size: 14px;
+    height: 26px;
+    line-height: 26px;
+    padding: 8px 5%;
+    width: 90%;
+    text-indent: 2em;
+    border: none;
+    color: #676a6c;
 }
 
 
 #signup_name{
-	background: url('../images/i1.png') no-repeat 9px 15px;
+	background: url('../images/i1.png') no-repeat 9px 12px;
 }
 #signup_password{
 	background: url('../images/i2.png') no-repeat 9px 15px;
@@ -255,7 +264,6 @@ h1.signup_title{
 }
 
 .login-btn-set{
-	width:260px;
 	height: auto;
 	overflow: hidden;
 	margin:10px auto;
@@ -263,9 +271,16 @@ h1.signup_title{
 .login-btn{
 	display: block;
 	float: right;
-	background: url(../images/login_btn.png) no-repeat;
 	width: 157px;
-	height:41px;
+
+    height: 40px;
+    border: none;
+    font-size: 16px;
+    background: #098ac4;
+    color: #FFF;
+    cursor: pointer;
+    text-align: center;line-height: 40px;text-decoration: none;
+    border-radius: 5px;
 }
 
 .login-btn:hover{
@@ -285,6 +300,7 @@ h1.signup_title{
 	width:90px;
 	height: 22px;
 	cursor: pointer;
+	text-indent: 25px;
 }
 .login-btn-set .rem.selected{
 	background-position: 0 0;
