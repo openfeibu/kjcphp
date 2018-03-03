@@ -221,15 +221,14 @@ class method extends wxbaseclass
         $lng = ICookie::get('lng');
         $lat = ICookie::get('lat');
         $addressname = ICookie::get('addressname');
-        $lat = empty($lat)?0:$lat;
-        $lng = empty($lng)?0:$lng;
+        $lat = empty($lat)? 23.282178:$lat;
+        $lng = empty($lng)? 113.615325:$lng;
         if (empty($addressname)) {
             $addressname = '' ;
         }
         $data['lat'] = $lat;
         $data['lng'] = $lng;
         $data['addressname'] = $addressname;
-
         //判断平台类型  //2微信端,3web端
         $source = 3;
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
@@ -2122,11 +2121,11 @@ class method extends wxbaseclass
         $order_status = IReq::get('order_status');
         switch ($order_status) {
             case '1':
-                $where .= " AND paystatus = 0";
+                $where .= " AND status = 0 AND is_reback = 0 ";
                 break;
             case '3':
                 //待发货，已发货，待收货
-                $where .= " and ((status = 1 and is_make = 1 and  paystatus=1) or ( is_make = 0 and status > 0 and status < 3 and  paystatus=1 ) or (status > 1 and status < 4  and paystatus=1))";
+                $where .= " and status = 1 AND is_reback = 0";
                 break;
             case '4':
                 //已完成
@@ -2201,6 +2200,9 @@ class method extends wxbaseclass
     }
     public function ordershow()
     {
+        error_reporting(-1);
+        ini_set('display_errors',1);
+
         $link = IUrl::creatUrl('wxsite/index');
         if ($this->member['uid'] == 0) {
             $this->message('未登陆', $link);
@@ -2209,6 +2211,8 @@ class method extends wxbaseclass
         $wxclass = new wx_s();
         $signPackage = $wxclass->getSignPackage();
         $data['signPackage'] = $signPackage;
+
+        $orderclass = new orderclass();
 
         $shareinfo = $this->mysql->select_one("select title,img,`describe`  from ".Mysite::$app->config['tablepre']."juanshowinfo where type=2 order by orderid asc  ");
         if (empty($shareinfo)) {
@@ -2286,6 +2290,8 @@ class method extends wxbaseclass
                 $order['paystatus'] = $order['paystatus'] ;
                 $order['addtime'] = date('Y-m-d H:i:s', $order['addtime']);
                 $order['posttime'] = date('Y-m-d H:i:s', $order['posttime']);
+
+                $order['order_status'] = $orderclass->handleOrderStatus($order);
 
                 #print_r($order);
                 $data['order'] = $order;

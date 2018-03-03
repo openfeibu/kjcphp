@@ -160,6 +160,7 @@ $("body").on('click','.order_button_pay',function(){
             console.log(content);
             if(content.error ==  false){
                 wxdata = eval('('+ content.wxdata +')');
+                orderid = content.orderid;
                 callpay();
             }else{
                 $.toast(content.msg,'text');
@@ -182,7 +183,7 @@ function jsApiCall()
             var temparr = dostring.split(':');
             if(temparr.length == 2){
                 if(temparr[1] == 'ok'){
-                    window.location.reload();
+                    window.location.href= siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+id ;
                 }
             }else{
                 $.toast(res.err_msg,'text');
@@ -203,6 +204,36 @@ function callpay()
     }else{
         jsApiCall();
     }
+}
+function cancel_order(id)
+{
+    $.confirm({
+        text: '是否取消订单',
+        onOK: function() {
+            $F.loading();
+            //点击确认
+            var info = {'orderid': id,'typeid':0};
+            var url =  siteurl+'/index.php?ctrl=wxsite&action=savedrawbacklog&datatype=json&random=@random@';
+            $.ajax({
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                data:info,
+                success:function(content) {
+                    $F.closeLoading();
+                    if(content.error ==  false){
+                        $.toast('申请成功!','text');
+                        $("#orderList_item_"+id).remove();
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+                    $F.closeLoading();
+                }
+            });
+        },
+        onCancel: function() {}
+    });
 }
 </script>
 

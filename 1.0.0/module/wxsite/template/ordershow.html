@@ -64,7 +64,7 @@
         </div>
         <div class="orderDetail_info_item fb-clearfix fsMain">
           <p>订单状态</p>
-          <span>等待商家接单</span>
+          <span><{$order['order_status']}></span>
         </div>
         <div class="orderDetail_info_item fb-clearfix">
           <p>订单号码</p>
@@ -83,7 +83,136 @@
         <{$order['content']}>
       </div>
       <div class="orderDetail_button">
-        <a href="">取消订单</a>
+        <{if $order['is_reback'] == 0}>
+        <{if $order['status'] >= 0 && $order['status'] < 2}>
+            <{if $order['is_reback'] == 0  }>
+                <{if $order['paystatus'] == 1 && $allowreback == 1   }>
+                    <a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a>
+                <{/if}>
+                <{if $order['paystatus'] == 1 && $order['is_make'] == 0 && $allowreback == 0 }>
+                    <a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a>
+                <{/if}>
+            <{/if}>
+        <{/if}>
+        <{if $order['status'] == 4}>
+            <{if $order['is_reback'] == 2}>
+                <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
+            <{else}>
+                <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
+            <{/if}>
+        <{/if}>
+        <{if $order['status'] == 5}>
+            <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
+        <{/if}>
+        <{if $order['status'] == 0 && $order['paystatus'] == 0  }>
+            <a href="javascript:void(0);" class="pay_btn">继续支付</a>
+        <{/if}>
+        <{if $order['status'] == 2  && $order['is_reback'] == 0  }>
+            <a onclick="acceptorder();" href="javascript:void(0);">确认收货 </a>
+        <{/if}>
+        <{if $order['status'] == 3 && $order['is_acceptorder'] == 1 }>
+            <a href="javascript:void(0);" class="orderDetail_button_ed">已完成</a>
+        <{/if}>
+        <{else}>
+            <{if $order['is_reback'] == 1}>
+                <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
+            <{else if $order['is_reback'] == 2}>
+                <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
+            <{else if $order['is_reback'] == 3}>
+                <a href="javascript:void(0);" class="orderDetail_button_ed">拒绝退款</a>
+            <{else if $order['is_reback'] == 4}>
+                <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
+            <{/if}>
+        <{/if}>
       </div>
     </div>
+    <script>
+    function cancel_order(id)
+    {
+        $.confirm({
+            text: '是否取消订单',
+            onOK: function() {
+                $F.loading();
+                //点击确认
+                var info = {'orderid': id,'typeid':0};
+                var url =  siteurl+'/index.php?ctrl=wxsite&action=savedrawbacklog&datatype=json&random=@random@';
+                $.ajax({
+                    url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                    dataType: "json",
+                    data:info,
+                    success:function(content) {
+                        $F.closeLoading();
+                        if(content.error ==  false){
+                            $.toast('申请成功!','text');
+                            window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+id ;
+                        }else{
+                            $.toast(content.msg,'text');
+                        }
+                    },
+                    error:function(){
+                        $F.closeLoading();
+                    }
+                });
+            },
+            onCancel: function() {}
+        });
+    }
+    $("body").on('click','.pay_btn',function(){
+        url = siteurl+'/index.php?ctrl=wxsite&action=pay&random=@random@';
+        $.ajax({         //script定义
+            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            dataType: "json",
+            async:true,
+            data:{orderid:'<{$order['id']}>'},
+            success:function(content) {
+                console.log(content);
+                if(content.error ==  false){
+                    wxdata = eval('('+ content.wxdata +')');
+                    callpay();
+                }else{
+                    $.toast(content.msg,'text');
+                    return false;
+                }
+            },
+            error:function(){
+                //$.toast(content.msg,'text');
+            }
+        });
+    });
+    function jsApiCall()
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            wxdata,
+            function(res){
+                WeixinJSBridge.log(res.err_msg);
+                var dostring = res.err_msg;
+                var temparr = dostring.split(':');
+                if(temparr.length == 2){
+                    if(temparr[1] == 'ok'){
+                        window.location.reload();
+                    }
+                }else{
+                    $.toast(res.err_msg,'text');
+                }
+            }
+        );
+
+    }
+    function callpay()
+    {
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+    </script>
 <{/block}>
+
+<{block name=footer}><{/block}>
