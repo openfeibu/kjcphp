@@ -1,0 +1,9 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$single['title']}> <{$sitename}><{/block}>
+<{block name=blockcontent}>
+<body ontouchstart style="background:#fff;">
+<div class="agreement">
+ <{$single['content']|htmlspecialchars_decode}>
+</div>
+<{/block}>
+<{block name=footer}><{/block}>

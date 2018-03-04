@@ -1,0 +1,14 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$single['title']}> <{$sitename}><{/block}>
+<{block name=blockcontent}>
+<body ontouchstart style="background:#fff;">
+<div class="about">
+ <{$single['content']|htmlspecialchars_decode}>
+ <div class="about_copy">
+    <div class="about_href">
+      <a href="<{ofunc type=url link="/wxsite/page/code/termuse"}>" class="fb-inlineBlock">使用条款</a>       <a href="<{ofunc type=url link="/wxsite/page/code/service"}>" class="fb-inlineBlock">服务协议</a>     </div>
+    <p>CopyRight © 2017-2018 All Rights Reserved</p>
+  </div>
+</div>
+<{/block}>
+<{block name=footer}><{/block}>
