@@ -373,6 +373,9 @@ class wmrclass
         } elseif (isset($paixuarr['sell'])) {
             $pxvalue = 'sellcount';
             $pxtype = $paixuarr['sell'] == 'asc'?SORT_ASC:SORT_DESC;
+        } elseif (isset($paixuarr['ordercount'])) {
+            $pxvalue = 'ordercount';
+            $pxtype = $paixuarr['ordercount'] == 'asc'?SORT_ASC:SORT_DESC;
         }
 
 
