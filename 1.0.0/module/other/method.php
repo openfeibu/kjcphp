@@ -1,7 +1,7 @@
 <?php
 class method   extends baseclass
 {
-	/* 
+	/*
 	[0] => Array
         (
             [id] => 26175
@@ -20,16 +20,16 @@ class method   extends baseclass
             [paytype] => 1
             [paystatus] => 1
             [trade_no] => 4003282001201705090146580408
-            [content] => 
+            [content] =>
             [ordertype] => 3
             [daycode] => 2
-            [area1] => 
-            [area2] => 
-            [area3] => 
-            [cxids] => 
+            [area1] =>
+            [area2] =>
+            [area3] =>
+            [cxids] =>
             [cxcost] => 0.00
             [yhjcost] => 0
-            [yhjids] => 
+            [yhjids] =>
             [ipaddress] => 171.15.157.8???
             [scoredown] => 0
             [is_ping] => 0
@@ -47,37 +47,37 @@ class method   extends baseclass
             [suretime] => 0
             [allcost] => 0.10
             [buycode] => 188f75
-            [othertext] => 
+            [othertext] =>
             [is_print] => 0
             [wxstatus] => 0
             [shoptype] => 0
             [is_make] => 0
             [is_reback] => 0
-            [areaids] => 
-            [psuid] => 
-            [psusername] => 
-            [psemail] => 
+            [areaids] =>
+            [psuid] =>
+            [psusername] =>
+            [psemail] =>
             [admin_id] => 410100
             [is_goshop] => 0
             [paytype_name] => weixin
             [taxcost] => 0.00
             [postdate] => 11:14-11:44
             [pttype] => 0
-            [ptkg] => 
-            [ptkm] => 
+            [ptkg] =>
+            [ptkm] =>
             [allkgcost] => 0.00
             [allkmcost] => 0.00
-            [farecost] => 
+            [farecost] =>
             [dnos] => 0
             [shoplat] => 34.735325
             [shoplng] => 113.614724
             [buyerlat] => 34.802330
             [buyerlng] => 113.543806
             [psbflag] => 1
-            [movegoodscost] => 
-            [movegoodstype] => 
-            [psyoverlng] => 
-            [psyoverlat] => 
+            [movegoodscost] =>
+            [movegoodstype] =>
+            [psyoverlng] =>
+            [psyoverlat] =>
             [shopdowncost] => 0
             [acountname] => zem123456789101112131415161718192021222324252627282930313233
             [detlist] => Array
@@ -95,8 +95,8 @@ class method   extends baseclass
                             [is_send] => 0
                             [product_id] => 0
                             [have_det] => 0
-                            [typeid] => 
-                            [goodsattr] => 
+                            [typeid] =>
+                            [goodsattr] =>
                         )
 
                 )
@@ -105,42 +105,42 @@ class method   extends baseclass
 
 	*/
 	//生成签名
-	function getsignature($data){ 
-	 
-		ksort($data); 
+	function getsignature($data){
+
+		ksort($data);
 		$stringA = '';
 		$newarray = array();
 		foreach($data as $key=>$value){
  			$newarray[] = $key.'='.$value;
 		}
 		$stringA = implode('&',$newarray);
-		 
+
 		$apimiyao = 'GHkj2004GHkj2004GHkj2004GHkj2004';
 		$stringSignTemp = $stringA.'&key='.$apimiyao;
 		 print_R($stringSignTemp);
 		$sign = strtoupper(md5($stringSignTemp));
- 		 
+
 		return $sign;
-		
+
 	}
 	//测试退款操作
 	function wxrefundpay(){
-	 
-	 
+
+
 		$datas = array();
 		$datas['appid'] = 'wx90d68db4fe91edae';
 		$datas['mch_id'] = '1302694901';
-		$datas['nonce_str'] = md5(time().$datas['appid'].time().$datas['mch_id']); 
+		$datas['nonce_str'] = md5(time().$datas['appid'].time().$datas['mch_id']);
    		$datas['op_user_id'] = '1302694901';
 		$datas['out_refund_no'] = '812749725686';
 		$datas['total_fee'] = '100';
-		$datas['refund_fee'] = '100'; 
+		$datas['refund_fee'] = '100';
 		$datas['transaction_id'] = '4003282001201705090146580408';
 		$datas['sign'] = $this->getsignature($datas);
-		
+
 	    $newdataa = $this->ToXml($datas);
 		#print_R($datas);
-		
+
 		$returnxml = $this->curl_post_ssl('https://api.mch.weixin.qq.com/secapi/pay/refund',   $newdataa );
 		$returndata = $this->FromXml($returnxml);
 		print_r($returndata);
@@ -152,12 +152,12 @@ class method   extends baseclass
 	**/
 	public function ToXml($datas)
 	{
-		if(!is_array($datas) 
+		if(!is_array($datas)
 			|| count($datas) <= 0)
 		{
     		throw new WxPayException("数组数据异常！");
     	}
-    	
+
     	$xml = "<xml>";
     	foreach ($datas as $key=>$val)
     	{
@@ -168,23 +168,23 @@ class method   extends baseclass
     		}
         }
         $xml.="</xml>";
-        return $xml; 
+        return $xml;
 	}
-	
+
  /**
      * 将xml转为array
      * @param string $xml
      * @throws WxPayException
      */
 	public function FromXml($returnxml)
-	{	
+	{
 		if(!$returnxml){
 			throw new WxPayException("xml数据异常！");
 		}
         //将XML转为array
         //禁止引用外部xml实体
         libxml_disable_entity_loader(true);
-        $data = json_decode(json_encode(simplexml_load_string($returnxml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+        $data = json_decode(json_encode(simplexml_load_string($returnxml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 		return $data;
 	}
 function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
@@ -199,9 +199,9 @@ function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
 	curl_setopt($ch,CURLOPT_URL,$url);
 	curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
 	curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
-	
+
 	//以下两种方式需选择一种
-	
+
 	//第一种方法，cert 与 key 分别属于两个.pem文件
 	//默认格式为PEM，可以注释
 	curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
@@ -209,25 +209,25 @@ function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
 	//默认格式为PEM，可以注释
 	curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
 	curl_setopt($ch,CURLOPT_SSLKEY,getcwd().'/plug/pay/weixin/cert/apiclient_key.pem');
-	
+
 	//第二种方式，两个文件合成一个.pem文件
 //	curl_setopt($ch,CURLOPT_SSLCERT,getcwd().'/all.pem');
- 
+
 	if( count($aHeader) >= 1 ){
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeader);
 	}
- 
+
 	curl_setopt($ch,CURLOPT_POST, 1);
 	curl_setopt($ch,CURLOPT_POSTFIELDS,$vars);
 	$data = curl_exec($ch);
-	 
+
 	if($data){
 		curl_close($ch);
 		return $data;
 	}
-	else { 
+	else {
 		$error = curl_errno($ch);
-		echo "call faild, errorCode:$error\n"; 
+		echo "call faild, errorCode:$error\n";
 		curl_close($ch);
 		return false;
 	}
@@ -235,8 +235,8 @@ function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
 
 
 
-	
-	
+
+
 	    public function adminupload()  // 会员中心申请开店
 	 {
 	 	 $func = IFilter::act(IReq::get('func'));
@@ -263,13 +263,13 @@ function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
 	   $data['func'] = $func;
 	   Mysite::$app->setdata($data);
 	 }
-	
+
 	 public function saveupload()
 	 {
-	 	
+
 		  $json = new Services_JSON();
       $uploadpath = 'upload/goods/';
-		  $filepath = 'http://m6.waimairen.com/upload/goods/';
+		  $filepath = Mysite::$app->config['imgserver'].'/upload/goods/';
       $upload = new upload($uploadpath,array('gif','jpg','jpge','png'));//upload
       $file = $upload->getfile();
      if($upload->errno!=15&&$upload->errno!=0) {
@@ -350,22 +350,22 @@ function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
 	   }
 	    Mysite::$app->setdata(array('type'=>$type,'goodsid'=>$goodsid,'imgurl'=>$imgurl));
 	 }
-	 
-	 
+
+
 	  /* 配送宝上传图片接口 */
-	 function psbimgUpload(){ 
- 	 
-		$uploadname ='imgFile';//传入参数  用户名 
+	 function psbimgUpload(){
+
+		$uploadname ='imgFile';//传入参数  用户名
 		$json = new Services_JSON();
-		$uploadpath = 'upload/psbimg/';//size 获取文件大小 
-		if(isset($_FILES[$uploadname])){  
+		$uploadpath = 'upload/psbimg/';//size 获取文件大小
+		if(isset($_FILES[$uploadname])){
 		    if($_FILES[$uploadname]['error'] == 0 ){//可以上传
 				$upload1 = new upload($uploadpath,array('gif','jpg','jpge','doc','png'));
-				$file1 = $upload1->getfile(); 
-				 
-				if($upload1->errno !=15 && $upload1->errno !=0){   
+				$file1 = $upload1->getfile();
+
+				if($upload1->errno !=15 && $upload1->errno !=0){
 					$this->message($upload1->errmsg());
-				}else{ 
+				}else{
 					$data['psbimgUploadUrl'] = Mysite::$app->config['siteurl'].'/'.$uploadpath.$file1[0]['saveName'];
 					$this->success($data);
 			    }
@@ -375,11 +375,11 @@ function curl_post_ssl($url, $vars, $second=30,$aHeader=array())
 		}else{
 			$this->message('上传失败');
 		}
-  	}  
-	  
-	 
-	 
-	 
+  	}
+
+
+
+
 }
 
 

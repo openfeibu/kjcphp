@@ -234,9 +234,11 @@ class method extends wxbaseclass
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
             $source = 2;
         }
-        $datalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('juli'=>'asc'), $lat, $lng, $source);
-        $data['shoplist']  = $datalistx;
-
+        $julidatalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('mijuli'=>'asc'), $lat, $lng, $source);
+        $data['julishoplist']  = $julidatalistx;
+        $ordercountdatalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('ordercount'=>'desc'), $lat, $lng, $source);
+        $data['ordercountshoplist']  = $ordercountdatalistx;
+//var_dump($data);exit;
         $shoptypelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where parent_id <> 0 order by orderid  asc");
         foreach ($shoptypelist as $key => $value) {
             $shoptypelist[$key]['catelink'] = IUrl::creatUrl('/wxsite/shoplist/typelx/wm/typeid/'.$value['id'].'');
@@ -7917,5 +7919,25 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $this->mysql->update(Mysite::$app->config['tablepre'].'alljuan',$data,"id='".$id."'");
             $this->success('success');
         }
+    }
+    public function page()
+    {
+        $code = trim(IFilter::act(IReq::get('code')));
+		$data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
+	    Mysite::$app->setdata($data);
+    }
+    public function about()
+    {
+        $code = 'about';
+		$data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
+	    Mysite::$app->setdata($data);
+    }
+    public function contact()
+    {
+
+    }
+    public function tape()
+    {
+
     }
 }
