@@ -30,7 +30,7 @@
            </form>
     </div>
 
-    <div class="login-btn-set"><div class='rem'>记住我</div> <a href='javascript:loginin();' class='login-btn'>登录</a></div>
+    <div class="login-btn-set"><a href='javascript:loginin();' class='login-btn'>登录</a></div>
     <p class='copyright'>技术支持：@广州飞步信息科技有限公司 </p>
 </div>
 
@@ -101,7 +101,7 @@ function loginin()
      	}else{
      		if(content.error == true)
      		{
-     			$('#'+content.msg).addClass('tip error');
+     			alert("账户或密码错误")
      		}else{
      			alert(content);
      		}
