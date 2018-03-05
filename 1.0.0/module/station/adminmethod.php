@@ -8,7 +8,7 @@ class method extends adminbaseclass
         $searchvalue = IReq::get('searchvalue');
         $status = intval(IReq::get('status'));
         $cityid = intval(IReq::get('cityid'));
-        $where = '  where mem.uid > 0 and mem.groupid = 4  ';
+        $where = '  where 1  ';
 
         $data['searchvalue'] ='';
         $data['querytype'] ='';
@@ -41,9 +41,9 @@ class method extends adminbaseclass
         $pageshow->setpage(IReq::get('page'), 10);
         //order: id  dno 订单编号 shopuid 店铺UID shopid 店铺ID shopname 店铺名称 shopphone 店铺电话 shopaddress 店铺地址 buyeruid 购买用户ID，0未注册用户 buyername
         //
+        $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo as st ".$where." order by st.id desc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
 
-        $data['stationlist'] = $this->mysql->getarr("select *,mem.uid from ".Mysite::$app->config['tablepre']."admin as mem left join  ".Mysite::$app->config['tablepre']."stationadmininfo as st on mem.uid = st.uid   ".$where." order by mem.uid desc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
-        $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."admin as mem left join  ".Mysite::$app->config['tablepre']."stationadmininfo as st on mem.uid = st.uid   ".$where." ");
+        $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."stationadmininfo as st ".$where." ");
         $pageshow->setnum($shuliang);
         $data['pagecontent'] = $pageshow->getpagebar($link);
 
@@ -173,8 +173,10 @@ class method extends adminbaseclass
         # limitalert();
         $is_selfsitecx = intval(IReq::get('is_selfsitecx'));
         $uid = IReq::get('uid');
-        $username = trim(IReq::get('username'));
-        $password = trim(IReq::get('password'));
+        $stationid = IReq::get('stationid');
+        //$uid = ;
+        //$username = trim(IReq::get('username'));
+        //$password = trim(IReq::get('password'));
         $stationname = trim(IReq::get('stationname'));
         $stationusername = trim(IReq::get('stationusername'));
         $stationphone = trim(IReq::get('stationphone'));
@@ -188,11 +190,12 @@ class method extends adminbaseclass
         if ($is_selfsitecx == 0) {
             $this->mysql->delete(Mysite::$app->config['tablepre'] . 'rule', "cityid = '$cityid'");
         }
-        if (empty($username)) {
-            $this->message('member_emptyname');
-        }
+        // if (empty($username)) {
+        //     $this->message('member_emptyname');
+        // }
 
-        if (empty($uid)) {
+        if (empty($stationid)) {
+            /*
             if (empty($password)) {
                 $this->message('member_emptypwd');
             }
@@ -200,7 +203,7 @@ class method extends adminbaseclass
             if (!empty($testinfo)) {
                 $this->message('member_repeatname');
             }
-
+            */
             if (empty($stationname)) {
                 $this->message('分站名称不能为空');
             }
@@ -213,30 +216,31 @@ class method extends adminbaseclass
             if (empty($cityid)) {
                 $this->message('请选择所属城市');
             }
-
+            /*
             $checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where cityid='".$cityid."' ");
 
             if (!empty($checkinfo)) {
                 $this->message('所选城市已占用，请选择其他城市');
             }
-
-            /*  if(empty($stationlnglat)){
+            */
+             if(empty($stationlnglat)){
                  $this->message('请设置分站地图坐标');
-             }  */
+             }
+             /*
             if (empty($stationaddress)) {
                 $this->message('请填写分站地址');
             }
-
 
             $arr['username'] = $username;
             $arr['password'] = md5($password);
             $arr['time'] = time();
             $arr['groupid'] = 4;
+
             $this->mysql->insert(Mysite::$app->config['tablepre'].'admin', $arr);
             $stationuid = $this->mysql->insertid();
-
+            */
             $adddata = array();
-            $adddata['uid'] = $stationuid;
+            $adddata['uid'] = 1;
             $adddata['stationname'] = $stationname;
             $adddata['stationusername'] = $stationusername;
             $adddata['stationphone'] = $stationphone;
@@ -246,8 +250,10 @@ class method extends adminbaseclass
             $adddata['orderid'] = $orderid;
             $adddata['is_selfsitecx'] = $is_selfsitecx;
             $adddata['stationis_open'] = $stationis_open;
+
             $this->mysql->insert(Mysite::$app->config['tablepre'].'stationadmininfo', $adddata);
         } else {
+            /*
             $testinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."admin where username='".$username."' ");
             if (empty($testinfo)) {
                 $this->message('member_editfail');
@@ -255,7 +261,7 @@ class method extends adminbaseclass
             if (!empty($password)) {
                 $arr['password'] = md5($password);
             }
-
+            */
             if (empty($stationname)) {
                 $this->message('分站名称不能为空');
             }
@@ -265,9 +271,10 @@ class method extends adminbaseclass
             if (empty($stationphone)) {
                 $this->message('分站负责人电话不能为空');
             }
-            /*  if(empty($stationlnglat)){
+            if(empty($stationlnglat)){
                  $this->message('请设置分站地图坐标');
-             } */
+             }
+             /*
             if (empty($stationaddress)) {
                 $this->message('请填写分站地址');
             }
@@ -275,6 +282,7 @@ class method extends adminbaseclass
             if (!empty($arr)) {
                 $this->mysql->update(Mysite::$app->config['tablepre'].'admin', $arr, "uid='".$uid."'");
             }
+            */
 
             $updataarr = array();
             $updataarr['stationname'] = $stationname;
@@ -285,7 +293,7 @@ class method extends adminbaseclass
             $updataarr['orderid'] = $orderid;
             $updataarr['stationis_open'] = $stationis_open;
             $updataarr['is_selfsitecx'] = $is_selfsitecx;
-            $this->mysql->update(Mysite::$app->config['tablepre'].'stationadmininfo', $updataarr, "uid='".$uid."'");
+            $this->mysql->update(Mysite::$app->config['tablepre'].'stationadmininfo', $updataarr, "id='".$stationid."'");
         }
         $this->success('success');
         // $this->json(array('error'=>false));

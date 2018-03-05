@@ -93,8 +93,12 @@ class method extends adminbaseclass
     //保存店铺
     public function saveshop()
     {
+        ini_set('display_errors', 1);            //错误信息
+        ini_set('display_startup_errors', 1);    //php启动错误信息
+        error_reporting(-1);
         $laiyuan = intval(IReq::get('laiyuan')); // 申请来源。1为微信端，主要用于判断微信端用户是否开过店
         $subtype = intval(IReq::get('subtype'));
+        $stationid = intval(IReq::get('stationid'));
         $id = intval(IReq::get('uid'));
         if (!in_array($subtype, array(1,2))) {
             $this->message('system_err');
@@ -117,8 +121,12 @@ class method extends adminbaseclass
             if (empty($data['shopname'])) {
                 $this->message('shop_emptyname');
             }
+            $data['stationid'] = $stationid;
+            if (empty($data['stationid'])) {
+                $this->message('请选择所属分站！');
+            }
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  shopname='".$data['shopname']."'  ");
-            $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('admin_id'=>intval(IReq::get('admin_id'))), "uid='".$testinfo['uid']."'");
+            $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('stationid'=>$stationid), "uid='".$testinfo['uid']."'");
             if (!empty($shopinfo)) {
                 $this->message('shop_repeatname');
             }
@@ -127,9 +135,9 @@ class method extends adminbaseclass
             $data['admin_id'] = intval(IReq::get('admin_id'));
             $data['is_pass']  = 1;
             $data['yjin']  = Mysite::$app->config['yjin']; //店铺默认佣金
-            if (empty($data['admin_id'])) {
-                $this->message('请选择所属城市！');
-            }
+            // if (empty($data['admin_id'])) {
+            //     $this->message('请选择所属城市！');
+            // }
             $nowday = 24*60*60*365;
             $data['endtime'] = time()+$nowday;
 
@@ -160,9 +168,6 @@ class method extends adminbaseclass
 
             $this->mysql->insert(Mysite::$app->config['tablepre'].'shopattr', $attrdata);
 
-
-
-
             $this->success('success');
         } elseif ($subtype ==  2) {
             /*检测*/
@@ -183,10 +188,14 @@ class method extends adminbaseclass
             if ($password2 != $data['password']) {
                 $this->message('member_twopwdnoequale');
             }
+            $sdata['stationid'] = $stationid;
+            if (empty($sdata['stationid'])) {
+                $this->message('请选择所属分站！');
+            }
             $uid = 0;
             if ($this->memberCls->regester($data['email'], $data['username'], $data['password'], $data['phone'], 3)) {
                 $uid = $this->memberCls->getuid();
-                $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('admin_id'=>intval(IReq::get('admin_id'))), "uid='".$uid."'");
+                $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('stationid'=>$stationid), "uid='".$uid."'");
             } else {
                 $this->message($this->memberCls->ero());
             }
@@ -195,6 +204,7 @@ class method extends adminbaseclass
             $sdata['addtime'] = time();
             $sdata['email'] =  $data['email'];
             $sdata['admin_id'] = intval(IReq::get('admin_id'));
+
             $nowday = 24*60*60*365;
             $sdata['endtime'] = time()+$nowday;
 
@@ -806,6 +816,7 @@ class method extends adminbaseclass
         $data['catarr'] = array('0'=>'外卖','1'=>'超市');
         $data['catlist'] = $catlist;
 
+        $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo as st where stationis_open = 0 order by st.id desc");
         Mysite::$app->setdata($data);
     }
     public function moreaddshop()
