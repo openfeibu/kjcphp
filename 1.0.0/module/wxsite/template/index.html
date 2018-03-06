@@ -5,7 +5,7 @@
   <div class="main_header">
     <div class="index_map" >
       <input type="text" id="index_map" class="">
-      <p class="fb-inlineBlock">广东农工商职业技术学院</p>
+      <p class="fb-inlineBlock"><{$addressname}></p>
       <div class="icon fb-inlineBlock"></div>
     </div>
     <div class="index_search">
@@ -158,7 +158,21 @@
     ],
     onClose:function(picker){
       var val = picker.value[0];
-      $.alert(val)
+      ajaxurl = '<{ofunc type=url link="/wxsite/updateMemberStationid"}>';
+      $F.loading();
+      $.ajax({
+         type: 'POST',
+         async:true,
+         url: ajaxurl,
+         data: {'stationid':val},
+         success: function(content) {
+             window.location.reload();
+             //$F.closeLoading();
+         },
+         error: function(content) {
+             //$F.closeLoading();
+         }
+      });
     }
   });
   var mySwiper = new Swiper ('.swiper-container-banner', {

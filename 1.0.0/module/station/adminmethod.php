@@ -239,13 +239,15 @@ class method extends adminbaseclass
             $this->mysql->insert(Mysite::$app->config['tablepre'].'admin', $arr);
             $stationuid = $this->mysql->insertid();
             */
+            $stationlnglat = explode(',',$stationlnglat);
             $adddata = array();
             $adddata['uid'] = 1;
             $adddata['stationname'] = $stationname;
             $adddata['stationusername'] = $stationusername;
             $adddata['stationphone'] = $stationphone;
             $adddata['cityid'] = $cityid;
-            $adddata['stationlnglat'] = $stationlnglat;
+            $adddata['lng'] = $stationlnglat[0];
+            $adddata['lat'] = $stationlnglat[1];
             $adddata['stationaddress'] = $stationaddress;
             $adddata['orderid'] = $orderid;
             $adddata['is_selfsitecx'] = $is_selfsitecx;
@@ -283,12 +285,13 @@ class method extends adminbaseclass
                 $this->mysql->update(Mysite::$app->config['tablepre'].'admin', $arr, "uid='".$uid."'");
             }
             */
-
+            $stationlnglat = explode(',',$stationlnglat);
             $updataarr = array();
             $updataarr['stationname'] = $stationname;
             $updataarr['stationusername'] = $stationusername;
             $updataarr['stationphone'] = $stationphone;
-            $updataarr['stationlnglat'] = $stationlnglat;
+            $updataarr['lng'] = $stationlnglat[0];
+            $updataarr['lat'] = $stationlnglat[1];
             $updataarr['stationaddress'] = $stationaddress;
             $updataarr['orderid'] = $orderid;
             $updataarr['stationis_open'] = $stationis_open;

@@ -218,34 +218,32 @@ class method extends wxbaseclass
     {
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $addressname = ICookie::get('addressname');
-        $lat = empty($lat)? 23.282178:$lat;
-        $lng = empty($lng)? 113.615325:$lng;
-        if (empty($addressname)) {
-            $addressname = '' ;
-        }
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+        $station = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 AND id = '".$this->stationid."' order by id desc");
+
         $data['lat'] = $lat;
         $data['lng'] = $lng;
-        $data['addressname'] = $addressname;
+        $data['addressname'] = $station['stationname'];
         //判断平台类型  //2微信端,3web端
         $source = 3;
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
             $source = 2;
         }
-        $julidatalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('mijuli'=>'asc'), $lat, $lng, $source);
+
+        $julidatalistx = $this->Tdata($this->stationid, array('index_com'=>1), array('mijuli'=>'asc'), $lat, $lng, $source);
         $data['julishoplist']  = $julidatalistx;
-        $ordercountdatalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('ordercount'=>'desc'), $lat, $lng, $source);
+        $ordercountdatalistx = $this->Tdata($this->stationid, array('index_com'=>1), array('ordercount'=>'desc'), $lat, $lng, $source);
         $data['ordercountshoplist']  = $ordercountdatalistx;
-//var_dump($data);exit;
+
         $shoptypelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where parent_id <> 0 order by orderid  asc");
         foreach ($shoptypelist as $key => $value) {
             $shoptypelist[$key]['catelink'] = IUrl::creatUrl('/wxsite/shoplist/typelx/wm/typeid/'.$value['id'].'');
         }
         $data['shoptypelist']  = $shoptypelist;
 
-        $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo order by id desc");
+        $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 order by id desc");
 
         Mysite::$app->setdata($data);
     }
@@ -297,12 +295,12 @@ class method extends wxbaseclass
 
         $data['moretypelist']  = $newmoretypelist;
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
+        $lng = $this->lng;
+        $lat = $this->lat;
         $addressname = ICookie::get('addressname');
 
         $lat = empty($lat)?0:$lat;
-        $lng = empty($lng)?0:$lng;
+
         $where =  Mysite::$app->config['plateshopid'] > 0? ' and id != '.Mysite::$app->config['plateshopid'] .' ':'';
         $where .= "  and admin_id=".$this->CITY_ID."   ";
         $where = empty($where)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ': $where.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ';
@@ -346,12 +344,12 @@ class method extends wxbaseclass
         $sendtype = intval(IReq::get('sendtype')); //2平台配送   1店铺配送
         $cxtype = intval(IReq::get('cxtype'));	//1送赠品  2满减  3折扣  4免配送费
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
 
-        $datalistx = $this->Tdata($this->CITY_ID, array('index_com'=>1), array('juli'=>'asc'), $lat, $lng, $source);
+
+
+        $datalistx = $this->Tdata($this->stationid, array('index_com'=>1), array('juli'=>'asc'), $lat, $lng, $source);
         $data['shoplist']  = $datalistx;
         #print_r($data['shoplist']);
         Mysite::$app->setdata($data);
@@ -462,16 +460,16 @@ class method extends wxbaseclass
             $source = 2;
         }
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+
         $limitarr['shoptype'] = 2;
 
 
 
 
-        $datalistx = $this->Tdata($this->CITY_ID, $limitarr, array('juli'=>'asc'), $lat, $lng, $source);
+        $datalistx = $this->Tdata($this->stationid, $limitarr, array('juli'=>'asc'), $lat, $lng, $source);
         /*获取店铺*/
         $pageinfo = new page();
         $pageinfo->setpage(intval(IReq::get('page')));
@@ -564,7 +562,7 @@ class method extends wxbaseclass
         ini_set('display_startup_errors', 1);    //php启动错误信息
         error_reporting(-1);
         echo $this->CITY_ID;
-        $data['shoplist'] = $this->Tdata($this->CITY_ID, array(), array('sell'=>'desc'), '34.788678', '113.664677', 3);
+        $data['shoplist'] = $this->Tdata($this->stationid, array(), array('sell'=>'desc'), '34.788678', '113.664677', 3);
         //Tdata($cityid,$limitarr,$paixuarr,$lat,$lng,$source,$limitjuli=0)
         print_r($data['shoplist']);
         Mysite::$app->setdata($data);
@@ -617,10 +615,8 @@ class method extends wxbaseclass
         $sendtype = intval(IReq::get('sendtype')); //2平台配送   1店铺配送
         $cxtype = intval(IReq::get('cxtype'));	//1送赠品  2满减  3折扣  4免配送费
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
 
         //超市
         if ($shopshowtype == 'market') {
@@ -636,7 +632,8 @@ class method extends wxbaseclass
 
             //2微信端,3web端
 
-            $datalistx = $this->Tdata($this->CITY_ID, $limitarr, $orderarray[$order], $lat, $lng, $source);
+            $datalistx = $this->Tdata($this->stationid, $limitarr, $orderarray[$order], $lat, $lng, $source);
+
             /*获取店铺*/
             $pageinfo = new page();
             $pageinfo->setpage(intval(IReq::get('page')));
@@ -661,7 +658,8 @@ class method extends wxbaseclass
             } else {
                 $limitarr['is_waimai'] = 1;
             }
-            $datalistx = $this->Tdata($this->CITY_ID, $limitarr, $orderarray[$order], $lat, $lng, $source);
+            $datalistx = $this->Tdata($this->stationid, $limitarr, $orderarray[$order], $lat, $lng, $source);
+
             /*获取店铺*/
             $pageinfo = new page();
             $pageinfo->setpage(intval(IReq::get('page')));
@@ -4688,16 +4686,16 @@ class method extends wxbaseclass
         $lng = 0;
         $lat = 0;
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+
         #  $where = empty($where)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ': $where.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ';
 
         $lng = trim($lng);
         $lat = trim($lat);
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+
+
 
         $orderarray = array(
                             '0' =>" (2 * 6378.137* ASIN(SQRT(POW(SIN(3.1415926535898*(".$lat."-lat)/360),2)+COS(3.1415926535898*".$lat."/180)* COS(lat * 3.1415926535898/180)*POW(SIN(3.1415926535898*(".$lng."-lng)/360),2))))*1000  ASC      ",
@@ -5031,11 +5029,11 @@ class method extends wxbaseclass
                         } else {
                             $values['ordercount']  = $shopcounts['shuliang'];
                         }
-                        $lng = ICookie::get('lng');
-                        $lat = ICookie::get('lat');
+                        $lng = $this->lng;
+                        $lat = $this->lat;
 
-                        $lng = empty($lng)?0:$lng;
-                        $lat =empty($lat)?0:$lat;
+
+
 
                         $mi = $this->GetDistance($lat, $lng, $values['lat'], $values['lng'], 1);
 
@@ -5922,17 +5920,17 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $lng = 0;
         $lat = 0;
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+
         #  $where = empty($where)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ': $where.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ';
 
 
         $lng = trim($lng);
         $lat = trim($lat);
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+
+
 
         /*获取店铺*/
         $where = Mysite::$app->config['plateshopid'] > 0? $where.' and  id != '.Mysite::$app->config['plateshopid'] .' ':$where;
@@ -6064,16 +6062,16 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $lng = 0;
         $lat = 0;
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+
         $goodwhere = empty($goodwhere)?'   and  SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ': $goodwhere.' and SQRT((`lat` -'.$lat.') * (`lat` -'.$lat.' ) + (`lng` -'.$lng.' ) * (`lng` -'.$lng.' )) < (`pradiusa`*0.01094-0.01094) ';
 
         $lng = trim($lng);
         $lat = trim($lat);
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+
+
 
         $templist11 = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where  cattype = 0 and parent_id = 0 and is_main =1  order by orderid asc limit 0,1000");
         $attra['input'] = 0;
@@ -6181,8 +6179,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $data['movegoodscost'] = IReq::get('cost');
         $data['movegoodsweight'] = IReq::get('weight');
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
+        $lng = $this->lng;
+        $lat = $this->lat;
         $mapname = ICookie::get('mapname');
         $city_id = $this->CITY_ID;
         $city_name = $this->CITY_NAME;
@@ -6244,8 +6242,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function pthelpme85()
     {  // 跑腿----帮我送/买
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
+        $lng = $this->lng;
+        $lat = $this->lat;
         $mapname = ICookie::get('mapname');
         $city_id = $this->CITY_ID;
         $city_name = $this->CITY_NAME;
@@ -6516,10 +6514,10 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $lng = 0;
         $lat = 0;
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+
         $lat = $latx != 0?$latx:$lat;
         $lng = $lngx != 0?$lngx:$lng;
         $this->CITY_ID = $ctidx != 0?$ctidx:$this->CITY_ID;
@@ -6532,8 +6530,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
         $lng = trim($lng);
         $lat = trim($lat);
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+
+
 
         $pageinfo = new page();
         $pageinfo->setpage(intval(IReq::get('page')), 1000000);
@@ -7460,14 +7458,14 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function collect()
     {
         $this->checkwxweb();
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+        $lng = $this->lng;
+        $lat = $this->lat;
+
+
         $lng = trim($lng);
         $lat = trim($lat);
-        $lng = empty($lng)?0:$lng;
-        $lat =empty($lat)?0:$lat;
+
+
         $list =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and endtime > ".time()."  ");
         $nowhour = date('H:i:s', time());
         $nowhour = strtotime($nowhour);
@@ -7942,5 +7940,32 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function tape()
     {
 
+    }
+    public function updateMemberlnglat()
+    {
+        $lat = trim(IFilter::act(IReq::get('lat')));
+        $lng = trim(IFilter::act(IReq::get('lng')));
+        $data['lat'] = $lat;
+        $data['lng'] = $lng;
+
+        $stationlist = $this->mysql->getarr("select id,lng,lat from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 order by id desc");
+        $distancedata = array();
+        foreach ($stationlist as $key => $value) {
+            $distance = distance($lat,$lng,$value['lat'],$stationlnglat['lng']);
+            $distancedata[$value['id']] = $distance;
+        }
+        asort($distancedata);
+        reset($distancedata);
+        $stationid = key($distancedata);
+        $data['stationid'] = $stationid;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid ='".$this->member['uid']."' ");
+        $this->success('success');
+    }
+    public function updateMemberStationid()
+    {
+        $stationid = intval(IReq::get('stationid'));
+        $data['stationid'] = $stationid;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid ='".$this->member['uid']."' ");
+        $this->success('success');
     }
 }
