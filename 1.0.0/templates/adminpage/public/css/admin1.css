@@ -543,6 +543,7 @@ padding-right: 10px;
 
 border-bottom: 1px solid #e8eef6;
 }
+
 #tagscontent input, #tagscontent #table input {
 font-size: 12px;
 line-height: 22px;
@@ -557,16 +558,20 @@ height: 20px;
 background: #fbfdff;
 }
 .button {
-background: url('../images/buttom_bg.gif') right bottom no-repeat;
-height: 24px;
-line-height: 18px;
+	color: #fff;
+	border-radius: 2px;
+	background: #1783b2;
+	cursor: pointer;
+height: 32px !important;
+line-height: 32px !important;
 cursor: pointer;
 text-align: center;
-padding: 2px 10px;
-border: 1px solid #c4d9e9;
-color: #395366;
+padding: 0 20px !important;
 overflow: hidden;
-margin-left:20px;
+display: block;
+border:none;
+margin:0 20px;
+display: inline-block;
 }
 #tagscontent tr {
 	line-height:36px;
@@ -577,6 +582,14 @@ margin-left:20px;
 		font-size:12px;
 	color:#1B4670;
 	border-bottom:1px solid #e8eef6;
+}
+#tagscontent td  span{
+	padding:5px 10px;
+	color: #fff;
+	border-radius: 2px;
+	background: #41b1d6;
+	cursor: pointer;
+	margin:0 10px;
 }
 #tagscontent th { 
 	color:#1B4670;
