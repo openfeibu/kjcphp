@@ -93,17 +93,14 @@ class method extends adminbaseclass
     //保存店铺
     public function saveshop()
     {
-        ini_set('display_errors', 1);            //错误信息
-        ini_set('display_startup_errors', 1);    //php启动错误信息
-        error_reporting(-1);
         $laiyuan = intval(IReq::get('laiyuan')); // 申请来源。1为微信端，主要用于判断微信端用户是否开过店
         $subtype = intval(IReq::get('subtype'));
-        $stationid = intval(IReq::get('stationid'));
         $id = intval(IReq::get('uid'));
         if (!in_array($subtype, array(1,2))) {
             $this->message('system_err');
         }
         if ($subtype == 1) {
+            $stationid = intval(IReq::get('stationid'));
             $username = IReq::get('username');
             if (empty($username)) {
                 $this->message('member_emptyname');
@@ -140,22 +137,15 @@ class method extends adminbaseclass
             // }
             $nowday = 24*60*60*365;
             $data['endtime'] = time()+$nowday;
-
-
-
             $shoptype =  IReq::get('shoptype') ;
             $temparray = explode('_', $shoptype);
-
             $sdata['shoptype']  = $temparray[0];   // 店铺大类型 0为外卖 1为超市
             $attrid =  $temparray[1];
-
 
             $checkshoptype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptype where id=".$attrid."  ");
             if (empty($checkshoptype)) {
                 $this->message("获取店铺分类失败");
             }
-
-
             $this->mysql->insert(Mysite::$app->config['tablepre'].'shop', $data);
 
             $shopid = $this->mysql->insertid();
@@ -171,6 +161,7 @@ class method extends adminbaseclass
             $this->success('success');
         } elseif ($subtype ==  2) {
             /*检测*/
+            $stationid = intval(IReq::get('stationid'));
             $data['username'] = IReq::get('username');
             $data['phone'] = IReq::get('maphone');
             $data['email'] = IReq::get('email');
@@ -195,7 +186,7 @@ class method extends adminbaseclass
             $uid = 0;
             if ($this->memberCls->regester($data['email'], $data['username'], $data['password'], $data['phone'], 3)) {
                 $uid = $this->memberCls->getuid();
-                $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('stationid'=>$stationid), "uid='".$uid."'");
+                $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('admin_id'=>intval(IReq::get('admin_id'))), "uid='".$uid."'");
             } else {
                 $this->message($this->memberCls->ero());
             }
@@ -204,7 +195,6 @@ class method extends adminbaseclass
             $sdata['addtime'] = time();
             $sdata['email'] =  $data['email'];
             $sdata['admin_id'] = intval(IReq::get('admin_id'));
-
             $nowday = 24*60*60*365;
             $sdata['endtime'] = time()+$nowday;
 
@@ -216,9 +206,9 @@ class method extends adminbaseclass
             $attrid =  $temparray[1];
             $sdata['is_pass']  = 1;
             $sdata['yjin']  = Mysite::$app->config['yjin']; //店铺默认佣金
-            if (empty($sdata['admin_id'])) {
-                $this->message('请选择所属城市！');
-            }
+            // if (empty($sdata['admin_id'])) {
+            //     $this->message('请选择所属城市！');
+            // }
             $checkshoptype =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptype where id=".$attrid."  ");
             if (empty($checkshoptype)) {
                 $this->message("获取店铺分类失败");
@@ -756,7 +746,7 @@ class method extends adminbaseclass
         $this->setstatus();
         //$default_cityid = empty(Mysite::$app->config['default_cityid'])?0:Mysite::$app->config['default_cityid'];
         //$where = " and ( admin_id = '".$default_cityid."' or admin_id = 0 ) ";
-		$where = ' and admin_id > 0 ';
+		$where = ' and stationid > 0 ';
         $data['shopname'] =  trim(IReq::get('shopname'));
         $data['username'] =  trim(IReq::get('username'));
         $data['phone'] = trim(IReq::get('phone'));

@@ -244,6 +244,9 @@ class method extends wxbaseclass
             $shoptypelist[$key]['catelink'] = IUrl::creatUrl('/wxsite/shoplist/typelx/wm/typeid/'.$value['id'].'');
         }
         $data['shoptypelist']  = $shoptypelist;
+
+        $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo order by id desc");
+
         Mysite::$app->setdata($data);
     }
 

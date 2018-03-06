@@ -30,108 +30,110 @@
       <div class="swiper-pagination swiper-pagination-banner"></div>
     </div>
   </div>
-  <div class="menu">
-    <ul>
-      <{foreach from=$shoptypelist item=items }>
-      <li class="fb-inlineBlock">
-        <a href="<{$items['catelink']}>" style="background:url('<{$items['image']}>') no-repeat center top;background-size: .96rem .96rem;"><{$items['name']}></a>
-      </li>
-      <{/foreach}>
-    </ul>
-  </div>
-  <div class="pic_discount">
-    <a href="<{ofunc type=url link="/wxsite/discount"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/pic_discount.jpg" alt=""></a>
-  </div>
-  <div class="shop_group">
-    <div class="shop_group_title">附近商家</div>
-    <div class="shop_group_tab fb-clearfix">
-      <div class="shop_group_tab_item active" href="sltab1">销量优先</div>
-      <div class="shop_group_tab_item" href="sltab2">距离优先</div>
-    </div>
-    <div class="shop_group_list">
-      <div id="sltab1">
-          <{if !empty($ordercountshoplist) }>
-          <{foreach from=$ordercountshoplist item=items }>
-          <div class="shop_group_item">
-            <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
-              <{if $items['opentype'] == 2  }>
-              <div class="shop_state shop_state_ing"></div>
-              <{else}>
-              <div class="shop_state shop_state_ed"></div>
-              <{/if}>
-              <div class="img"><img src="<{$items['shoplogo']|default:$shoplogo}>" alt=""></div>
-              <div class="text">
-                <div class="shop_name"><{$items['shopname']}></div>
-                <div class="shop_nums">销量<{$items['ordercount']}>份</div>
-                <div class="shop_decs fb-clearfix">
-                  <div class="fb-fl"><span>起送￥<{$items['limitcost']}></span><span>配送￥<{$items['pscost']}></span></div>
-                  <div class="fb-fr">
-                      <{if !empty($items['arrivetime']) }>
-                      <span><{$items['arrivetime']}>分钟</span>
-                      <{/if}>
-                      <span><{$items['juli']}></span></div>
-                </div>
-                <{if !empty($items['cxlist'] ) }>
-                <div class="discount">
-                    <{foreach from=$items['cxlist'] item=itv }>
-                    <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
-                    <{/foreach}>
-                </div>
-                <{/if}>
-              </div>
-            </a>
-          </div>
+  <div id="loadindecContent">
+      <div class="menu">
+        <ul>
+          <{foreach from=$shoptypelist item=items }>
+          <li class="fb-inlineBlock">
+            <a href="<{$items['catelink']}>" style="background:url('<{$items['image']}>') no-repeat center top;background-size: .96rem .96rem;"><{$items['name']}></a>
+          </li>
           <{/foreach}>
-          <{else}>
-          <div class='noPro'>没有相关的数据</div>
-          <{/if}>
+        </ul>
       </div>
-      <div id="sltab2" style="display:none;">
-          <{if !empty($julishoplist) }>
-          <{foreach from=$julishoplist item=items }>
-          <div class="shop_group_item">
-            <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
-              <{if $items['opentype'] == 2  }>
-              <div class="shop_state shop_state_ing"></div>
-              <{else}>
-              <div class="shop_state shop_state_ed"></div>
-              <{/if}>
-              <div class="img"><img src="<{$items['shoplogo']|default:$shoplogo}>" alt=""></div>
-              <div class="text">
-                <div class="shop_name"><{$items['shopname']}></div>
-                <div class="shop_nums">销量<{$items['ordercount']}>份</div>
-                <div class="shop_decs fb-clearfix">
-                  <div class="fb-fl"><span>起送￥<{$items['limitcost']}></span><span>配送￥<{$items['pscost']}></span></div>
-                  <div class="fb-fr">
-                      <{if !empty($items['arrivetime']) }>
-                      <span><{$items['arrivetime']}>分钟</span>
-                      <{/if}>
-                      <span><{$items['juli']}></span></div>
-                </div>
-                <{if !empty($items['cxlist'] ) }>
-                <div class="discount">
-                    <{foreach from=$items['cxlist'] item=itv }>
-                    <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
-                    <{/foreach}>
-                </div>
-                <{/if}>
+      <div class="pic_discount">
+        <a href="<{ofunc type=url link="/wxsite/discount"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/pic_discount.jpg" alt=""></a>
+      </div>
+      <div class="shop_group">
+        <div class="shop_group_title">附近商家</div>
+        <div class="shop_group_tab fb-clearfix">
+          <div class="shop_group_tab_item active" href="sltab1">销量优先</div>
+          <div class="shop_group_tab_item" href="sltab2">距离优先</div>
+        </div>
+        <div class="shop_group_list">
+          <div id="sltab1">
+              <{if !empty($ordercountshoplist) }>
+              <{foreach from=$ordercountshoplist item=items }>
+              <div class="shop_group_item">
+                <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
+                  <{if $items['opentype'] == 2  }>
+                  <div class="shop_state shop_state_ing"></div>
+                  <{else}>
+                  <div class="shop_state shop_state_ed"></div>
+                  <{/if}>
+                  <div class="img"><img src="<{$items['shoplogo']|default:$shoplogo}>" alt=""></div>
+                  <div class="text">
+                    <div class="shop_name"><{$items['shopname']}></div>
+                    <div class="shop_nums">销量<{$items['ordercount']}>份</div>
+                    <div class="shop_decs fb-clearfix">
+                      <div class="fb-fl"><span>起送￥<{$items['limitcost']}></span><span>配送￥<{$items['pscost']}></span></div>
+                      <div class="fb-fr">
+                          <{if !empty($items['arrivetime']) }>
+                          <span><{$items['arrivetime']}>分钟</span>
+                          <{/if}>
+                          <span><{$items['juli']}></span></div>
+                    </div>
+                    <{if !empty($items['cxlist'] ) }>
+                    <div class="discount">
+                        <{foreach from=$items['cxlist'] item=itv }>
+                        <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
+                        <{/foreach}>
+                    </div>
+                    <{/if}>
+                  </div>
+                </a>
               </div>
-            </a>
+              <{/foreach}>
+              <{else}>
+              <div class='noPro'>没有相关的数据</div>
+              <{/if}>
           </div>
-          <{/foreach}>
-          <{else}>
-          <div class='noPro'>没有相关的数据</div>
-          <{/if}>
-      </div>
-    </div>
+          <div id="sltab2" style="display:none;">
+              <{if !empty($julishoplist) }>
+              <{foreach from=$julishoplist item=items }>
+              <div class="shop_group_item">
+                <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
+                  <{if $items['opentype'] == 2  }>
+                  <div class="shop_state shop_state_ing"></div>
+                  <{else}>
+                  <div class="shop_state shop_state_ed"></div>
+                  <{/if}>
+                  <div class="img"><img src="<{$items['shoplogo']|default:$shoplogo}>" alt=""></div>
+                  <div class="text">
+                    <div class="shop_name"><{$items['shopname']}></div>
+                    <div class="shop_nums">销量<{$items['ordercount']}>份</div>
+                    <div class="shop_decs fb-clearfix">
+                      <div class="fb-fl"><span>起送￥<{$items['limitcost']}></span><span>配送￥<{$items['pscost']}></span></div>
+                      <div class="fb-fr">
+                          <{if !empty($items['arrivetime']) }>
+                          <span><{$items['arrivetime']}>分钟</span>
+                          <{/if}>
+                          <span><{$items['juli']}></span></div>
+                    </div>
+                    <{if !empty($items['cxlist'] ) }>
+                    <div class="discount">
+                        <{foreach from=$items['cxlist'] item=itv }>
+                        <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
+                        <{/foreach}>
+                    </div>
+                    <{/if}>
+                  </div>
+                </a>
+              </div>
+              <{/foreach}>
+              <{else}>
+              <div class='noPro'>没有相关的数据</div>
+              <{/if}>
+          </div>
+        </div>
 
-    <!-- <div class="weui-loadmore loadmoreing">
-      <i class="weui-loading "></i>
-      <span class="weui-loadmore__tips ">正在加载中</span>
-    </div> -->
-    <div class="weui-loadmore weui-loadmore_line loadmored" style="display:block;">
-      <span class="weui-loadmore__tips">已经到底了</span>
-    </div>
+        <!-- <div class="weui-loadmore loadmoreing">
+          <i class="weui-loading "></i>
+          <span class="weui-loadmore__tips ">正在加载中</span>
+        </div> -->
+        <div class="weui-loadmore weui-loadmore_line loadmored" style="display:block;">
+          <span class="weui-loadmore__tips">已经到底了</span>
+        </div>
+      </div>
   </div>
 </div>
 <{/block}>
@@ -142,8 +144,16 @@
     cols: [
       {
         textAlign: 'center',
-        values: ['广东农工商职业技术学院', '华南理工大学', '华南师范大学', '华南农业大学', '南方医科大学', '广东工业大学', '广东外语外贸大学'],
-        displayValues: ['广东农工商职业技术学院', '华南理工大学', '华南师范大学', '华南农业大学', '南方医科大学', '广东工业大学', '广东外语外贸大学']
+        values: [
+            <{foreach from=$stationlist item=items key=key}>
+            "<{$items['id']}>",
+            <{/foreach}>
+        ],
+        displayValues: [
+            <{foreach from=$stationlist item=items key=key}>
+            "<{$items['stationname']}>",
+            <{/foreach}>
+        ]
       }
     ],
     onClose:function(picker){
