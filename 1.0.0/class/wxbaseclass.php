@@ -42,6 +42,7 @@ class wxbaseclass extends wmrclass
 
 		/*测试 start */
 	//	$adcode = '410100';
+        /*
         $lat = 23.282178;
         $lng = 113.615325;
         $addressname = '广东农工商职业技术学院北校区';
@@ -52,13 +53,33 @@ class wxbaseclass extends wmrclass
         ICookie::set('mapname', $addressname);
 		ICookie::set('CITY_ID', $cityId);
 		ICookie::set('CITY_NAME', $city_name);
-
+        */
 		/*测试 end */
+        $lng = $lat = $stationid = 0;
+        if($this->member['uid'])
+        {
+            $lng = $this->member['lng'];
+            $lat = $this->member['lat'];
+            $stationid = $this->member['stationid'];
+        }
+        if(!$stationid)
+        {
+            $station = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 order by id desc");
+            $stationid = $station['id'];
+            $lng = $station['lng'];
+            $lat = $station['lat'];
+            $this->CITY_ID = $station['cityid'];
+        }else{
+            $station = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 AND id = ".$stationid." order by id desc");
+            $lng = $lng > 0 ? $lng : $station['lng'];
+            $lat = $lat > 0 ? $lat : $station['lat'];
+        }
 
-        $lng = ICookie::get('lng');
-        $lat = ICookie::get('lat');
-        $data['lng']=$lng;
-        $data['lat']=$lat;
+        // $lng = ICookie::get('lng');
+        // $lat = ICookie::get('lat');
+        $data['lng'] = $this->lng = $lng;
+        $data['lat'] = $this->lat = $lat;
+        $data['stationid'] = $this->stationid = $stationid;
 
         $CITY_NAME = ICookie::get('CITY_NAME');
         if (!empty($CITY_NAME)) {

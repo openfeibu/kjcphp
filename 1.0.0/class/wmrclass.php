@@ -328,7 +328,7 @@ class wmrclass
         $str = str_replace('？', '', $str);
         return trim($str);
     }
-    public function Tdata($cityid, $limitarr, $paixuarr, $lat, $lng, $source, $limitjuli=0)
+    public function Tdata($stationid, $limitarr, $paixuarr, $lat, $lng, $source, $limitjuli=1)
     {// 0所有  1外卖  2超时
 
         //排序方式 ：综合排序，好评优先 起送价最低  ，距离 ,
@@ -377,20 +377,14 @@ class wmrclass
             $pxvalue = 'ordercount';
             $pxtype = $paixuarr['ordercount'] == 'asc'?SORT_ASC:SORT_DESC;
         }
-
-
         // print_r($this->CITY_ID);
         //$cityid = 410100;
-
-        $platpsinfo =  $this->mysql->select_one("select locationradius,radiusvalue from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityid."' ");
-
-
-
         $tempwherexxx =  Mysite::$app->config['plateshopid'] > 0? ' and a.id != '.Mysite::$app->config['plateshopid'] .' ':'';
-        $tempwherexxx .=  " and a.admin_id = '".$cityid."'  ";
+        $tempwherexxx .=  " and a.stationid = '".$stationid."'  ";
 
         if (isset($limitarr['shopcat'])&& $limitarr['shopcat'] > 0) {
-            $tempwherexxx =   $tempwherexxx." and b.shopid in(select sh.shopid from  ".Mysite::$app->config['tablepre']."shopsearch  as sh    where sh.second_id = ".$limitarr['shopcat']."  group by shopid  ) ";
+            // $tempwherexxx =   $tempwherexxx." and b.shopid in(select sh.shopid from  ".Mysite::$app->config['tablepre']."shopsearch  as sh    where sh.second_id = ".$limitarr['shopcat']."  group by shopid  ) ";
+            $tempwherexxx =   $tempwherexxx." and b.shopid in(select sa.shopid from  ".Mysite::$app->config['tablepre']."shopattr  as sa    where sa.attrid = ".$limitarr['shopcat']."  group by shopid  ) ";
         }
         //cxtype  运算中在测算 ---这个构造的 shopid太长了在list里运算
         $limitcx = 0;//是否限制店铺促销类型
@@ -405,9 +399,6 @@ class wmrclass
                 $cxshopid = array_unique($cxshopid);
             }
         }
-
-
-
 
         if (isset($limitarr['sendtype']) && $limitarr['sendtype'] > 0) {
             $tempwherexxx = $limitarr['sendtype']==1?$tempwherexxx." and b.sendtype = 1":$tempwherexxx." and b.sendtype != 1";
@@ -454,23 +445,16 @@ class wmrclass
 
         // print_r($tempwherexxx);
 
-        $juliwhere = $limitjuli == 1?"":" and ((b.sendtype = 1 and SQRT(  power(6370693.5*( COS(a.`lat` * 0.01745329252)  )*  (a.`lng` * 0.01745329252 - ".$lng." * 0.01745329252) ,2)+power(6370693.5*(a.`lat` * 0.01745329252 - ".$lat." * 0.01745329252),2) ) < b.pradius*1000)or(b.sendtype !=1 and SQRT(  power(6370693.5*( COS(a.`lat` * 0.01745329252)  )*  (a.`lng` * 0.01745329252 - ".$lng." * 0.01745329252) ,2)+power(6370693.5*(a.`lat` * 0.01745329252 - ".$lat." * 0.01745329252),2) ) < ".$platbangjing.")) ";
+        $juliwhere = "";
 
 
+        $waimailist = $this->mysql->getarr("select  a.sort, a.id,a.shopname,a.sellcount,a.ordercount,a.point,a.pointcount,a.virtualsellcounts,a.is_open,a.starttime,a.pointcount as pointsellcount,a.lat,a.lng,a.shoplogo,a.shoptype,a.address,a.isforyou,a.is_recom,
+		 b.shopid,b.is_orderbefore,b.limitcost,b.is_hot,b.is_com,b.is_new,b.maketime,b.pradius,b.sendtype,b.pscost,b.pradiusvalue,b.arrivetime,b.postdate,SQRT(  power(6370693.5*( COS(a.`lat` * 0.01745329252)  )*  (a.`lng` * 0.01745329252 - ".$lng." * 0.01745329252) ,2)+power(6370693.5*(a.`lat` * 0.01745329252 - ".$lat." * 0.01745329252),2) ) as juli
+		 from ".Mysite::$app->config['tablepre']."shopfast as b left join ".Mysite::$app->config['tablepre']."shop as a  on b.shopid  = a.id
+		 where a.is_pass = 1    ".$tempwherexxx." and a.endtime > ".time()." ".$juliwhere." order by id desc  limit 0,2000 ");
 
-        if ($dotype == 1|| $dotype == 0) {//只显示外卖
-            $waimailist = $this->mysql->getarr("select  a.sort, a.id,a.shopname,a.sellcount,a.ordercount,a.point,a.pointcount,a.virtualsellcounts,a.is_open,a.starttime,a.pointcount as pointsellcount,a.lat,a.lng,a.shoplogo,a.shoptype,a.address,a.isforyou,a.is_recom,
-			 b.shopid,b.is_orderbefore,b.limitcost,b.is_hot,b.is_com,b.is_new,b.maketime,b.pradius,b.sendtype,b.pscost,b.pradiusvalue,b.arrivetime,b.postdate,SQRT(  power(6370693.5*( COS(a.`lat` * 0.01745329252)  )*  (a.`lng` * 0.01745329252 - ".$lng." * 0.01745329252) ,2)+power(6370693.5*(a.`lat` * 0.01745329252 - ".$lat." * 0.01745329252),2) ) as juli
-			 from ".Mysite::$app->config['tablepre']."shopfast as b left join ".Mysite::$app->config['tablepre']."shop as a  on b.shopid  = a.id
-			 where a.is_pass = 1    ".$tempwherexxx." and a.endtime > ".time()." ".$juliwhere." order by id desc  limit 0,2000 ");
-        }
         $marketlist = array();
-        if ($dotype == 2|| $dotype == 0) {//只显示超市
-            $marketlist = $this->mysql->getarr("select a.sort,  a.id,a.shopname,a.sellcount,a.ordercount,a.point,a.pointcount,a.virtualsellcounts,a.is_open,a.starttime,a.pointcount as pointsellcount,a.lat,a.lng,a.shoplogo,a.shoptype,a.address,a.isforyou,a.is_recom,
-			 b.shopid,b.is_orderbefore,b.limitcost,b.is_hot,b.is_com,b.is_new,b.maketime,b.pradius,b.sendtype,b.pscost,b.pradiusvalue,b.arrivetime,b.postdate,SQRT(  power(6370693.5*( COS(a.`lat` * 0.01745329252)  )*  (a.`lng` * 0.01745329252 - ".$lng." * 0.01745329252) ,2)+power(6370693.5*(a.`lat` * 0.01745329252 - ".$lat." * 0.01745329252),2) ) as juli
-			 from ".Mysite::$app->config['tablepre']."shopmarket as b left join ".Mysite::$app->config['tablepre']."shop as a  on b.shopid  = a.id
-			 where a.is_pass = 1    ".$tempwherexxx."  and a.endtime > ".time()." ".$juliwhere." order by id desc limit 0,2000 ");
-        }
+
         $tempdds = array_merge($marketlist, $waimailist);
 
         //print_r($waimailist);
@@ -486,7 +470,6 @@ class wmrclass
         $pxvalue1 = array();
         $shoppsimg = Mysite::$app->config['shoppsimg'];
         $psimg = Mysite::$app->config['psimg'];
-        $platvaluelist = empty($platpsinfo['radiusvalue'])? '':unserialize($platpsinfo['radiusvalue']);
         $nowhout = strtotime(date('Y-m-d', time()));
         foreach ($tempdds as $key=>$value) {
             if ($limitcx == 1) {
@@ -494,13 +477,9 @@ class wmrclass
                     continue;
                 }
             }
-            if ($value['sendtype'] == 1) {
-                $value['psimg'] = $shoppsimg;
-                $value['valuelist'] = empty($value['pradiusvalue'])? '':unserialize($value['pradiusvalue']);
-            } else {
-                $value['psimg'] = $psimg;
-                $value['valuelist'] =$platvaluelist;
-            }
+
+            $value['psimg'] = $shoppsimg;
+
             $value['mijuli'] = $value['juli'];
             $juli = $value['juli'];
             $juliceshi = intval($juli/1000);
@@ -514,25 +493,7 @@ class wmrclass
             }
             $value['pscost'] = '0';
             $value['canps'] = 0;
-            $valuelist = $value['valuelist'];
-            if (is_array($valuelist)) {
-                foreach ($valuelist as $k=>$v) {
-                    if ($juliceshi == $k) {
-                        $value['pscost'] = $v;
-                        $value['canps'] = 1;
-                    }
-                }
-            }
-            /*
-            $source =  intval(IFilter::act(IReq::get('source')));
-            $ios_waiting =   Mysite::$app->config['ios_waiting'];
-            if($source == 1 && $ios_waiting == true){
-                $value['canps'] = 1;
-            }
-            if($value['canps'] == 0){//不在配送范围抛掉
-                continue;
-            }
-            */
+
 
 
             $value['opentype'] = '1';//1营业  0未营业
@@ -583,7 +544,6 @@ class wmrclass
             $value['point'] = 	$shopstart;
 
             $pxvalue1[$key] = $value[$pxvalue];
-            unset($value['valuelist']);
             unset($value['pradiusvalue']);
             unset($value['postdate']);
             $datalist[] = $value;
