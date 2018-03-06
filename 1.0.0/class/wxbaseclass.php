@@ -118,6 +118,15 @@ class wxbaseclass extends wmrclass
         $id = intval(IFilter::act(IReq::get('id')));
         $data['id'] = $id;
         $data['member'] = $this->member;
+
+        $wxclass = new wx_s();
+        $signPackage = $wxclass->getSignPackage();
+        $data['signPackage'] = $signPackage;
+        $shareinfo['title'] = Mysite::$app->config['sitename'];
+        $shareinfo['img'] = Mysite::$app->config['sitelogo'];
+        $shareinfo['describe'] = Mysite::$app->config['sitename'];
+        $data['shareinfo'] = $shareinfo;
+
         Mysite::$app->setdata($data);
     }
     /***设置分享***/
