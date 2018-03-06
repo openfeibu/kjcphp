@@ -102,6 +102,7 @@
             var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
             var speed = res.speed; // 速度，以米/每秒计
             var accuracy = res.accuracy; // 位置精度
+            alert(latitude);return false;
             ajaxurl = '<{ofunc type=url link="/wxsite/updateMemberlnglat"}>';
             $.ajax({
     		   type: 'POST',
@@ -109,7 +110,7 @@
     		   url: ajaxurl,
     		   data: {'lat':latitude,'lng':longitude},
                success: function(content) {
-                  // window.location.reload();
+                   window.location.reload();
     		   },
     		   error: function(content) {
 
