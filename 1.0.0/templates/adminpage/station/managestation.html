@@ -51,7 +51,7 @@
                       <td class="left">分站位置</td>
                       <td><input type="text"  readonly  value="拾取坐标" class="skey" style="width:100px;" onclick="biaoji();">
 <input type="text" name="stationaddress" id="stationaddress" placeholder="分站地址" value="<{$stationinfo['stationaddress']|default:''}>" class="skey" style="width:250px;">
-					  <input type="hidden" name="stationlnglat" id="stationlnglat" readonly  value="<{$stationinfo['stationlnglat']|default:''}>" class="skey" style="width:250px;">
+					  <input type="hidden" name="stationlnglat" id="stationlnglat" readonly  value="<{$stationinfo['lng']|default:''}>,<{$stationinfo['lat']|default:'lat'}>" class="skey" style="width:250px;">
 					  </td>
                     </tr>
 
