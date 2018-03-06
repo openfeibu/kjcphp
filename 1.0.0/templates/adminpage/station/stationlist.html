@@ -66,7 +66,7 @@
 
                       <tr>
 
-                        <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th>
+                        <!-- <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th> -->
 
                         <th align="center">ID</th>
                         <!-- <th align="center">分站账号</th> -->
@@ -92,7 +92,7 @@
 					<{else}>
                        <{foreach from=$stationlist item=items}>
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                        <td align="center" ><input type="checkbox" name="id[]" value="<{$items['id']}>"></td>
+                        <!-- <td align="center" ><input type="checkbox" name="id[]" value="<{$items['id']}>"></td> -->
                         <td align="center"><{$items['id']}>  </td>
 
                         <td align="center"> <{$items['stationname']}> </td>
@@ -122,10 +122,10 @@
                 </form>
 
                <div class="page_newc">
-                 	     <div class="select_page">
+                 	     <!-- <div class="select_page">
                  	     	<a href="#" onclick="checkword(true);">全选</a>/<a href="#" onclick="checkword(false);">取消</a>
                  	     <a onclick="return remindall(this);" href="<{ofunc type=url link="/adminpage/ask/module/delask/datatype/json"}>" class="delurl">删除</a>
-                 	     	</div>
+                 	     	</div> -->
                        <div class="show_page"><ul><{$pagecontent}></ul></div>
                  </div>
 

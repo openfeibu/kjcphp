@@ -1,16 +1,16 @@
-$(function(){ 
-	
+$(function(){
+
  autosize();
 	$('#positionname2').text($('#positionname').text());
 	$('#nowactioninfo').text($('#positionname').text());
 	if(menu != null){
-	$.each(menu,function(i,field){ 
-	  
+	$.each(menu,function(i,field){
+
 		if(field.is_curent == true)
 		{
 			$('#navshow').append('<a href="'+siteurl+field.urls+'" class="on">'+field.name+'</a>');
-			
-			
+
+
 			 $('#menu').find('dt').text(field.name);
 			var  detl= field.det;
 			$.each(detl,function(k,submen){
@@ -19,18 +19,18 @@ $(function(){
 				{
 					classname = 'class="on"';
 				}
-				
+
 				$('#menu dl').eq(0).append('<dd '+classname+'><a href="'+siteurl+submen.urls+'">'+submen.name+'</a></dd> ');
-			}); 
-		 
-			
+			});
+
+
 		}else{
 		   $('#navshow').append('<a href="'+siteurl+field.urls+'">'+field.name+'</a>');
 		 }
-		 
-	}); 
+
+	});
 }
-	 
+
 });
 function limitalert(){
 	diaerror("您暂无权限设置,如有疑问请联系QQ：375952873  Tel：18538930577");
@@ -44,7 +44,7 @@ function artsucces(msg)
 }
 function autosize()
 {
- 
+
 //	alert($('.right_content').height());
   var leftheight = $('.left_content').height();
   var rightheight = $('.right_content').height();
@@ -54,43 +54,43 @@ function autosize()
   var wheight = defaultheight-580+$('.newmain').height();
  // alert(defaultheight);
   wheight = defaultheight+80;
-  $('.newmain').css('height',wheight); 
-   
-  
+  $('.newmain').css('height',wheight);
+
+
 }
 function subform(newurl,obj)
 {
 	$('#cat_zhe').toggle();
 	$('#cat_tj').toggle();
-	var url = $(obj).attr('action'); 
+	var url = $(obj).attr('action');
 	$.ajax({
      type: 'post',
      async:true,
      data:$(obj).serialize(),
-     url: url.replace('@random@', 1+Math.round(Math.random()*1000)), 
-     dataType: 'json',success: function(content) {   
+     url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+     dataType: 'json',success: function(content) {
      	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
      	if(content.error == false){
-     		 
+
      		diasucces(content.msg,newurl);
      	}else{
-     		
+
      		if(content.error == true)
      		{
-     			diaerror(content.msg); 
+     			diaerror(content.msg);
      		}else{
-     			diaerror(content); 
+     			diaerror(content);
      		}
-     	} 
+     	}
 		},
-    error: function(content) { 
+    error: function(content) {
     	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
-    	diaerror('数据获取失败'); 
+    	diaerror('数据获取失败');
 	  }
-   });   
-   
+   });
+
 	return false;
 }
 function diaerror(msg)
@@ -104,24 +104,24 @@ function diasucces(msg,linkurl)
 {
 	    alert(msg);
     	if(linkurl == null || linkurl== '' || linkurl == undefined)
-	    { 
+	    {
 	    	window.location.reload();
 	    }else{
-	    	 
+
 	    	window.location.href=linkurl;
-	    } 
-} 
+	    }
+}
 function remind(obj){
   if(confirm('确定操作吗？')){
   	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
-    var url = $(obj).attr('href'); 
+    var url = $(obj).attr('href');
 	 $.ajax({
      type: 'get',
      async:true,
      data:$(obj).serialize(),
-     url: url.replace('@random@', 1+Math.round(Math.random()*1000)), 
-     dataType: 'json',success: function(content) {  
+     url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+     dataType: 'json',success: function(content) {
      	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
      	if(content.error == false){
@@ -129,18 +129,18 @@ function remind(obj){
      	}else{
      		if(content.error == true)
      		{
-     			diaerror(content.msg); 
+     			diaerror(content.msg);
      		}else{
-     			diaerror(content); 
+     			diaerror(content);
      		}
-     	} 
+     	}
 		},
-    error: function(content) { 
+    error: function(content) {
     	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
-    	diaerror('数据获取失败'); 
+    	diaerror('数据获取失败');
 	  }
-   });   
+   });
   }
   return false;
 }
@@ -149,8 +149,8 @@ function remind(obj){
 var server = window.location.host;
 var domain = 'pds.com';
 function isChinese(str){
-    var reg = /[u00-uFF]/;       
-    return !reg.test(str);      
+    var reg = /[u00-uFF]/;
+    return !reg.test(str);
 }
 function RndNum(n){
   var rnd="";
@@ -158,7 +158,7 @@ function RndNum(n){
     rnd+=Math.floor(1+Math.round(Math.random()*1000)*10);
   return rnd;
 }
- 
+
 function strlen(str){
     var strlength=0;
     for (i=0;i<str.length;i++){
@@ -199,22 +199,22 @@ function adddaohang(){
   html += '<input type="text" name="typeurl[]" id="typeurl[]" class="skey" style=\'width:130px;\'/>';
   html += '</td><td align="left" style="padding-left:10px;">';
   html += '<input type="text" name="typeorder[]" id="typeorder[]" class="skey" style=\'width:50px;\'/>';
-  html += '</td><td align="center"><a onclick="$(this).parent().parent().remove();" href="javascript:;">移除</a></td></tr>'; 
+  html += '</td><td align="center"><a onclick="$(this).parent().parent().remove();" href="javascript:;">移除</a></td></tr>';
   $("#type").append(html);
 }
 //全选操作
 function checkall()
-{ 
+{
 	var checkinfo = $('#chkall').attr('checked');
 	if(checkinfo ==  true){
-	$("input[name='id[]']").attr("checked",true); 
+	$("input[name='id[]']").attr("checked",true);
 	}else{
-		$("input[name='id[]']").attr("checked",false); 
-	} 
+		$("input[name='id[]']").attr("checked",false);
+	}
 }
 function checkword(flag)
-{ 
-		 $('#chkall').attr('checked',flag); 
+{
+		 $('#chkall').attr('checked',flag);
 	checkall();
 }
 
@@ -227,17 +227,17 @@ function modifypwd()
     content: showcontent
   });
 }
-function remindall(obj){ 
+function remindall(obj){
   if(confirm('确定操作吗？')){
   	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
-    var url = $(obj).attr('href'); 
+    var url = $(obj).attr('href');
 	 $.ajax({
      type: 'post',
      async:true,
      data:$('#delform').serialize(),
-     url: url.replace('@random@', 1+Math.round(Math.random()*1000)), 
-     dataType: 'json',success: function(content) {  
+     url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+     dataType: 'json',success: function(content) {
       $('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
      	if(content.error == false){
@@ -245,36 +245,36 @@ function remindall(obj){
      	}else{
      		if(content.error == true)
      		{
-     			diaerror(content.msg); 
+     			diaerror(content.msg);
      		}else{
-     			diaerror(content); 
+     			diaerror(content);
      		}
-     	} 
+     	}
 		},
-    error: function(content) {  
+    error: function(content) {
     	$('#cat_zhe').toggle();
 	      $('#cat_tj').toggle();
-    	diaerror('数据获取失败'); 
+    	diaerror('数据获取失败');
 	  }
-   });   
-  }  
-  return false; 
+   });
+  }
+  return false;
 }
 //导出选择项
 function outchoice(obj)
-{ 
+{
 	var result=new Array();
 	$("input[name='id[]']").each(function(){
 		 if($(this).is(":checked")){
 		 	 result.push($(this).val());
 		 	}
-	});	
+	});
 	var idsm = result.join("-");
 	var docontent = '';
 	if(is_static == 1 || is_static == 2){
-		docontent = '/outtype/ids/id/'+idsm;  
+		docontent = '/outtype/ids/id/'+idsm;
 	}else{
-		docontent = '&outtype=ids&id='+idsm;  
+		docontent = '&outtype=ids&id='+idsm;
 	}
 
 	 if(idsm.length ==0)
@@ -283,9 +283,9 @@ function outchoice(obj)
 
       alert('查询条件不能为空');
    }else{
-   
+
       var url = $(obj).attr('data')+docontent;
-    	window.open(url); 
-      } 
-}	
+    	window.open(url);
+      }
+}
 //导出选择项
