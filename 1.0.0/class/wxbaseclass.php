@@ -146,7 +146,7 @@ class wxbaseclass extends wmrclass
         $signPackage = $wxclass->getSignPackage();
         $data['signPackage'] = $signPackage;
         $shareinfo['title'] = Mysite::$app->config['sitename'];
-        $shareinfo['img'] = Mysite::$app->config['wxshare'];
+        $shareinfo['img'] = Mysite::$app->config['share_img'];
         $shareinfo['describe'] = Mysite::$app->config['sitename'];
         $data['shareinfo'] = $shareinfo;
 
