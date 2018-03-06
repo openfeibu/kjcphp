@@ -82,7 +82,7 @@
   </footer>
   <{/block}>
   <script>
-    <{if !$lat}>
+    <{if $lat <= 0 || empty($lat) }>
     wx.checkJsApi({
         jsApiList: [
             'getLocation'
