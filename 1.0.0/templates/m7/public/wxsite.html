@@ -41,8 +41,8 @@
 	var is_static ="<{$is_static}>";
 	var taction = "<{$Taction}>";
 	var https = '<{$https|default:''}>';
-    var lat = '<{$lat|default:0}>';
-    var lng = '<{$lng|default:0}>';
+    var lat = '<{$latitude|default:0}>';
+    var lng = '<{$longitude|default:0}>';
 	// if ( taction != 'member' &&  taction != 'login' &&  taction != 'reg'  ){
 	// 	var cururl = window.location.href;
 	// 	$.cookie('wxCurUrl', cururl);
@@ -84,7 +84,7 @@
   </footer>
   <{/block}>
   <script>
-    
+
     wx.ready(function(){
         // 2. 分享接口
         // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
@@ -213,7 +213,7 @@
         });
         //   Tmsg('已注册获取“分享到QZone”状态事件');
         // };
-		<{if $lat <= 0 || empty($lat) }>
+		<{if $latitude <= 0 || empty($latitude) }>
 		wx.checkJsApi({
 			jsApiList: [
 				'getLocation'
