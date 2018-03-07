@@ -110,9 +110,9 @@ class myapp
         $this->Taction = $Taction;
 
         if ($controller == 'site' && $Taction == 'index') {
-            if (is_mobile_request()) {
+            //if (is_mobile_request()) {
                 $this->controller = 'wxsite';
-            }
+            //}
         }
 
         spl_autoload_register('Mysite::autoload');
