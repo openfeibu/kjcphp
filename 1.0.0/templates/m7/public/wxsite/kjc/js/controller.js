@@ -69,7 +69,7 @@
         $(".bigloading").remove();
         $("body").append('<div class="bigloading"></div>');
         setTimeout(function(){
-            $(".bigloading").fadeIn(100);
+            $(".bigloading").fadeIn(10);
         },1)
 
     };
