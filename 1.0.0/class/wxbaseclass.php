@@ -99,11 +99,11 @@ class wxbaseclass extends wmrclass
         $platpsinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid='".$cityId."' ");
         $this->platpsinfo = $platpsinfo;
         $data['platpsinfo'] = $platpsinfo;
-        if (!strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {    //判断是微信浏览器不
-            $data['WeChatType'] = 0;
-        } else {
+        // if (!strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {    //判断是微信浏览器不
+        //     $data['WeChatType'] = 0;
+        // } else {
             $data['WeChatType'] = 1;//微信端
-        }
+        //}
         //loadindexcontent
         $wxopenid  = ICookie::get('wxopenid');
         $action = Mysite::$app->getAction();
@@ -113,7 +113,7 @@ class wxbaseclass extends wmrclass
         $loadaction=array('index','noticelist','ajaxnoticelist','notice','shopshow','mkshopshow','mkcatefoods','loadindexcontent','indexshoplistdata','shoplistdata','saveloation','shoplist','specialpagelistdata','loginmode','choice','marketshop','specialpage','marketlistdata','waimai','marketlist','paotui','togethersay','togethersaydata','foodshow','getshopmorecomment','getshopcomment','getdetailinfo','commentwxuser');
         if ($datatype == 'json' || in_array($action, $loadaction)) {
         } else {
-            if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) { //判断是微信浏览器不
+            //if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) { //判断是微信浏览器不
                 if ($this->member['uid'] <= 0) {
                     if (Mysite::$app->config['wxLoginType']==0) {
                         //微信自动登录
@@ -129,7 +129,7 @@ class wxbaseclass extends wmrclass
                         }
                     }
                 }
-            }
+            //}
         }
         $this->doshare();
         $checkmodule =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."module  where name='".$controller."' and install=1 limit 0,20");
@@ -380,8 +380,8 @@ class wxbaseclass extends wmrclass
 
     public function wxlogin()
     {
-        if (is_mobile_request()) {
-            if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+        // if (is_mobile_request()) {
+        //     if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
                 $wxopenid  = ICookie::get('wxopenid');
                 $code = IFilter::act(IReq::get('code'));
                 $state = IFilter::act(IReq::get('state'));
@@ -401,31 +401,31 @@ class wxbaseclass extends wmrclass
                         }
                     }
                 }
-            } else {
-            }
-        } else {
-            if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
-                $wxopenid  = ICookie::get('wxopenid');
-                $code = IFilter::act(IReq::get('code'));
-                $doinsert = 0;
-                if (empty($wxopenid)) {
-                    //echo 'openid 为空';
-                    if (empty($code)) {
-                        //跳转到微信OPenlink
-                        $this->getwxcode();
-                    }
-                } else {
-                    $wxinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxopenid."'");
-                    if (empty($wxinfo)) {
-                        /*未关注用户不可登陆*/
-                        if (empty($code)) {
-                            $this->getwxcode();
-                        }
-                    }
-                }
-            } else {
-            }
-        }
+        //     } else {
+        //     }
+        // } else {
+        //     if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+        //         $wxopenid  = ICookie::get('wxopenid');
+        //         $code = IFilter::act(IReq::get('code'));
+        //         $doinsert = 0;
+        //         if (empty($wxopenid)) {
+        //             //echo 'openid 为空';
+        //             if (empty($code)) {
+        //                 //跳转到微信OPenlink
+        //                 $this->getwxcode();
+        //             }
+        //         } else {
+        //             $wxinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxopenid."'");
+        //             if (empty($wxinfo)) {
+        //                 /*未关注用户不可登陆*/
+        //                 if (empty($code)) {
+        //                     $this->getwxcode();
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //     }
+        // }
     }
     public function getwxcode()
     {
