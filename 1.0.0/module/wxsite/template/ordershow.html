@@ -10,7 +10,7 @@
 
             <div class="orderDetail_pro_name fb-inlineBlock">
               <p><{$items['goodsname']}></p>
-              <span>{$items['goodsattr']}</span>
+              <span><{$items['goodsattr']}></span>
             </div>
             <div class="orderDetail_pro_num fb-inlineBlock">
               x<{$items['goodscount']}>
@@ -130,8 +130,8 @@
       <div class="orderDetail_button">
             <a href="javascript:void(0);" class="pay_btn pay_btn_b" >继续支付(还需)</a>
       </div>
-      <div class="orderDetail_button">
-            <a onclick="acceptorder();" href="javascript:void(0);" class="closeOrder">取消订单 </a>
+      <div class="orderDetail_button closeOrder">
+            <a onclick="acceptorder();" href="javascript:void(0);">取消订单 </a>
       </div>
     </div>
     <script>

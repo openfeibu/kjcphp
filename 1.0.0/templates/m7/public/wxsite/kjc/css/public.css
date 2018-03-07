@@ -91,3 +91,12 @@
 .coupon_button a{color: #ff3156}
 .shop_map ul li .orderDetail_address{margin-right: 1.34rem !important; }
 .shop_map form .input_b textarea{width: 80% !important;}
+.orderDetail .orderDetail_button{margin:0.3rem 0;}
+.orderDetail .closeOrder {
+    width: 100%;
+    height: 0.95rem;
+    background: #cdcdcd;
+    border-radius: 5px;
+    border:1px solid #cdcdcd;
+    color: #cdcdcd
+}
