@@ -29,7 +29,7 @@ var backtype = 0;
     $(function(){
         // maketime();
 		 freshcart();
-        // getjuaninfo();
+         getjuaninfo();
      });
 </script>
 <script id="cartlist" type="text/html">
@@ -86,11 +86,7 @@ var backtype = 0;
         </div>
         <div class="orderDetail_item fsMain checkDiscount">
           <p>优惠券</p>
-          <{if $juancount}>
-          <span><{$juancount}>张可用</span>
-          <{else}>
           <span>暂无可用</span>
-          <{/if}>
         </div>
         <div class="orderDetail_money">
           <p>实付<span class="surecost">￥0</span></p>
@@ -116,21 +112,15 @@ var backtype = 0;
 <script>
   var count = 28;
   var discount = 1;
+  discountids = ['0,0'];
+  discountvalues = ['不使用优惠券'];
   $(".checkDiscount").picker({
     title: "请选择优惠券",
     cols: [
       {
         textAlign: 'center',
-        values: [
-            <{foreach from=$juanlist item=items }>
-            "<{$items['cost']}>,<{$items['id']}>",
-            <{/foreach}>
-        ],
-        displayValues: [
-            <{foreach from=$juanlist item=items }>
-            "满<{$items['limitcost']}>元-<{$items['cost']}>元",
-            <{/foreach}>
-        ],
+        values: discountids,
+        displayValues: discountvalues,
       }
     ],
     onClose:function(picker){
