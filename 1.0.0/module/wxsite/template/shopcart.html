@@ -126,11 +126,15 @@ var backtype = 0;
     onClose:function(picker){
       var valArr = picker.value[0].split(",");
       var val = parseFloat(valArr[0]);
-      $(".checkDiscount span").text("-￥"+val);
-      $('#juanid').val(valArr[1]);
-      $('#juancost').val(val);
-	  $('input[name="yhjcost"]').val(val);
-      freshcart(1);
+      if(valArr[1] != 0)
+      {
+          $(".checkDiscount span").text("-￥"+val);
+          $('#juanid').val(valArr[1]);
+          $('#juancost').val(val);
+    	  $('input[name="yhjcost"]').val(val);
+          freshcart(1);
+      }
+
     }
   });
     function  orderSubmit(){

@@ -3,9 +3,15 @@
 
 <{block name=blockcontent}>
 <div class="shop_map">
+  <{if $shopid}>
+  <div class="addMap" onclick="replaceLocation('<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress&shopid=<{$shopid}>')">
+    添加新地址
+  </div>
+  <{else}>
   <div class="addMap" onclick="replaceLocation('<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress')">
     添加新地址
   </div>
+  <{/if}>
   <div class="shopMap">
   <{if empty($arealist)}>
     <div class="noPro" style="display: block;">

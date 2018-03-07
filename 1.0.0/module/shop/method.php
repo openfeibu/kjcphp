@@ -416,7 +416,8 @@ class method extends baseclass
         $data['collectid'] = $collectid;
         $data['uid'] = $this->member['uid'];
 
-        $is_collect = $this->mysql->select_one("SELECT collectid FROM ".Mysite::$app->config['tablepre'].'collect', "uid='".$this->member['uid']."'  and collectid = '".$collectid."' and collecttype ='".$collecttype."'");
+        $is_collect = $this->mysql->select_one("select collectid from ".Mysite::$app->config['tablepre']."collect  where uid='".$this->member['uid']."'  and collectid = '".$collectid."' and collecttype ='".$data['collecttype']."'");
+
         if ($is_collect) {
             $this->mysql->delete(Mysite::$app->config['tablepre'].'collect', "uid='".$this->member['uid']."'  and collectid = '".$collectid."' and collecttype ='".$collecttype."'");
             return $this->success('success');
@@ -440,6 +441,7 @@ class method extends baseclass
             $this->success('success');
         }
         $data['shopuid'] = $goodsinfo['uid'];
+
         $this->mysql->insert(Mysite::$app->config['tablepre'].'collect', $data);
         $this->success('success');
     }

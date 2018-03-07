@@ -7872,7 +7872,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
             {
                 $juaninfo[$key]['is_user_juan'] = 1;
             }else{
-                $juaninfo[$key]['is_user_juan'] = 10;
+                $juaninfo[$key]['is_user_juan'] = 0;
             }
             $juaninfo[$key]['user_juan'] = $user_juan;
         }

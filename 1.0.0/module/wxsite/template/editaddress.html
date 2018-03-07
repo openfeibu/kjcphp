@@ -29,6 +29,7 @@
   </div>
 </div>
 <script>
+shopid = "<{$shopid}>";
   $(".shopMap .orderDetail_address").on("click",function(){
     var i = $(this).index(".shopMap .orderDetail_address");
     $(".shopMap .orderDetail_address").eq(i).parents("li").addClass("active").siblings("li").removeClass("active");
@@ -53,8 +54,13 @@
     var backdata = ajaxback(url,info);
     if(backdata.flag == false){
     	// window.location.href = '<{ofunc type=url link="/wxsite/address"}>';
-        $F.closeLoading(); 
-        $.toast("修改成功",'text'); 
+        if(shopid)
+        {
+            window.location.href = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+shopid;
+        }else{
+            $F.closeLoading();
+            $.toast("修改成功",'text');
+        }
         return false;
     }else{
     	$F.closeLoading();
