@@ -7940,7 +7940,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
     }
     public function tape()
     {
-
+        $data['list'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."tape where uid = ".$this->member['uid']."  order by id desc limit 0,20");
+        Mysite::$app->setdata($data);
     }
     public function updateMemberlnglat()
     {
