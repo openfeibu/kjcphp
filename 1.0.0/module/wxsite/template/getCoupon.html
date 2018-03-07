@@ -44,7 +44,7 @@ $(function(){
             success:function(content) {
                 if(content.error ==  false){
                     $.toast('添加成功','text');
-                    that.addClass("coupon_button_ed").removeClass("coupon_button_get").text("已领取")
+                    that.addClass("coupon_button_ed").removeClass("coupon_button_get").text('<a href="<{$siteurl}>/index.php?ctrl=wxsite&action=shoplist&typelx=wm&typeid=401">使用</a>')
                     // window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=getCoupon' ;
                 }else{
                     $.toast(content.msg,'text');
