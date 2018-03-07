@@ -886,9 +886,13 @@
 
     //结算
     $(".shop-buy").on("click", function() {
-        var id = "<{$id}>";
-        var carturl = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+id;
-        window.location.href = carturl;
+        if($(this).hasClass("active")){
+          var id = "<{$id}>";
+          var carturl = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+id;
+          window.location.href = carturl;   
+        }else{
+          $.toast($(this).text(),"text")
+        }
     })
     function openType(id){
         var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);

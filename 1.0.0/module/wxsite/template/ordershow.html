@@ -128,19 +128,22 @@
 
       </div>
       <div class="orderDetail_button">
-            <a href="javascript:void(0);" class="pay_btn pay_btn_b" timestamp="3456">继续支付(还需<span>15分00秒</span>)</a>
+            <a href="javascript:void(0);" class="pay_btn pay_btn_b" timestamp="100">继续支付(还需<span>15分00秒</span>)</a>
       </div>
       <div class="orderDetail_button closeOrder">
             <a onclick="javascript:cancel_order('<{$order['id']}>');" href="javascript:void(0);">取消订单 </a>
       </div>
     </div>
     <script>
+
+
     var timestamp = $(".pay_btn_b").attr("timestamp");
     // 倒计时
     function countTime(){
         --timestamp;
         if(timestamp == 0){
             //时间到
+           window.location.reload();
         }else{
             var min=Math.floor(timestamp/60%60);
             var sec=Math.floor(timestamp%60);  
@@ -156,6 +159,9 @@
     setInterval(function(){
         countTime()
     },1000)
+
+
+
     function cancel_order(id)
     {
         $.confirm({
