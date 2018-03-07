@@ -10,7 +10,7 @@
 
             <div class="orderDetail_pro_name fb-inlineBlock">
               <p><{$items['goodsname']}></p>
-              <span>大份、孜然+微辣</span>
+              <span>{$items['goodsattr']}</span>
             </div>
             <div class="orderDetail_pro_num fb-inlineBlock">
               x<{$items['goodscount']}>
@@ -105,6 +105,7 @@
             <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
         <{/if}>
         <{if $order['status'] == 0 && $order['paystatus'] == 0  }>
+
             <a href="javascript:void(0);" class="pay_btn">继续支付</a>
         <{/if}>
         <{if $order['status'] == 2  && $order['is_reback'] == 0  }>
@@ -124,6 +125,11 @@
                 <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
             <{/if}>
         <{/if}>
+
+      </div>
+      <div class="orderDetail_button">
+            <a onclick="acceptorder();" href="javascript:void(0);" class="closeOrder">取消订单 </a>
+            <a href="javascript:void(0);" class="pay_btn pay_btn_b" >继续支付(还需)</a>
       </div>
     </div>
     <script>
