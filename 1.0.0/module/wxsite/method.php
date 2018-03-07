@@ -246,6 +246,19 @@ class method extends wxbaseclass
 
         $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 order by id desc");
 
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6");
+        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 AND count > 0 AND endtime > $time AND starttime <= $time order by id asc ");
+        foreach ($juaninfo as $key => $value) {
+            $user_juan = $this->mysql->select_one("SELECT * FROM ".Mysite::$app->config['tablepre']."juan WHERE alljuanid = ".$value['id']." AND uid = ".$this->member['uid']." ");
+            if(!empty($user_juan))
+            {
+                $juaninfo[$key]['is_user_juan'] = 1;
+            }else{
+                $juaninfo[$key]['is_user_juan'] = 0;
+            }
+            $juaninfo[$key]['user_juan'] = $user_juan;
+        }
+        $data['juaninfo'] = $juaninfo;
         Mysite::$app->setdata($data);
     }
 
