@@ -601,8 +601,6 @@ class memberclass
 
     public function updatememjuaninfo($phoneyan)
     {
-
-
         // 根据前台注册的手机号检测此手机号数据库中是否领取过优惠券，如果有则更新UID和username status=1
         // 如果前台新注册的用户 存在分享者 shareuid > 0 则考虑返增推广分享者优惠券
         $checkphonejuan =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where bangphone='".$phoneyan."' and uid=0 and status = 0  ");
@@ -634,12 +632,12 @@ class memberclass
             }
         }
     }
-    public function insertTap($uid,$type,$name,$content)
+    public function insertTape($uid,$name,$content,$type = 'system')
     {
         $data['uid'] = $uid;
         $data['name'] = $name;
         $data['type'] = $type;
         $data['content'] = $content;
-        $this->mysql->insert(Mysite::$app->config['tablepre'].'juan', $data);
+        $this->mysql->insert(Mysite::$app->config['tablepre'].'tape', $data);
     }
 }

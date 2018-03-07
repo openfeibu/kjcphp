@@ -1396,7 +1396,7 @@ $ch = curl_init($url);
             $status = "退款中";
         }
         if($order['status'] == 2){
-            $status = "已收货";
+            $status = "已发货";
         }
         if($order['status'] == 3){
             $status = "已收货";
