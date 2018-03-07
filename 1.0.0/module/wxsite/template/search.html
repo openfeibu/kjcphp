@@ -20,6 +20,27 @@
 
 </div>
 <script>
+  $("#searchInput").on('keypress',function(e) {  
+                var keycode = e.keyCode;  
+                var searchName = $(this).val();  
+                if(keycode=='13') {  
+                    e.preventDefault();    
+                    //请求搜索接口  
+                    var searchname = $("#searchInput").val();
+                    if(searchname != ''){
+                        $F.loading();
+                        var url = '<{ofunc type=url link="/wxsite/searchresult"}>';
+                        $.post(url, {'searchname':searchname},function (data, textStatus){
+                            $('.noPro').remove();
+                            $('.search').find(".shop_group").remove().end().append(data);
+                            $F.closeLoading();
+                        }, 'html');
+                    }else{
+
+                    }
+                }  
+         });  
+
   $("#searchInput").click(function(){
     $(this).focus()
   })
@@ -39,8 +60,11 @@
 
     }
   })
-//  滚动
 
+
+
+  
+//  滚动
     var loading = false;  //状态标记
     var page = 0;
     $(document.body).infinite(50).on("infinite", function() {
