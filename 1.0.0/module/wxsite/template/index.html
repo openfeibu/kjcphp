@@ -136,8 +136,13 @@
       </div>
   </div>
 </div>
+
+<script>
+<{if $have_juan}>
+  $F.getCoupon("<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/coupon_popup.png","<{ofunc type=url link="/wxsite/getCoupon"}>");
+<{/if}>
+</script>
 <{/block}>
-<{$juaninfo}>
 
 <{block name="end_script"}>
 <script>

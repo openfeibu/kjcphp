@@ -116,9 +116,9 @@
             $(".fb-mask").remove();
         }
     }
-    fbFun.getCoupon = function(href){
+    fbFun.getCoupon = function(img,href){
         var dom = '  <div class="getCoupon fb-position-fixed">\
-                    <a href="'+href+'"><img src="images/coupon_popup.png" alt=""></a>\
+                    <a href="'+href+'"><img src="'+img+'" alt=""></a>\
                     <div class="close fb-position-absolute transition" onclick="$F.closeGetCoupon()">\
                     </div>\
                     </div>';
