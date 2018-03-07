@@ -69,7 +69,7 @@ class memberclass
         }
     }
     //普通用户注册
-    public function regester($email, $tname, $password, $phone, $group, $userlogo='', $address='', $cost=0, $score=0, $admin_id)
+    public function regester($email, $tname, $password, $phone, $group, $userlogo='', $address='', $cost=0, $score=0, $admin_id,$stationadminid = 0)
     {
         if (empty($phone)) {
             $this->error = '手机号不能为空';
@@ -124,6 +124,7 @@ class memberclass
         $arr['group'] = $group;
         $arr['cost'] = $cost;
         $arr['admin_id'] = $admin_id;
+        $arr['stationadminid'] = $stationadminid;
         $arr['parent_id'] = intval(ICookie::get('logincode'));
         $this->mysql->insert(Mysite::$app->config['tablepre'].'member', $arr);
         $this->uid = $this->mysql->insertid();
