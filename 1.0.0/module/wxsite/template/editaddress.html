@@ -52,7 +52,8 @@
     var url = '<{ofunc type=url link="/area/saveaddress/random/@random@/datatype/json"}>';
     var backdata = ajaxback(url,info);
     if(backdata.flag == false){
-    	window.location.href = '<{ofunc type=url link="/wxsite/address"}>';
+    	// window.location.href = '<{ofunc type=url link="/wxsite/address"}>';
+        $.toast("修改成功",'text'); 
         return false;
     }else{
     	$F.closeLoading();
