@@ -2129,7 +2129,7 @@ class method extends wxbaseclass
                 break;
             case '3':
                 //待发货，已发货，待收货
-                $where .= " and status = 1 AND is_reback = 0";
+                $where .= " and status in (1,2) AND is_reback = 0";
                 break;
             case '4':
                 //已完成
@@ -2146,7 +2146,7 @@ class method extends wxbaseclass
         $temparray = array('0'=>'外卖','1'=>'超市','2'=>'其他','100'=>'跑腿订单');
         $backdata = array();
         foreach ($datalist as $key=>$value) {
-
+                $value['goods_count'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."orderdet    where order_id = ".$value['id']." ");
         //自动关闭订单
             if ($value['paytype'] == 1 && $value['paystatus'] == 0 && $value['status'] < 3) {
                 $checktime = time() - $value['addtime'];
@@ -2190,7 +2190,6 @@ class method extends wxbaseclass
         }
 
         $data['orderlist'] = $backdata;
-        #print_r($backdata);
         Mysite::$app->setdata($data);
         /*
         $datas = json_encode($backdata);

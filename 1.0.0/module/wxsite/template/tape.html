@@ -6,7 +6,7 @@
       <{foreach from=$list item=items}>
       <div class="tape_item">
         <div class="tape_title"><{$items['name']}></div>
-        <div class="tape_date">10分钟前</div>
+        <div class="tape_date"><{$items['time']|friendlyDate}></div>
         <div class="tape_con"><{$items['content']}></div>
       </div>
       <{/foreach}>

@@ -8,9 +8,9 @@
          <div class="name fb-fl"><{$items['shopname']}></div>
          <div class="state fb-fr"><{$items['order_status']}></div>
        </div>
-       <div class="date">1分钟前</div>
+       <div class="date"><{$items['addtime']|strtotime|friendlyDate}></div>
        <div class="order_con fb-clearfix">
-         <div class="order_con_l fb-fl">共3件商品</div>
+         <div class="order_con_l fb-fl">共<{$items['goods_count']}>件商品</div>
          <div class="order_con_r fb-fr">￥<{$items['allcost']}></div>
        </div>
      </div>
