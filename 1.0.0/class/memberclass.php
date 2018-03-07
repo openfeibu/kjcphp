@@ -634,4 +634,12 @@ class memberclass
             }
         }
     }
+    public function insertTap($uid,$type,$name,$content)
+    {
+        $data['uid'] = $uid;
+        $data['name'] = $name;
+        $data['type'] = $type;
+        $data['content'] = $content;
+        $this->mysql->insert(Mysite::$app->config['tablepre'].'juan', $data);
+    }
 }
