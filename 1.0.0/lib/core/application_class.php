@@ -7,9 +7,8 @@
      * 专业破解各类程序与加密文件 QQ2436714
      * 全网系统源码购买+QQ 2436714
      */
-	 
-class myapp
 
+class myapp
 {
 
   //应用的名称
@@ -36,592 +35,474 @@ class myapp
      */
 
     public function __construct($config)
-
     {
+        if (is_string($config)) {
+            $config = require($config);
+        }
 
-        if(is_string($config)) $config = require($config);
+        if (is_array($config)) {
+            $this->config = $config;
+        } else {
+            $this->config = array();
+        }
 
-        if(is_array($config)) $this->config = $config;
-
-        else $this->config = array();
 
 
 
-     
 
-    //设为if true为了标注以后要再解决cli模式下的basePath
+        //设为if true为了标注以后要再解决cli模式下的basePath
 
-    if(!isset($_SERVER['DOCUMENT_ROOT']))
+        if (!isset($_SERVER['DOCUMENT_ROOT'])) {
+            if (isset($_SERVER['SCRIPT_FILENAME'])) {
+                $_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
+            } elseif (isset($_SERVER['PATH_TRANSLATED'])) {
+                $_SERVER['DOCUMENT_ROOT'] =  dirname(rtrim($_SERVER['PATH_TRANSLATED'], "/\\"));
+            }
+        }
 
-    {
 
-      if(isset($_SERVER['SCRIPT_FILENAME']))
 
-      {
+        if ($web = true) {
+            $script_dir = trim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
-        $_SERVER['DOCUMENT_ROOT'] = dirname( $_SERVER['SCRIPT_FILENAME'] );
+            if ($script_dir != "") {
+                $script_dir .="/";
+            }
 
-      }
 
-      elseif(isset($_SERVER['PATH_TRANSLATED']))
 
-      {
+            $basePath = rtrim($_SERVER['DOCUMENT_ROOT'], '/\\')."/" . $script_dir;
 
-        $_SERVER['DOCUMENT_ROOT'] =  dirname( rtrim($_SERVER['PATH_TRANSLATED'],"/\\"));
+            $this->config['basePath'] = $basePath;
 
-      }
-
+            $this->setBasePath($basePath);
+        }
     }
 
-
-
-    if($web = true)
-
+    public function run($setindex='')
     {
+        IUrl::beginUrl();
 
-      $script_dir = trim(dirname($_SERVER['SCRIPT_NAME']),'/\\');
+        $controller = IUrl::getInfo("ctrl");
 
-      if( $script_dir != "" )
-
-      {
-
-        $script_dir .="/";
-
-      }
-
-
-
-      $basePath = rtrim($_SERVER['DOCUMENT_ROOT'],'/\\')."/" . $script_dir; 
-
-      $this->config['basePath'] = $basePath;
-
-      $this->setBasePath($basePath);
-
-    }
-
-  } 
-
-  public function run($setindex='')
-
-  {
-
-          
-
-         
-
-        IUrl::beginUrl(); 
-
-        $controller = IUrl::getInfo("ctrl"); 
-
-        $action = IUrl::getInfo("action"); 
+        $action = IUrl::getInfo("action");
 
         $Taction = empty($action) ? $this->defaultAction: $action;
 
-        $info =isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');  
+        $info =isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
 
-      //   $url=  IUrl::getUrl();//'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];   获取当前网页
+        //   $url=  IUrl::getUrl();//'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];   获取当前网页
 
-       //  print_r($url);
+        //  print_r($url);
 
-      
 
-         $Taction = empty($action) ? $this->defaultAction: $action;
 
-        $info =isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');  
+        $Taction = empty($action) ? $this->defaultAction: $action;
 
-       if($controller === null) $controller = $this->defaultController; 
+        $info =isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
 
-       $this->controller = $controller;
+        if ($controller === null) {
+            $controller = $this->defaultController;
+        }
 
-       $this->Taction = $Taction;  
+        $this->controller = $controller;
 
-       if($controller == 'site' && $Taction == 'index'){ 
+        $this->Taction = $Taction;
 
-         if(is_mobile_request()){   
+        // if ($controller == 'site' && $Taction == 'index') {
+        //     if (is_mobile_request()) {
+                $this->controller = 'wxsite';
+        //     }
+        // }
 
-            $this->controller = 'wxsite'; 
+        spl_autoload_register('Mysite::autoload');
 
-         } 
+        $filePath = hopedir."/lib/Smarty/libs/Smarty.class.php";
 
-       } 
+        if (!class_exists('smarty')) {
+            include_once($filePath);
+        }
 
-       spl_autoload_register('Mysite::autoload');  
+        if ($controller == 'adminpage') {
+            $smarty = new Smarty();  //建立smarty实例对象$smarty
 
-       $filePath = hopedir."/lib/Smarty/libs/Smarty.class.php"; 
+            $smarty->assign("siteurl", Mysite::$app->config['siteurl']);
 
-       if( !class_exists('smarty')){
+            $smarty->cache_lifetime =   Mysite::$app->config['cache_lifetime'];  //设置缓存时间
 
-          include_once($filePath);  
+            $smarty->caching = false;
 
-       }
+            $smarty->template_dir = hopedir."/templates/"; //设置模板目录
 
-       if($controller == 'adminpage'){
+            $smarty->compile_dir = hopedir."/templates_c/adminpage"; //设置编译目录
 
-               $smarty = new Smarty();  //建立smarty实例对象$smarty     
+            $smarty->cache_dir = hopedir."/smarty_cache"; //缓存文件夹
 
-               $smarty->assign("siteurl",Mysite::$app->config['siteurl']); 
+            $smarty->left_delimiter = "<{";
 
-               $smarty->cache_lifetime =   Mysite::$app->config['cache_lifetime'];  //设置缓存时间
+            $smarty->right_delimiter = "}>";
 
-               $smarty->caching = false; 
+            $module =  IUrl::getInfo("module");
 
-               $smarty->template_dir = hopedir."/templates/"; //设置模板目录  
+            $module = empty($module)?'index':$module;
 
-               $smarty->compile_dir = hopedir."/templates_c/adminpage"; //设置编译目录 
+            $doaction = Mysite::$app->getAction()=='index'?'system':Mysite::$app->getAction();
 
-               $smarty->cache_dir = hopedir."/smarty_cache"; //缓存文件夹  
+            $this->Taction = $doaction;
 
-               $smarty->left_delimiter = "<{"; 
+            $this->siteset();
 
-               $smarty->right_delimiter = "}>"; 
+            if (!file_exists(hopedir."/module/".Mysite::$app->getAction()."/adminmethod.php")) {//判断文件是否存在
 
-               $module =  IUrl::getInfo("module"); 
+            } else {
+                include(hopedir."/module/".Mysite::$app->getAction()."/adminmethod.php");
 
-               $module = empty($module)?'index':$module;
+                $method = new method();
 
-               $doaction = Mysite::$app->getAction()=='index'?'system':Mysite::$app->getAction();
+                $method->init();
 
-               $this->Taction = $doaction;  
+                if (method_exists($method, $module)) {
+                    call_user_func(array($method,$module));
+                }
+            }
 
-               $this->siteset(); 
+            $datas = $this->getdata();
 
-               if(!file_exists(hopedir."/module/".Mysite::$app->getAction()."/adminmethod.php"))//判断文件是否存在
+            if (is_array($datas)) {
+                foreach ($datas as $key=>$value) {
+                    $smarty->assign($key, $value);
+                }
+            }
 
-               {   
+            $nowID = ICookie::get('myaddress');
 
-                    
+            $lng = ICookie::get('lng');
 
-                
+            $lat = ICookie::get('lat');
 
-               }else{  
+            $mapname = ICookie::get('mapname');
 
-                   include(hopedir."/module/".Mysite::$app->getAction()."/adminmethod.php");   
+            $adminshopid = ICookie::get('adminshopid');
 
-                   $method = new method();
+            $smarty->assign("myaddress", $nowID);
 
-                   $method->init(); 
+            $smarty->assign("mapname", $mapname);
 
-                   if(method_exists($method, $module)){
+            $smarty->assign("adminshopid", $adminshopid);
 
-                       call_user_func( array($method,$module)); 
+            $smarty->assign("lng", $lng);
 
-                   }  
+            $smarty->assign("lat", $lat);
 
-               } 
+            $smarty->assign("controlname", Mysite::$app->getController());
 
-               $datas = $this->getdata(); 
+            $smarty->assign("Taction", Mysite::$app->getAction());
 
-               if(is_array($datas)){
+            $smarty->assign("urlshort", Mysite::$app->getController().'/'.Mysite::$app->getAction());
 
-                  foreach($datas as $key=>$value)
+            //假设我是用户查看新闻    前台 /fontpage  /admin  后台
 
-                  {
+            $templtepach = hopedir.'/templates/adminpage/'.Mysite::$app->getAction()."/".$module.".html";
 
-                     $smarty->assign($key, $value);  
+            if (file_exists($templtepach)) {//判断文件是否存在
 
-                  }
+            } elseif (file_exists(hopedir."/module/".Mysite::$app->getAction()."/adminpage/".$module.".html")) {
+                $smarty->compile_dir = hopedir."/templates_c/adminpage/".Mysite::$app->getAction();
 
-               }
+                $templtepach = hopedir."/module/".Mysite::$app->getAction()."/adminpage/".$module.".html";
+            } else {
+                logwrite('模板不存在 ');
 
-               $nowID = ICookie::get('myaddress');
+                $smarty->assign("msg", '模板文件不存在');
 
-               $lng = ICookie::get('lng'); 
+                $smarty->assign("sitetitle", '错误提示');
 
-               $lat = ICookie::get('lat');
+                $errorlink = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
 
-               $mapname = ICookie::get('mapname');
+                $smarty->assign("errorlink", $errorlink);
 
-               $adminshopid = ICookie::get('adminshopid');
+                $templtepach = hopedir.'/templates/adminpage/public/error.html';
+            }
 
-               $smarty->assign("myaddress",$nowID);
+            $smarty->assign("tmodule", $module);
 
-               $smarty->assign("mapname",$mapname);
+            $smarty->assign("tempdir", 'adminpage');
 
-               $smarty->assign("adminshopid",$adminshopid);
+            $smarty->registerPlugin("function", "ofunc", "FUNC_function");
 
-               $smarty->assign("lng",$lng);
+            $smarty->registerPlugin("block", "oblock", "FUNC_block");
 
-               $smarty->assign("lat",$lat); 
+            $smarty->display($templtepach);
 
-               $smarty->assign("controlname",Mysite::$app->getController());
+            exit;
+        } elseif ($controller == 'areaadminpage') {
+            $smarty = new Smarty();  //建立smarty实例对象$smarty
 
-               $smarty->assign("Taction",Mysite::$app->getAction());
+            $smarty->assign("siteurl", Mysite::$app->config['siteurl']);
 
-               $smarty->assign("urlshort", Mysite::$app->getController().'/'.Mysite::$app->getAction());   
+            $smarty->cache_lifetime =   Mysite::$app->config['cache_lifetime'];  //设置缓存时间
 
-               //假设我是用户查看新闻    前台 /fontpage  /admin  后台 
+            $smarty->caching = false;
 
-               $templtepach = hopedir.'/templates/adminpage/'.Mysite::$app->getAction()."/".$module.".html";  
+            $smarty->template_dir = hopedir."/templates/"; //设置模板目录
 
-               if(file_exists($templtepach))//判断文件是否存在
+            $smarty->compile_dir = hopedir."/templates_c/areaadminpage"; //设置编译目录
 
-               {  
+            $smarty->cache_dir = hopedir."/smarty_cache"; //缓存文件夹
 
-               }elseif(file_exists(hopedir."/module/".Mysite::$app->getAction()."/adminpage/".$module.".html")){  
+            $smarty->left_delimiter = "<{";
 
-                  $smarty->compile_dir = hopedir."/templates_c/adminpage/".Mysite::$app->getAction();
+            $smarty->right_delimiter = "}>";
 
-                  $templtepach = hopedir."/module/".Mysite::$app->getAction()."/adminpage/".$module.".html";    
+            $module =  IUrl::getInfo("module");
 
-               }else{ 
+            $module = empty($module)?'index':$module;
 
-                  logwrite('模板不存在 ');
+            $doaction = Mysite::$app->getAction()=='index'?'system':Mysite::$app->getAction();
 
-                  $smarty->assign("msg",'模板文件不存在');
+            $this->Taction = $doaction;
 
-                  $smarty->assign("sitetitle",'错误提示'); 
+            $this->siteset();
 
-                  $errorlink = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+            if (!file_exists(hopedir."/module/".Mysite::$app->getAction()."/areaadminmethod.php")) {//判断文件是否存在
 
-                  $smarty->assign("errorlink",$errorlink); 
+            } else {
+                include(hopedir."/module/".Mysite::$app->getAction()."/areaadminmethod.php");
 
-                  $templtepach = hopedir.'/templates/adminpage/public/error.html';   
+                $method = new method();
 
-               } 
+                $method->init();
 
-               $smarty->assign("tmodule",$module);
+                if (method_exists($method, $module)) {
+                    call_user_func(array($method,$module));
+                }
+            }
 
-               $smarty->assign("tempdir",'adminpage');  
+            $datas = $this->getdata();
 
-               $smarty->registerPlugin("function","ofunc", "FUNC_function");
+            if (is_array($datas)) {
+                foreach ($datas as $key=>$value) {
+                    $smarty->assign($key, $value);
+                }
+            }
 
-               $smarty->registerPlugin("block","oblock", "FUNC_block");
+            $nowID = ICookie::get('myaddress');
 
-               $smarty->display($templtepach);  
+            $lng = ICookie::get('lng');
 
-               exit;
+            $lat = ICookie::get('lat');
 
-       }elseif($controller == 'areaadminpage'){
+            $mapname = ICookie::get('mapname');
 
-               $smarty = new Smarty();  //建立smarty实例对象$smarty     
+            $adminshopid = ICookie::get('adminshopid');
 
-               $smarty->assign("siteurl",Mysite::$app->config['siteurl']); 
+            $smarty->assign("myaddress", $nowID);
 
-               $smarty->cache_lifetime =   Mysite::$app->config['cache_lifetime'];  //设置缓存时间
+            $smarty->assign("mapname", $mapname);
 
-               $smarty->caching = false; 
+            $smarty->assign("adminshopid", $adminshopid);
 
-               $smarty->template_dir = hopedir."/templates/"; //设置模板目录  
+            $smarty->assign("lng", $lng);
 
-               $smarty->compile_dir = hopedir."/templates_c/areaadminpage"; //设置编译目录 
+            $smarty->assign("lat", $lat);
 
-               $smarty->cache_dir = hopedir."/smarty_cache"; //缓存文件夹  
+            $smarty->assign("controlname", Mysite::$app->getController());
 
-               $smarty->left_delimiter = "<{"; 
+            $smarty->assign("Taction", Mysite::$app->getAction());
 
-               $smarty->right_delimiter = "}>"; 
+            $smarty->assign("urlshort", Mysite::$app->getController().'/'.Mysite::$app->getAction());
 
-               $module =  IUrl::getInfo("module"); 
+            //假设我是用户查看新闻    前台 /fontpage  /admin  后台
 
-               $module = empty($module)?'index':$module;
+            $templtepach = hopedir.'/templates/areaadminpage/'.Mysite::$app->getAction()."/".$module.".html";
 
-               $doaction = Mysite::$app->getAction()=='index'?'system':Mysite::$app->getAction();
+            if (file_exists($templtepach)) {//判断文件是否存在
 
-               $this->Taction = $doaction;  
+            } elseif (file_exists(hopedir."/module/".Mysite::$app->getAction()."/areaadminpage/".$module.".html")) {
+                $smarty->compile_dir = hopedir."/templates_c/areaadminpage/".Mysite::$app->getAction();
 
-               $this->siteset(); 
+                $templtepach = hopedir."/module/".Mysite::$app->getAction()."/areaadminpage/".$module.".html";
+            } else {
+                logwrite('模板不存在 ');
 
-               if(!file_exists(hopedir."/module/".Mysite::$app->getAction()."/areaadminmethod.php"))//判断文件是否存在
+                $smarty->assign("msg", '模板文件不存在');
 
-               {   
+                $smarty->assign("sitetitle", '错误提示');
 
-                 
+                $errorlink = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
 
-                
+                $smarty->assign("errorlink", $errorlink);
 
-               }else{  
+                $templtepach = hopedir.'/templates/areaadminpage/public/error.html';
+            }
 
-                   include(hopedir."/module/".Mysite::$app->getAction()."/areaadminmethod.php");   
 
-                   $method = new method();
 
-                   $method->init(); 
 
-                   if(method_exists($method, $module)){
 
-                       call_user_func( array($method,$module)); 
+            $smarty->assign("tmodule", $module);
 
-                   }  
+            $smarty->assign("tempdir", 'areaadminpage');
 
-               } 
+            $smarty->registerPlugin("function", "ofunc", "FUNC_function");
 
-               $datas = $this->getdata(); 
+            $smarty->registerPlugin("block", "oblock", "FUNC_block");
 
-               if(is_array($datas)){
+            $smarty->display($templtepach);
 
-                  foreach($datas as $key=>$value)
+            exit;
+        } else {
+            $smarty = new Smarty();  //建立smarty实例对象$smarty
 
-                  {
+            $smarty->assign("siteurl", Mysite::$app->config['siteurl']);
 
-                     $smarty->assign($key, $value);  
+            $smarty->cache_lifetime =  Mysite::$app->config['cache_lifetime'];  //设置缓存时间
 
-                  }
+            $smarty->caching = false;
 
-               }
+            $smarty->template_dir = hopedir."/templates"; //设置模板目录
 
-               $nowID = ICookie::get('myaddress');
+            $smarty->compile_dir = hopedir."/templates_c/".Mysite::$app->config['sitetemp']; //设置编译目录
 
-               $lng = ICookie::get('lng'); 
+            $smarty->cache_dir = hopedir."/smarty_cache"; //缓存文件夹
 
-               $lat = ICookie::get('lat');
+            $smarty->left_delimiter = "<{";
 
-               $mapname = ICookie::get('mapname');
+            $smarty->right_delimiter = "}>";
 
-               $adminshopid = ICookie::get('adminshopid');
+            $this->siteset();
 
-               $smarty->assign("myaddress",$nowID);
+            if (!file_exists(hopedir."module/".Mysite::$app->getController()."/method.php")) {//判断文件是否存在
+                $this->setController ='site';
 
-               $smarty->assign("mapname",$mapname);
+                $this->setAction = 'error';
+            } else {
+                include(hopedir."module/".Mysite::$app->getController()."/method.php");
 
-               $smarty->assign("adminshopid",$adminshopid);
+                $method = new method();
 
-               $smarty->assign("lng",$lng);
+                $method->init();
 
-               $smarty->assign("lat",$lat); 
+                if (method_exists($method, $Taction)) {
+                    call_user_func(array($method,$Taction));
+                }
+            }
 
-               $smarty->assign("controlname",Mysite::$app->getController());
+            $datas = $this->getdata();
 
-               $smarty->assign("Taction",Mysite::$app->getAction());
 
-               $smarty->assign("urlshort", Mysite::$app->getController().'/'.Mysite::$app->getAction());   
 
-               //假设我是用户查看新闻    前台 /fontpage  /admin  后台 
+            if (is_array($datas)) {
+                foreach ($datas as $key=>$value) {
+                    $smarty->assign($key, $value);
+                }
+            }
 
-               $templtepach = hopedir.'/templates/areaadminpage/'.Mysite::$app->getAction()."/".$module.".html";  
+            $nowID = ICookie::get('myaddress');
 
-               if(file_exists($templtepach))//判断文件是否存在
+            $lng = ICookie::get('lng');
 
-               {  
+            $lat = ICookie::get('lat');
 
-               }elseif(file_exists(hopedir."/module/".Mysite::$app->getAction()."/areaadminpage/".$module.".html")){  
+            $mapname = ICookie::get('mapname');
 
-                  $smarty->compile_dir = hopedir."/templates_c/areaadminpage/".Mysite::$app->getAction();
+            $adminshopid = ICookie::get('adminshopid');
 
-                  $templtepach = hopedir."/module/".Mysite::$app->getAction()."/areaadminpage/".$module.".html";    
+            $smarty->assign("myaddress", $nowID);
 
-               }else{ 
+            $smarty->assign("mapname", $mapname);
 
-                  logwrite('模板不存在 ');
+            $smarty->assign("adminshopid", $adminshopid);
 
-                  $smarty->assign("msg",'模板文件不存在');
+            $smarty->assign("lng", $lng);
 
-                  $smarty->assign("sitetitle",'错误提示'); 
+            $smarty->assign("lat", $lat);
 
-                  $errorlink = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+            $smarty->assign("controlname", Mysite::$app->getController());
 
-                  $smarty->assign("errorlink",$errorlink); 
+            $smarty->assign("Taction", Mysite::$app->getAction());
 
-                  $templtepach = hopedir.'/templates/areaadminpage/public/error.html';   
+            $smarty->assign("urlshort", Mysite::$app->getController().'/'.Mysite::$app->getAction());
 
-               } 
+            //假设我是用户查看新闻    前台 /fontpage  /admin  后台
 
-               
+            $templtepach = hopedir.'/templates/'.Mysite::$app->config['sitetemp']."/".Mysite::$app->getController()."/".Mysite::$app->getAction().".html";
 
-               
 
-               $smarty->assign("tmodule",$module);
 
-               $smarty->assign("tempdir",'areaadminpage');  
+            if (file_exists($templtepach)) {//判断文件是否存在
 
-               $smarty->registerPlugin("function","ofunc", "FUNC_function");
+            } elseif (file_exists(hopedir."/module/".Mysite::$app->getController()."/template/".Mysite::$app->getAction().".html")) {
+                $smarty->compile_dir = hopedir."/templates_c/system";
 
-               $smarty->registerPlugin("block","oblock", "FUNC_block");
+                $templtepach = hopedir."/module/".Mysite::$app->getController()."/template/".Mysite::$app->getAction().".html";
+            } else {
+                logwrite('模板不存在 ');
 
-               $smarty->display($templtepach);  
+                $smarty->assign("msg", '模板文件不存在');
 
-               exit;
+                $smarty->assign("sitetitle", '错误提示');
 
-       }else{
+                $errorlink = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
 
-               $smarty = new Smarty();  //建立smarty实例对象$smarty     
+                $smarty->assign("errorlink", $errorlink);
 
-               $smarty->assign("siteurl",Mysite::$app->config['siteurl']); 
+                $templtepach = hopedir.'/templates/'.Mysite::$app->config['sitetemp']."/public/error.html";
+            }
 
-               $smarty->cache_lifetime =  Mysite::$app->config['cache_lifetime'];  //设置缓存时间
+            $smarty->assign("tempdir", Mysite::$app->config['sitetemp']);
 
-               $smarty->caching = false; 
+            $smarty->registerPlugin("function", "ofunc", "FUNC_function");
 
-               $smarty->template_dir = hopedir."/templates"; //设置模板目录  
+            $smarty->registerPlugin("block", "oblock", "FUNC_block");
 
-               $smarty->compile_dir = hopedir."/templates_c/".Mysite::$app->config['sitetemp']; //设置编译目录 
-
-               $smarty->cache_dir = hopedir."/smarty_cache"; //缓存文件夹  
-
-               $smarty->left_delimiter = "<{"; 
-
-               $smarty->right_delimiter = "}>"; 
-
-               $this->siteset(); 
-
-               if(!file_exists(hopedir."module/".Mysite::$app->getController()."/method.php"))//判断文件是否存在
-
-               {   
-
-                  $this->setController ='site'; 
-
-                  $this->setAction = 'error';
-
-                
-
-               }else{  
-
-                   include(hopedir."module/".Mysite::$app->getController()."/method.php");   
-
-                   $method = new method();
-
-                   $method->init(); 
-
-                   if(method_exists($method, $Taction)){
-
-                       call_user_func( array($method,$Taction)); 
-
-                   }  
-
-               } 
-
-               $datas = $this->getdata();
-
-               
-
-               if(is_array($datas)){
-
-                  foreach($datas as $key=>$value)
-
-                  {
-
-                     $smarty->assign($key, $value);  
-
-                  }
-
-               }
-
-               $nowID = ICookie::get('myaddress');
-
-               $lng = ICookie::get('lng'); 
-
-               $lat = ICookie::get('lat');
-
-               $mapname = ICookie::get('mapname');
-
-               $adminshopid = ICookie::get('adminshopid');
-
-               $smarty->assign("myaddress",$nowID);
-
-               $smarty->assign("mapname",$mapname);
-
-               $smarty->assign("adminshopid",$adminshopid);
-
-               $smarty->assign("lng",$lng);
-
-               $smarty->assign("lat",$lat); 
-
-               $smarty->assign("controlname",Mysite::$app->getController());
-
-               $smarty->assign("Taction",Mysite::$app->getAction());
-
-               $smarty->assign("urlshort", Mysite::$app->getController().'/'.Mysite::$app->getAction());   
-
-               //假设我是用户查看新闻    前台 /fontpage  /admin  后台 
-
-               $templtepach = hopedir.'/templates/'.Mysite::$app->config['sitetemp']."/".Mysite::$app->getController()."/".Mysite::$app->getAction().".html";   
-
-                 
-
-               if(file_exists($templtepach))//判断文件是否存在
-
-               {  
-
-               }elseif(file_exists(hopedir."/module/".Mysite::$app->getController()."/template/".Mysite::$app->getAction().".html")){  
-
-                  $smarty->compile_dir = hopedir."/templates_c/system";
-
-                  $templtepach = hopedir."/module/".Mysite::$app->getController()."/template/".Mysite::$app->getAction().".html";    
-
-               }else{ 
-
-                 logwrite('模板不存在 ');
-
-                  $smarty->assign("msg",'模板文件不存在');
-
-                  $smarty->assign("sitetitle",'错误提示'); 
-
-                  $errorlink = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
-
-                  $smarty->assign("errorlink",$errorlink); 
-
-                  $templtepach = hopedir.'/templates/'.Mysite::$app->config['sitetemp']."/public/error.html";   
-
-               } 
-
-               $smarty->assign("tempdir",Mysite::$app->config['sitetemp']); 
-
-               $smarty->registerPlugin("function","ofunc", "FUNC_function");
-
-               $smarty->registerPlugin("block","oblock", "FUNC_block");
-
-               $smarty->display($templtepach);  
-
-       }
-
-       
-
-  }
-
-  static public function statichtml($htmlcontent,$datas){
-
-   
-
-    $filePath = hopedir."/lib/Smarty/libs/Smarty.class.php"; 
-
-    if( !class_exists('smarty')){
-
-       include_once($filePath); 
-
-    } 
-
-    $tpl = new Smarty();  //建立smarty实例对象$smarty       
-
-    $tpl->cache_lifetime = 0;  //设置缓存时间
-
-    $tpl->caching = false; 
-
-    $tpl->template_dir = hopedir."/templates"; //设置模板目录  
-
-    $tpl->compile_dir = hopedir."/templates_c"; //设置编译目录 
-
-    
-
-    $tpl->cache_dir = hopedir."/smarty_cache"; //缓存文件夹  
-
-    $tpl->left_delimiter = "{"; 
-
-    $tpl->right_delimiter = "}";   
-
-    if(is_array($datas)){
-
-      foreach($datas as $key=>$value)
-
-      {
-
-         $tpl->assign($key, $value);   
-
-      }
-
+            $smarty->display($templtepach);
+        }
     }
 
-    $content = $tpl->fetch('string:'.$htmlcontent); // 
+    public static function statichtml($htmlcontent, $datas)
+    {
+        $filePath = hopedir."/lib/Smarty/libs/Smarty.class.php";
 
-    return $content;
+        if (!class_exists('smarty')) {
+            include_once($filePath);
+        }
 
-  }  
+        $tpl = new Smarty();  //建立smarty实例对象$smarty
 
-  public function siteset(){
+        $tpl->cache_lifetime = 0;  //设置缓存时间
 
-        $config = new config('hopeconfig.php',hopedir);   
+        $tpl->caching = false;
 
-        $this->setdata($config->getInfo()); 
+        $tpl->template_dir = hopedir."/templates"; //设置模板目录
 
-   }
+        $tpl->compile_dir = hopedir."/templates_c"; //设置编译目录
+
+
+
+        $tpl->cache_dir = hopedir."/smarty_cache"; //缓存文件夹
+
+        $tpl->left_delimiter = "{";
+
+        $tpl->right_delimiter = "}";
+
+        if (is_array($datas)) {
+            foreach ($datas as $key=>$value) {
+                $tpl->assign($key, $value);
+            }
+        }
+
+        $content = $tpl->fetch('string:'.$htmlcontent); //
+
+        return $content;
+    }
+
+    public function siteset()
+    {
+        $config = new config('hopeconfig.php', hopedir);
+
+        $this->setdata($config->getInfo());
+    }
 
     /**
      * @brief 设置应用的基本路径
@@ -629,71 +510,50 @@ class myapp
      */
 
     public function setBasePath($basePath)
-
     {
-
         $this->basePath = $basePath;
-
     }
 
-    
+
 
     public function getBasePath()
-
     {
-
         return $this->basePath;
-
     }
 
     public function getController()
-
     {
-
-      return $this->controller;
-
+        return $this->controller;
     }
 
-    public function setController($controller){
-
-      $this->controller= $controller;
-
+    public function setController($controller)
+    {
+        $this->controller= $controller;
     }
 
-    public function setAction($action){
-
-       $this->Taction = $action;
-
+    public function setAction($action)
+    {
+        $this->Taction = $action;
     }
 
-    public function getAction(){
-
-      return  $this->Taction;
-
+    public function getAction()
+    {
+        return  $this->Taction;
     }
 
     public function setdata($data)
-
     {
-
         $tempdata = $this->getdata();
 
-        $tempdata = array_merge($tempdata,$data);
+        $tempdata = array_merge($tempdata, $data);
 
         $this->renderData = $tempdata;//合并数组;
-
     }
 
-    
+
 
     public function getdata()
-
     {
-
-       return $this->renderData;
-
+        return $this->renderData;
     }
-
-    
-
 }
