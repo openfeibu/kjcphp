@@ -34,7 +34,6 @@ var webLoca = 'http://192.168.2.3:33/';
 // var locahost ="http://192.168.0.99:8080/xh1.0.0/server.php";
 var tab =window.location.hash.replace(/#\//,"");
 var locaTime = 600000; //十分钟  全局缓存
-var max_loadingNum = loadingText.length-1;
 var workPageNum = 20,shopPageNum=20,quanPageNum=20,pageNum=20;
 $.ajaxSetup({
           xhrFields: {
