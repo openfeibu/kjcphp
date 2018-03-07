@@ -53,6 +53,7 @@
     var backdata = ajaxback(url,info);
     if(backdata.flag == false){
     	// window.location.href = '<{ofunc type=url link="/wxsite/address"}>';
+        $F.closeLoading(); 
         $.toast("修改成功",'text'); 
         return false;
     }else{
