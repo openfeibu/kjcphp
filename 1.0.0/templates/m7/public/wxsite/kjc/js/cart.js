@@ -51,6 +51,12 @@ function freshcartdata(datas,$payflag){
             $('#addressprice').after(htmls);
         });
     }
+    cartbagcost = datas.content.bagcost;
+    cxcost =  datas.content.downcost;
+    cartsum = datas.content.sum;
+    cartpscost = datas.content.pscost;
+    surecost = datas.content.surecost-juancost;
+
     var allcost1 = (Number(datas.content.sum)+Number(datas.content.bagcost)-Number(juancost)-Number(datas.content.downcost)).toFixed(2);
     var allcost = allcost1>0?allcost1:0;
     $('.surecost').text('￥'+allcost);
@@ -160,55 +166,7 @@ function doselectjuan1(){
         if(juanlist.length > 0){
             var htmle = '';
             var checkcost = Number(cartsum)+Number(cartbagcost);
-            /*
-            $.each(juanlist,function(i,field){  //可用优惠券
-                var juancost = Number(field.limitcost);
-                var jpaytype = $('input[name="paytype"]').val();
-                jpaytype = Number(jpaytype)+1;
-                if(field.paytype == '' || field.paytype == 'undefined' || field.paytype == null){
-                    var paytypearr = '1,2';
-                }else{
-                    var paytypearr = field.paytype.split(",");
-                }
-                if(checkcost >= juancost && contains(paytypearr,jpaytype)){
-                    var can = 'yes';
 
-                    var temp_pre = oldjuanid == field.id ?'on':'';
-                    htmle +='<div class="discoupon"   style="background-color: #fff; border-radius:0">';
-                    htmle +='<div style="padding-bottom: 5px;">';
-                    if(checkcost >= juancost && contains(paytypearr,jpaytype)){
-                        htmle +='<div class="checkjuan c_'+field.id+'"  onclick="selectjuan(\''+field.id+'\',\''+field.cost+'\',\''+field.limitcost+'\',\''+field.name+'\',\''+field.paytype+'\')"></div>';
-                    }
-                    htmle +='<div style="display:inline-block;text-align:center;width:30%;margin-top: 10px;">';
-                    htmle +='<p class="'+can+'"><font style="color:red">￥</font><font style="color:red;font-size: 30px;font-weight: bold;">'+field.cost+'</font></p>';
-                    htmle +='<p><div id="'+can+'" style="text-align:center;font-size:11px;background-color: #FFE4E1;border-radius: 25px;height: 22px;margin-left: 5px;">满'+field.limitcost+'元可用</div></p>';
-                    htmle +='</div><div style="display:inline-block;text-align:center"><ul class="'+can+'">';
-                    htmle +='<li  style="font-size: 14px; font-weight:bold;text-align:left">'+field.name+'</li>';
-                    htmle +='<li  style="font-size: 11px;">有效期：'+getdate(field.creattime)+'至'+getdate(field.endtime)+'</li></ul></div></div>	';
-
-                }
-                htmle +='</div>';
-
-            });
-
-            htmle +='<div style="height:40px"></div>';
-            if(htmle == ''){
-                Tmsg('无满足条件的优惠券');
-            }else{
-                var juanid = $('#juanid').val();
-                var isck = $('#juanid').attr('data');
-                if(juanid > 0 || isck == 1){
-
-                }else{
-                    $('#yhjlist').append(htmle);
-                    $('#yhjlist').append('<div class="discoupon notusejuan" onclick="notusejuan();" >不使用优惠券</div>');
-                }
-                $('#gdcart').hide();
-                $('#orderaddress').hide();
-                $('.wmr_title_center').text('选择优惠券');
-                $('#yhjlist').show();
-            }
-            */
         }
 
         setTimeout("myyanchi()", 500 );
@@ -218,4 +176,35 @@ function doselectjuan1(){
 
 function myyanchi(){
     checknext = false;
+}
+/*================获取优惠券信息===================*/
+function getjuaninfo(){
+
+    var oldjuanid = Number($('#juanid').val());
+    if(  typeof(juanlist) != "undefined" ){
+
+        if(juanlist.length > 0){
+            var juancount = 0;
+            var checkcost = Number(cartsum)+Number(cartbagcost);
+
+            $.each(juanlist,function(i,field){
+                var juancost = Number(field.limitcost);
+                if(checkcost >= juancost){
+                    juancount = juancount + 1;
+                    discountids.push(field.cost+','+field.id);
+                    discountvalues.push('满'+field.limitcost+'元-'+field.cost+'元');
+                }
+            });
+            console.log('juancount:'+juancount);
+            if(juancount > 0){
+                $('.checkDiscount').html('<p>优惠券</p><span>'+juancount+'张可用</span>');
+            }else{
+                $('.checkDiscount').html('<p>优惠券</p><span>暂无可用</span>');
+            }
+            console.log('discountids:'+discountids);
+            console.log('discountvalues:'+discountvalues);
+        }else{
+            //$('#juanshuoming').text('暂无可用');
+        }
+    }
 }
