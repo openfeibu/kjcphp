@@ -47,7 +47,7 @@
       empty: true, // 是否允许为空
       onOK: function (input) {
         //点击确认
-        var Ltext = that.find(".weui-cell__ft").text();
+        var Ltext = $("#weui-prompt-input").val();
         $F.loading();
         ajaxurl = '<{ofunc type=url link="/wxsite/updateMobile/datatype/json"}>';
         $.ajax({
