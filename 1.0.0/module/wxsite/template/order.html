@@ -148,7 +148,7 @@ freshpage();
         if(_this.loading) return;
         loadmore(_this);
     });
-$("body").on('click','.order_button_pay',function(){
+$("body").on('click','.order_button_pay2',function(){
     orderid = $(this).attr('orderid');
     url = siteurl+'/index.php?ctrl=wxsite&action=pay&random=@random@';
     $.ajax({         //script定义
@@ -221,7 +221,7 @@ function cancel_order(id)
                 success:function(content) {
                     $F.closeLoading();
                     if(content.error ==  false){
-                        $.toast('申请成功!','text');
+                        $.toast('取消成功!','text');
                         $("#orderList_item_"+id).remove();
                     }else{
                         $.toast(content.msg,'text');
@@ -234,6 +234,36 @@ function cancel_order(id)
         },
         onCancel: function() {}
     });
+}
+function acceptorder(id){
+    $.confirm({
+        text: '确认收货？',
+        onOK: function() {
+            $F.loading();
+            //点击确认
+            var info = {'orderid': id,'typeid':0};
+            var url =  siteurl+'/index.php?ctrl=order&action=acceptorder&orderid='+id+'&datatype=json&random=@random@';
+            $.ajax({
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                data:info,
+                success:function(content) {
+                    $F.closeLoading();
+                    if(content.error ==  false){
+                        $.toast('确认收货成功!','text');
+                        $("#orderList_item_"+id).remove();
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+                    $F.closeLoading();
+                }
+            });
+        },
+        onCancel: function() {}
+    });
+
 }
 </script>
 

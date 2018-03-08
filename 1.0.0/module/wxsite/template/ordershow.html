@@ -82,57 +82,56 @@
       <div class="orderDetail_mask">
         <{$order['content']}>
       </div>
-      <div class="orderDetail_button">
+
         <{if $order['is_reback'] == 0}>
         <{if $order['status'] >= 0 && $order['status'] < 2}>
             <{if $order['is_reback'] == 0  }>
                 <{if $order['paystatus'] == 1 && $allowreback == 1   }>
-                    <a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a>
-                <{/if}>
+                    <div class="orderDetail_button"><a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a></div>
+               <{/if}>
                 <{if $order['paystatus'] == 1 && $order['is_make'] == 0 && $allowreback == 0 }>
-                    <a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a>
+                    <div class="orderDetail_button"><a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a></div>
                 <{/if}>
             <{/if}>
         <{/if}>
         <{if $order['status'] == 4}>
             <{if $order['is_reback'] == 2}>
-                <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a></div>
             <{else}>
-                <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a></div>
             <{/if}>
         <{/if}>
         <{if $order['status'] == 5}>
-            <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
+            <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a></div>
         <{/if}>
         <{if $order['status'] == 0 && $order['paystatus'] == 0  }>
 
-            <a href="javascript:void(0);" class="pay_btn">继续支付</a>
+            <div class="orderDetail_button"><a href="javascript:void(0);" class="pay_btn pay_btn_b" timestamp="<{$order['setime']}>">继续支付(还需<span>00分00秒</span>)</a></div>
         <{/if}>
         <{if $order['status'] == 2  && $order['is_reback'] == 0  }>
-            <a onclick="acceptorder();" href="javascript:void(0);">确认收货 </a>
+            <div class="orderDetail_button"><a onclick="acceptorder('<{$order['id']}>');" href="javascript:void(0);">确认收货 </a></div>
         <{/if}>
         <{if $order['status'] == 3 && $order['is_acceptorder'] == 1 }>
-            <a href="javascript:void(0);" class="orderDetail_button_ed">已完成</a>
+            <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">已完成</a></div>
         <{/if}>
         <{else}>
             <{if $order['is_reback'] == 1}>
-                <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a></div>
             <{else if $order['is_reback'] == 2}>
-                <a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a></div>
             <{else if $order['is_reback'] == 3}>
-                <a href="javascript:void(0);" class="orderDetail_button_ed">拒绝退款</a>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">拒绝退款</a></div>
             <{else if $order['is_reback'] == 4}>
-                <a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a></div>
             <{/if}>
         <{/if}>
 
-      </div>
-      <div class="orderDetail_button">
+      <!-- <div class="orderDetail_button">
             <a href="javascript:void(0);" class="pay_btn pay_btn_b" timestamp="100">继续支付(还需<span>15分00秒</span>)</a>
       </div>
       <div class="orderDetail_button closeOrder">
             <a onclick="javascript:cancel_order('<{$order['id']}>');" href="javascript:void(0);">取消订单 </a>
-      </div>
+      </div> -->
     </div>
     <script>
 
@@ -146,7 +145,7 @@
            window.location.reload();
         }else{
             var min=Math.floor(timestamp/60%60);
-            var sec=Math.floor(timestamp%60);  
+            var sec=Math.floor(timestamp%60);
             if(min < 10){
                 min = '0'+min;
             }
@@ -178,7 +177,7 @@
                     success:function(content) {
                         $F.closeLoading();
                         if(content.error ==  false){
-                            $.toast('申请成功!','text');
+                            $.toast('取消成功!','text');
                             window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+id ;
                         }else{
                             $.toast(content.msg,'text');
@@ -192,6 +191,36 @@
             onCancel: function() {}
         });
     }
+    function acceptorder(id){
+        $.confirm({
+            text: '确认收货？',
+            onOK: function() {
+                $F.loading();
+                //点击确认
+                var info = {'orderid': id,'typeid':0};
+                var url =  siteurl+'/index.php?ctrl=order&action=acceptorder&orderid='+id+'&datatype=json&random=@random@';
+                $.ajax({
+                    url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                    dataType: "json",
+                    data:info,
+                    success:function(content) {
+                        $F.closeLoading();
+                        if(content.error ==  false){
+                            $.toast('确认收货成功!','text');
+                            window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+id ;
+                        }else{
+                            $.toast(content.msg,'text');
+                        }
+                    },
+                    error:function(){
+                        $F.closeLoading();
+                    }
+                });
+            },
+            onCancel: function() {}
+        });
+
+   }
     $("body").on('click','.pay_btn',function(){
         url = siteurl+'/index.php?ctrl=wxsite&action=pay&random=@random@';
         $.ajax({         //script定义

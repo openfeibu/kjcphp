@@ -2305,6 +2305,7 @@ class method extends wxbaseclass
                 $order['paytype'] =  $order['paytype'];
                 #   $order['paystatus'] = $order['paystatus']==1?'已支付':'未支付';
                 $order['paystatus'] = $order['paystatus'] ;
+                $order['setime'] = 15 * 60 - (time() - $order['addtime']);
                 $order['addtime'] = date('Y-m-d H:i:s', $order['addtime']);
                 $order['posttime'] = date('Y-m-d H:i:s', $order['posttime']);
 
@@ -7981,6 +7982,18 @@ CREATE TABLE `xiaozu_shophuiorder` (
     {
         $stationid = intval(IReq::get('stationid'));
         $data['stationid'] = $stationid;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid ='".$this->member['uid']."' ");
+        $this->success('success');
+    }
+    public function updateMobile()
+    {
+        $phone = trim(IFilter::act(IReq::get('phone')));
+        if(!IValidate::suremobi($phone))   $this->message('errphone');
+        $member= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$phone."' and uid = '".$this->member['uid']."' ");
+        if($member){
+            $this->message('手机号已绑定其他账号不能重复绑定');
+        }
+        $data['phone'] = $phone;
         $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid ='".$this->member['uid']."' ");
         $this->success('success');
     }

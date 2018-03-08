@@ -29,7 +29,7 @@
     </a>
     <a class="weui-cell weui-cell_access" href="javascript:;">
       <div class="weui-cell__bd">
-        <p>签名</p>
+        <p>手机号码</p>
       </div>
       <div class="weui-cell__ft">
 
@@ -43,12 +43,35 @@
     var text = $(this).find(".weui-cell__ft").text();
     $.prompt({
       title: '',
-      text: '签名',
+      text: '绑定手机号码',
       input: text,
       empty: true, // 是否允许为空
       onOK: function (input) {
         //点击确认
-        $.toast("修改成功","text")
+        $F.loading();
+        ajaxurl = '<{ofunc type=url link="/wxsite/updateMobile/datatype/json"}>';
+        $.ajax({
+           type: 'POST',
+           async:true,
+           url: ajaxurl,
+           data: {'phone':input},
+           dataType:'json',
+           success: function(content) {
+               $F.closeLoading();
+               if(content.error ==  false)
+               {
+                   $.toast("修改成功","text");
+               }else{
+                   $.toast(content.msg,"text");
+               }
+               console.log(content);
+          },
+          error: function(content) {
+              $F.closeLoading();
+                 //Tmsg('获取失败...');
+          }
+        });
+
       },
       onCancel: function () {
         //点击取消
