@@ -20,13 +20,8 @@
            <a href="javascript:;" class="order_button order_button_pay order_button_pay2 fb-inlineBlock" orderid='<{$items['id']}>' >去付款</a>
        <{/if}>
        <{if $items['status'] >= 0 && $items['status'] < 2 && $items['is_reback'] == 0}>
-           <{if $items['is_reback'] == 0  }>
-               <{if $items['paystatus'] == 1 && $allowreback == 1   }>
-                   <a href="javascript:void(0);" class="order_button order_button_pay fb-inlineBlock" onclick="javascript:cancel_order('<{$items['id']}>');">取消订单</a>
-               <{/if}>
-               <{if $items['paystatus'] == 1 && $items['is_make'] == 0 && $allowreback == 0 }>
-                   <a href="javascript:void(0);" class="order_button order_button_pay fb-inlineBlock" onclick="javascript:cancel_order('<{$items['id']}>');">取消订单</a>
-               <{/if}>
+           <{if $items['paystatus'] == 1 }>
+               <a href="javascript:void(0);" class="order_button order_button_pay fb-inlineBlock" onclick="javascript:cancel_order('<{$items['id']}>');">取消订单</a>
            <{/if}>
        <{/if}>
        <{if $items['status'] == 2 && $items['is_reback'] == 0 }>

@@ -24,7 +24,21 @@
         <p>性别</p>
       </div>
       <div class="weui-cell__ft">
+        <{if $member['sex'] == 1}>
         男
+        <{else if $member['sex'] == 2}>
+        女
+        <{else}>
+        未知
+        <{/if}>
+      </div>
+    </a>
+    <a class="weui-cell " href="javascript:;">
+      <div class="weui-cell__bd">
+        <p>学校</p>
+      </div>
+      <div class="weui-cell__ft">
+        <{$stationadmininfo['stationname']}>
       </div>
     </a>
     <a class="weui-cell weui-cell_access" href="javascript:;">
@@ -33,7 +47,6 @@
       </div>
       <div class="weui-cell__ft"><{$member['phone']}></div>
     </a>
-
   </div>
 </div>
 <script>

@@ -7470,7 +7470,9 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $this->checkwxweb();
 
         $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid = ".$this->member['uid']." ");
+        $stationadmininfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where id = ".$this->stationid." ");
         $data['is_bang'] = $userinfo['is_bang'];
+        $data['stationadmininfo'] = $stationadmininfo;
         Mysite::$app->setdata($data);
     }
     //8.3 个人中心点击我的收藏判断登录
@@ -7887,11 +7889,14 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $user_juan = $this->mysql->select_one("SELECT * FROM ".Mysite::$app->config['tablepre']."juan WHERE alljuanid = ".$value['id']." AND uid = ".$this->member['uid']." ");
             if(!empty($user_juan))
             {
-                $juaninfo[$key]['is_user_juan'] = 1;
+                if($user_juan['status'] == 1 && $user_juan['endtime'] > time()){
+                    $juaninfo[$key]['is_user_juan'] = 1;
+                }else{
+                    unset($juaninfo[$key]);
+                }
             }else{
                 $juaninfo[$key]['is_user_juan'] = 0;
             }
-            $juaninfo[$key]['user_juan'] = $user_juan;
         }
         $data['juaninfo'] = $juaninfo;
         Mysite::$app->setdata($data);
@@ -7937,6 +7942,12 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);
             $data['count'] = $juaninfo['count'] - 1;
             $this->mysql->update(Mysite::$app->config['tablepre'].'alljuan',$data,"id='".$id."'");
+            $tape = array(
+                'name' => '系统消息',
+                'content' => '你已领取一张代金券，请在“我的券包”中查看。',
+                'uid' => $this->member['uid'],
+            );
+            $this->memberCls->insertTape($tape['uid'],$tape['name'],$tape['content']);
             $this->success('success');
         }
     }

@@ -88,10 +88,7 @@
         <{if $order['is_reback'] == 0}>
         <{if $order['status'] >= 0 && $order['status'] < 2}>
             <{if $order['is_reback'] == 0  }>
-                <{if $order['paystatus'] == 1 && $allowreback == 1   }>
-                    <div class="orderDetail_button"><a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a></div>
-               <{/if}>
-                <{if $order['paystatus'] == 1 && $order['is_make'] == 0 && $allowreback == 0 }>
+                <{if $order['paystatus'] == 1}>
                     <div class="orderDetail_button"><a href="javascript:void(0);" onclick="javascript:cancel_order('<{$order['id']}>');">取消订单</a></div>
                 <{/if}>
             <{/if}>
