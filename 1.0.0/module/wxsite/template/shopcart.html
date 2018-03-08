@@ -14,12 +14,13 @@ var backtype = 0;
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/address.js"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/template.min.js"></script>
 <script>
- 
+
     var cartbagcost =0;
     var cartpscost = 0;
     var cartsum = 0;
     var cxcost = 0;
     var surecost = 0;
+    var cxcosttotal = 0;
     var juanlist = <{$juanlist|json_encode}>;
     var wxjuanlist = <{$wxjuanlist|json_encode}>;
     var checknext = false;
@@ -89,9 +90,9 @@ var backtype = 0;
             <p>优惠券</p>
             <span>暂无可用</span>
           </div>
-          
+
           <div class="YHcheckDiscount">
-             
+
           </div>
         </div>
         <div class="orderDetail_money">
