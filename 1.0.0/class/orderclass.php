@@ -393,7 +393,7 @@ class orderclass
                 }
 
                 $temp_content = '在'.Mysite::$app->config['sitename'].'下单成功'.'\n';
-                $temp_content . = '店铺：'.$orderinfo['shopname'].'\n';
+                $temp_content .= '店铺：'.$orderinfo['shopname'].'\n';
                 $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
                 if ($orderinfo['shoptype'] == 100) {
                     $temp_content .='配送时间：'. $orderinfo['postdate'].'\n';
@@ -432,7 +432,7 @@ class orderclass
 
                     $to_sender = $orderinfo['buyername'].$to_sender;
                     foreach($senders as $senderkey => $sender){
-                        $wx_s->sendmsg($to_sender, $sender['openid']  ;
+                        $wx_s->sendmsg($to_sender, $sender['openid'])  ;
                     }
                     if ($wx_s->sendmsg($contents, $wxbuyer['openid'])) {
                     } else {
