@@ -143,12 +143,12 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .orderList .orderspan{ font-size:15px; color:#ffffff; font-family:"微软雅黑";}
 .orderList .orderspan .numOrder{ font-size:24px;padding:0 8px;}
 .orderList .orderspan .seccost{ color:#ec7501; font-size:24px; padding:0 8px;}
-.singleOrder{ width:950px;  background:url(../images/singleOrder.png) repeat; margin-top:30px;} 
-.singleOrder .singleOrder_title{ width:950px; height:54px; background:#6dccf6;}
+.singleOrder{ width:100%;  background:#466572; margin-top:30px;} 
+.singleOrder .singleOrder_title{ width:100%; height:54px; background:#6dccf6;}
 .singleOrder .singleOrder_title .orderNum{ float:left; color:#ffffff; font-size:36px; height:54px; line-height:54px; font-family:"微软雅黑"; width:90px; text-align:center;background:#27a9e3; } 
-.singleOrder .singleOrder_title .order_xx{ font-family:"微软雅黑"; float:left; color:#ffffff; width:800px; height:54px; line-height:54px; }
+.singleOrder .singleOrder_title .order_xx{ font-family:"微软雅黑"; float:left; color:#ffffff; width:990px; height:54px; line-height:54px; }
 .oxx{ color:#076f9c;}
-.order_details{ width:900px; padding:25px; color:#bceafe;display:none;}
+.order_details{ width:1094px; padding:25px; color:#bceafe;display:none;}
 .order_details table{ margin-bottom:26px;}
 .order_details tr td{  height:40px; line-height:40px; padding-left:5px; border-bottom:1px solid #6294a7; }
 .order_listli tr td{ border-bottom: 1px solid #6294a7;
@@ -165,7 +165,9 @@ right: 30px;
 width: 30px; 
 height:54px;
 line-height:54px;
-color:#fff;}
+color:#fff;
+font-size: 30px;
+}
 
 
 

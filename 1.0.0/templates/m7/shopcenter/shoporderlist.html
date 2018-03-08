@@ -82,7 +82,7 @@
       <div class="singleOrder" id="order_area_<{$items['id']}>">
         <div class="singleOrder_title">
           <div class="orderNum"> <span><{$items['daycode']}></span> </div>
-          <div class="order_xx"> <span style=" margin-left:26px;"><span class="oxx">订单号</span>：<{$items['dno']}>
+          <div class="order_xx"  onclick="showdet('<{$items['id']}>',$(this).next('.showorderdet').get(0));"> <span style=" margin-left:26px;"><span class="oxx">订单号</span>：<{$items['dno']}>
 		  			<{if $items['is_goshop'] == 1}> <font color=red>预订<{if $orderinfo['allcost'] == 0}>座位<{else}>座位和菜品<{/if}></font> <{/if}>
 
 		  </span> <span style=" margin-left:30px;"><span class="oxx">下单时间</span>：<{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}></span><span style=" margin-left:30px;">
@@ -182,7 +182,7 @@
 					<div>
 
 			<h3>退款申请信息</h3>
-				    <table class="order_listli" style="font-size: 14px; margin-top: 5px; text-align: left; margin-left: 20px;" width="898" align="center" border="" cellpadding="0" cellspacing="0" bordercolor="#6596a9" >
+				    <table class="order_listli" style="font-size: 14px; margin-top: 5px; text-align: left; margin-left: 20px;" width="1050" align="center" border="" cellpadding="0" cellspacing="0" bordercolor="#6596a9" >
 			<tr>
               <td><div>申请时间: <span><{$items['drawbacklog']['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}></span></div></td>
               <td><div>会员名: <span><{$items['drawbacklog']['username']}></span></div></td>
@@ -226,7 +226,7 @@
 
 
 
-          <table class="order_listli" style="font-size: 14px; margin-top: 5px; text-align: left; margin-left: 20px;" width="898" align="center" border="" cellpadding="0" cellspacing="0" bordercolor="#6596a9" >
+          <table class="order_listli" style="font-size: 14px; margin-top: 5px; text-align: left; margin-left: 20px;" width="1050" align="center" border="" cellpadding="0" cellspacing="0" bordercolor="#6596a9" >
             <tr>
               <td><div>支付方式: <span><{$paytypearr[$items['paytype']]}>(<{if !empty($items['paytype_name'])}><{$payway[$items['paytype_name']]}>，<{/if}><{if $items['paystatus'] == 1}>已付<{else}>未付<{/if}>) </span></div></td>
               <td><div>订单状态: <span>
@@ -276,7 +276,7 @@
             </tr>
           </table>
           <div class="order_alllist">
-            <table style="font-size: 14px; margin-top: 5px; text-align: left; margin-left: 20px;" width="898" align="center" border="1" cellpadding="0" cellspacing="0" bordercolor="#6596a9" >
+            <table style="font-size: 14px; margin-top: 5px; text-align: left; margin-left: 20px;" width="1050" align="center" border="1" cellpadding="0" cellspacing="0" bordercolor="#6596a9" >
               <tr>
                   <td style=" font-weight:bold;" width="55%">美食篮子</td>
                   <td style=" font-size:14px; color:#ffffff; font-weight:bold; font-family:"微软雅黑";"  align="center">单价</td>
