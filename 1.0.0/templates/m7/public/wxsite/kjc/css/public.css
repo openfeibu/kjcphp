@@ -111,3 +111,18 @@
     bottom: 0;
     left: 2.3rem;
 }
+.discount .pro_group_list .pro_group_item .img{
+  border:1px solid #eee;
+  overflow:hidden;
+  border-radius: 2px;
+}
+.shop_group .shop_group_list .shop_group_item .img{
+   width: 1.5rem  !important;
+   height: 1.5rem  !important;
+}
+.shop_group .shop_group_list .shop_group_item{
+  min-height: 1.5rem;
+}
+.shop_group .shop_group_list .shop_group_item .text{
+  margin-left: 1.8rem !important;
+}
