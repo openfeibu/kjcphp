@@ -34,6 +34,14 @@ function freshcartdata(datas,$payflag){
                     +'</div>';
         $('#foodslist').append(temp_htmls);
     }
+    /*==============遍历追加优惠活动信息===============*/
+
+    if (datas.content.cxdet !== null && datas.content.cxdet !== undefined && datas.content.cxdet !== ''){
+        $.each(datas.content.cxdet, function(i,val){
+            var htmls = template.render('cxlist', {list:val});
+            $('#foodslist').append(htmls);
+        });
+    }
     /*==================追加配送费信息===================*/
     if(datas.content.pscost != 0){
         $('input[name="pscost"]').val(datas.content.pscost);
@@ -43,14 +51,7 @@ function freshcartdata(datas,$payflag){
         temp_htmls = '<div class="orderDetail_item"><p>配送费</p><span>￥' +0+'</span></div>';
         $('#foodslist').append(temp_htmls);
     }
-    /*==============遍历追加优惠活动信息===============*/
 
-    if (datas.content.cxdet !== null && datas.content.cxdet !== undefined && datas.content.cxdet !== ''){
-        $.each(datas.content.cxdet, function(i,val){
-            var htmls = template.render('cxlist', {list:val});
-            $('#addressprice').after(htmls);
-        });
-    }
     cartbagcost = datas.content.bagcost;
     cxcost =  datas.content.downcost;
     cartsum = datas.content.sum;
