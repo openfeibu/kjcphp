@@ -4,7 +4,7 @@
  <{block name=bodylist}>
    <{load_data assign="info" table="member" where="`uid`=$id"  type="one"}>
    <{load_data assign="wxinfo" table="wxuser" where="`uid`=$id"  type="one"}>
-   <{load_data assign="stationlist" table="stationadmininfo" fileds="*"  where="stationis_open = 0" orderby=" id desc"}>
+   <{load_data assign="stationlist" table="stationadmininfo" fileds="*"  where="stationis_open = 0" orderby=" id desc" limit="1000"}>
    <div style="width:auto;overflow-x:hidden;overflow-y:auto">
           <div class="tags">
           <div id="tagscontent">

@@ -57,8 +57,10 @@ function freshcartdata(datas,$payflag){
     cartsum = datas.content.sum;
     cartpscost = datas.content.pscost;
     surecost = datas.content.surecost-juancost;
-
+    cxcosttotal = datas.content.cxcosttotal;
+console.log('cxcosttotal0:'+datas.content.cxcosttotal);
     var allcost1 = (Number(datas.content.sum)+Number(datas.content.bagcost)-Number(juancost)-Number(datas.content.downcost)).toFixed(2);
+    console.log('datas.content:'+datas.content);
     var allcost = allcost1>0?allcost1:0;
     $('.surecost').text('￥'+allcost);
 }
@@ -186,8 +188,8 @@ function getjuaninfo(){
 
         if(juanlist.length > 0){
             var juancount = 0;
-            var checkcost = Number(cartsum)+Number(cartbagcost);
-
+            var checkcost = Number(cartsum)+Number(cartbagcost)-Number(cxcosttotal);
+//console.log('cxcosttotal:'+cxcosttotal);
             $.each(juanlist,function(i,field){
                 var juancost = Number(field.limitcost);
                 if(checkcost >= juancost){
