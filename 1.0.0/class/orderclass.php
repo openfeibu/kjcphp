@@ -242,6 +242,8 @@ class orderclass
         $orderdet =  $this->ordmysql->getarr("select *  from ".Mysite::$app->config['tablepre']."orderdet  where order_id= '".$orderid."'   ");
         $shopinfo =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop  where id= '".$orderinfo['shopid']."'   ");
         $memberinfo =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member  where uid= '".$orderinfo['buyeruid']."'   ");
+        //负责人
+        $senders = $this->ordmysql->getarr("select *  from ".Mysite::$app->config['tablepre']."member as m join  ".Mysite::$app->config['tablepre']."wxuser as wm on wm.uid =  m.uid  where m.stationadminid= '".$shopinfo['stationid']."'");
 
         $contents = '';
         $checknotice =  isset($shopinfo['noticetype'])? explode(',', $shopinfo['noticetype']):array();
@@ -391,7 +393,7 @@ class orderclass
                 }
 
                 $temp_content = '在'.Mysite::$app->config['sitename'].'下单成功'.'\n';
-                $temp_content = '店铺：'.$orderinfo['shopname'].'\n';
+                $temp_content . = '店铺：'.$orderinfo['shopname'].'\n';
                 $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
                 if ($orderinfo['shoptype'] == 100) {
                     $temp_content .='配送时间：'. $orderinfo['postdate'].'\n';
@@ -408,7 +410,7 @@ class orderclass
                 foreach ($orderdet as $km=>$vc) {
                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
                 }
-                $contents = $temp_content;
+                $contents = $to_sender = $temp_content;
                 if (!empty($contents)) {
                     $time = time();
                     $tempstr = md5(Mysite::$app->config['wxtoken'].$time);
@@ -428,8 +430,10 @@ class orderclass
                     $linkstr =  Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=index&openid='.$wxbuyer['openid'].'&actime='.$time.'&sign='.$tempstr.'&backinfo='.$backinfo;
                     $contents .= '<a href=\''.trim($dolink).'\'>查看详情</a>';
 
-
-
+                    $to_sender = $orderinfo['buyername'].$to_sender;
+                    foreach($senders as $senderkey => $sender){
+                        $wx_s->sendmsg($to_sender, $sender['openid']  ;
+                    }
                     if ($wx_s->sendmsg($contents, $wxbuyer['openid'])) {
                     } else {
                         logwrite('微信客服发送错误:'.$wx_s->err());
