@@ -2622,23 +2622,24 @@ class method extends wxbaseclass
             }
             //$paytype = intval(IReq::get('paytype'));
             $paytype = 1;
-            $cxclass->setdata($shopid, $carinfo['sum'], $carinfo['shopinfo']['shoptype'], $this->member['uid'], $platform, $paytype);
+            $cxclass->setdata($shopid, $carinfo['sum'] - $carinfo['cxcosttotal'], $carinfo['shopinfo']['shoptype'], $this->member['uid'], $platform, $paytype);
             $cxinfo = $cxclass->getdata();
             #print_r($cxinfo);
             $backdata['surecost'] = $cxinfo['surecost'];
             $backdata['downcost'] = $cxinfo['downcost'];
+            $backdata['cxcosttotal'] = $carinfo['cxcosttotal'];
             $backdata['cxdet'] = $cxinfo['cxdet'];
-            if (!empty($backdata['list'])) {
-                foreach ($backdata['list']  as $v) {
-                    if (!empty($v)) {
-                        if ($v['cxinfo']['is_cx'] == 1 && $v['cxinfo']['cxcost']>0) {
-                            $backdata['downcost'] = 0;
-                            $cxinfo['nops'] = false;
-                            break;
-                        }
-                    }
-                }
-            }
+            // if (!empty($backdata['list'])) {
+            //     foreach ($backdata['list']  as $v) {
+            //         if (!empty($v)) {
+            //             if ($v['cxinfo']['is_cx'] == 1 && $v['cxinfo']['cxcost']>0) {
+            //                 $backdata['downcost'] = 0;
+            //                 $cxinfo['nops'] = false;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
 
             $backdata['gzdata'] = isset($cxinfo['gzdata'])?$cxinfo['gzdata']:array();
             $backdata['zpinfo'] = $cxinfo['zid'];
@@ -2652,6 +2653,7 @@ class method extends wxbaseclass
             }
             $backdata['canps'] = $tempinfo['canps'];
             $backdata['nops'] = $cxinfo['nops'];
+
             $this->success($backdata);
         } else {
             $this->message(array());
@@ -3428,15 +3430,15 @@ class method extends wxbaseclass
         $paytype = $info['paytype'] == 1?1:0;
 
         $info['shopinfo'] = $shopinfo;
-        $info['allcost'] = $carinfo['sum'];
+        $info['allcost'] = $carinfo['sum'] ;
         $info['bagcost'] = $carinfo['bagcost'];
         $info['allcount'] = $carinfo['count'];
         $info['shopps'] = $checkps['pscost'];
         $info['goodslist']   = $carinfo['goodslist'];
+        $info['cxcosttotal'] = $carinfo['cxcosttotal'];
 
         $info['pstype'] = $checkps['pstype'];
         $info['cattype'] = 0;//表示不是预订
-
 
         #print_r($info['addpscost']);
         #print_r($info['shopps']);
