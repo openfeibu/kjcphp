@@ -562,10 +562,10 @@ $ch = curl_init($url);
             } else {
                 $platform=0;
             }
-            $sellrule->setdata($info['shopinfo']['id'], $data['shopcost'], $info['shopinfo']['shoptype'], $info['userid'], $platform, $data['paytype']);
+            $sellrule->setdata($info['shopinfo']['id'], $data['shopcost'] - $info['cxcosttotal'], $info['shopinfo']['shoptype'], $info['userid'], $platform, $data['paytype']);
             //		    $sellrule->setdata($info['shopinfo']['id'],$data['shopcost'],$info['shopinfo']['shoptype']);
             $ruleinfo = $sellrule->getdata();
-
+            /*
             //判断是否存在打折商品
             foreach ($info['goodslist'] as $k=>$v) {
                 if ($v['cxinfo']['is_cx']==1 &&  $v['cxinfo']['cxcost']>0) {
@@ -575,7 +575,7 @@ $ch = curl_init($url);
                     break;
                 }
             }
-
+            */
             $data['pstype'] = $info['pstype'] ;
             $data['shopdowncost'] = $ruleinfo['shopdowncost'];//促销中  平台承担的部分
             $data['cxcost'] = $ruleinfo['downcost'];
