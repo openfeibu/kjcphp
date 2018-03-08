@@ -18,12 +18,8 @@
                         </div>
                         <div class="xuanze_right">
                         	<select name="controltype" id="controltype" onchange="changetxt(this)" style="height:42px;;width:124px;">
-								<option value="1"   selected >满赠活动</option>
                                 <option value="2"   <{if $cxinfo['controltype'] == 2}>selected<{/if}>>满减活动</option>
-                                <option value="3"   <{if $cxinfo['controltype'] == 3}>selected<{/if}>>折扣活动</option>
-                                <{if $sendtype == 1}> 							
-								<option value="4"   <{if $cxinfo['controltype'] == 4}>selected<{/if}>>免配送费</option>
-								<{/if}>								 
+		 
 						    </select>
                         </div>
                         <div class="cl"></div>

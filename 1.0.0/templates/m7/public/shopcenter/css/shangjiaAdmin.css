@@ -127,8 +127,8 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .selOrder .autoRe span{ color:#e47d1b; font-size:46px;}
 
 
-.refresh_set{ width:755px; margin-left:255px; margin-top:15px;}
-.refresh_set .refset{ cursor:pointer; float:left; margin-right:31px; position:relative;  width:87px; height:35px; padding-left:15px; line-height:32px; color:#ffffff; font-family:"微软雅黑"; font-size:14px;  background:url(../images/jbsetBg.png) repeat-x;}
+.refresh_set{ width:540px; margin:0 auto; margin-top:15px;}
+.refresh_set .refset{ cursor:pointer; float:left; margin:0 15px; position:relative;  width:87px; height:35px; padding-left:15px; line-height:32px; color:#ffffff; font-family:"微软雅黑"; font-size:14px;  background:url(../images/jbsetBg.png) repeat-x;}
 .refresh_set .refset img{ position:absolute; top:9px;  left:12px; }
 .refresh_set .refset .current{ background:#ec7501;}
 .order_search{ position:relative; width:1172px; height:55px; background:#311f16; border-bottom:1px solid #2b1f15; line-height:55px; color:#ffffff; font-size:14px; font-family:"微软雅黑"; padding-left:28px;}

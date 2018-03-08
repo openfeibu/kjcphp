@@ -76,9 +76,7 @@
                     <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptotal"}>');" data="baseordertj"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddtj.png" /></div>
 					<a href="<{ofunc type=url link="/shopcenter/shoptotal"}>">订单统计</a></li>
 					
-					<li onclick="openlink('<{ofunc type=url link="/shopcenter/setshophui"}>');" data="baseshorder">
-					<div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddgl.png" /></div>
-					<a href="<{ofunc type=url link="/shopcenter/setshophui"}>">闪惠管理</a></li>
+					
 					
 					
                     
@@ -86,23 +84,7 @@
 					<li onclick="openlink('<{ofunc type=url link="/shopcenter/cxrule"}>');"  data="basecx"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xxgz.png" /></div>
 					<a href="<{ofunc type=url link="/shopcenter/cxrule"}>">促销规则</a></li>
                    
-					<li onclick="openlink('<{ofunc type=url link="/shopcenter/shopask"}>');" data="baseask"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/lygl.png" /></div>
-					<a href="<{ofunc type=url link="/shopcenter/shopask"}>">留言评价</a></li>
-                    
-					<{if $shopinfo['shoptype'] == 0}>
-					<{load_data assign="info" table="shopfast"  type="one"  where="shopid = '<{$shopinfo['id']}>'"}>
-					<{if $info['sendtype'] == 1}>		       
-					<li onclick="openlink('<{ofunc type=url link="/shopcenter/shoppsset"}>');"  data="baseps"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddtj.png" /></div>
-					<a href="<{ofunc type=url link="/shopcenter/shoppsset"}>">配送设置</a></li>           
-					<{/if}>
-					<{else}>								 
-					<{load_data assign="info" table="shopmarket"  type="one"  where="shopid = '<{$shopinfo['id']}>'"}>
-					<{if $info['sendtype'] == 1}>		       
-					<li onclick="openlink('<{ofunc type=url link="/shopcenter/shoppsset"}>');"  data="baseps"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddtj.png" /></div>
-					<a href="<{ofunc type=url link="/shopcenter/shoppsset"}>">配送设置</a></li>           
-					<{/if}>
-					<{/if}>
-                    
+			
 					
 					
 					
