@@ -439,10 +439,10 @@ class orderclass
                             logwrite('配送员微信客服发送错误:'.$wx_s->err());
                         }
                     }
-                    if ($wx_s->sendmsg($contents, $wxbuyer['openid'])) {
-                    } else {
-                        logwrite('微信客服发送错误:'.$wx_s->err());
-                    }
+                    // if ($wx_s->sendmsg($contents, $wxbuyer['openid'])) {
+                    // } else {
+                    //     logwrite('微信客服发送错误:'.$wx_s->err());
+                    // }
                 }
             }
         }

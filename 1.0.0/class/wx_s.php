@@ -1,23 +1,23 @@
-<?php 
+<?php
 
 /**
  * @class wx_s  微信menu 和客服信管理类
- 
- 
+
+
  */
 class wx_s
 {
 	 private $wxtoken;//微信自定义 token
    private $wxappid; //微信  appid
    private $wxsecret;//微信  secret
-   public $access_token; //操作令牌 
+   public $access_token; //操作令牌
    private $errId; //错误号
    private $menulist;//菜单信息
 	 private $ticket;
 	 private $userlist;
 	 private $lookuser;
-	 private $proxypassword = false; 
-	 private $sessionKey = '123456';//登录后所持有的SESSION KEY，即可通过login方法时创建 
+	 private $proxypassword = false;
+	 private $sessionKey = '123456';//登录后所持有的SESSION KEY，即可通过login方法时创建
 	 private $client;
 	 private  $errorcode = array(
 	 '-1'=>'系统繁忙',
@@ -105,34 +105,34 @@ class wx_s
    '40054'=>'invalid sub button url domain');
 	 //  微信access_token  服务令牌
 	 //https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN  微信发送信息  body
-	 //https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN  微信 创建菜单 
+	 //https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN  微信 创建菜单
 	 //https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN  微信  删除菜单
-	 //  返回信息    
-	 //  成功    {"errcode":0,"errmsg":"ok"} 
-	 //  失败     {"errcode":40018,"errmsg":"invalid button name size"} 
-	  function __construct(){ 	  
+	 //  返回信息
+	 //  成功    {"errcode":0,"errmsg":"ok"}
+	 //  失败     {"errcode":40018,"errmsg":"invalid button name size"}
+	  function __construct(){
 	  	$this->wxtoken =  Mysite::$app->config['wxtoken'];
-	  	$this->wxappid =  Mysite::$app->config['wxappid']; 
-	  	$this->wxsecret =  Mysite::$app->config['wxsecret'];  
+	  	$this->wxappid =  Mysite::$app->config['wxappid'];
+	  	$this->wxsecret =  Mysite::$app->config['wxsecret'];
     }
     //获取token
    function checktoken(){
-      $config = new config('autorun.php',hopedir);   
+      $config = new config('autorun.php',hopedir);
 	   	$tempinfo = $config->getInfo();
-	    
+
 	   	if(isset($tempinfo['access_token']) && isset($tempinfo['wx_time'])){
 	   		 $btime = time() - $tempinfo['wx_time'];
 	   		 if($btime < 7000){
 	   		 	 $this->access_token = $tempinfo['access_token'];
 	   		 	 return true;
 	   		}
-	   	   
-	   	}  
+
+	   	}
 	   	//通过post方法获取  当前token;
 	   	$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$this->wxappid.'&secret='.$this->wxsecret);
-	   
+
 	   	$info = json_decode($info,true);
-	   	 
+
 	   	if(isset($info['access_token'])){
 	   		$test['access_token'] = $info['access_token'];
 	   		$this->access_token = $info['access_token'];
@@ -142,7 +142,7 @@ class wx_s
 	   	}else{
 	   		$this->errId=$info['errcode'];
 	   	   return false;
-	   	} 
+	   	}
    }
    function gettoken(){
    	   if($this->checktoken()){
@@ -153,11 +153,11 @@ class wx_s
    }
    function menu(){
    	 if($this->checktoken()){
-   	 	 $info = $this->vpost('https://api.weixin.qq.com/cgi-bin/menu/get?access_token='.$this->access_token); 
-   	 	 
+   	 	 $info = $this->vpost('https://api.weixin.qq.com/cgi-bin/menu/get?access_token='.$this->access_token);
+
    	 	 $info = json_decode($info,true);
    	 	 if(isset($info['errcode'])){
-   	 	   
+
    	 	    if($info['errcode'] == 0){
    	 	    	return true;
    	 	    }else{
@@ -165,9 +165,9 @@ class wx_s
    	 	        return false;
    	 	    }
    	 	 }
-   	 	 
+
    	 	 $this->menulist = $info;
-   	 	 return true; 
+   	 	 return true;
      }
      return false;
    }
@@ -182,7 +182,7 @@ class wx_s
           */
           logwrite($info);
       	   $info = $this->vpost('https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$this->access_token,$info);
-      	   
+
       	   $info = json_decode($info,true);
       	   if(isset($info['errcode'])){
       	     if($info['errcode'] == 0){
@@ -196,18 +196,18 @@ class wx_s
       	  return false;
       }else{
       	  return false;
-      } 
+      }
    }
    function  tickets(){
-   
+
    		if($this->checktoken()){
-   		 
+
    			 $posttr = '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": 123}}}';
-   		 
-   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->access_token,$posttr); 
-   			 
+
+   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->access_token,$posttr);
+
 	       	$info = json_decode($info,true);
-	        
+
 	        if(isset($info['errcode'])){
       	      if($info['errcode'] == 0){
       	 	    	return false;
@@ -218,20 +218,20 @@ class wx_s
       	  }
       	  $this->ticket = $info['ticket'];
       	  return true;
-      
+
       }else{
-       
+
       	return false;
       }
    }
-   
+
    //上传永久店铺扫描地址
    function makeforever($shopid){
-	   if($this->checktoken()){ 
+	   if($this->checktoken()){
 				$posttr = '{"action_name": "QR_LIMIT_STR_SCENE", "action_info": {"scene": {"scene_str": "sp_'.$shopid.'"}}}';
-				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->access_token,$posttr);  
-				 
-				$info = json_decode($info,true); 
+				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token='.$this->access_token,$posttr);
+
+				$info = json_decode($info,true);
 				if(isset($info['errcode'])){
 					if($info['errcode'] == 0){
 						return false;
@@ -239,13 +239,13 @@ class wx_s
 						$this->errId = $info['errcode'];
 						return false;
 					}
-				} 
+				}
 				//{"ticket":"gQH47joAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL2taZ2Z3TVRtNzJXV1Brb3ZhYmJJAAIEZ23sUwMEmm3sUw==","expire_seconds":60,"url":"http:\/\/weixin.qq.com\/q\/kZgfwMTm72WWPkovabbI"}
 				$this->makeurl = $info['url'];
 				$this->ticket = $info['ticket'];
-			 
-				return true; 
-		}else{ 
+
+				return true;
+		}else{
 			return false;
 		}
    }
@@ -254,20 +254,20 @@ class wx_s
    }
    function get_img(){
    	 if($this->tickets()){
-   		  
+
    		  return 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.UrlEncode($this->ticket);
-   	   
+
    	 }else{
    	    return '';
    	 }
    }
-   
-   
+
+
    function get_user($newxid = ''){
-      
+
      if($this->checktoken()){
-   			 
-   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/user/get?access_token='.$this->access_token.'&next_openid='.$newxid); 
+
+   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/user/get?access_token='.$this->access_token.'&next_openid='.$newxid);
 	       	$info = json_decode($info,true);
 	        if(isset($info['errcode'])){
       	     if($info['errcode'] == 0){
@@ -279,16 +279,16 @@ class wx_s
       	  }
       	  $this->userlist = $info;
       	  return true;
-      
+
       }else{
       	return false;
       }
    }
    function showuserinfo($openid){
-   	  if($this->checktoken()){ 
+   	  if($this->checktoken()){
            $info = $this->vpost('https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$this->access_token.'&openid='.$openid.'&lang=zh_CN');  //=OPENID&lang=zh_CN
            $info = json_decode($info,true);
-           
+
 	        if(isset($info['errcode'])){
       	     if($info['errcode'] == 0){
       	 	    	return true;
@@ -300,7 +300,7 @@ class wx_s
              $this->lookuser =$info;
              return true;
           }
-      	 
+
      }else{
         return false;
      }
@@ -309,20 +309,20 @@ class wx_s
       return  $this->lookuser;
    }
    function userlist(){
-     	return  $this->userlist; 
+     	return  $this->userlist;
    }
    //{"ticket":"gQG28DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL0FuWC1DNmZuVEhvMVp4NDNMRnNRAAIEesLvUQMECAcAAA==","expire_seconds":1800}
    function returnmenu(){
-   	
+
       return $this->menulist;
    }
-   function sendmsg($msg,$useropenid){ 
-   
-      if($this->checktoken()){ 
-      	  $poststr = '{"touser":"'.$useropenid.'","msgtype":"text","text":{"content":"'.$msg.'"}}'; 
-   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token='.$this->access_token,$poststr); 
-   			 
-	       	$info = json_decode($info,true); 
+   function sendmsg($msg,$useropenid){
+
+      if($this->checktoken()){
+      	  $poststr = '{"touser":"'.$useropenid.'","msgtype":"text","text":{"content":"'.$msg.'"}}';
+   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token='.$this->access_token,$poststr);
+
+	       	$info = json_decode($info,true);
 	        if(isset($info['errcode'])){
       	     if($info['errcode'] == 0){
       	 	    	return true;
@@ -331,19 +331,19 @@ class wx_s
       	 	        return false;
       	 	    }
       	  }
-      	  
+
       	  return true;
-      
+
       }else{
       	return false;
       }
    }
-   
-   /* 
+
+   /*
    根据OpenID列表群发【订阅号不可用，服务号认证后可用】
 接口调用请求说明
 http请求方式: POST
-https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN 	
+https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
 
 文本：
 
@@ -357,13 +357,13 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
 }
 
 	*/
-   
+
     function qunsendmsg($msg,$useropenidaarr){ 		//高级群发接口
-      if($this->checktoken()){ 
-      	  $poststr = '{"touser":['.$useropenidaarr.'],"msgtype":"text","text":{"content":"'.$msg.'"}}'; 
-   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token='.$this->access_token,$poststr); 
-   			 
-	       	$info = json_decode($info,true); 
+      if($this->checktoken()){
+      	  $poststr = '{"touser":['.$useropenidaarr.'],"msgtype":"text","text":{"content":"'.$msg.'"}}';
+   				$info = $this->vpost('https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token='.$this->access_token,$poststr);
+
+	       	$info = json_decode($info,true);
 	        if(isset($info['errcode'])){
       	     if($info['errcode'] == 0){
       	 	    	return true;
@@ -372,31 +372,31 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
       	 	        return false;
       	 	    }
       	  }
-      	  
+
       	  return true;
-      
+
       }else{
       	return false;
       }
    }
-   
-   
-   
-   function err(){ 
-   	  
-      return  $this->errorcode[$this->errId]; 
+
+
+
+   function err(){
+
+      return  $this->errorcode[$this->errId];
    }
-   
-   
-   
-   
-   
-   
+
+
+
+
+
+
    // JSSDK
-   
+
   public function getSignPackage() {
     $jsapiTicket = $this->getJsApiTicket();
-	
+
     // 注意 URL 一定要动态获取，不能 hardcode.
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -417,7 +417,7 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
       "signature" => $signature,
       "rawString" => $string
     );
-    return $signPackage; 
+    return $signPackage;
   }
 
   private function createNonceStr($length = 16) {
@@ -431,29 +431,29 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
 
   //获取ticket
    function getJsApiTicket(){
-	   
-        $config = new config('autorun.php',hopedir);   
+
+        $config = new config('autorun.php',hopedir);
 	   	$tempinfo = $config->getInfo();
 	   	if(isset($tempinfo['ticket']) && isset($tempinfo['wcx_time'])){
 	   		 $btime = time() - $tempinfo['wcx_time'];
 			 if($btime < 7000){
 	   		 	 $ticket= $tempinfo['ticket'];
-				
+
 	   		 	 return $ticket;
 	   		}
-	   	   
-	   	}  
-		
+
+	   	}
+
  	 	 $accessToken = $this->gettoken();
-		
+
       // 如果是企业号用以下 URL 获取 ticket
       // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
   	/*	    $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
-	  
+
 	   */
 	   	$url = $this->vpost('https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$accessToken.'&type=jsapi');
-	
-		$info = json_decode($url,true);	 
+
+		$info = json_decode($url,true);
 	   	if(isset($info['ticket'])){
 	   		$test['ticket'] = $info['ticket'];
 	   		$ticket = $info['ticket'];
@@ -463,28 +463,28 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
 	   	}else{
 	   		$this->errId=$info['errcode'];
 	   	   return false;
-	   	} 
+	   	}
    }
    /* http请求方式: GET
 			http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID
  */
 	//下载多媒体文件
     function saveMedia($url){
-		
+
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);    
+        curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_NOBODY, 0);    //对body进行输出。
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $package = curl_exec($ch);
         $httpinfo = curl_getinfo($ch);
-       
+
         curl_close($ch);
         $media = array_merge(array('mediaBody' => $package), $httpinfo);
-        
+
         //求出文件格式
         preg_match('/\w\/(\w+)/i', $media["content_type"], $extmatches);
         $fileExt = $extmatches[1];
-		
+
         $filename = time().rand(100,999).".{$fileExt}";
         $dirname = "./upload/wximages/";
         if(!file_exists($dirname)){
@@ -493,28 +493,28 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
         file_put_contents($dirname.$filename,$media['mediaBody']);
         return Mysite::$app->config['siteurl'].'/upload/wximages/'.$filename;
     }
-	
-	
-   
+
+
+
    //post提交数据
-   //$post_string = "app=request&version=beta"; 
+   //$post_string = "app=request&version=beta";
    function vpost($url,$data='',$cookie=''){ // 模拟提交数据函数
       /*1方案*/
-   	      
-              $options = array(  
-                   'http' => array(  
-                       'method' => 'POST',  
-                       // 'content' => 'name=caiknife&email=caiknife@gmail.com',  
-                       'content' => $data,  
-                   ),  
-               );  
-             
-               $result = file_get_contents($url, false, stream_context_create($options));  
-             
-               return $result;  
+
+              $options = array(
+                   'http' => array(
+                       'method' => 'POST',
+                       // 'content' => 'name=caiknife&email=caiknife@gmail.com',
+                       'content' => $data,
+                   ),
+               );
+
+               $result = file_get_contents($url, false, stream_context_create($options));
+
+               return $result;
 			   /*2方案
-			   
-			   
+
+
 			     $curl = curl_init(); // 启动一个CURL会话
     curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
@@ -533,12 +533,12 @@ https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=ACCESS_TOKEN
     }
     curl_close($curl); // 关闭CURL会话
     return $tmpInfo; // 返回数据
-	
-	
+
+
 	   */
  }
 
-   
+
 
 }
 
