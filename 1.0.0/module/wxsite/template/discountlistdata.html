@@ -11,7 +11,11 @@
                 <{if $items['is_cx'] == 1 }><span><{$items['cost']/($items['zhekou']/10)}></span><{/if}>
             </div>
             <div class="pro_nums_x">
-              限购<{$items['cxnum']}>件/天
+              <{if $items['cxnum'] == 0}>
+                无限购
+              <{else}>
+                限购<{$items['cxnum']}>件/天
+              <{/if}>
             </div>
           </div>
           <div class="pro_speed">
