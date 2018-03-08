@@ -216,6 +216,8 @@ class method extends wxbaseclass
 
     public function index()
     {
+        $senders = $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."member as m  join ".Mysite::$app->config['tablepre']."wxuser as wm on wm.uid =  m.uid where m.stationadminid= '127'");
+        var_dump($senders);exit;
        $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
@@ -7853,7 +7855,6 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $nowdate = date('Y-m-d', time());
         $checktime = $nowtime-strtotime($nowdate);
         $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid join ".Mysite::$app->config['tablepre']."shop as s on g.shopid = s.id WHERE s.stationid = ".$this->stationid." AND g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ";
-
         $goods_list = $this->mysql->getarr($sql);
         foreach ($goods_list as $key => $goods) {
             $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
