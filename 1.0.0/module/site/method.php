@@ -2292,8 +2292,8 @@ class method extends baseclass
         /* 更新订单物流信息 */
         $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id = ".$orderid."   ");
         $orderCLs = new orderclass();
-
         $orderCLs->writewuliustatus($orderinfo['id'], 3, $orderinfo['paytype']);  //在线支付成功状态
+        $orderCLs->sendmess($orderid);
         if ($orderinfo['is_make']  == 1) {
             $orderCLs->writewuliustatus($orderinfo['id'], 4, $orderinfo['paytype']);  //商家自动确认接单
             $auto_send = Mysite::$app->config['auto_send'];
@@ -2356,7 +2356,7 @@ class method extends baseclass
 
         // $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."'  ");
         //	$orderclass = new orderclass();
-        $orderCLs->sendmess($orderid);
+
         echo 'success';
         exit;
     }
