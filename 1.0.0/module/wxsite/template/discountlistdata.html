@@ -3,15 +3,19 @@
     <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['shopid']}>"}>">
         <div class="img"><img src="<{$items['img']|default:$shoplogo}>" alt=""></div>
         <div class="text">
-          <div class="pro_name"><{$items['name']}></div>
+          <div class="pro_name"><{$items['name']}>
+            <div class="pro_nums_x">
+              (限购<{$items['cxnum']}>件/天)
+            </div>
+          </div>
           <div class="pro_nums fb-clearfix">
             <div class="pro_nums_m">
                 ￥<{$items['cost']}>
                 <{if $items['is_cx'] == 1 }><span><{$items['cost']/($items['zhekou']/10)}></span><{/if}>
             </div>
-            <div class="pro_nums_x">
+           <!--  <div class="pro_nums_x">
               限购<{$items['cxnum']}>件/天
-            </div>
+            </div> -->
           </div>
           <div class="pro_speed">
             <div class="pro_speed_text">已抢<{$items['sell_count']}>件</div>
