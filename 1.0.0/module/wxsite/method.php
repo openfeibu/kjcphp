@@ -3268,6 +3268,8 @@ class method extends wxbaseclass
     /* 提交订单 start */
     public function makeorder()
     {
+        error_reporting(-1);
+        ini_set('display_errors',1);
         $this->checkwxweb();
         if ($this->checkbackinfo()) {
             if ($this->member['uid'] == 0) {
@@ -3379,9 +3381,9 @@ class method extends wxbaseclass
         $ip_l=new iplocation();
         $ipaddress=$ip_l->getaddress($ip_l->getIP());
         if (isset($ipaddress["area1"])) {
-            if (function_exists(mb_convert_encoding)) {
+            if (function_exists('mb_convert_encoding')) {
                 $info['ipaddress']  = $ipaddress['ip'];//('GB2312','ansi',);
-            } elseif (function_exists(iconv)) {
+            } elseif (function_exists('iconv')) {
                 $info['ipaddress']  = $ipaddress['ip'].iconv('GB2312', $ipaddress["area1"], 'UTF-8');//('GB2312','ansi',);
             } else {
                 $info['ipaddress']='0';
