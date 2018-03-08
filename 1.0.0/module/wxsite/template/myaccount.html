@@ -38,6 +38,7 @@
 </div>
 <script>
   $(".weui-cell_access").on("click",function(){
+    var that = $(this);
     var text = $(this).find(".weui-cell__ft").text();
     $.prompt({
       title: '',
@@ -58,7 +59,8 @@
                $F.closeLoading();
                if(content.error ==  false)
                {
-                  $(".weui-cell_access .weui-cell__ft").text(text)
+                  console.log(text)
+                  that.find(".weui-cell__ft").text(text)
                    $.toast("修改成功","text");
                }else{
                    $.toast(content.msg,"text");
