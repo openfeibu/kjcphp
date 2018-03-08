@@ -432,7 +432,12 @@ class orderclass
 
                     $to_sender = $orderinfo['buyername'].$to_sender;
                     foreach($senders as $senderkey => $sender){
-                        $wx_s->sendmsg($to_sender, $sender['openid'])  ;
+                        if($wx_s->sendmsg($to_sender, $sender['openid'])){
+                            logwrite('配送员微信客服发送开始');
+                            sleep(0.5);
+                        }else{
+                            logwrite('配送员微信客服发送错误:'.$wx_s->err());
+                        }
                     }
                     if ($wx_s->sendmsg($contents, $wxbuyer['openid'])) {
                     } else {
