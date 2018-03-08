@@ -451,7 +451,7 @@ class orderclass
 
         //短信通知买家有效
         $contents = '';
-
+        /*
         if (Mysite::$app->config['allowedsendbuyer'] == 1) {
             if ($orderinfo['paytype_name'] == 'open_acout') {
                 $orderinfo['buyerphone'] = $memberinfo['phone'];
@@ -472,7 +472,7 @@ class orderclass
                     $phonecode->sendother($contents);
                 }
             }
-        }
+        }*/
     }
 
 
