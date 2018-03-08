@@ -632,7 +632,7 @@ class memberclass
             }
         }
     }
-    public function insertTape($uid,$name,$content,$type = 'system')
+    public function insertTape($uid,$name = '系统消息',$content,$type = 'system')
     {
         $data['uid'] = $uid;
         $data['name'] = $name;

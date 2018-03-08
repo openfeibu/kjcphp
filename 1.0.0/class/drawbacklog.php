@@ -91,7 +91,7 @@ class drawbacklog
             $this->error = '该订单未支付';
             return false;
         }
-        if ($orderinfo['status'] < 1 || $orderinfo['status'] >= 3 || ($orderinfo['is_make'] ==1 && Mysite::$app->config['allowreback'] != 1)) {
+        if ($orderinfo['status'] < 1 || $orderinfo['status'] >= 3) {
             $this->error = '订单状态不能申请退款';
             return false;
         }
