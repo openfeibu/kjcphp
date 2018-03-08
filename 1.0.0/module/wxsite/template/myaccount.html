@@ -47,6 +47,7 @@
       empty: true, // 是否允许为空
       onOK: function (input) {
         //点击确认
+        var Ltext = that.find(".weui-cell__ft").text();
         $F.loading();
         ajaxurl = '<{ofunc type=url link="/wxsite/updateMobile/datatype/json"}>';
         $.ajax({
@@ -59,8 +60,7 @@
                $F.closeLoading();
                if(content.error ==  false)
                {
-                  console.log(text)
-                  that.find(".weui-cell__ft").text(text)
+                  that.find(".weui-cell__ft").text(Ltext)
                    $.toast("修改成功","text");
                }else{
                    $.toast(content.msg,"text");
