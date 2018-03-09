@@ -2616,4 +2616,16 @@ class method extends baseclass
 
         $this->success('success');
     }
+    public function orderReceiving()
+    {
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."order where status = 2 AND is_reback = 0 AND sendtime <= (select date_sub(now(), interval 2 HOUR))";
+        $orders = $this->mysql->getarr($sql);
+        foreach($orders as $key => $value)
+        {
+            $orderid = $value['id'];
+    		$userctlord = new userctlord($orderid,$value['buyeruid'],$this->mysql);
+            $userctlord->sureorder();
+        }
+        exit;
+    }
 }
