@@ -143,3 +143,9 @@
 .c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_money {
   width: 20% !important;
 }
+.orderDetail .orderDetail_mask{
+  font-size: 0.3rem !important;
+}
+.c_orderDetail .orderDetail_mask textarea{
+  font-size: 0.3rem !important;
+}
