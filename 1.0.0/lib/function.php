@@ -332,3 +332,7 @@ function friendlyDate($sTime, $type = 'mohu', $alt = 'false')
         }
     }
 }
+function buildSn($prefix = ''){
+    $out_trade_no = $prefix.'KJC'.date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+    return $out_trade_no;
+}
