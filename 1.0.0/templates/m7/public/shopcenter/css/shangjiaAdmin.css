@@ -1,3 +1,5 @@
+select{border:1px solid #eee;background: #fff;line-height: 26px;    width: 60px;
+    height: 30px;}
 .curbtn {cursor: pointer;}
 .content{ width:1200px; height:auto; margin:0 auto; margin-top:90px; position:relative; min-height: 758px;}
 
@@ -86,7 +88,7 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 
 
 /********店铺设置--外卖设置***************/
-.conWaiSet{ width:1200px;  padding:0 ; height:auto; background:url(../images/conRightBg.png) repeat-y 0 0 /100% auto;min-height: 800px;}
+.conWaiSet{ width:1200px;  padding:0 ; height:auto; /*background:url(../images/conRightBg.png) repeat-y 0 0 /100% auto;*/background:rgb(59, 54, 58);min-height: 800px;}
 .shopSetTop{ width:1200px; height:42px; background:#27a9e3; }
 .shopSetTop span{ height:42px; font-family:"微软雅黑"; line-height:42px; font-size:16px; color:#ffffff; background:url(../images/wmsetBg.png) 18px center no-repeat; padding-left:47px;}
 .waimaiset{ width:1140px; height:40px;  background:#605d5b;   padding: 30px  ;}
@@ -98,7 +100,7 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .waimaiset .jbset .current{ background:#ec7501;}
 
 #loginForm{}
-.jutiSet{ padding:48px 95px 36px 95px; width:1010px; height:auto; background:rgba(43,39,39,0.98); position:relative;}
+.jutiSet{ padding:48px 95px 36px 95px; width:1010px; height:auto;  position:relative;}
 .jutiSet .serxuanze{ width:780px; height:42px; margin-bottom:18px;}
 .jutiSet .serxuanze .xuanze_left{ float:left; width:168px; height:42px;}
 .jutiSet .serxuanze .xuanze_left span{ height:42px; line-height:42px; font-size:14px; font-family:"宋体"; color:#ffffff; float:left;}
@@ -131,7 +133,7 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .refresh_set .refset{ cursor:pointer; float:left; margin:0 15px; position:relative;  width:87px; height:35px; padding-left:15px; line-height:32px; color:#ffffff; font-family:"微软雅黑"; font-size:14px;  background:url(../images/jbsetBg.png) repeat-x;}
 .refresh_set .refset img{ position:absolute; top:9px;  left:12px; }
 .refresh_set .refset .current{ background:#ec7501;}
-.order_search{ position:relative; width:1172px; height:55px; background:#311f16; border-bottom:1px solid #2b1f15; line-height:55px; color:#ffffff; font-size:14px; font-family:"微软雅黑"; padding-left:28px;}
+.order_search{ position:relative; width:1172px; height:55px;  border-bottom:1px solid #2b1f15; line-height:55px; color:#ffffff; font-size:14px; font-family:"微软雅黑"; padding-left:28px;}
 .order_search input{ color:#ffffff;}
 .chaxun{ color:#27a9e3;}
 .xzrq{width:163px; height:27px; background:#656565; border:none;line-height:27px;}
@@ -180,7 +182,7 @@ font-size: 30px;
 .addFenlei input{ border:none; width:182px; height:36px; background:#fff;text-indent:1em;}
 .orderset .addButton { background:url(../images/addFenlei.png) no-repeat;  width:124px; height:38px; line-height:38px;}
 
-.caidanSet{  width:1010px;padding:0 95px 0 95px; height:auto;  background:rgba(43,39,39,0.98); position:relative;}
+.caidanSet{  width:1010px;padding:0 95px 0 95px; height:auto;  position:relative;}
 .caidanTitle{ width:1010px; height:42px; background:#544e48;}
 .caidanTitle ul li { font-family:"微软雅黑"; font-size:14px; height:42px; line-height:42px; text-align:center; padding:0 33px; color:#f0f0f0; float:left; cursor:pointer;}
 
@@ -487,3 +489,9 @@ input[type="text"]{-webkit-appearance: none;
     -moz-appearance: none;
     outline: none}
 .addDate{width: 124px;height: 38px;line-height: 38px;display: block;line-height: 38px;text-align: center;color: #fff;background: #ec7401;}
+.shoptx_info{margin:0 auto;color: #fff;font-size: 14px;line-height: 36px;padding:50px;}
+.shoptx_money{color: #fff;font-size: 14px;line-height: 36px;margin:20px 0;}
+.shoptx_form{}
+.shoptx_form input[type="text"]{width: 350px;height: 36px;border: 1px solid #eee;background: #fff;text-indent: 1em;border-radius: 2px;}
+.shoptx_form input[type="submit"]{width: 120px;height: 38px;border: 1px solid #27a9e3;background: #27a9e3;cursor: pointer;display: block;color: #fff;font-size: 14px;margin:20px 0;border-radius: 2px;}
+.shoptx_des{font-size: 12px;color: #ddd}
