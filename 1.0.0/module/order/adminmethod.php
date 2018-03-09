@@ -365,6 +365,9 @@ class method extends adminbaseclass
     // 8.6
     public function systemdraworder()
     { // 管理员直接在订单处 退款 ，并且生成退款记录
+        $weixindir = hopedir.'/plug/pay/weixin/';
+        require_once $weixindir."lib/WxPay.Api.php";
+
         $id = intval(IReq::get('id'));
         $type = IReq::get('type');
         if (empty($id)) {
@@ -376,82 +379,77 @@ class method extends adminbaseclass
         }
         switch ($type) {
               case 'drawback'://退款成功
-              //获取退款记录
+                //获取退款记录
                 if ($orderinfo['status'] > 3) {
-                    $this->message('订单状态不能退款');
+                $this->message('订单状态不能退款');
                 }
                 if ($orderinfo['paystatus']  != 1) {
-                    $this->message('订单未支付');
+                $this->message('订单未支付');
                 }
                 if ($orderinfo['is_reback']  > 0) {
-                    $this->message('已申请退款请到退款管理里处理退款');
+                $this->message('已申请退款请到退款管理里处理退款');
                 }
 
                 //直接退款限制在下单后24小时
                 if ($orderinfo['status'] == 3) {
-                    $this->message('订单已完成不能直接退款');
-                    /*
-                    $checktime = $orderinfo['sendtime']+86400;
-                    if($checktime < time()){
-                        $this->message('配送时间已超过24小时,退款失败');
-                    }
-                    */
+                $this->message('订单已完成不能直接退款');
+                /*
+                $checktime = $orderinfo['sendtime']+86400;
+                if($checktime < time()){
+                $this->message('配送时间已超过24小时,退款失败');
+                }
+                */
                 }
                 //当订单已完成 限制在多少时间
+                $input = new WxPayRefund();
+                $input->SetTransaction_id($orderinfo['trade_no']);
+                $input->SetTotal_fee($orderinfo['allcost'] * 100);
+                $input->SetRefund_fee($orderinfo['allcost'] * 100);
+                $input->SetOut_refund_no(buildSn());
+                $input->SetOp_user_id(WxPayConfig::MCHID);
+                //微信退款
+                $result = WxPayApi::refund($input);
+                // 这句file_put_contents是用来查看服务器返回的退款结果 测试完可以删除了
+                //file_put_contents(APP_ROOT.'/Api/wxpay/logs/log4.txt',arrayToXml($result),FILE_APPEND);
+                if(($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')){
+                    $zengcost = IReq::get('zengcost');
+                    $is_phonenotice = IReq::get('is_phonenotice');
+                    $notice_content = IReq::get('notice_content');
 
-               $zengcost = IReq::get('zengcost');
-               $is_phonenotice = IReq::get('is_phonenotice');
-               $notice_content = IReq::get('notice_content');
+                    $arr['is_reback'] = 2;//订单状态
+                    $arr['status'] = 5;
+                    $this->mysql->update(Mysite::$app->config['tablepre'].'order', $arr, "id='".$id."'");
+                    $ordCls = new orderclass();
 
-               $arr['is_reback'] = 2;//订单状态
-               $arr['status'] = 5;
-                $this->mysql->update(Mysite::$app->config['tablepre'].'order', $arr, "id='".$id."'");
-
-               if ($orderinfo['paytype_name'] == 'open_acout') {
-                   if (!empty($orderinfo['buyeruid'])) {
-                       $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$orderinfo['buyeruid']."'   ");
-                       if (!empty($memberinfo)) {
-                           $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`cost`=`cost`+'.$zengcost, "uid ='".$orderinfo['buyeruid']."' ");
-                       }
-                       $bdliyou = $is_phonenotice==0?"管理员退款给用户":$notice_content;
-                       $shengyucost = $memberinfo['cost']+$zengcost;
-                       $this->memberCls->addmemcostlog($orderinfo['buyeruid'], $memberinfo['username'], $memberinfo['cost'], 1, $zengcost, $shengyucost, $bdliyou, ICookie::get('adminuid'), ICookie::get('adminname'));
-                       $this->memberCls->addlog($orderinfo['buyeruid'], 2, 1, $zengcost, '退款处理', $bdliyou, $shengyucost);
-                       if ($is_phonenotice == 1 && !empty($memberinfo['phone'])) {
-                           $this->fasongmsg($notice_content, $memberinfo['phone'])  ;
-                           logwrite("管理员退款余额变动发送给用户成功");
-                       }
-                   }
-               }
-
-//			    if($orderinfo['pstype'] == 2){
-//					$psbinterface = new psbinterface();
-//					if($psbinterface->psbnoticereback($orderinfo['id'])){
-//
-//					}
-//				}
-
-               $ordCls = new orderclass();
-
-               $ordCls->writewuliustatus($orderinfo['id'], 14, $orderinfo['paytype']);  // 管理员退款给用户 物流信息
+                    $ordCls->writewuliustatus($orderinfo['id'], 14, $orderinfo['paytype']);  // 管理员退款给用户 物流信息
 
 
-               //退款成功给用户 下面写退款记录
-               $drawdata['uid'] = $orderinfo['buyeruid'];
-               $memberinfoone  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid=".$drawdata['uid']."  ");
-               $drawdata['username'] = $memberinfoone['username'];
-               $drawdata['bkcontent'] = IReq::get('reasons');
-               $drawdata['addtime'] = time();
-               $drawdata['orderid'] = 	$orderinfo['id'];
-               $drawdata['shopid'] = 	$orderinfo['shopid'];
-               $drawdata['cost'] = 	 $zengcost;
-               $drawdata['status'] = 	1;
-               $drawdata['admin_id'] = 	ICookie::get('adminuid');
-               $drawdata['type'] = 1;
-               $this->mysql->insert(Mysite::$app->config['tablepre'].'drawbacklog', $drawdata);
+                    //退款成功给用户 下面写退款记录
+                    $drawdata['uid'] = $orderinfo['buyeruid'];
+                    $memberinfoone  = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid=".$drawdata['uid']."  ");
+                    $drawdata['username'] = $memberinfoone['username'];
+                    $drawdata['bkcontent'] = IReq::get('reasons');
+                    $drawdata['addtime'] = time();
+                    $drawdata['orderid'] = 	$orderinfo['id'];
+                    $drawdata['shopid'] = 	$orderinfo['shopid'];
+                    $drawdata['cost'] = 	 $zengcost;
+                    $drawdata['status'] = 	1;
+                    $drawdata['admin_id'] = 	ICookie::get('adminuid');
+                    $drawdata['type'] = 1;
+                    $this->mysql->insert(Mysite::$app->config['tablepre'].'drawbacklog', $drawdata);
 
-                  $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$id' and status != 3");  //写配送订单
-              //     $ordCls->noticeback($id);
+                    $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$id' and status != 3");  //写配送订单
+                    //     $ordCls->noticeback($id);
+                }else if(($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')){
+                    //退款失败
+                    //原因
+                    $reason = (empty($result['err_code_des'])?$result['return_msg']:$result['err_code_des']);
+                    $this->message($reason);
+                }else{
+                    $this->message("退款失败");
+                }
+                //等待
+
           break;
           case 'undrawback'://退款不成功
                 if ($orderinfo['status'] > 3) {
@@ -537,6 +535,10 @@ class method extends adminbaseclass
     }
     public function ordercontrol()
     {
+        error_reporting(-1);
+        ini_set('display_errors',1);
+        $weixindir = hopedir.'/plug/pay/weixin/';
+        require_once $weixindir."lib/WxPay.Api.php";
         $id = intval(IReq::get('id'));
         $type = IReq::get('type');
         if (empty($id)) {
@@ -817,14 +819,14 @@ class method extends adminbaseclass
                                $juandata['card'] = $nowtime.rand(100, 999);
                                $juandata['card_password'] =  substr(md5($juandata['card']), 0, 5);
                                $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
-       $juandata['creattime'] = $nowtime;// 制造时间
-       $juandata['cost'] = Mysite::$app->config['tui_juancost'];// 优惠金额
-       $juandata['limitcost'] =  Mysite::$app->config['tui_juanlimit'];// 购物车限制金额下限
-       $juandata['endtime'] = $endtime;// 失效时间
-       $juandata['uid'] = $upuser['uid'];// 用户ID
-       $juandata['username'] = $upuser['username'];// 用户名
-       $juandata['name'] = '推荐送优惠券';//  优惠券名称
-           $this->mysql->insert(Mysite::$app->config['tablepre'].'juan', $juandata);
+                               $juandata['creattime'] = $nowtime;// 制造时间
+                               $juandata['cost'] = Mysite::$app->config['tui_juancost'];// 优惠金额
+                               $juandata['limitcost'] =  Mysite::$app->config['tui_juanlimit'];// 购物车限制金额下限
+                               $juandata['endtime'] = $endtime;// 失效时间
+                               $juandata['uid'] = $upuser['uid'];// 用户ID
+                               $juandata['username'] = $upuser['username'];// 用户名
+                               $juandata['name'] = '推荐送优惠券';//  优惠券名称
+                               $this->mysql->insert(Mysite::$app->config['tablepre'].'juan', $juandata);
                                $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`parent_id`=0', "uid ='".$orderinfo['buyeruid']."' ");
                                $logdata['uid'] = $upuser['uid'];
                                $logdata['childusername'] = $memberinfo['username'];
@@ -868,58 +870,70 @@ class method extends adminbaseclass
                if ($orderinfo['is_reback'] == 2) {
                    $this->message('订单已退款成功不能重复操作');
                }
+               $input = new WxPayRefund();
+               $input->SetTransaction_id($orderinfo['trade_no']);
+               $input->SetTotal_fee($orderinfo['allcost'] * 100);
+               $input->SetRefund_fee($orderinfo['allcost'] * 100);
+               $input->SetOut_refund_no(buildSn());
+               $input->SetOp_user_id(WxPayConfig::MCHID);
+               //微信退款
+               $result = WxPayApi::refund($input);
+               if(($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')){
 
+                   $arr['is_reback'] = 2;//订单状态
+                   $arr['status'] = 4;
+                    $this->mysql->update(Mysite::$app->config['tablepre'].'order', $arr, "id='".$id."'");
+                   $data['bkcontent'] = IReq::get('reasons');
+                   $data['status'] = 1;//
+                   $data['admin_id'] = ICookie::get('adminuid');
+                   $data['cost'] = $zengcost;
+                   $this->mysql->update(Mysite::$app->config['tablepre'].'drawbacklog', $data, "id='".$drawbacklog['id']."'");
 
+                   if ($orderinfo['paytype_name'] == 'open_acout') {
+                       if (!empty($orderinfo['buyeruid'])) {
+                           $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$orderinfo['buyeruid']."'   ");
+                           if (!empty($memberinfo)) {
+                               $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`cost`=`cost`+'.$zengcost, "uid ='".$orderinfo['buyeruid']."' ");
+                               $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`score`=`score`+'.$orderinfo['scoredown'], "uid ='".$orderinfo['buyeruid']."' ");
+                           }
+                           $bdliyou = $is_phonenotice==0?"管理员退款给用户":$notice_content;
+                           $shengyucost = $memberinfo['cost']+$zengcost;
 
-
-
-
-               $arr['is_reback'] = 2;//订单状态
-               $arr['status'] = 4;
-                $this->mysql->update(Mysite::$app->config['tablepre'].'order', $arr, "id='".$id."'");
-               $data['bkcontent'] = IReq::get('reasons');
-               $data['status'] = 1;//
-               $data['admin_id'] = ICookie::get('adminuid');
-               $data['cost'] = $zengcost;
-               $this->mysql->update(Mysite::$app->config['tablepre'].'drawbacklog', $data, "id='".$drawbacklog['id']."'");
-
-               if ($orderinfo['paytype_name'] == 'open_acout') {
-                   if (!empty($orderinfo['buyeruid'])) {
-                       $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$orderinfo['buyeruid']."'   ");
-                       if (!empty($memberinfo)) {
-                           $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`cost`=`cost`+'.$zengcost, "uid ='".$orderinfo['buyeruid']."' ");
-                           $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`score`=`score`+'.$orderinfo['scoredown'], "uid ='".$orderinfo['buyeruid']."' ");
+                           $this->memberCls->addmemcostlog($orderinfo['buyeruid'], $memberinfo['username'], $memberinfo['cost'], 1, $zengcost, $shengyucost, $bdliyou, ICookie::get('adminuid'), ICookie::get('adminname'));
+                           $this->memberCls->addlog($orderinfo['buyeruid'], 2, 1, $zengcost, '退款处理', $bdliyou, $shengyucost);
+                           if ($is_phonenotice == 1) {
+                               $this->fasongmsg($notice_content, $orderinfo['buyerphone']);
+                               logwrite("管理员退款余额变动发送给用户成功");
+                           }
                        }
-                       $bdliyou = $is_phonenotice==0?"管理员退款给用户":$notice_content;
-                       $shengyucost = $memberinfo['cost']+$zengcost;
-
-                       $this->memberCls->addmemcostlog($orderinfo['buyeruid'], $memberinfo['username'], $memberinfo['cost'], 1, $zengcost, $shengyucost, $bdliyou, ICookie::get('adminuid'), ICookie::get('adminname'));
-                       $this->memberCls->addlog($orderinfo['buyeruid'], 2, 1, $zengcost, '退款处理', $bdliyou, $shengyucost);
-                       if ($is_phonenotice == 1) {
-                           $this->fasongmsg($notice_content, $orderinfo['buyerphone']);
-                           logwrite("管理员退款余额变动发送给用户成功");
+                   } else {
+                       if (!empty($orderinfo['buyeruid'])) {
+                           $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$orderinfo['buyeruid']."'   ");
+                           if (!empty($memberinfo)) {
+                               $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`score`=`score`+'.$orderinfo['scoredown'], "uid ='".$orderinfo['buyeruid']."' ");
+                           }
                        }
                    }
-               } else {
-                   if (!empty($orderinfo['buyeruid'])) {
-                       $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$orderinfo['buyeruid']."'   ");
-                       if (!empty($memberinfo)) {
-                           $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`score`=`score`+'.$orderinfo['scoredown'], "uid ='".$orderinfo['buyeruid']."' ");
-                       }
-                   }
-               }
-                /* if($orderinfo['pstype'] == 2){
-                    $psbinterface = new psbinterface();
-                    if($psbinterface->psbnoticereback($orderinfo['id'])){
+                    /* if($orderinfo['pstype'] == 2){
+                        $psbinterface = new psbinterface();
+                        if($psbinterface->psbnoticereback($orderinfo['id'])){
 
-                    }
-                } */
-               $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$id' and status != 3");
-               $ordCls = new orderclass();
+                        }
+                    } */
+                   $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$id' and status != 3");
+                   $ordCls = new orderclass();
 
-               $ordCls->writewuliustatus($orderinfo['id'], 14, $orderinfo['paytype']);  // 管理员退款给用户 物流信息
+                   $ordCls->writewuliustatus($orderinfo['id'], 14, $orderinfo['paytype']);  // 管理员退款给用户 物流信息
 
                    $ordCls->noticeback($id);
+               }else if(($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')){
+                   //退款失败
+                   //原因
+                   $reason = (empty($result['err_code_des'])?$result['return_msg']:$result['err_code_des']);
+                   $this->message($reason);
+               }else{
+                   $this->message("退款失败");
+               }
           break;
           case 'undrawback'://退款不成功
                 $zengcost = IReq::get('zengcost');
