@@ -3452,4 +3452,8 @@ class method extends baseclass
         $data['typearray'] = $typearray;
         Mysite::$app->setdata($data);
     }
+    public function shoptx()
+    {
+        
+    }
 }
