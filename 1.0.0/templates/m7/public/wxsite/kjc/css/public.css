@@ -126,3 +126,17 @@
 .shop_group .shop_group_list .shop_group_item .text{
   margin-left: 1.8rem !important;
 }
+.c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_name{
+  width: 65% !important;;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_num{
+  width: 12% !important;
+  
+}
+.c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_money {
+  width: 23% !important;
+
+}
