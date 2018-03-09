@@ -886,12 +886,17 @@
 
     //结算
     $(".shop-buy").on("click", function() {
-        if($(this).hasClass("active")){
+        if($(this).hasClass("active") && $(".shop-car-icon").hasClass("active")){
           var id = "<{$id}>";
           var carturl = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+id;
           window.location.href = carturl;   
         }else{
-          $.toast($(this).text(),"text")
+          if(!$(".shop-car-icon").hasClass("active")){
+            $.toast('购物车不可为空',"text")
+          }else{
+            $.toast($(this).text(),"text")
+          }
+          
         }
     })
     function openType(id){
