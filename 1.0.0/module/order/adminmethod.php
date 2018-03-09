@@ -535,8 +535,6 @@ class method extends adminbaseclass
     }
     public function ordercontrol()
     {
-        error_reporting(-1);
-        ini_set('display_errors',1);
         $weixindir = hopedir.'/plug/pay/weixin/';
         require_once $weixindir."lib/WxPay.Api.php";
         $id = intval(IReq::get('id'));
@@ -925,7 +923,7 @@ class method extends adminbaseclass
 
                    $ordCls->writewuliustatus($orderinfo['id'], 14, $orderinfo['paytype']);  // 管理员退款给用户 物流信息
 
-                   $ordCls->noticeback($id);
+                 //  $ordCls->noticeback($id);
                }else if(($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')){
                    //退款失败
                    //原因
