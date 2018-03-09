@@ -138,8 +138,16 @@ var backtype = 0;
           $(".checkDiscount span").text("-￥"+val);
           $('#juanid').val(valArr[1]);
           $('#juancost').val(val);
-    	  $('input[name="yhjcost"]').val(val);
+    	    $('input[name="yhjcost"]').val(val);
           freshcart(1);
+      }else{
+          $(".checkDiscount span").text("不使用优惠券");
+
+          $('#juanid').val(valArr[1]);
+          $('#juancost').val(val);
+          $('input[name="yhjcost"]').val(val);
+
+          freshcart(1)
       }
 
     }
