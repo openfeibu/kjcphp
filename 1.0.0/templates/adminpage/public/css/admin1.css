@@ -90,6 +90,13 @@ body {
 }
 input {
 	font-size:12px;
+	height: 24px;border-radius: 2px;
+	border:1px solid #ddd;
+}
+select{
+	height: 24px;
+	border-radius: 2px;
+	border:1px solid #ddd;
 }
 textarea {
 	font-size:12px;
@@ -577,6 +584,7 @@ display: inline-block;
 	line-height:36px;
 	height:auto;
 	clear:both;
+	border-bottom: 1px solid #1783b2;
 }
 #tagscontent td {
 		font-size:12px;
@@ -592,9 +600,9 @@ display: inline-block;
 	margin:0 10px;
 }
 #tagscontent th { 
-	color:#1B4670;
-	background-color:#ebe7dc;
-	border-bottom:1px solid #e8eef6;
+	color:#1783b2;
+	/*background-color:#ebe7dc;*/
+	border-bottom:1px solid #1783b2;
 }
 #submit {
 	width:50px;
@@ -615,7 +623,7 @@ display: inline-block;
 	height: 20px;
 }
 #tagscontent .table_td th,#tagscontent #table th {
-background: #ebe7dc; 
+/*background: #ebe7dc; */
 line-height: 32px;
 text-align: center;
 }

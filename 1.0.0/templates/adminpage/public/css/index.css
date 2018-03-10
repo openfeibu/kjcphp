@@ -179,7 +179,10 @@ input {
 .homeRightCon .homeRightTop ul li .icon_spkgl{
 	background-position: -422px -10px;
 }
-
+.homeRightCon .homeRightTop ul li .icon_add{
+	background: url(../images/admin/n3.png) no-repeat center/65px auto;
+}
+    
 .homeRightCon .homeRightTop ul li span{
 	font-size: 14px;
 	color: #ffffff;

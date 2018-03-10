@@ -20,13 +20,19 @@
              <li class="hoTopbg01">
                  <a href="<{ofunc type=url link="/adminpage/member/module/memberlist"}>">
                      <i class="icon_psydd"></i>
-                     <span>会员列表</span>
+                     <span>会员管理</span>
+                 </a>
+             </li>
+             <li class="hoTopbg05">
+                 <a href="<{ofunc type=url link="/adminpage/shop/module/goodslibrary"}>">
+                     <i class="icon_add"></i>
+                     <span>添加店铺</span>
                  </a>
              </li>
              <li class="hoTopbg02">
-                 <a href="<{ofunc type=url link="/adminpage/order/module/adminfastfoods"}>">
+                 <a href="<{ofunc type=url link="/adminpage/card/module/grantset"}>">
                      <i class="icon_dkxd"></i>
-                     <span>客服代客下单系统</span>
+                     <span>代金券发放</span>
                  </a>
              </li>
              <li class="hoTopbg03">
@@ -36,21 +42,17 @@
                  </a>
              </li>
              <li class="hoTopbg04">
-			 <{if <{Mysite::$app->config['psbopen']}> == 1}>
+<!-- 			 <{if <{Mysite::$app->config['psbopen']}> == 1}>
                  <a target="_blank" href="<{Mysite::$app->config['autopsblink']}>">
-		     <{else}>
-				 <a href="<{ofunc type=url link="/adminpage/psuser/module/psymap"}>">
-		     <{/if}>
+		     <{else}> -->
+             <!-- <{/if}> -->
+				 <a href="<{ofunc type=url link="/adminpage/order/module/drawbacklog"}>">
+		     
                      <i class="icon_ddks"></i>
-                     <span>配送员调度管理系统</span>
+                     <span>退款管理</span>
                  </a>
              </li>
-             <li class="hoTopbg05">
-                 <a href="<{ofunc type=url link="/adminpage/shop/module/goodslibrary"}>">
-                     <i class="icon_spkgl"></i>
-                     <span>商品库管理系统</span>
-                 </a>
-             </li>
+             
          </ul>
      </div>
      <div class="homeRightBot">
