@@ -1641,7 +1641,7 @@ if(  empty($this->member['uid']) || $this->member['uid'] ==  0){
 	 	 	   }
 	 	 }
 	 	 if(Mysite::$app->config['regester_juan'] ==1){
-	 	   //注册送优惠券
+	 	   //注册送代金券
 	 	   $nowtime = time();
 	 	   $endtime = $nowtime+Mysite::$app->config['regester_juanday']*24*60*60;
 	 	   $juandata['card'] = $nowtime.rand(100,999);
@@ -1653,7 +1653,7 @@ if(  empty($this->member['uid']) || $this->member['uid'] ==  0){
        $juandata['endtime'] = $endtime;// 失效时间	
        $juandata['uid'] = $this->uid;// 用户ID	
        $juandata['username'] = $arr['username'];// 用户名	
-       $juandata['name'] = '注册账号赠送优惠券';//  优惠券名称 
+       $juandata['name'] = '注册账号赠送代金券';//  代金券名称 
 	 	   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata); 
 	 	 
 	 	 }
@@ -2025,8 +2025,8 @@ if(  empty($this->member['uid']) || $this->member['uid'] ==  0){
 		$orderwuliustatus = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderstatus where   orderid = ".$orderid." order by addtime asc limit 0,10 ");
 		$data['orderwuliustatus'] = $orderwuliustatus;
 
-		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' " );  	   
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc " ); 
+		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送代金券' " );  	   
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送代金券' order by id asc " ); 
 	    $data['sendjuanstatus'] = $juansetinfo['status'];
 		
 		if(!empty($orderid)){
@@ -2283,11 +2283,11 @@ if(  empty($this->member['uid']) || $this->member['uid'] ==  0){
 		$ojuan['shuliang'] =  $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan    where uid = ".$this->member['uid']." and endtime < ".$nowtime." and (status = 1 or status =3)");
 		$ojuan['list'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where uid = ".$this->member['uid']." and endtime < ".$nowtime." and (status = 1 or status =3)  ");
 		$pcjuan = array('shuliang'=>0,'list'=>array());
-		//可用优惠券
+		//可用代金券
 		$pcjuan['list'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where endtime > ".time()." and status = 1 and  uid = ".$this->member['uid']." ");   		 
-		//不可用优惠券
+		//不可用代金券
 		$pcjuan['nouselist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where (status >= 2 or endtime < ".time().") and  uid = ".$this->member['uid']." ");   		
-		//可用优惠券数量
+		//可用代金券数量
 		$pcjuan['shuliang'] =  $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."juan   where endtime > ".time()." and  status = 1 and   uid = ".$this->member['uid']."  ");
 		$wxujuan = array('shuliang'=>0,'list'=>array());
 		$wxujuan['shuliang'] =  $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."wxuserjuan    where uid = ".$this->member['uid']." and endtime > ".$nowtime." and lqstatus = 1 ");
@@ -5100,7 +5100,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
 				$sendname .= '+';
 			}
 			if(  $rechargeone['is_sendjuan']  == 1  ){
-				$sendname .= $rechargeone['sendjuancost'].'优惠券';
+				$sendname .= $rechargeone['sendjuancost'].'代金券';
 			}
 		}
  		$data['sendname'] = $sendname;
@@ -6534,14 +6534,14 @@ function lifeass(){
 
 
 /* 8.3新增  2016-05-31  zem */
-	function sharehb(){   //下单分享领取优惠券页面
+	function sharehb(){   //下单分享领取代金券页面
  		
 		/* $wxclass = new wx_s();
 		$signPackage = $wxclass->getSignPackage();
  		$data['signPackage'] = $signPackage; */
         
-        $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' " );  	   
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc " ); 
+        $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送代金券' " );  	   
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送代金券' order by id asc " ); 
         $data['sendjuanstatus'] = $juansetinfo['status'];
 		$shareinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."juanshowinfo where id=1");		 
 		if( empty($shareinfo) ){
@@ -6569,7 +6569,7 @@ function lifeass(){
 		Mysite::$app->setdata($data);
 		
 	}
-	function receivejuan(){    //下单成功分享优惠券 根据手机号  领取优惠券
+	function receivejuan(){    //下单成功分享代金券 根据手机号  领取代金券
 		
 		$orderid = intval(IReq::get('orderid'));
 		$phone = IFilter::act(IReq::get('phone'));
@@ -6577,8 +6577,8 @@ function lifeass(){
 		if(empty($orderinfo)) $this->message('获取失败，请尝试刷新页面~');
 		if(empty($phone)) $this->message('请填写领取使用的手机号~');
 		if(!(IValidate::suremobi($phone)))$this->message('请填写正确的手机号~');
-		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' " );  	   
-        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc " ); 
+		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送代金券' " );  	   
+        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送代金券' order by id asc " ); 
 		if($juansetinfo['status'] == 0 || empty($juaninfo)) $this->message('活动已结束~');
 		$checkisrec =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where orderid=".$orderid."  and bangphone = '".$phone."' ");
 		if(!empty($checkisrec))  $this->message('您已领取过，不可重复领取噢~');
@@ -6610,7 +6610,7 @@ function lifeass(){
 				}							
 				$data['bangphone'] = $phone;
 				$data['orderid'] = $orderinfo['id'];
-				$data['name'] = "下单送优惠券";
+				$data['name'] = "下单送代金券";
 				$data['type'] = 4;
 				$data['paytype'] = $val['paytype'];			 
 				$this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$data);
@@ -6620,7 +6620,7 @@ function lifeass(){
 		 
 		$this->success('success');
 	}
-	function memsharej(){   //会员忠心推广邀请好友分享优惠券页面
+	function memsharej(){   //会员忠心推广邀请好友分享代金券页面
 		$link = IUrl::creatUrl('wxsite/index'); 
 		if($this->member['uid'] == 0)  $this->message('未登陆',$link); 
  		$jiamiuidkey = base64_encode($this->member['uid']);  //  base64_decode
@@ -6654,7 +6654,7 @@ function lifeass(){
 		
 	}
 	
- function memsharehb(){   //会员中心推广分享领取优惠券页面
+ function memsharehb(){   //会员中心推广分享领取代金券页面
 		$uidkey = trim(IReq::get('key'));
  		$uid = base64_decode($uidkey);          	
 		if( is_numeric($uid) ){
@@ -6686,7 +6686,7 @@ function lifeass(){
 		
 	}
 	
- function memsharelqjuan(){    //会员推广分享优惠券 根据手机号  领取优惠券
+ function memsharelqjuan(){    //会员推广分享代金券 根据手机号  领取代金券
 		
 		$uid = intval(IReq::get('uid'));
 		$phone = IFilter::act(IReq::get('phone'));
@@ -6819,7 +6819,7 @@ function lifeass(){
         }
         $data['phone']=$phoneyan;
         $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid='".$this->member['uid']."'");
-		/* 更新绑定手机号有关优惠券信息 */
+		/* 更新绑定手机号有关代金券信息 */
 		$memberCls = new memberclass($this->mysql);  
 		$memberCls->updatememjuaninfo($phoneyan);
 		
@@ -6986,7 +6986,7 @@ function lifeass(){
 		Mysite::$app->setdata($data);
 	}
 	
-// 8.4新增 关注微信领取优惠券功能  2016-07-15
+// 8.4新增 关注微信领取代金券功能  2016-07-15
 function gzwx(){ 
          
  		/* $wxclass = new wx_s();
@@ -7000,7 +7000,7 @@ function gzwx(){
 			$shareinfo['describe'] = Mysite::$app->config['sitename'];
 		}
 		$data['shareinfo'] = $shareinfo;		  
-		//检测是否领取过关注送类型的优惠券
+		//检测是否领取过关注送类型的代金券
 		$juancheck =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where type = 1 and uid = '".$uid."' ");
 		 
 		if(empty($juancheck)){
@@ -7008,8 +7008,8 @@ function gzwx(){
 		}else{
 		    $data['canget'] = 0;
 		}	 		
-		$where = "  where type = 1 or name = '关注送优惠券' ";
- 		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 1 or name = '关注送优惠券' " );  	   
+		$where = "  where type = 1 or name = '关注送代金券' ";
+ 		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 1 or name = '关注送代金券' " );  	   
 		$juanlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan ".$where." order by id asc ");			
 		foreach($juanlist as $k=>$v){			
             if($juansetinfo['costtype'] == 2){
@@ -7025,8 +7025,8 @@ function gzwx(){
 	function receivgzwxjuan(){    	
 		$juaninfo = IReq::get('juaninfo');
 		$juaninfo = unserialize($juaninfo);
-		if(empty($juaninfo)) $this->message('优惠券信息获取失败');
-		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 1 or name = '关注送优惠券' " );  	   
+		if(empty($juaninfo)) $this->message('代金券信息获取失败');
+		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 1 or name = '关注送代金券' " );  	   
 		if($juansetinfo['status'] == 0) $this->message('活动已结束');		 
 		foreach($juaninfo as $key=>$val){ 			
 			if($juansetinfo['timetype'] == 1){
@@ -7043,7 +7043,7 @@ function gzwx(){
 			$data['uid'] = $this->member['uid'];
 			$data['username'] = $this->member['username'];			
 			$data['status'] = 1;													 
-			$data['name'] = "关注送优惠券";
+			$data['name'] = "关注送代金券";
 			$data['type'] = 1;
 			$data['paytype'] = $val['paytype'];					
 			$this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$data);  

@@ -1,7 +1,7 @@
 <{extends file="<{$tempdir}>/public/admin.html"}>
 <{block name=extendjs}>
 <{/block}>
- <{block name=controlname}>添加营销分享优惠券规则<{/block}>
+ <{block name=controlname}>添加营销分享代金券规则<{/block}>
  <{block name=bodylist}>
 <{load_data assign="info" table="juanrule" where="`id`=$id"  type="one"}> 
      <div style="width:98%;overflow-y:auto;white-space:nowrap;">
@@ -20,14 +20,14 @@
                  
 
                      <tr class="show_1" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">分享优惠券类型</td>
+                      <td class="left">分享代金券类型</td>
                       <td>
 					  <select name="type" onchange="changetxt(this);" >
-                      	<option   value="0">请选择优惠券类型</option>
-                      	<option <{if $info['type'] == 1  }> selected <{/if}>  value="1">充值送优惠券</option>
-                      	<option  <{if $info['type'] == 2  }> selected <{/if}> value="2">下单成功分享优惠券</option>
-                      	<option  <{if $info['type'] == 3  }> selected <{/if}>  value="3">推广优惠券</option>
-                      	<option  <{if $info['type'] == 4  }> selected <{/if}>  value="4">关注微信领取优惠券</option>
+                      	<option   value="0">请选择代金券类型</option>
+                      	<option <{if $info['type'] == 1  }> selected <{/if}>  value="1">充值送代金券</option>
+                      	<option  <{if $info['type'] == 2  }> selected <{/if}> value="2">下单成功分享代金券</option>
+                      	<option  <{if $info['type'] == 3  }> selected <{/if}>  value="3">推广代金券</option>
+                      	<option  <{if $info['type'] == 4  }> selected <{/if}>  value="4">关注微信领取代金券</option>
                        	<select>
 					</td>
                     </tr>
@@ -63,37 +63,37 @@
 
 					</script>
 					 <tr id="rechargeWhe"   style="display:none;"     onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">优惠券数量</td>
+                      <td class="left">代金券数量</td>
                       <td><input type="text" name="juannum" id="juannum" value="<{$info['juannum']}>" class="skey" style="width:80px;" >
-					  <span id="haveone" style="display:none;">推广优惠券默认只能为一张</span>
+					  <span id="haveone" style="display:none;">推广代金券默认只能为一张</span>
  					  </td>
                     </tr>
 					 
 					
                      <tr id="otherWhe" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">充值赠送优惠券总金额</td>
+                      <td class="left">充值赠送代金券总金额</td>
                       <td><input type="text" name="juantotalcost" id="juantotalcost" value="<{$info['juantotalcost']}>" class="skey" style="width:80px;" >元
-					   <span>(充值类型赠送优惠券总额和充值赠送列表的赠送优惠券总金额一致，下面的规则系统自动生成优惠券总金额的优惠券列表)</span> 
+					   <span>(充值类型赠送代金券总额和充值赠送列表的赠送代金券总金额一致，下面的规则系统自动生成代金券总金额的代金券列表)</span> 
 					  </td>
                     </tr>
 					
 					
                      <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">优惠券限制金额</td>
+                      <td class="left">代金券限制金额</td>
                       <td>
 					  <input type="text" name="jiancostmin" id="jiancostmin" value="<{$info['jiancostmin']}>" class="skey" style="width:80px;" >至
 					  <input type="text" name="jiancostmax" id="jiancostmax" value="<{$info['jiancostmax']}>" class="skey" style="width:80px;" >元
-					  &nbsp;&nbsp;&nbsp;&nbsp;(优惠券限制金额范围，如果填写一样，则限制金额为固定的)
+					  &nbsp;&nbsp;&nbsp;&nbsp;(代金券限制金额范围，如果填写一样，则限制金额为固定的)
 					  </td>
                     </tr>
 					
 					
 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">优惠券优惠金额</td>
+                      <td class="left">代金券优惠金额</td>
                       <td>
 					  <input type="text" name="jiacostmin" id="jiacostmin" value="<{$info['jiacostmin']}>" class="skey" style="width:80px;" >至
 					  <input type="text" name="jiacostmax" id="jiacostmax" value="<{$info['jiacostmax']}>" class="skey" style="width:80px;" >元
-					  &nbsp;&nbsp;&nbsp;&nbsp;(优惠券减金额范围，如果填写一样，则减的金额为固定的)
+					  &nbsp;&nbsp;&nbsp;&nbsp;(代金券减金额范围，如果填写一样，则减的金额为固定的)
 					  </td>
                     </tr>
 					

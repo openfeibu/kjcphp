@@ -148,13 +148,13 @@
 
 					   <div class="showtop_t" id="positionname">
 						  <div class="navs <{if $tmodule=='followsjset' }> navon <{/if}>">
-						  <a href="<{ofunc type=url link="/adminpage/card/module/followsjset"}>">关注送优惠券</a>
+						  <a href="<{ofunc type=url link="/adminpage/card/module/followsjset"}>">关注送代金券</a>
 						  </div>
 						  <div class="navs <{if $tmodule=='registersjset' }> navon <{/if}>">
-						  <a href="<{ofunc type=url link="/adminpage/card/module/registersjset"}>">注册送优惠券</a>
+						  <a href="<{ofunc type=url link="/adminpage/card/module/registersjset"}>">注册送代金券</a>
 						  </div>
 						  <div class="navs <{if $tmodule=='rechargesjset' }> navon <{/if}>">
-						  <a href="<{ofunc type=url link="/adminpage/card/module/rechargesjset"}>">充值送优惠券</a>
+						  <a href="<{ofunc type=url link="/adminpage/card/module/rechargesjset"}>">充值送代金券</a>
 						  </div>
 						  <div class="navs <{if $tmodule=='makeordersjset' }> navon <{/if}>">
 						  <a href="<{ofunc type=url link="/adminpage/card/module/makeordersjset"}>">下单发红包</a>
@@ -215,7 +215,7 @@ $(function(){
 	}
 </script>
 <script>
-    $(".left_nav ul li a:contains('优惠券营销')").addClass("on");
+    $(".left_nav ul li a:contains('代金券营销')").addClass("on");
     var nowname =  $('.navon').text();
     $('#nowactioninfo').text(nowname);
     $('#positionname2').text(nowname);

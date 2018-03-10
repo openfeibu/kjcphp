@@ -451,7 +451,7 @@ class method   extends baseclass
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
 				 } 
 					 if(Mysite::$app->config['regester_juan'] ==1){
-					   //注册送优惠券
+					   //注册送代金券
 					   $nowtime = time();
 					   $endtime = $nowtime+Mysite::$app->config['regester_juanday']*24*60*60;
 					   $juandata['card'] = $nowtime.rand(100,999);
@@ -463,7 +463,7 @@ class method   extends baseclass
 						$juandata['endtime'] = $endtime;// 失效时间	
 						$juandata['uid'] = $uid;// 用户ID	
 						$juandata['username'] = $arr['username'];// 用户名	
-						$juandata['name'] = '注册账号赠送优惠券';//  优惠券名称 
+						$juandata['name'] = '注册账号赠送代金券';//  代金券名称 
 					   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata); 
 					 
 					 }  
@@ -4114,7 +4114,7 @@ function getshopnew(){
 		$this->success($backdata);
 	}
 	/**
-	 *  @brief 绑定优惠券
+	 *  @brief 绑定代金券
 	 *  
 	 *  @return Return_Description
 	 *  
@@ -4811,7 +4811,7 @@ function getshopnew(){
 		//打包费
 		//订单实价
 		//配送时间列表
-		//优惠券列表
+		//代金券列表
 		//需要提交数据   lng lat  shopid goodsid  goodscount
 		logwrite('appcx');
 		$backinfo = $this->checkappMem();
@@ -5315,7 +5315,7 @@ function getshopnew(){
 		//打包费
 		//订单实价
 		//配送时间列表
-		//优惠券列表
+		//代金券列表
 		//需要提交数据   lng lat  shopid goodsid  goodscount
 		/*
 		$backinfo = $this->checkappMem();
@@ -8081,7 +8081,7 @@ if($showtype == 1){    // 加载商品
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
 				 } 
 				 if(Mysite::$app->config['regester_juan'] ==1){
-					   //注册送优惠券
+					   //注册送代金券
 					   $nowtime = time();
 					   $endtime = $nowtime+Mysite::$app->config['regester_juanday']*24*60*60;
 					   $juandata['card'] = $nowtime.rand(100,999);
@@ -8093,7 +8093,7 @@ if($showtype == 1){    // 加载商品
 						$juandata['endtime'] = $endtime;// 失效时间	
 						$juandata['uid'] = $uid;// 用户ID	
 						$juandata['username'] = $arr['username'];// 用户名	
-						$juandata['name'] = '注册账号赠送优惠券';//  优惠券名称 
+						$juandata['name'] = '注册账号赠送代金券';//  代金券名称 
 					   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata); 
 				 
 				 }  
@@ -8328,7 +8328,7 @@ if($showtype == 1){    // 加载商品
 			   $tempname .= '+';
 		   }
 		    if(   $value['is_sendjuan'] == 1  ){
-			   $tempname .= $value['sendjuancost'].'元优惠券';
+			   $tempname .= $value['sendjuancost'].'元代金券';
 		   }
 		  $value['juanname'] = $tempname;
 		  
@@ -8731,7 +8731,7 @@ if($showtype == 1){    // 加载商品
 
 
 
-	/* 8.3 新增下单分享优惠券数据 */
+	/* 8.3 新增下单分享代金券数据 */
 	function ordersharejuan(){
 		
 		$backinfo = $this->checkappMem();
@@ -8757,7 +8757,7 @@ if($showtype == 1){    // 加载商品
 		
 	}
 	
-	/* 8.3 新增会员推广分享优惠券数据 */
+	/* 8.3 新增会员推广分享代金券数据 */
 	function memsharejuan(){
 		
 		$backinfo = $this->checkappMem();
@@ -8785,7 +8785,7 @@ if($showtype == 1){    // 加载商品
 	}
 	
 	
-	function memsharej(){   //会员忠心推广分享优惠券页面
+	function memsharej(){   //会员忠心推广分享代金券页面
 		
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
@@ -8825,8 +8825,8 @@ if($showtype == 1){    // 加载商品
 		Mysite::$app->setdata($data);
 		
 	}
-		/* 8.3  会员中心推广分享优惠券页面 */
-	function memsharejMMM(){   //会员忠心推广分享优惠券页面
+		/* 8.3  会员中心推广分享代金券页面 */
+	function memsharejMMM(){   //会员忠心推广分享代金券页面
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
@@ -8848,7 +8848,7 @@ if($showtype == 1){    // 加载商品
 		if( !empty($checkinfosendjuan) && $userextensionsharejuan == 0 &&  !empty($shareinfo)  ){
 			$data['shareinfo'] = $shareinfo;
 		}else{
-			$this->message('优惠券已经领取完毕');
+			$this->message('代金券已经领取完毕');
 		}
 	 
    		$this->success($data);

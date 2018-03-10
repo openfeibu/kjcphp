@@ -68,10 +68,10 @@ input[type='number'], input[type='tel'] {
 							<div id="capture-tip" class="capture-tip" style="text-align:center;font-size:14px">活动已结束~</div>			
 							<{else}>
 							    <{if $canget == 1}> 
-								<div id="capture-tip" class="capture-tip" style="text-align:center;font-size:14px">送你<{count($juaninfo,0)}>张优惠券，快来领取吧~</div>
+								<div id="capture-tip" class="capture-tip" style="text-align:center;font-size:14px">送你<{count($juaninfo,0)}>张代金券，快来领取吧~</div>
 								<input id="capture-btn" class="combtn borderradius-3" type="button" value="马上领取"/>
 								<{else}>
-								<div id="capture-tip" class="capture-tip" style="text-align:center;font-size:14px">您已领取过优惠券,不可重复领取噢~</div>
+								<div id="capture-tip" class="capture-tip" style="text-align:center;font-size:14px">您已领取过代金券,不可重复领取噢~</div>
 								<input  class="combtn borderradius-3" style='background-color:#C7C7C7' disabled="disabled" type="button" value="马上领取"/>
 							    <{/if}>  
 							<{/if}>

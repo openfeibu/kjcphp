@@ -1018,7 +1018,7 @@ background-repeat: no-repeat;
 .shopcaorderCon ul .shopcaoderbox .shopcaoderxz{ width:21px; height:21px; display:block; background-image:url(../images/084.png); background-size:100%; position:absolute; top:10px; right:0px; z-index:1;}
 .shopcaorderCon ul .shopcaoderbox .shopcaoaA{ background-image:url(../images/083.png);}
 .shopcaorderCon ul .shopcaoderbox .shopayment{ width:20px; height:20px; position:absolute; top:10px; right:0px; z-index:2; opacity:0;}
-/*优惠券*/
+/*代金券*/
 .shopcaorderCon ul .shopcaoderbox .shopcoupon{ font-size:14px; color:#999999;}
 .shopcaorderCon ul .shopcaoderbox .shopcoupon i{ font-size:16px; margin-left:16px;}
 /*订单清单*/

@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
 <{/block}>
- <{block name=controlname}>优惠券领取记录列表<{/block}>
+ <{block name=controlname}>代金券领取记录列表<{/block}>
  <{block name=bodylist}>
 
       <div style="width:auto;overflow-x:hidden;overflow-y:auto">
@@ -16,7 +16,7 @@
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/card/module/receivejuanlog"}>">
 
              
-			  <label>优惠券名称：</label>
+			  <label>代金券名称：</label>
             	   <input type="text" name="name" value="<{$name}>" style="width:80px;"> 
 				  &nbsp;
 			   <label>领取用户名：</label>
@@ -25,20 +25,20 @@
 			  <label>绑定手机号：</label>
             	   <input type="text" name="bangphone" value="<{$bangphone}>" style="width:100px;"> 
 		          &nbsp;
-		          <label>优惠券类型：</label>
+		          <label>代金券类型：</label>
             	   <select name="type" style="width:100px;">
-            	   	  <option value="all">请选择优惠券类型</option>
- 			   		 	  	  <option value="1" <{if $type == '1'}>selected<{/if}>>关注送优惠券</option>
-			   		 	  	  <option value="2" <{if $type == '2'}>selected<{/if}>>注册送优惠券</option>
-			   		 	  	  <option value="3" <{if $type == '3'}>selected<{/if}>>充值送优惠券</option>
+            	   	  <option value="all">请选择代金券类型</option>
+ 			   		 	  	  <option value="1" <{if $type == '1'}>selected<{/if}>>关注送代金券</option>
+			   		 	  	  <option value="2" <{if $type == '2'}>selected<{/if}>>注册送代金券</option>
+			   		 	  	  <option value="3" <{if $type == '3'}>selected<{/if}>>充值送代金券</option>
 			   		 	  	  <option value="4" <{if $type == '4'}>selected<{/if}>>下单发红包</option>
 			   		 	  	  <option value="5" <{if $type == '5'}>selected<{/if}>>邀请好友送红包</option>
 							  <option value="6" <{if $type == '6'}>selected<{/if}>>邀请好友反赠</option>
             	  </select>
 				  &nbsp;
-				   <label>优惠券状态：</label>
+				   <label>代金券状态：</label>
 				     <select name="status" style="width:60px;">
-            	   	  <option value="all">请选择优惠券状态</option>
+            	   	  <option value="all">请选择代金券状态</option>
  			   		 	  	  <option value="1" <{if $status == '1'}>selected<{/if}>>未使用</option>
  			   		 	  	  <option value="2" <{if $status == '2'}>selected<{/if}>>已绑定</option>
 			   		 	  	  <option value="3" <{if $status == '3'}>selected<{/if}>>已使用</option>
@@ -78,7 +78,7 @@
                     <thead>
 
                       <tr> 
-                        <th align="center">优惠券类型</th> 
+                        <th align="center">代金券类型</th> 
                          <th align="center">名称</th>
                         <th align="center">使用门槛</th>
                          <th align="center">面值</th>

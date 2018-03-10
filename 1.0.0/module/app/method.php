@@ -1372,14 +1372,14 @@ class method   extends baseclass
 				 if($arr['score'] > 0){
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
 				 }
-         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );
-         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );
+         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送代金券' " );
+         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送代金券' order by id asc " );
 		 if($juansetinfo['status'] ==1 && !empty($juaninfo)){
-	 	   //注册送优惠券
+	 	   //注册送代金券
 		   foreach($juaninfo as $key=>$value){
 			   $juandata['uid'] = $this->uid;// 用户ID
 			   $juandata['username'] = $arr['username'];// 用户名
-			   $juandata['name'] = $value['name'];//  优惠券名称
+			   $juandata['name'] = $value['name'];//  代金券名称
 			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
 			   $juandata['card'] = $nowtime.rand(100,999);
 			   $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
@@ -2855,7 +2855,7 @@ class method   extends baseclass
 	*	  "pscost" : "5.00",【配送费】
      *     "cxcost" : "36.00",【促销优惠减金额】
 	*	  "jfcost" : "0.00",【积分抵扣金额】
-	*	  "yhjcost" : "0.00",【优惠券抵扣金额】
+	*	  "yhjcost" : "0.00",【代金券抵扣金额】
 	*	  "bagcost" : "8.00",【打包费】
     *      "dno" : "15022698256802", 【订单编号】
     *      "content" : "", 【备注】
@@ -3023,7 +3023,7 @@ class method   extends baseclass
 		$data['pscost'] = number_format($orderinfo['shopps'],2);//配送费
 		$data['cxcost'] = number_format($orderinfo['cxcost'],2);//促销优惠金额
 		$data['jfcost'] = number_format($orderinfo['scoredown']/Mysite::$app->config['scoretocost'],2);//积分抵扣金额
-		$data['yhjcost'] = number_format($orderinfo['yhjcost'],2);//优惠券抵扣金额
+		$data['yhjcost'] = number_format($orderinfo['yhjcost'],2);//代金券抵扣金额
 		$data['bagcost'] = number_format($orderinfo['bagcost'],2);//打包费
 		$data['addpscost'] = number_format($orderinfo['addpscost'],2);//附加配送费
 		$data['dno'] = $orderinfo['dno'];//订单编号
@@ -6910,7 +6910,7 @@ function getshopnew(){
 		$this->success($data);
 	}
 	/**
-	 *  @brief 绑定优惠券
+	 *  @brief 绑定代金券
 	 *
 	 *  @return Return_Description
 	 *
@@ -7807,7 +7807,7 @@ function getshopnew(){
 		//打包费
 		//订单实价
 		//配送时间列表
-		//优惠券列表
+		//代金券列表
 		//需要提交数据   lng lat  shopid goodsid  goodscount
 
 		$backinfo = $this->checkappMem();
@@ -8045,7 +8045,7 @@ function getshopnew(){
 
 		$availablejuan = array();
 		$unavailablejuan = array();
-		$checkpaytype = $paytype + 1;//接口中传来的是  货到是0  在线支付是1   但是  优惠券中  支持订单类型是   货到是1 在线支付是2
+		$checkpaytype = $paytype + 1;//接口中传来的是  货到是0  在线支付是1   但是  代金券中  支持订单类型是   货到是1 在线支付是2
 
 		foreach($newjuanlist as $k=>$v){
 			$v['paytype'] = empty($v['paytype'])?'1,2':$v['paytype'];
@@ -8374,7 +8374,7 @@ function getshopnew(){
 		//打包费
 		//订单实价
 		//配送时间列表
-		//优惠券列表
+		//代金券列表
 		//需要提交数据   lng lat  shopid goodsid  goodscount
 		/*
 		$backinfo = $this->checkappMem();
@@ -11248,7 +11248,7 @@ if($showtype == 1){    // 加载商品
 	*		"cost": "0.00",【余额】
 	*       "temp_password":"",【未设置密码的快捷登陆账号密码】
 	*		"logo": "http://qzapp.qlogo.cn/qzapp/101416262/5D5E1ECC63F45FBBE40429C16F0DD2F6/100",【头像】
-	*		"juancount": 0【所拥有的优惠券张数】
+	*		"juancount": 0【所拥有的代金券张数】
 	*	}
 	*}
 	*/
@@ -11288,7 +11288,7 @@ if($showtype == 1){    // 加载商品
 	*		"cost": "0.00",【余额】
 	*       "temp_password":"",【未设置密码的快捷登陆账号密码】
 	*		"logo": "http://qzapp.qlogo.cn/qzapp/101416262/5D5E1ECC63F45FBBE40429C16F0DD2F6/100",【头像】
-	*		"juancount": 0【所拥有的优惠券张数】
+	*		"juancount": 0【所拥有的代金券张数】
 	*	}
 	*}
 	*情况2   账号未绑定手机
@@ -11384,14 +11384,14 @@ if($showtype == 1){    // 加载商品
 				 if($arr['score'] > 0){
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
 				 }
-				 $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );
-                 $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );
+				 $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送代金券' " );
+                 $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送代金券' order by id asc " );
 		 if($juansetinfo['status'] ==1 && !empty($juaninfo)){
-	 	   //注册送优惠券
+	 	   //注册送代金券
 		   foreach($juaninfo as $key=>$value){
 			   $juandata['uid'] = $uid;// 用户ID
 			   $juandata['username'] = $arr['username'];// 用户名
-			   $juandata['name'] = $value['name'];//  优惠券名称
+			   $juandata['name'] = $value['name'];//  代金券名称
 			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
 			   $juandata['card'] = $nowtime.rand(100,999);
 			   $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
@@ -11634,7 +11634,7 @@ if($showtype == 1){    // 加载商品
 			   $tempname .= '+';
 		   }
 		    if(   $value['is_sendjuan'] == 1  ){
-			   $tempname .= $value['sendjuancost'].'元优惠券';
+			   $tempname .= $value['sendjuancost'].'元代金券';
 		   }
 		  $value['juanname'] = $tempname;
 
@@ -12042,7 +12042,7 @@ if($showtype == 1){    // 加载商品
 
 
 
-	/* 8.3 新增下单分享优惠券数据 */
+	/* 8.3 新增下单分享代金券数据 */
 	function ordersharejuan(){
 
 		$backinfo = $this->checkappMem();
@@ -12050,8 +12050,8 @@ if($showtype == 1){    // 加载商品
 			$this->message('nologin');
 		}
 		$orderid = intval(IFilter::act(IReq::get('orderid')));
-		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' " );
-        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc " );
+		$juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送代金券' " );
+        $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送代金券' order by id asc " );
 		$shareinfo = $this->mysql->select_one("select title,img,`describe`  from ".Mysite::$app->config['tablepre']."juanshowinfo where type=2 order by orderid asc  ");
 		$shareinfo['img'] = Mysite::$app->config['siteurl'].$shareinfo['img'];
 		$shareinfo['link'] = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=sharehb&did='.$orderid;
@@ -12064,7 +12064,7 @@ if($showtype == 1){    // 加载商品
 
 	}
 
-	/* 8.3 新增会员推广分享优惠券数据 */
+	/* 8.3 新增会员推广分享代金券数据 */
 	function memsharejuan(){
 
 		$backinfo = $this->checkappMem();
@@ -12088,7 +12088,7 @@ if($showtype == 1){    // 加载商品
 	}
 
 
-	function memsharej(){   //会员中心推广分享优惠券页面
+	function memsharej(){   //会员中心推广分享代金券页面
 
 		$backinfo = $this->checkappMem();
 
@@ -12122,8 +12122,8 @@ if($showtype == 1){    // 加载商品
 		Mysite::$app->setdata($data);
 
 	}
-		/* 8.3  会员中心推广分享优惠券页面 */
-	function memsharejMMM(){   //会员忠心推广分享优惠券页面
+		/* 8.3  会员中心推广分享代金券页面 */
+	function memsharejMMM(){   //会员忠心推广分享代金券页面
 		$backinfo = $this->checkappMem();
 		if(empty($backinfo['uid'])){
 			$this->message('nologin');
@@ -12145,7 +12145,7 @@ if($showtype == 1){    // 加载商品
 		if( !empty($checkinfosendjuan) && $userextensionsharejuan == 0 &&  !empty($shareinfo)  ){
 			$data['shareinfo'] = $shareinfo;
 		}else{
-			$this->message('优惠券已经领取完毕');
+			$this->message('代金券已经领取完毕');
 		}
 
    		$this->success($data);

@@ -262,7 +262,7 @@ class method extends adminbaseclass
                 $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
                 $value['unlinescore'] = $scordedown;
                 $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
-                $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用优惠券
+                $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
                 $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 总优惠
                 $value['ptcxcost'] = $line['shopdowncost'] +$shoptj['shopdowncost'];//总优惠金额中  平台承担的部分
                 $value['shopcxcost'] = $value['cxcost'] - $value['ptcxcost'];//总优惠金额中  商家承担的部分
@@ -553,7 +553,7 @@ class method extends adminbaseclass
                 $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
                 $value['unlinescore'] = $scordedown;
                 $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
-                $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用优惠券
+                $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
                 $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 促销总优惠
 
                 $value['ptcxcost'] = $line['shopdowncost'] +$shoptj['shopdowncost'];// 促销总优惠中  平台承担的部分
@@ -581,7 +581,7 @@ class method extends adminbaseclass
             }
         }
         $outexcel = new phptoexcel();
-        $titledata = array('店铺名称','配送方式','订单数量','线上支付','线下支付','优惠券','平台促销','店铺促销','积分低扣金额','配送费','商品总价','打包费','佣金');
+        $titledata = array('店铺名称','配送方式','订单数量','线上支付','线下支付','代金券','平台促销','店铺促销','积分低扣金额','配送费','商品总价','打包费','佣金');
         $titlelabel = array('shopname','sendtype','orderNum','online','unline','yhjcost','ptcxcost','shopcxcost','score','pscost','goodscost','bagcost','yje');
         // $datalist = $this->mysql->getarr("select card,card_password,cost from ".Mysite::$app->config['tablepre']."card where id > 0 ".$where."   order by id desc  limit 0,2000 ");
         $outexcel->out($titledata, $titlelabel, $list, '', '商家结算');

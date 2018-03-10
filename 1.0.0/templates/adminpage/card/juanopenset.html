@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js"></script>
  <{/block}>
- <{block name=controlname}>优惠券设置<{/block}>
+ <{block name=controlname}>代金券设置<{/block}>
  <{block name=bodylist}> 
 	 <div style="width:auto;overflow-x:hidden;overflow-y:auto"> 
          
@@ -14,13 +14,13 @@
                   <tbody>
                   	 
 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                        <td class="left">用户下单分享优惠券</td>
+                        <td class="left">用户下单分享代金券</td>
                         <td><input type="radio" name="userordersharejuan"   value="0"  <{if $userordersharejuan== 0}>checked<{/if}>>开启
                             <input type="radio" name="userordersharejuan"   value="1"  <{if $userordersharejuan== 1}>checked<{/if}>>关闭</td>
                      </tr>
 					
 					  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                        <td class="left">用户推广分享优惠券</td>
+                        <td class="left">用户推广分享代金券</td>
                         <td><input type="radio" name="userextensionsharejuan"   value="0"  <{if $userextensionsharejuan== 0}>checked<{/if}>>开启
                             <input type="radio" name="userextensionsharejuan"   value="1"  <{if $userextensionsharejuan== 1}>checked<{/if}>>关闭</td>
                      </tr>

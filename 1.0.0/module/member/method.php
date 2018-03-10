@@ -107,14 +107,14 @@ class method   extends baseclass
 				 if($arr['score'] > 0){
 					$this->memberCls->addlog($uid,1,1,$arr['score'],'注册送积分','注册送积分'.$arr['score'],$arr['score']);
 				 } 
-         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' " );  	   
-         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc " );	   
+         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送代金券' " );  	   
+         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送代金券' order by id asc " );	   
 		 if($juansetinfo['status'] ==1 && !empty($juaninfo)){
-	 	   //注册送优惠券		   		   	  
+	 	   //注册送代金券		   		   	  
 		   foreach($juaninfo as $key=>$value){			   
 			   $juandata['uid'] = $this->uid;// 用户ID	
 			   $juandata['username'] = $arr['username'];// 用户名
-			   $juandata['name'] = $value['name'];//  优惠券名称 
+			   $juandata['name'] = $value['name'];//  代金券名称 
 			   $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效	
 			   $juandata['card'] = $nowtime.rand(100,999);
 			   $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
@@ -136,8 +136,8 @@ class method   extends baseclass
 			   }			   			   		  	    		   
 			   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);			   
 		   } 
-       }	// 根据前台注册的手机号检测此手机号数据库中是否领取过优惠券，如果有则更新UID和username status=1   
-			// 如果前台新注册的用户 存在分享者 shareuid > 0 则考虑返增推广分享者优惠券
+       }	// 根据前台注册的手机号检测此手机号数据库中是否领取过代金券，如果有则更新UID和username status=1   
+			// 如果前台新注册的用户 存在分享者 shareuid > 0 则考虑返增推广分享者代金券
 			$checkphonejuan =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan where bangphone='".$phone."' and uid=0 and status = 0  "); 
 			if( !empty($checkphonejuan) ){
 				$tdata['uid'] = $uid;

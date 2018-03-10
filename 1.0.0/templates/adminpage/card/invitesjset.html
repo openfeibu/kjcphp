@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js"></script>
  <{/block}>
- <{block name=controlname}>优惠券设置<{/block}>
+ <{block name=controlname}>代金券设置<{/block}>
  <{block name=bodylist}> 
  <style>
 .set{border:1px solid #999d9c; width:80%}
@@ -24,7 +24,7 @@
           <div class="search">
             <div class="search_content" style='font-size:12px'>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	会员在用户端个人中心“邀请好友送红包”分享优惠券消息链接给好友，好友通过该链接用手机号领取并用该手机号注册成功后，将会奖励双方同等的优惠券。
+	会员在用户端个人中心“邀请好友送红包”分享代金券消息链接给好友，好友通过该链接用手机号领取并用该手机号注册成功后，将会奖励双方同等的代金券。
 	        <div class='wxshare'>
 			<div class='fxxx'><a style='color:#fff' href='<{ofunc type=url link="/adminpage/card/module/addshareinfo/id/2"}>'>分享消息</a></div>
 			<div class='lqjm'><a href='<{ofunc type=url link="/adminpage/card/module/addsjsinfo/id/2"}>'>领取界面</a></div>
@@ -44,12 +44,12 @@
                      </tr>
 					
 					  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                        <td class="left">优惠券面值</td>
+                        <td class="left">代金券面值</td>
                         <td><input type="radio" name="costtype" id='fixedcost'  value="1"  <{if $juansetinfo['costtype'] == 1}>checked<{/if}>>&nbsp;固定&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <input type="radio" name="costtype" id='randomcost'  value="2"  <{if $juansetinfo['costtype'] == 2}>checked<{/if}>>&nbsp;随机</td>
                      </tr>
 					 <tr  onmouseout="this.bgColor='ffffff';">
-                        <td class="left">优惠券设置</td>
+                        <td class="left">代金券设置</td>
                         <td>
 						 	<div class='set' >	
                                 <div class='settop' style='width:100%;border-bottom:1px solid #999d9c;background-color:#F5F5F5'>
@@ -69,7 +69,7 @@
 									   <div class='setconrs'>
 										   <div style='width:30%'><input type="text" name="fjuancost[]" value="<{$items["cost"]}>" style='width:45px' >元</div>
 										   <div style='width:34%'>满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style='width:45px' >元可使用</div>
-										   <div style='width:34%;color:#2585a6'><span class="faddjuan">+添加优惠券</span></div>
+										   <div style='width:34%;color:#2585a6'><span class="faddjuan">+添加代金券</span></div>
 									   </div>
 									  <{else}>
 									  <div class='setconrs'>
@@ -94,7 +94,7 @@
 										   <div style='width:30%'><input type="text" name="rjuancostmin[]" value="<{$items["costmin"]}>" style='width:45px' >
 										   至 <input type="text" name="rjuancostmax[]" value="<{$items["costmax"]}>" style='width:45px' >元</div>
 										   <div style='width:34%'>满 <input type="text" name="rjuanlimitcost[]" value="<{$items["limitcost"]}>" style='width:45px' >元可使用</div>
-										   <div style='width:34%;color:#2585a6'><span class="raddjuan">+添加优惠券</span></div>
+										   <div style='width:34%;color:#2585a6'><span class="raddjuan">+添加代金券</span></div>
 									   </div>
 									   <{else}>
 									   <div class='setconrs'>
@@ -188,7 +188,7 @@
 			html += '<div style="width:34%;color:red"><span class="rdeljuan">删除</span></div></div>';
 		    $('.rsetconr').append(html); 
 		}else{
-		   alert('最多只能添加5张优惠券噢~');
+		   alert('最多只能添加5张代金券噢~');
 		}
 		
 	  });
@@ -210,7 +210,7 @@
 			html += '<div style="width:34%;color:red"><span class="fdeljuan">删除</span></div></div>';
 		    $('.fsetconr').append(html); 
 		}else{
-		   alert('最多只能添加5张优惠券噢~');
+		   alert('最多只能添加5张代金券噢~');
 		}
 		
 	  });

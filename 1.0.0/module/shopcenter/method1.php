@@ -2189,7 +2189,7 @@ class method   extends baseclass
 				   $where2 = 'and posttime > '.$value['starttime'].' and posttime < '.$value['endtime'];
 	         $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =0 and shopcost > 0 and status = 3 ".$where2." order by id asc  limit 0,1000");
 	         $line= $this->mysql->select_one("select count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost,sum(shopcost) as shopcost, sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =1  and paystatus =1 and shopcost > 0 and status = 3 ".$where2."   order by id asc  limit 0,1000");
-	         //月 份	订单数量	在线付款	线下支付	使用优惠券	店铺优惠	使用积分	打包费	配送费	商品总价
+	         //月 份	订单数量	在线付款	线下支付	使用代金券	店铺优惠	使用积分	打包费	配送费	商品总价
 	         $value['orderNum'] =  $shoptj['shuliang']+$line['shuliang'];//订单总个数
 	         $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $line['score']/Mysite::$app->config['scoretocost']:0;
 	         $value['onlinescore'] = $scordedown;
@@ -2197,7 +2197,7 @@ class method   extends baseclass
 	         $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
 	         $value['unlinescore'] = $scordedown;
 	         $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
-	         $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用优惠券
+	         $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
 	         $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 店铺优惠
 	         $value['score'] = $value['unlinescore'] +$value['onlinescore']; //  使用积分
 	         $value['bagcost'] = $line['bagcost'] +$shoptj['bagcost'];//   打包费
@@ -2792,7 +2792,7 @@ class method   extends baseclass
 	         $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(xfcost) as xfcost,sum(yhcost) as yhcost, sum(sjcost) as sjcost from ".Mysite::$app->config['tablepre']."shophuiorder  where shopid = '".$shopid."' and   paystatus =1 and status = 1 ".$where2." order by id asc  limit 0,1000");
 	         
 			# print_r($shoptj);
-			 //月 份	订单数量	在线付款	线下支付	使用优惠券	店铺优惠	使用积分	打包费	配送费	商品总价
+			 //月 份	订单数量	在线付款	线下支付	使用代金券	店铺优惠	使用积分	打包费	配送费	商品总价
 	         $value['orderNum'] =  $shoptj['shuliang'];//订单总个数
 	         
 	         $value['xfcost'] = $shoptj['xfcost'];//

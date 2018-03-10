@@ -21,7 +21,7 @@ function freshcart($payflag){
 
 function freshcartdata(datas,$payflag){
     $('#foodslist').html('');
-    var juancost = Number($("#juancost").val());//优惠券
+    var juancost = Number($("#juancost").val());//代金券
     $.each(datas.content.list, function(i,val){
         var htmls = template.render('cartlist', {list:val});
         htmls = '<div class="orderDetail_pro">'+htmls + "</div>"
@@ -180,7 +180,7 @@ function doselectjuan1(){
 function myyanchi(){
     checknext = false;
 }
-/*================获取优惠券信息===================*/
+/*================获取代金券信息===================*/
 function getjuaninfo(){
 
     var oldjuanid = Number($('#juanid').val());
@@ -200,9 +200,9 @@ function getjuaninfo(){
             });
             console.log('juancount:'+juancount);
             if(juancount > 0){
-                $('.checkDiscount').html('<p>优惠券</p><span>'+juancount+'张可用</span>');
+                $('.checkDiscount').html('<p>代金券</p><span>'+juancount+'张可用</span>');
             }else{
-                $('.checkDiscount').html('<p>优惠券</p><span>暂无可用</span>');
+                $('.checkDiscount').html('<p>代金券</p><span>暂无可用</span>');
             }
             console.log('discountids:'+discountids);
             console.log('discountvalues:'+discountvalues);

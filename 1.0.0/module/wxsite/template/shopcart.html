@@ -87,7 +87,7 @@ var backtype = 0;
         </div>
         <div class="orderDetail_item fsMain ">
           <div class="checkDiscount">
-            <p>优惠券</p>
+            <p>代金券</p>
             <span>暂无可用</span>
           </div>
 
@@ -120,9 +120,9 @@ var backtype = 0;
   var count = 28;
   var discount = 1;
   discountids = ['0,0'];
-  discountvalues = ['不使用优惠券'];
+  discountvalues = ['不使用代金券'];
   $(".YHcheckDiscount").picker({
-    title: "请选择优惠券",
+    title: "请选择代金券",
     cols: [
       {
         textAlign: 'center',
@@ -141,7 +141,7 @@ var backtype = 0;
     	    $('input[name="yhjcost"]').val(val);
           freshcart(1);
       }else{
-          $(".checkDiscount span").text("不使用优惠券");
+          $(".checkDiscount span").text("不使用代金券");
 
           $('#juanid').val(valArr[1]);
           $('#juancost').val(val);

@@ -346,7 +346,7 @@ class method   extends areaadminbaseclass
 	         $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
 	         $value['unlinescore'] = $scordedown;
 	         $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
-	         $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用优惠券
+	         $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
 	         $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 店铺优惠
 	         $value['score'] = $value['unlinescore'] +$value['onlinescore']; //  使用积分
 	         $value['bagcost'] = $line['bagcost'] +$shoptj['bagcost'];//   打包费
@@ -762,7 +762,7 @@ class method   extends areaadminbaseclass
                         }
                     }
 					/*
-					// 写优惠券
+					// 写代金券
 					*/
 					if($memberinfo['parent_id'] > 0){ 
 						$upuser = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$memberinfo['parent_id']."'   ");
@@ -779,12 +779,12 @@ class method   extends areaadminbaseclass
 								$juandata['endtime'] = $endtime;// 失效时间
 								$juandata['uid'] = $upuser['uid'];// 用户ID
 								$juandata['username'] = $upuser['username'];// 用户名
-								$juandata['name'] = '推荐送优惠券';//  优惠券名称
+								$juandata['name'] = '推荐送代金券';//  代金券名称
 								$this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);
 								$this->mysql->update(Mysite::$app->config['tablepre'].'member','`parent_id`=0',"uid ='".$orderinfo['buyeruid']."' ");
 								$logdata['uid'] = $upuser['uid'];
 								$logdata['childusername'] = $memberinfo['username'];
-								$logdata['titile'] = '推荐送优惠券';
+								$logdata['titile'] = '推荐送代金券';
 								$logdata['addtime'] = time();
 								$logdata['content'] = '被推荐下单完成';
 								$this->mysql->insert(Mysite::$app->config['tablepre'].'sharealog',$logdata);
@@ -1167,7 +1167,7 @@ $where3 .= !empty($endtime)? ' and  jstime < '.strtotime($endtime.' 23:59:59').'
 	         $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
 	         $value['unlinescore'] = $scordedown;
 	         $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
-	         $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用优惠券
+	         $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
 	         $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 店铺优惠
 	         $value['score'] = $value['unlinescore'] +$value['onlinescore']; //  使用积分
 	         $value['bagcost'] = $line['bagcost'] +$shoptj['bagcost'];//   打包费
@@ -1188,7 +1188,7 @@ $where3 .= !empty($endtime)? ' and  jstime < '.strtotime($endtime.' 23:59:59').'
 		   }
 		}
 		 $outexcel = new phptoexcel();
-		 $titledata = array('店铺名称','配送方式','订单数量','线上支付','线下支付','优惠券','店铺促销','积分低扣金额','配送费','商品总价','打包费','佣金');
+		 $titledata = array('店铺名称','配送方式','订单数量','线上支付','线下支付','代金券','店铺促销','积分低扣金额','配送费','商品总价','打包费','佣金');
 		 $titlelabel = array('shopname','sendtype','orderNum','online','unline','yhjcost','cxcost','score','pscost','goodscost','bagcost','yje');
 		// $datalist = $this->mysql->getarr("select card,card_password,cost from ".Mysite::$app->config['tablepre']."card where id > 0 ".$where."   order by id desc  limit 0,2000 ");
 		 $outexcel->out($titledata,$titlelabel,$list,'','商家结算');

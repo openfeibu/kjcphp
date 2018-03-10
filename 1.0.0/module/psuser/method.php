@@ -782,7 +782,7 @@ class method   extends baseclass
 		             	 $this->mysql->update(Mysite::$app->config['tablepre'].'member','`total`=`total`+'.$checkinfo['allcost'],"uid ='".$checkinfo['buyeruid']."' ");
 		              }
 		              /*
-		               // 写优惠券
+		               // 写代金券
 		              */
 		              if($memberinfo['parent_id'] > 0){
 
@@ -800,12 +800,12 @@ class method   extends baseclass
        $juandata['endtime'] = $endtime;// 失效时间
        $juandata['uid'] = $upuser['uid'];// 用户ID
        $juandata['username'] = $upuser['username'];// 用户名
-       $juandata['name'] = '推荐送优惠券';//  优惠券名称
+       $juandata['name'] = '推荐送代金券';//  代金券名称
 	 	   $this->mysql->insert(Mysite::$app->config['tablepre'].'juan',$juandata);
 	 	    $this->mysql->update(Mysite::$app->config['tablepre'].'member','`parent_id`=0',"uid ='".$checkinfo['buyeruid']."' ");
 	 	    $logdata['uid'] = $upuser['uid'];
 	 	    $logdata['childusername'] = $memberinfo['username'];
-	 	    $logdata['titile'] = '推荐送优惠券';
+	 	    $logdata['titile'] = '推荐送代金券';
 	 	    $logdata['addtime'] = time();
 	 	    $logdata['content'] = '被推荐下单完成';
 	 	    $this->mysql->insert(Mysite::$app->config['tablepre'].'sharealog',$logdata);
@@ -1037,7 +1037,7 @@ class method   extends baseclass
 			$templist[]['mytext'] = '促销优惠：'.$order['cxcost'];
 		}
 		if($order['yhjcost'] > 0){
-			$templist[]['mytext'] = '优惠券抵扣：'.$order['yhjcost'];
+			$templist[]['mytext'] = '代金券抵扣：'.$order['yhjcost'];
 		}
 		if($order['shopps'] > 0){
 			$templist[]['mytext'] = '配送费：'.$order['shopps'];

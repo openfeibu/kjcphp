@@ -732,9 +732,9 @@ function doselectjuan(){
 			   }
 		});
 		if(htmle == ''){
-		  Tmsg('无满足条件的优惠券');
+		  Tmsg('无满足条件的代金券');
 		}else{
-			 htmle = '<li class="" onclick="selectjuan(\'0\',\'0\',\'不使用优惠券\');">不使用优惠券</li>'+htmle;
+			 htmle = '<li class="" onclick="selectjuan(\'0\',\'0\',\'不使用代金券\');">不使用代金券</li>'+htmle;
 		//	  htmle = '<div class="juanshow" id="outdivshow"><ul>'+htmle+'</ul></div>  <div style="clear:both;height:20px;"></div>';
 	       
 		  myScroll.scrollToElement('#yhjposition',100); 
@@ -751,7 +751,7 @@ function doselectjuan(){
 		} 
 		
 	}else{
-	  Tmsg('您未绑定优惠券');
+	  Tmsg('您未绑定代金券');
 	  $('#mask1').hide();
 	  $('#popup1').hide();
 	}

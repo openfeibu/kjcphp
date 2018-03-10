@@ -56,7 +56,7 @@
                         <th align="center">id</th>
                          <th align="center">充值金额</th>
                          <th align="center">是否赠送金额</th>
-                         <th align="center">是否赠送优惠券</th>
+                         <th align="center">是否赠送代金券</th>
                          <th align="center">排序</th> 
                          <th align="center">操作</th> 
 
@@ -71,7 +71,7 @@
                         <td align="center"><{$items['id']}></td>
                         <td align="center"> <{$items['cost']}> </td>
                         <td align="center"  ><{if $items['is_sendcost'] == 1 }>赠送<{$items['sendcost']}><{else}>否<{/if}></td>
-                           <td align="center"><{if $items['is_sendjuan']==1}>赠送优惠券总金额：<{$items['sendjuancost']}>元<{else}>否<{/if}></td>
+                           <td align="center"><{if $items['is_sendjuan']==1}>赠送代金券总金额：<{$items['sendjuancost']}>元<{else}>否<{/if}></td>
                          <td align="center"><{$items['orderid']}></td>
 						<td align="center">
                         	<a href="<{ofunc type=url link="/adminpage/card/module/addrechargecost/id/<{$items['id']}>"}>" ><img style='margin-bottom: -8px;' src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/edit.jpg"></a>
@@ -93,7 +93,7 @@
 				
 					<div class="select_page"><a href="#" onclick="checkword(true);">全选</a>/<a href="#" onclick="checkword(false);">取消</a> 
 						  <a onclick="return remindall(this);" href="<{ofunc type=url link="/adminpage/card/module/delrechargecost/datatype/json"}>" class="delurl">删除</a>  
-						  <a href="<{ofunc type=url link="/adminpage/card/module/addrechargecost"}>" class="delurl">添加充值送余额/优惠券</a></div>
+						  <a href="<{ofunc type=url link="/adminpage/card/module/addrechargecost"}>" class="delurl">添加充值送余额/代金券</a></div>
 				 
                  	     </div>
                        <div class="show_page"><ul><{$pagecontent}></ul></div>

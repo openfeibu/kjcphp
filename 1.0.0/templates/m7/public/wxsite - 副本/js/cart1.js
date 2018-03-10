@@ -411,7 +411,7 @@ function freshcartdata(datas,$payflag){
 		  var morepscost = Number($("#morepscost").text());
 
 		  var morepscost = Number($("#morepscost").text());//附加配送费
-		  var juancost = Number($("#juancost").val());//优惠券
+		  var juancost = Number($("#juancost").val());//代金券
 		  var jifen = Number($("#jifen").val());//积分抵扣
 
 
@@ -450,7 +450,7 @@ function freshcartdata(datas,$payflag){
 	  }
 
 		  if(juancost > 0 ){
-			  temp_htmls = ' <li><span class="shopdetalistL" style="width:49.8823%;">&nbsp;</span><span class="shopdetalistC shpdetb">优惠券抵扣：</span><span class="shopdetalistR">-￥'+juancost+'</span></li>	';
+			  temp_htmls = ' <li><span class="shopdetalistL" style="width:49.8823%;">&nbsp;</span><span class="shopdetalistC shpdetb">代金券抵扣：</span><span class="shopdetalistR">-￥'+juancost+'</span></li>	';
 			  $('#nextshocart').append(temp_htmls);
 		  }
 		  if(jifen > 0 ){
@@ -756,7 +756,7 @@ function selectjuan(juanid,juancost,juanname,juanpaytype){
   	//if( curpaytype == 0 && juanpaytype !=0 ){
 	//	if(  juanpaytype.indexOf(1) > -1  ){
  	//	}else{
-	//		Tmsg('此优惠券不支持货到付款');
+	//		Tmsg('此代金券不支持货到付款');
 	//		return false;
 	//	}
 	//}
@@ -764,7 +764,7 @@ function selectjuan(juanid,juancost,juanname,juanpaytype){
 	//if( curpaytype == 1 && juanpaytype !=0  ){
 	//	if(  juanpaytype.indexOf(2) > -1  ){
  	//	}else{
-	//		Tmsg('此优惠券不支持在线支付');
+	//		Tmsg('此代金券不支持在线支付');
 	//		return false;
 	//	}
 	//}
@@ -831,9 +831,9 @@ function doselectjuan(){
 			   }
 		});
 		if(htmle == ''){
-		  Tmsg('无满足条件的优惠券');
+		  Tmsg('无满足条件的代金券');
 		}else{
-			 htmle = '<li class="" onclick="selectjuan(\'0\',\'0\',\'不使用优惠券\',\'0\');">不使用优惠券</li>'+htmle;
+			 htmle = '<li class="" onclick="selectjuan(\'0\',\'0\',\'不使用代金券\',\'0\');">不使用代金券</li>'+htmle;
 		//	  htmle = '<div class="juanshow" id="outdivshow"><ul>'+htmle+'</ul></div>  <div style="clear:both;height:20px;"></div>';
 	       
 		  myScroll.scrollToElement('#yhjposition',100); 
@@ -850,7 +850,7 @@ function doselectjuan(){
 		} 
 		
 	}else{
-	  Tmsg('您未绑定优惠券');
+	  Tmsg('您未绑定代金券');
 	  $('#mask1').hide();
 	  $('#popup1').hide();
 	}

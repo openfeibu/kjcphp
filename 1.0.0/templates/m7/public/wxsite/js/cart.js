@@ -404,7 +404,7 @@ function freshcartdata(datas,$payflag){
 	
 	  if(datas.flag == false){
 		var morepscost = Number($("#morepscost").text());//附加配送费
-		var juancost = Number($("#juancost").val());//优惠券
+		var juancost = Number($("#juancost").val());//代金券
 		var jifen = Number($("#jfcost").val());//积分抵扣
     	var temp_htmls = '';
            $('#foodslist').append(temp_htmls);
@@ -715,7 +715,7 @@ function selectTime(timename,timetitle,cost){
 	setTimeout("myyanchi()", 500 );
  }
 }
-/*==================选择完优惠券后执行函数========================*/
+/*==================选择完代金券后执行函数========================*/
 function selectjuan(juanid,juancost,limitcost,juanname,juanpaytype){
 	if(checknext ==  false){
 	$('.checkjuan').removeClass('checkonejuan');	
@@ -728,7 +728,7 @@ function selectjuan(juanid,juancost,limitcost,juanname,juanpaytype){
   	if( curpaytype == 0 && juanpaytype !=0 && Number(juanpaytype) >0 ){
 		if(  juanpaytype.indexOf(1) > -1  ){
  		}else{
-			Tmsg('此优惠券不支持货到付款');
+			Tmsg('此代金券不支持货到付款');
 			return false;
 		}
 	}
@@ -736,7 +736,7 @@ function selectjuan(juanid,juancost,limitcost,juanname,juanpaytype){
 	if( curpaytype == 1 && juanpaytype !=0 && Number(juanpaytype) >0 ){
 		if(  juanpaytype.indexOf(2) > -1  ){
  		}else{
-			Tmsg('此优惠券不支持在线支付');
+			Tmsg('此代金券不支持在线支付');
 			return false;
 		}
 	}
@@ -746,7 +746,7 @@ function selectjuan(juanid,juancost,limitcost,juanname,juanpaytype){
 	$('input[name="yhjcost"]').val(juancost);
 	$('#orderaddress').show();
 	$('.wmr_title_center').text('订单配送至');
-	$('.wmr_subord_yh').html('<h3>优惠券</h3><span style="color:#ff6e6e">-￥'+juancost+'<i class="fa fa-angle-right"></i></span>');
+	$('.wmr_subord_yh').html('<h3>代金券</h3><span style="color:#ff6e6e">-￥'+juancost+'<i class="fa fa-angle-right"></i></span>');
     $("#juanshuoming b span").text('-￥'+juancost);
     $('#mask1').hide();
 	$('#popup1').hide();
@@ -784,9 +784,9 @@ function doselectjuan(){
 			   }
 		});
 		if(htmle == ''){
-		  Tmsg('无满足条件的优惠券');
+		  Tmsg('无满足条件的代金券');
 		}else{
-			 htmle = '<li class="" onclick="selectjuan(\'0\',\'0\',\'0\',\'不使用优惠券\',\'0\');">不使用优惠券</li>'+htmle; 
+			 htmle = '<li class="" onclick="selectjuan(\'0\',\'0\',\'0\',\'不使用代金券\',\'0\');">不使用代金券</li>'+htmle; 
 		  myScroll.scrollToElement('#yhjposition',100); 
 	      
   	         setTimeout(function () {
@@ -795,7 +795,7 @@ function doselectjuan(){
 		} 
 		
 	}else{
-	  Tmsg('您未绑定优惠券');
+	  Tmsg('您未绑定代金券');
 	  $('#mask1').hide();
 	  $('#popup1').hide();
 	}
@@ -820,7 +820,7 @@ function doselectjuan1(){
 	if(juanlist.length > 0){
 		var htmle = '';
 		var checkcost = Number(cartsum)+Number(cartbagcost);
- 		$.each(juanlist,function(i,field){  //可用优惠券
+ 		$.each(juanlist,function(i,field){  //可用代金券
 			var juancost = Number(field.limitcost);
 			var jpaytype = $('input[name="paytype"]').val();   
 			    jpaytype = Number(jpaytype)+1;
@@ -849,7 +849,7 @@ function doselectjuan1(){
 					htmle +='</div>';
 			   
 		});	
-		$.each(juanlist,function(i,field){   //不可用优惠券
+		$.each(juanlist,function(i,field){   //不可用代金券
 			var juancost = Number(field.limitcost);
 			var jpaytype = $('input[name="paytype"]').val();   
 			    jpaytype = Number(jpaytype)+1;
@@ -891,7 +891,7 @@ function doselectjuan1(){
 		});	
         htmle +='<div style="height:40px"></div>';		
 		if(htmle == ''){
-		  Tmsg('无满足条件的优惠券');
+		  Tmsg('无满足条件的代金券');
 		}else{
 			var juanid = $('#juanid').val();
 			var isck = $('#juanid').attr('data');
@@ -899,11 +899,11 @@ function doselectjuan1(){
 				
 			}else{
 			$('#yhjlist').append(htmle);
-			$('#yhjlist').append('<div class="discoupon notusejuan" onclick="notusejuan();" >不使用优惠券</div>');
+			$('#yhjlist').append('<div class="discoupon notusejuan" onclick="notusejuan();" >不使用代金券</div>');
 			}			
 			$('#gdcart').hide(); 
 			$('#orderaddress').hide();
-			$('.wmr_title_center').text('选择优惠券');
+			$('.wmr_title_center').text('选择代金券');
             $('#yhjlist').show();               
 		} 
 		
@@ -915,7 +915,7 @@ function doselectjuan1(){
 function notusejuan(){
 	$('#orderaddress').show();
 		$('.wmr_title_center').text('订单配送至');
-		$('.wmr_subord_yh').html('<h3>优惠券</h3><span>不使用优惠券<i class="fa fa-angle-right"></i></span>');     
+		$('.wmr_subord_yh').html('<h3>代金券</h3><span>不使用代金券<i class="fa fa-angle-right"></i></span>');     
 		$('#mask1').hide();
 		$('#popup1').hide();
 		$('#gdcart').show();  
@@ -927,7 +927,7 @@ function notusejuan(){
 		$('.checkjuan').removeClass('checkonejuan');
 		freshcart();
 }
-/*================获取优惠券信息===================*/  
+/*================获取代金券信息===================*/  
 function getjuaninfo(){
      freshcart()  
 	 var oldjuanid = Number($('#juanid').val());
@@ -959,10 +959,10 @@ function getjuaninfo(){
 		});
 		   
 		if(juancount > 0){
-			$('.wmr_subord_yh').html('<h3>优惠券</h3><span style="color:#ff6e6e">'+juancount+'张可用<i class="fa fa-angle-right"></i></span>');
+			$('.wmr_subord_yh').html('<h3>代金券</h3><span style="color:#ff6e6e">'+juancount+'张可用<i class="fa fa-angle-right"></i></span>');
 			$('#yhjlist span i').text(juancount);        			 			  
 		}else{
-			 $('.wmr_subord_yh').html('<h3>优惠券</h3><span>暂无可用<i class="fa fa-angle-right"></i></span>');  
+			 $('.wmr_subord_yh').html('<h3>代金券</h3><span>暂无可用<i class="fa fa-angle-right"></i></span>');  
            $('#yhjlist span i').text(0); 			 
 		} 
 		

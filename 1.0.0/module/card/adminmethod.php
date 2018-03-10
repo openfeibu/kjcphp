@@ -34,14 +34,14 @@ class method extends adminbaseclass
         $this->mysql->update(Mysite::$app->config['tablepre'].'cxruleset', $data, "id=".$id."");
         $this->success('success');
     }
-    /*优惠券发放*/
+    /*代金券发放*/
     public function grantset()
     {
-        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6 or name = '优惠券活动' ");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 or name= '优惠券活动' order by id asc ");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6 or name = '代金券活动' ");
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 or name= '代金券活动' order by id asc ");
         Mysite::$app->setdata($data);
     }
-    /**保存关注微信领取优惠券相关信息**/
+    /**保存关注微信领取代金券相关信息**/
     public function savegrantjuanset()
     {
         error_reporting(-1);
@@ -50,12 +50,12 @@ class method extends adminbaseclass
         $costtype = 1;//面值类型  1固定面值  2随机面值
         $id_arr = IReq::get('id');
         $ids = implode(',',array_filter($id_arr));
-        $cost = IReq::get('fjuancost');//优惠券固定面值数组
-        $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
-        $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
-        $count = IReq::get('count');//优惠券随机面值限制金额数组
-        $costmin = IReq::get('rjuancostmin');//优惠券随机面值金额下限数组
-        $costmax = IReq::get('rjuancostmax');//优惠券随机面值金额上限数组
+        $cost = IReq::get('fjuancost');//代金券固定面值数组
+        $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
+        $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
+        $count = IReq::get('count');//代金券随机面值限制金额数组
+        $costmin = IReq::get('rjuancostmin');//代金券随机面值金额下限数组
+        $costmax = IReq::get('rjuancostmax');//代金券随机面值金额上限数组
         // $paytype = IReq::get('paytype'); //支持类型数组 1在线支付 2货到付款 1,2都支持
         $timetype = 2;// 失效时间类型 1固定天数 2固定时间段
         $days = IReq::get('juanday');  //失效天数
@@ -67,18 +67,18 @@ class method extends adminbaseclass
         // if (strtotime($endtime.' 23:59:59') < strtotime($starttime.' 00:00:00')) {
         //    $this->message('过期时间不能早于生效时间');
         // }
-        //更新优惠券活动设置
+        //更新代金券活动设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['timetype'] = $timetype;
         $data['days'] = $days;
         // $data['starttime'] = strtotime($starttime.' 00:00:00');
         // $data['endtime'] = strtotime($endtime.' 23:59:59');
-        // $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 6 or name = '优惠券活动'");
+        // $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 6 or name = '代金券活动'");
         $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 6 and id not in ($ids)");//更新时  先删除以前的后插入新的
         $data1['paytype'] = '1,2';
         $data1['type'] = 6;
-        $data1['name'] = '优惠券活动';
+        $data1['name'] = '代金券活动';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
 
@@ -115,23 +115,23 @@ class method extends adminbaseclass
         }
         $this->success('success');
     }
-    /**关注微信领取优惠券相关信息**/
+    /**关注微信领取代金券相关信息**/
     public function followsjset()
     {
-        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 1 or name = '关注送优惠券' ");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 1 or name= '关注送优惠券' order by id asc ");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 1 or name = '关注送代金券' ");
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 1 or name= '关注送代金券' order by id asc ");
         Mysite::$app->setdata($data);
     }
-    /**保存关注微信领取优惠券相关信息**/
+    /**保存关注微信领取代金券相关信息**/
     public function savefollowjuanset()
     {
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
        $costtype = IReq::get('costtype');//面值类型  1固定面值  2随机面值
-       $cost = IReq::get('fjuancost');//优惠券固定面值数组
-       $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
-       $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
-       $costmin = IReq::get('rjuancostmin');//优惠券随机面值金额下限数组
-       $costmax = IReq::get('rjuancostmax');//优惠券随机面值金额上限数组
+       $cost = IReq::get('fjuancost');//代金券固定面值数组
+       $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
+       $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
+       $costmin = IReq::get('rjuancostmin');//代金券随机面值金额下限数组
+       $costmax = IReq::get('rjuancostmax');//代金券随机面值金额上限数组
        $paytype = IReq::get('paytype'); //支持类型数组 1在线支付 2货到付款 1,2都支持
        $timetype = IReq::get('timetype');// 失效时间类型 1固定天数 2固定时间段
        $days = IReq::get('juanday');  //失效天数
@@ -144,7 +144,7 @@ class method extends adminbaseclass
            $this->message('过期时间不能早于生效时间');
        }
 
-        //更新关注微信领取优惠券设置
+        //更新关注微信领取代金券设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['paytype'] = implode(',', $paytype);
@@ -152,11 +152,11 @@ class method extends adminbaseclass
         $data['days'] = $days;
         $data['starttime'] = strtotime($starttime.' 00:00:00');
         $data['endtime'] = strtotime($endtime.' 23:59:59');
-        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 1 or name = '关注送优惠券'");
+        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 1 or name = '关注送代金券'");
         $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 1");//更新时  先删除以前的后插入新的
         $data1['paytype'] = implode(',', $paytype);
         $data1['type'] = 1;
-        $data1['name'] = '关注送优惠券';
+        $data1['name'] = '关注送代金券';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
                 $data1['cost'] = $v1;
@@ -184,23 +184,23 @@ class method extends adminbaseclass
         $this->success('success');
     }
 
-    /**注册领取优惠券相关信息**/
+    /**注册领取代金券相关信息**/
     public function registersjset()
     {
-        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送优惠券' ");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送优惠券' order by id asc ");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 2 or name = '注册送代金券' ");
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 2 or name= '注册送代金券' order by id asc ");
         Mysite::$app->setdata($data);
     }
-    /**保存注册领取优惠券相关信息**/
+    /**保存注册领取代金券相关信息**/
     public function saveregistersjset()
     {
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
        $costtype = 1;//面值类型  1固定面值  2随机面值
-       $cost = IReq::get('fjuancost');//优惠券固定面值数组
-       $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
-       $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
-       $costmin = IReq::get('rjuancostmin');//优惠券随机面值金额下限数组
-       $costmax = IReq::get('rjuancostmax');//优惠券随机面值金额上限数组
+       $cost = IReq::get('fjuancost');//代金券固定面值数组
+       $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
+       $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
+       $costmin = IReq::get('rjuancostmin');//代金券随机面值金额下限数组
+       $costmax = IReq::get('rjuancostmax');//代金券随机面值金额上限数组
        $paytype = IReq::get('paytype'); //支持类型数组 1在线支付 2货到付款 1,2都支持
        $timetype = IReq::get('timetype');// 失效时间类型 1固定天数 2固定时间段
        $days = IReq::get('juanday');  //失效天数
@@ -212,7 +212,7 @@ class method extends adminbaseclass
        if (strtotime($endtime.' 23:59:59') < strtotime($starttime.' 00:00:00')) {
            $this->message('过期时间不能早于生效时间');
        }
-        //更新关注微信领取优惠券设置
+        //更新关注微信领取代金券设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['paytype'] = implode(',', $paytype);
@@ -220,11 +220,11 @@ class method extends adminbaseclass
         $data['days'] = $days;
         $data['starttime'] = strtotime($starttime.' 00:00:00');
         $data['endtime'] = strtotime($endtime.' 23:59:59');
-        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 2 or name = '注册送优惠券'");
+        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 2 or name = '注册送代金券'");
         $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 2");//更新时  先删除以前的后插入新的
         $data1['paytype'] = implode(',', $paytype);
         $data1['type'] = 2;
-        $data1['name'] = '注册送优惠券';
+        $data1['name'] = '注册送代金券';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
                 $data1['cost'] = $v1;
@@ -251,22 +251,22 @@ class method extends adminbaseclass
         }
         $this->success('success');
     }
-    /**充值送优惠券相关信息**/
+    /**充值送代金券相关信息**/
     public function rechargesjset()
     {
-        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 3 or name = '充值送优惠券' ");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 3 or name= '充值送优惠券' order by id asc ");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 3 or name = '充值送代金券' ");
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 3 or name= '充值送代金券' order by id asc ");
         Mysite::$app->setdata($data);
     }
-    /**保存充值送优惠券相关信息**/
+    /**保存充值送代金券相关信息**/
     public function saverechargesjset()
     {
         $costtype = IReq::get('costtype');//面值类型  1固定面值  2随机面值
-       $cost = IReq::get('fjuancost');//优惠券固定面值数组
-       $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
-       $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
-       $costmin = IReq::get('rjuancostmin');//优惠券随机面值金额下限数组
-       $costmax = IReq::get('rjuancostmax');//优惠券随机面值金额上限数组
+       $cost = IReq::get('fjuancost');//代金券固定面值数组
+       $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
+       $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
+       $costmin = IReq::get('rjuancostmin');//代金券随机面值金额下限数组
+       $costmax = IReq::get('rjuancostmax');//代金券随机面值金额上限数组
        $paytype = IReq::get('paytype'); //支持类型数组 1在线支付 2货到付款 1,2都支持
        $timetype = IReq::get('timetype');// 失效时间类型 1固定天数 2固定时间段
        $days = IReq::get('juanday');  //失效天数
@@ -278,7 +278,7 @@ class method extends adminbaseclass
        if (strtotime($endtime.' 23:59:59') < strtotime($starttime.' 00:00:00')) {
            $this->message('过期时间不能早于生效时间');
        }
-        //更新关注微信领取优惠券设置
+        //更新关注微信领取代金券设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['paytype'] = implode(',', $paytype);
@@ -286,11 +286,11 @@ class method extends adminbaseclass
         $data['days'] = $days;
         $data['starttime'] = strtotime($starttime.' 00:00:00');
         $data['endtime'] = strtotime($endtime.' 23:59:59');
-        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 3 or name = '充值送优惠券'");
+        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 3 or name = '充值送代金券'");
         $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 3");//更新时  先删除以前的后插入新的
         $data1['paytype'] = implode(',', $paytype);
         $data1['type'] = 3;
-        $data1['name'] = '充值送优惠券';
+        $data1['name'] = '充值送代金券';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
                 $data1['cost'] = $v1;
@@ -317,23 +317,23 @@ class method extends adminbaseclass
         }
         $this->success('success');
     }
-    /**下单领取优惠券相关信息**/
+    /**下单领取代金券相关信息**/
     public function makeordersjset()
     {
-        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送优惠券' ");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送优惠券' order by id asc ");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 4 or name = '下单送代金券' ");
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 4 or name= '下单送代金券' order by id asc ");
         Mysite::$app->setdata($data);
     }
-    /**保存下单领取优惠券相关信息**/
+    /**保存下单领取代金券相关信息**/
     public function savemakeordersjset()
     {
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
        $costtype = IReq::get('costtype');//面值类型  1固定面值  2随机面值
-       $cost = IReq::get('fjuancost');//优惠券固定面值数组
-       $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
-       $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
-       $costmin = IReq::get('rjuancostmin');//优惠券随机面值金额下限数组
-       $costmax = IReq::get('rjuancostmax');//优惠券随机面值金额上限数组
+       $cost = IReq::get('fjuancost');//代金券固定面值数组
+       $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
+       $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
+       $costmin = IReq::get('rjuancostmin');//代金券随机面值金额下限数组
+       $costmax = IReq::get('rjuancostmax');//代金券随机面值金额上限数组
        $paytype = IReq::get('paytype'); //支持类型数组 1在线支付 2货到付款 1,2都支持
        $timetype = IReq::get('timetype');// 失效时间类型 1固定天数 2固定时间段
        $days = IReq::get('juanday');  //失效天数
@@ -346,7 +346,7 @@ class method extends adminbaseclass
           $this->message('过期时间不能早于生效时间');
       }
 
-        //更新关注微信领取优惠券设置
+        //更新关注微信领取代金券设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['paytype'] = implode(',', $paytype);
@@ -354,11 +354,11 @@ class method extends adminbaseclass
         $data['days'] = $days;
         $data['starttime'] = strtotime($starttime.' 00:00:00');
         $data['endtime'] = strtotime($endtime.' 23:59:59');
-        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 4 or name = '下单送优惠券'");
+        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 4 or name = '下单送代金券'");
         $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 4");//更新时  先删除以前的后插入新的
         $data1['paytype'] = implode(',', $paytype);
         $data1['type'] = 4;
-        $data1['name'] = '下单送优惠券';
+        $data1['name'] = '下单送代金券';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
                 $data1['cost'] = $v1;
@@ -397,11 +397,11 @@ class method extends adminbaseclass
     {
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
        $costtype = IReq::get('costtype');//面值类型  1固定面值  2随机面值
-       $cost = IReq::get('fjuancost');//优惠券固定面值数组
-       $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
-       $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
-       $costmin = IReq::get('rjuancostmin');//优惠券随机面值金额下限数组
-       $costmax = IReq::get('rjuancostmax');//优惠券随机面值金额上限数组
+       $cost = IReq::get('fjuancost');//代金券固定面值数组
+       $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
+       $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
+       $costmin = IReq::get('rjuancostmin');//代金券随机面值金额下限数组
+       $costmax = IReq::get('rjuancostmax');//代金券随机面值金额上限数组
        $paytype = IReq::get('paytype'); //支持类型数组 1在线支付 2货到付款 1,2都支持
        $timetype = IReq::get('timetype');// 失效时间类型 1固定天数 2固定时间段
        $days = IReq::get('juanday');  //失效天数
@@ -415,7 +415,7 @@ class method extends adminbaseclass
            $this->message('过期时间不能早于生效时间');
        }
 
-        //更新关注微信领取优惠券设置
+        //更新关注微信领取代金券设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['paytype'] = implode(',', $paytype);
@@ -454,11 +454,11 @@ class method extends adminbaseclass
         }
         $this->success('success');
     }
-    /**添加充值送余额时   选择赠送优惠券数据**/
+    /**添加充值送余额时   选择赠送代金券数据**/
     public function addrechargecost()
     {
-        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 3 or name = '充值送优惠券' ");
-        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 3 or name= '充值送优惠券' order by id asc ");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 3 or name = '充值送代金券' ");
+        $data['juaninfo'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 3 or name= '充值送代金券' order by id asc ");
         Mysite::$app->setdata($data);
     }
     /**促销活动列表**/
@@ -889,7 +889,7 @@ class method extends adminbaseclass
         if (!empty($id)) {
             $checkregjuan = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."regsendjuan where id  =  ".$id."    ");
             if (empty($checkregjuan)) {
-                $this->message('获取注册优惠券失败');
+                $this->message('获取注册代金券失败');
             }
         }
         $name = trim(IReq::get('name'));
@@ -900,7 +900,7 @@ class method extends adminbaseclass
         $is_open = intval(IReq::get('is_open'));
 
         if (empty($name)) {
-            $this->message('请填写优惠券名称');
+            $this->message('请填写代金券名称');
         }
         if (empty($limitcost)) {
             $this->message('请填写最低消费使用金额');
@@ -938,7 +938,7 @@ class method extends adminbaseclass
         $paytype = IReq::get('paytype');
         $paytype = implode(',', $paytype);
         if (empty($paytype)) {
-            $this->message('请选择优惠券支持的支付方式');
+            $this->message('请选择代金券支持的支付方式');
         }
         $card_temp = trim(IReq::get('card_temp')); //卡前缀
         $card_acount = intval(IReq::get('card_acount')); //卡数量
@@ -1597,23 +1597,23 @@ class method extends adminbaseclass
             $this->message('请填写名称！');
         }
         if ($type <= 0) {
-            $this->message('请选择优惠券类型');
+            $this->message('请选择代金券类型');
         }
         if (!in_array($type, array(1,2,3,4))) {
-            $this->message('获取优惠券类型失败');
+            $this->message('获取代金券类型失败');
         }
         if ($type != 1) {
             if (empty($juannum)) {
-                $this->message('优惠券数量为空');
+                $this->message('代金券数量为空');
             }
         }
         if ($jiancostmax > 0) {
             if ($jiancostmin > $jiancostmax) {
-                $this->message('请正确填写优惠券限制金额范围');
+                $this->message('请正确填写代金券限制金额范围');
             }
         }
         if ($jiacostmin > $jiacostmax) {
-            $this->message('请正确填写优惠券优惠金额范围');
+            $this->message('请正确填写代金券优惠金额范围');
         }
 
         $tempvalue = '';
@@ -1622,12 +1622,12 @@ class method extends adminbaseclass
         }
 
         if (empty($tempvalue)) {
-            $this->message('请选择优惠券支持的支付方式');
+            $this->message('请选择代金券支持的支付方式');
         }
 
         // if(substr($daynum,1,1) == '.')$this->message('请填写天数');exit;
         if (empty($daynum)) {
-            $this->message('请填写优惠券有效时间');
+            $this->message('请填写代金券有效时间');
         }
 
 
@@ -1698,10 +1698,10 @@ class method extends adminbaseclass
         $juaninfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuan where type  = 3 and id = ".$juanid."   ");
         if ($is_sendjuan == 1) {
             if (empty($juaninfo)) {
-                $this->message('优惠券信息获取失败！');
+                $this->message('代金券信息获取失败！');
             }
         }
-        $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 3 or name = '充值送优惠券' ");
+        $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 3 or name = '充值送代金券' ");
 
         $data['juanid'] = $juanid;
         $data['cost'] = $cost;
@@ -1804,13 +1804,13 @@ class method extends adminbaseclass
         $actcolor = trim(IReq::get('actcolor'));
         $avtrule = trim(IReq::get('content'));
         if (empty($bigimg)) {
-            $this->message('请上传领取优惠券页面头部展示大图！');
+            $this->message('请上传领取代金券页面头部展示大图！');
         }
         if (empty($color)) {
-            $this->message('请填写领取优惠券页面背景色！');
+            $this->message('请填写领取代金券页面背景色！');
         }
         if (empty($actcolor)) {
-            $this->message('请填写领取优惠券页面活动规则背景色！');
+            $this->message('请填写领取代金券页面活动规则背景色！');
         }
         if (empty($avtrule)) {
             $this->message('请填写活动规则！');
@@ -1901,7 +1901,7 @@ class method extends adminbaseclass
         $data['juantypename'] = array(
             '2'=>'下单分享页面',
             '3'=>'推广页面',
-            '4'=>'关注微信领取优惠券',
+            '4'=>'关注微信领取代金券',
         );
 
 
@@ -1921,7 +1921,7 @@ class method extends adminbaseclass
     }
 
     public function receivejuanlog()
-    {  // 优惠券领取记录列表
+    {  // 代金券领取记录列表
 
         $name = IReq::get('name');
         $username = IReq::get('username');
@@ -1989,9 +1989,9 @@ class method extends adminbaseclass
         $data['pagecontent'] = $pageinfo->getpagebar($pagelink);
         $data['receivejuanlog'] = $receivejuanlog;
         $data['juantypename'] = array(
-            '1'=>'关注送优惠券',
-            '2'=>'注册送优惠券',
-            '3'=>'充值送优惠券',
+            '1'=>'关注送代金券',
+            '2'=>'注册送代金券',
+            '3'=>'充值送代金券',
             '4'=>'下单发红包',
             '5'=>'邀请好友送红包',
             '6'=>'邀请好友反赠',
@@ -2005,7 +2005,7 @@ class method extends adminbaseclass
         Mysite::$app->setdata($data);
     }
     public function savesharejuanset()
-    {   //保存分享优惠券设置
+    {   //保存分享代金券设置
         limitalert();
         $siteinfo['userordersharejuan'] =  intval(IReq::get('userordersharejuan'));
         $siteinfo['userextensionsharejuan'] =  intval(IReq::get('userextensionsharejuan'));

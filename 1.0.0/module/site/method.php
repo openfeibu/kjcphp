@@ -2401,8 +2401,8 @@ class method extends baseclass
                 $memberCls = new memberclass($this->mysql);
                 $memberCls->addmemcostlog($memberinfo['uid'], $memberinfo['username'], $memberinfo['cost'], 1, $rechargeone['sendcost'], $docost, $liyouContent, $memberinfo['uid'], $memberinfo['username']);
             }
-            if ($rechargeone['is_sendjuan']== 1  && $rechargeone['sendjuancost'] > 0) { // 充值赠送优惠券
-                $liyouContent .= ',赠送'.$rechargeone['sendjuancost'].'元优惠券';
+            if ($rechargeone['is_sendjuan']== 1  && $rechargeone['sendjuancost'] > 0) { // 充值赠送代金券
+                $liyouContent .= ',赠送'.$rechargeone['sendjuancost'].'元代金券';
                 $where = "  where type = 1 and  juantotalcost  =".$rechargeone['sendjuancost']." and addtime < ".time()." and endtime > ".time()." and is_open = 1   " ;
                 $checkinfosendjuan = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."juanrule ".$where."  order by orderid asc  ");
 

@@ -495,14 +495,14 @@ function  makejuan(){
 	dikoujin = dikoujin=='undefined'?0:dikoujin;
 	var surecost = Number($('input[name="surecost"]').val())
 	if(tempdo.length > 0){
-		 htmls = '<option value="0" data="0">选择优惠券</option>';
+		 htmls = '<option value="0" data="0">选择代金券</option>';
 		for(var i=0;i<tempdo.length;i++){ 
 			if(tempdo[i].limitcost < surecost){
 			    htmls +='<option value="'+tempdo[i].id+'" data="'+tempdo[i].cost+'">'+tempdo[i].name+'</option>';
 			}
 		}
 	}else{
-	  htmls = '<option value="0" data="0">暂无优惠券</option>';
+	  htmls = '<option value="0" data="0">暂无代金券</option>';
 	}
 	$('#ddlmyticket').html(htmls);
 }
@@ -539,7 +539,7 @@ $('input[name="buyjuan"]').live("click", function() {
 		if(  juanpaytype.indexOf(1) > -1  ){
  		 	jisuanjf();
 		}else{
-			alert('此优惠券不支持货到付款');
+			alert('此代金券不支持货到付款');
 			return false;
 		}
 	}
@@ -548,7 +548,7 @@ $('input[name="buyjuan"]').live("click", function() {
 		if(  juanpaytype.indexOf(2) > -1  ){
  		 	jisuanjf();
 		}else{
-			alert('此优惠券不支持在线支付');
+			alert('此代金券不支持在线支付');
 			return false;
 		}
 	}

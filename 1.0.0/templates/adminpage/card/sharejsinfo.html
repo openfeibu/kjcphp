@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
 <{/block}>
- <{block name=controlname}>分享优惠券展示信息列表<{/block}>
+ <{block name=controlname}>分享代金券展示信息列表<{/block}>
  <{block name=bodylist}>
 
       <div style="width:auto;overflow-x:hidden;overflow-y:auto">
@@ -21,10 +21,10 @@
 			 
 			 
             	   <select name="type">
-            	   	  <option value="all">请选择优惠券展示类型</option>
- 			   		 	  	  <option value="2" <{if $type == '2'}>selected<{/if}>>下单成功分享优惠券类型</option>
-			   		 	  	  <option value="3" <{if $type == '3'}>selected<{/if}>>推广优惠券类型</option>
-			   		 	  	  <option value="4" <{if $type == '4'}>selected<{/if}>>关注微信领取优惠券类型</option>
+            	   	  <option value="all">请选择代金券展示类型</option>
+ 			   		 	  	  <option value="2" <{if $type == '2'}>selected<{/if}>>下单成功分享代金券类型</option>
+			   		 	  	  <option value="3" <{if $type == '3'}>selected<{/if}>>推广代金券类型</option>
+			   		 	  	  <option value="4" <{if $type == '4'}>selected<{/if}>>关注微信领取代金券类型</option>
             	  </select>
             	 
             	    <input type="submit" value="提交查询" class="button">
@@ -106,14 +106,14 @@
 				
 					<div class="select_page"><a href="#" onclick="checkword(true);">全选</a>/<a href="#" onclick="checkword(false);">取消</a> 
 						  <a onclick="return remindall(this);" href="<{ofunc type=url link="/adminpage/card/module/delsjsinfo/datatype/json"}>" class="delurl">删除</a>  
-						  <a href="<{ofunc type=url link="/adminpage/card/module/addsjsinfo"}>" class="delurl">添加分享优惠券展示信息</a></div>
+						  <a href="<{ofunc type=url link="/adminpage/card/module/addsjsinfo"}>" class="delurl">添加分享代金券展示信息</a></div>
 				 
                  	     </div>
                        <div class="show_page"><ul><{$pagecontent}></ul></div>
                  </div>
 		
 					<div class="select_page" style="color:red;width:800px;">
-					<a style="color:red;width:800px;" href="jvascript:void(0);"  >温馨提示：如果同一种类型的优惠券展示有多条符合条件时候，则系统读取的是排序ID为最小的一种</a> 
+					<a style="color:red;width:800px;" href="jvascript:void(0);"  >温馨提示：如果同一种类型的代金券展示有多条符合条件时候，则系统读取的是排序ID为最小的一种</a> 
 						  </div>
                 <div class="blank20"></div>
 

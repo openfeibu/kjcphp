@@ -413,7 +413,7 @@ class method   extends baseclass
                     if (!empty($memberinfo)) {
                         $this->mysql->update(Mysite::$app->config['tablepre'] . 'member', '`total`=`total`+' . $ordercheck['allcost'], "uid ='" . $ordercheck['buyeruid'] . "' ");
                     }
-                    /*写优惠券*/
+                    /*写代金券*/
                     if ($memberinfo['parent_id'] > 0) {
                         $upuser = $this->mysql->select_one("select * from " . Mysite::$app->config['tablepre'] . "member where uid='" . $memberinfo['parent_id'] . "'   ");
                         if (!empty($upuser)) {
@@ -429,12 +429,12 @@ class method   extends baseclass
                                 $juandata['endtime'] = $endtime;// 失效时间
                                 $juandata['uid'] = $upuser['uid'];// 用户ID
                                 $juandata['username'] = $upuser['username'];// 用户名
-                                $juandata['name'] = '推荐送优惠券';//  优惠券名称
+                                $juandata['name'] = '推荐送代金券';//  代金券名称
                                 $this->mysql->insert(Mysite::$app->config['tablepre'] . 'juan', $juandata);
                                 $this->mysql->update(Mysite::$app->config['tablepre'] . 'member', '`parent_id`=0', "uid ='" . $ordercheck['buyeruid'] . "' ");
                                 $logdata['uid'] = $upuser['uid'];
                                 $logdata['childusername'] = $memberinfo['username'];
-                                $logdata['titile'] = '推荐送优惠券';
+                                $logdata['titile'] = '推荐送代金券';
                                 $logdata['addtime'] = time();
                                 $logdata['content'] = '被推荐下单完成';
                                 $this->mysql->insert(Mysite::$app->config['tablepre'] . 'sharealog', $logdata);

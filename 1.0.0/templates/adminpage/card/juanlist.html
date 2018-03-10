@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
 <{/block}>
- <{block name=controlname}>优惠券列表<{/block}>
+ <{block name=controlname}>代金券列表<{/block}>
  <{block name=bodylist}>
     <div style="width:auto;overflow-x:hidden;overflow-y:auto">
 
@@ -60,8 +60,8 @@
                         <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th>
 
                         <th align="center">id</th>
-                         <th align="center">优惠券号</th>
-                        <th align="center">优惠券密码</th>
+                         <th align="center">代金券号</th>
+                        <th align="center">代金券密码</th>
                         <th align="center">最低限制金额</th>
                         <th align="center">优惠劵面值</th>
                          <th align="center">使用者</th>
@@ -112,7 +112,7 @@
                  	     <a onclick="return remindall(this);" href="<{ofunc type=url link="/adminpage/card/module/deljuan/datatype/json"}>" class="delurl">删除</a>
                  	     <a  onclick="outchoice(this);" href="#"  data="<{ofunc type=url link="/adminpage/card/module/outjuan"}>" class="delurl">导出选择项</a>
                  	     <a  href="<{$outlink}>" target="_blank" class="delurl">导出查询结果</a>
-						 <a style='color:#0076cf' href="<{ofunc type=url link="/adminpage/card/module/addjuan"}>"  class="delurl">添加优惠券</a></div>
+						 <a style='color:#0076cf' href="<{ofunc type=url link="/adminpage/card/module/addjuan"}>"  class="delurl">添加代金券</a></div>
                        <div class="show_page"><ul><{$pagecontent}></ul></div>
                  </div>
 
