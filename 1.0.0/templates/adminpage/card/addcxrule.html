@@ -42,11 +42,8 @@
                       <td class="left">促销类型:</td>
                       <td>
                           <select name="controltype" id="controltype" onchange="changetxt(this)" >
-                                <option value="1"   selected >满赠活动</option>
-                                <option value="2"   <{if $cxinfo['controltype'] == 2}>selected<{/if}>>满减活动</option>
-                                <option value="3"   <{if $cxinfo['controltype'] == 3}>selected<{/if}>>折扣活动</option>
-                                <option value="4"   <{if $cxinfo['controltype'] == 4}>selected<{/if}>>免配送费</option>
-								<option value="5"   <{if $cxinfo['controltype'] == 5}>selected<{/if}>>首单立减</option>
+                                <option value="2"   selected >满减活动</option>
+                              
                           </select>
                       </td>
                     </tr>
@@ -150,14 +147,14 @@
 							 <input type='radio' name='shop' onclick="checkword(false);">取消全选 
 						   </div>
 						   <div style='height:350px;overflow:auto;line-height: 20px;margin-left: 20px;'>
-							   <div class='platps'>
+							  <!--  <div class='platps'>
 								   <p style='margin: 5px 0;font-size: 14px;font-weight: bold;margin-top: 10px;'>平台配送商家：</p>
 								   <{foreach from=$platps item=items}>
 								   <div style="display: inline-block;width: 98px;white-space:nowrap; overflow:hidden; ">
 									   <input type="checkbox" name="shopid[]" value="<{$items['id']}>"  <{if in_array("<{$items['id']}>",explode(',',$cxinfo['shopid']))}>checked<{/if}>><{$items['shopname']}>
 								   </div>							 
 								   <{/foreach}>
-							   </div>
+							   </div> -->
 							   <div class='shopps'>
 								   <p style='margin: 10px 0;font-size: 14px;font-weight: bold;'>店铺配送商家：</p>
 								   <{foreach from=$shopps item=items}>
