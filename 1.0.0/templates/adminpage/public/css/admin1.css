@@ -583,7 +583,7 @@ display: inline-block;
 	color:#1B4670;
 	border-bottom:1px solid #e8eef6;
 }
-#tagscontent td  span{
+#tagscontent td  > span{
 	padding:5px 10px;
 	color: #fff;
 	border-radius: 2px;
