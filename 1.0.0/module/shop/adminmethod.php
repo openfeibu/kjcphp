@@ -118,12 +118,24 @@ class method extends adminbaseclass
             if (empty($data['shopname'])) {
                 $this->message('shop_emptyname');
             }
-            $data['stationid'] = $stationid;
+            $data['stationid'] = $arr['stationid'] = $stationid;
             if (empty($data['stationid'])) {
                 $this->message('请选择所属分站！');
             }
+            $arr['txtype'] = IReq::get('txtype');
+            if (empty($arr['txtype'])) {
+                $this->message('请选择提现账号类型');
+            }
+            $arr['txname'] = IReq::get('txname');
+            if (empty($arr['txname'])) {
+                $this->message('请输入提现账号名称');
+            }
+            $arr['txaccount'] = IReq::get('txaccount');
+            if (empty($arr['txaccount'])) {
+                $this->message('请输入提现账号');
+            }
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  shopname='".$data['shopname']."'  ");
-            $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('stationid'=>$stationid), "uid='".$testinfo['uid']."'");
+            $this->mysql->update(Mysite::$app->config['tablepre'].'member', $arr, "uid='".$testinfo['uid']."'");
             if (!empty($shopinfo)) {
                 $this->message('shop_repeatname');
             }
@@ -179,14 +191,27 @@ class method extends adminbaseclass
             if ($password2 != $data['password']) {
                 $this->message('member_twopwdnoequale');
             }
-            $sdata['stationid'] = $stationid;
+            $sdata['stationid'] = $arr['stationid'] = $stationid;
             if (empty($sdata['stationid'])) {
                 $this->message('请选择所属分站！');
+            }
+            $arr['txtype'] = IReq::get('txtype');
+            if (empty($arr['txtype'])) {
+                $this->message('请选择提现账号类型');
+            }
+            $arr['txname'] = IReq::get('txname');
+            if (empty($arr['txname'])) {
+                $this->message('请输入提现账号名称');
+            }
+            $arr['txaccount'] = IReq::get('txaccount');
+            if (empty($arr['txaccount'])) {
+                $this->message('请输入提现账号');
             }
             $uid = 0;
             if ($this->memberCls->regester($data['email'], $data['username'], $data['password'], $data['phone'], 3)) {
                 $uid = $this->memberCls->getuid();
-                $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('admin_id'=>intval(IReq::get('admin_id'))), "uid='".$uid."'");
+                $arr['admin_id'] = intval(IReq::get('admin_id'));
+                $this->mysql->update(Mysite::$app->config['tablepre'].'member', $arr, "uid='".$uid."'");
             } else {
                 $this->message($this->memberCls->ero());
             }
@@ -1638,5 +1663,44 @@ class method extends adminbaseclass
         }
         $this->mysql->delete(Mysite::$app->config['tablepre'].'shopcateadv', " id in($ids)");
         $this->success('success', '');
+    }
+    public function settx()
+    {
+        $shopid =  intval(IReq::get('shopid'));
+        if (empty($shopid)) {
+            echo 'shop_noexit';
+            exit;
+        }
+        $shopinfo= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id=".$shopid."  ");
+        if (empty($shopinfo)) {
+            echo 'shop_noexit';
+            exit;
+        }
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+        $data['member'] = $member;
+
+        Mysite::$app->setdata($data);
+    }
+    public function savetx()
+    {
+        $uid =  intval(IReq::get('uid'));
+        $arr['txtype'] = IReq::get('txtype');
+        if (empty($arr['txtype'])) {
+            echo "<script>parent.uploaderror('请选择提现账号类型');</script>";
+            exit;
+        }
+        $arr['txname'] = IReq::get('txname');
+        if (empty($arr['txname'])) {
+            echo "<script>parent.uploaderror('请输入提现账号名称');</script>";
+            exit;
+        }
+        $arr['txaccount'] = IReq::get('txaccount');
+        if (empty($arr['txaccount'])) {
+            echo "<script>parent.uploaderror('请输入提现账号');</script>";
+            exit;
+        }
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member', $arr, "uid='".$uid."'");
+        echo "<script>parent.uploadsucess1('操作成功');</script>";
+        exit;
     }
 }

@@ -3454,6 +3454,51 @@ class method extends baseclass
     }
     public function shoptx()
     {
+        $this->checkshoplogin();
 
+        $shopid = ICookie::get('adminshopid');
+        $shopinfo = $this->shopinfo();
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+        $data['member'] = $member;
+        Mysite::$app->setdata($data);
     }
+    /*** 2016.3.5 新增
+	商家申请提现
+	***/
+	function shoptxadd(){
+        $this->checkshoplogin();
+
+        $shopid = ICookie::get('adminshopid');
+        $shopinfo = $this->shopinfo();
+		$uid = $shopinfo['uid'];
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+        $data['member'] = $member;
+		$cost = trim(IFilter::act(IReq::get('cost')));
+		$shopinfo = $this->mysql->select_one(" select *  from ".Mysite::$app->config['tablepre']."shop where uid='".$uid."'  ");
+		if(empty($shopinfo)){
+			$this->message('未开启店铺');
+		}
+		$shopid = $shopinfo['id'];
+		$userinfo = $member;
+		$checkcost = intval($cost);
+		if($checkcost < 100){
+			$this->message('提现金额不能少于100元');
+		}
+		if($userinfo['shopcost'] < $checkcost){
+			$this->message('账号金额小于提现金额');
+		}
+		$newdata['cost'] = $checkcost;
+		$newdata['type'] = 0;
+		$newdata['status'] = 1;
+		$newdata['addtime'] = time();
+		$newdata['shopid'] = $shopid;
+        $newdata['shopuid'] =  $uid;
+		$newdata['name'] = '申请提现';
+	    $newdata['yue'] = $userinfo['shopcost']-$checkcost;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`-'.$checkcost,"uid ='".$uid."' ");
+		$this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
+	    $orderid = $this->mysql->insertid();
+		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
+		$this->success($info);
+	}
 }
