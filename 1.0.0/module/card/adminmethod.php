@@ -44,8 +44,12 @@ class method extends adminbaseclass
     /**保存关注微信领取优惠券相关信息**/
     public function savegrantjuanset()
     {
+        error_reporting(-1);
+        ini_set('display_errors',1);
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
-        $costtype = IReq::get('costtype');//面值类型  1固定面值  2随机面值
+        $costtype = 1;//面值类型  1固定面值  2随机面值
+        $id_arr = IReq::get('id');
+        $ids = implode(',',array_filter($id_arr));
         $cost = IReq::get('fjuancost');//优惠券固定面值数组
         $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
         $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组
@@ -60,32 +64,40 @@ class method extends adminbaseclass
         }
         $starttime = IReq::get('starttime');//有效时间开始值
         $endtime = IReq::get('endtime');//有效时间结束值
-        if (strtotime($endtime.' 23:59:59') < strtotime($starttime.' 00:00:00')) {
-           $this->message('过期时间不能早于生效时间');
-        }
+        // if (strtotime($endtime.' 23:59:59') < strtotime($starttime.' 00:00:00')) {
+        //    $this->message('过期时间不能早于生效时间');
+        // }
         //更新优惠券活动设置
         $data['status'] = $followjuan;
         $data['costtype'] = $costtype;
         $data['timetype'] = $timetype;
         $data['days'] = $days;
-        $data['starttime'] = strtotime($starttime.' 00:00:00');
-        $data['endtime'] = strtotime($endtime.' 23:59:59');
-        $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 6 or name = '优惠券活动'");
-        $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 6");//更新时  先删除以前的后插入新的
+        // $data['starttime'] = strtotime($starttime.' 00:00:00');
+        // $data['endtime'] = strtotime($endtime.' 23:59:59');
+        // $this->mysql->update(Mysite::$app->config['tablepre'].'alljuanset', $data, "type = 6 or name = '优惠券活动'");
+        $this->mysql->delete(Mysite::$app->config['tablepre'].'alljuan', " type = 6 and id not in ($ids)");//更新时  先删除以前的后插入新的
         $data1['paytype'] = '1,2';
         $data1['type'] = 6;
         $data1['name'] = '优惠券活动';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
+
                 $data1['cost'] = $v1;
                 $data1['limitcost'] = $flimitcost[$k1];
                 if ($data1['cost']<= 0 || $data1['limitcost']<=0) {
                     $this->message('请输入大于0的金额数值');
                 }
-                $data1['starttime'] = strtotime($starttime.' 00:00:00');
-                $data1['endtime'] = strtotime($endtime.' 23:59:59');
+                $data1['starttime'] = strtotime(date('Y-m-d 00:00:00'));
+                $data1['endtime'] = strtotime($endtime[$k1].' 23:59:59');
                 $data1['count'] = $count[$k1];
-                $this->mysql->insert(Mysite::$app->config['tablepre'].'alljuan', $data1);
+
+                if(isset($id_arr[$k1]) && !empty($id_arr[$k1]))
+                {
+                    $this->mysql->update(Mysite::$app->config['tablepre'].'alljuan', $data1, "id = ".$id_arr[$k1]."");
+                }else{
+
+                    $this->mysql->insert(Mysite::$app->config['tablepre'].'alljuan', $data1);
+                }
             }
         } else {
             foreach ($rlimitcost as $k2=>$v2) {
@@ -183,7 +195,7 @@ class method extends adminbaseclass
     public function saveregistersjset()
     {
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
-       $costtype = IReq::get('costtype');//面值类型  1固定面值  2随机面值
+       $costtype = 1;//面值类型  1固定面值  2随机面值
        $cost = IReq::get('fjuancost');//优惠券固定面值数组
        $flimitcost = IReq::get('fjuanlimitcost');//优惠券固定面值限制金额数组
        $rlimitcost = IReq::get('rjuanlimitcost');//优惠券随机面值限制金额数组

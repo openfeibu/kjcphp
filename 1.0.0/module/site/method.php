@@ -2616,6 +2616,116 @@ class method extends baseclass
 
         $this->success('success');
     }
+    public function shopjsall()
+    {
+        $jstime = date("Y-m-d",strtotime("-3 day"));
+        $nowmintime = strtotime($jstime);
+        $where  = " where   id not in(select shopid from ".Mysite::$app->config['tablepre']."shopjs where jstime =".$nowmintime."  ) ";
+        $shoplist =   $this->mysql->getarr("select id,shopname,uid  from ".Mysite::$app->config['tablepre']."shop  ".$where." order by id asc");
+        foreach($shoplist as $key => $shop)
+        {
+            $this->makejsorder($jstime,$shop['id']);
+        }
+    }
+    //生成 结算单
+    public function makejsorder($jstime,$shopid)
+    {
+        if (empty($jstime)) {
+            return '请输入结算时间';
+        }
+        $nowtime = time();
+        $nowmintime =  strtotime($jstime);
+        $checktime = $nowtime - $nowmintime;
+        if ($checktime < 259200 || $checktime > 2592000) {
+            return '只能结算3天前的订单';
+        }
+        if (empty($shopid)) {
+            return '店铺ID错误';
+        }
+
+
+
+        $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$shopid."'  ");
+        if (empty($shopinfo)) {
+            return '店铺为空';
+        }
+        $shopdet = array();//默认 店铺配送
+        $sendtype = 1;
+        if ($shopinfo['shoptype'] == 0) {
+            $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where shopid='".$shopid."' ");//$table,$row,$where=""
+        } else {
+            $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where shopid='".$shopid."' ");//$table,$row,$where=""
+        }
+        //
+         if ($shopdet['sendtype'] == 0) {//平台配送
+             $sendtype = 0;
+         }
+
+        /***检测是否 生成过结算单***/
+        $checkinfo = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."shopjs  where shopid = ".$shopid." and jstime =".$nowmintime."  ");
+        if ($checkinfo > 0) {
+            return '已生成结算单';
+        }
+        $maxtime = $nowmintime +86400;
+        //将所有 在配送时间段里的
+        $canwhere = " where shopid = '".$shopid."'  and sendtime >= ".$nowmintime." and sendtime < ".$maxtime." and status >  1 and status < 3 and is_reback > 0 ";
+        $checkcanjs = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."order ".$canwhere."  ");
+        if ($checkcanjs > 0) {
+            return '店铺内存在退款订单请先处理后才能生成';
+        }
+        /***清理订单***/
+        $this->mysql->update(Mysite::$app->config['tablepre'].'order', array('status'=>3), "  status =2 and  shopid=".$shopid." and sendtime >= ".$nowmintime." and sendtime < ".$maxtime." ");
+
+
+
+        $where2  = " where shopid = '".$shopid."'  and sendtime >= ".$nowmintime." and sendtime < ".$maxtime." ";
+        $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(allcost) as allcost,sum(shopps) as shopps,sum(bagcost) as bagcost   from ".Mysite::$app->config['tablepre']."order  ".$where2." and paytype =0 and shopcost > 0 and status = 3  order by id asc  limit 0,1000");
+        $line= $this->mysql->select_one("select count(id) as shuliang,sum(allcost) as allcost,sum(shopps) as shopps,sum(bagcost) as bagcost   from ".Mysite::$app->config['tablepre']."order  ".$where2." and paytype !=0  and paystatus =1 and shopcost > 0 and status = 3     order by id asc  limit 0,1000");
+
+
+
+        $newdata['onlinecount'] = $line['shuliang'];
+        $newdata['onlinecost'] = $line['allcost'];
+        $newdata['unlinecount'] = $shoptj['shuliang'];
+        $newdata['unlinecost'] = $shoptj['allcost'];
+        $yjbl =   $shopinfo['yjin']< 1?Mysite::$app->config['yjin']:$shopinfo['yjin'];
+        $newdata['yjb'] = empty($yjbl)?0:$yjbl; // 15.00
+        $yjcost =  ($shoptj['allcost']+$line['allcost']-$shoptj['shopps']-$line['shopps']-$shoptj['bagcost']-$line['bagcost'])*$yjbl*0.01;
+        $newdata['acountcost'] =  0;
+        if ($sendtype == 0) {//平台配送
+              $newdata['acountcost'] = $line['allcost']+$shoptj['allcost']-$yjcost-$shoptj['shopps']-$line['shopps'];//  线上金额-佣金比例+线下金额-线上配送费=平台配送金额
+        } else {//自行配送
+             $newdata['acountcost'] = $line['allcost']-$yjcost;
+        }
+        $newdata['yjcost'] = $yjcost;
+        $newdata['pstype'] = $sendtype;
+        $newdata['shopid'] =$shopinfo['id'];
+        $newdata['shopuid'] =$shopinfo['uid'];
+
+        $newdata['addtime'] = time();
+        $newdata['jstime'] = $nowmintime;
+
+
+
+        $this->mysql->insert(Mysite::$app->config['tablepre'].'shopjs', $newdata);
+        $orderid = $this->mysql->insertid();
+        /***自动  更新用户 账号余额***/
+        $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."' ");
+        // $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$newdata['acountcost'],"uid ='".$shopinfo['uid']."' ");
+        $newdatac['cost'] = $newdata['acountcost'];
+        $newdatac['type'] = 3;
+        $newdatac['status'] = 2;
+        $newdatac['addtime'] = time()+1;
+        $newdatac['shopid'] = 0;
+        $newdatac['shopuid'] =  $shopinfo['uid'];
+        $newdatac['name'] = $jstime.'日结算转入';
+        $newdatac['yue'] = $memberinfo['shopcost']+$newdata['acountcost'];
+        $newdatac['jsid'] = $orderid;
+        //账号余额
+        $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx', $newdatac);
+
+        return 'success';
+    }
     public function orderReceiving()
     {
         $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."order where status = 2 AND is_reback = 0 AND sendtime <= (select date_sub(now(), interval 2 HOUR))";

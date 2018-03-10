@@ -71,12 +71,12 @@
        <div class="nav2 datainfo">
            <{$smarty.now|date_format:"%Y-%m-%d"}>
        </div>
-       <div class="nav2 positioninfo" id="positionname2">
+       <!-- <div class="nav2 positioninfo" id="positionname2">
 
        </div>
        <div class="nav2 orderinfo">
            您有今天有0 个订单待审核
-       </div>
+       </div> -->
   </div>
   <!-- 主内容区-->
   <div class="newmain_all">
@@ -147,8 +147,11 @@
                 <div class="show_content_m_ti">
 
                       <div class="showtop_t" id="positionname">
-                         <div class="navs navon">
+                         <div class="navs <{if $tmodule=='grantset' }> navon <{/if}>">
                          <a href="<{ofunc type=url link="/adminpage/card/module/grantset"}>">发放优惠券</a>
+                         </div>
+                         <div class="navs <{if $tmodule=='registersjset' }> navon <{/if}>">
+                         <a href="<{ofunc type=url link="/adminpage/card/module/registersjset"}>">注册送优惠券</a>
                          </div>
                       </div>
 

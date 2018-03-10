@@ -1701,10 +1701,10 @@ class method extends adminbaseclass
         $nowtime = time();
         $nowmintime =  strtotime($daytime);
         $checktime = $nowtime - $nowmintime;
-        if ($checktime < 259200 || $checktime > 457141240) {
+        //3天-10天 防止数据多
+        if ($checktime < 259200 || $checktime > 2592000) {
             $nowmintime = strtotime(date('Y-m-d', ($nowtime- 259200)));
         }
-
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 100);
         $where  = " where   id not in(select shopid from ".Mysite::$app->config['tablepre']."shopjs where jstime =".$nowmintime."  ) ";
@@ -1726,7 +1726,7 @@ class method extends adminbaseclass
         $nowtime = time();
         $nowmintime =  strtotime($jstime);
         $checktime = $nowtime - $nowmintime;
-        if ($checktime < 259200 || $checktime > 457141240) {
+        if ($checktime < 259200 || $checktime > 2592000) {
             $this->message('只能结算3天前的订单');
         }
         if (empty($shopid)) {
@@ -1817,48 +1817,6 @@ class method extends adminbaseclass
         $newdatac['jsid'] = $orderid;
         //账号余额
         $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx', $newdatac);
-
-
-
-        //结算闪慧订单
-        $where2  = " where shopid = '".$shopid."'  and addtime >= ".$nowmintime." and addtime < ".$maxtime." and status =1 and paystatus = 1 ";
-        $huitj= $this->mysql->select_one("select count(id) as shuliang,sum(sjcost) as allcost  from ".Mysite::$app->config['tablepre']."shophuiorder  ".$where2."    order by id asc  limit 0,1000");
-
-
-
-        $cnewdata['onlinecount'] = $huitj['shuliang'];
-        $cnewdata['onlinecost'] = $huitj['allcost'];
-        $cnewdata['unlinecount'] =0;
-        $cnewdata['unlinecost'] = 0;
-        // $yjbl =   empty($shopdet['yjin'])?Mysite::$app->config['yjin']:$shopdet['yjin'];
-        // $cnewdata['yjb'] = empty($yjbl)?0:$yjbl;
-        // $yjcost =  ($huitj['allcost'])*$yjbl*0.01;
-        $cnewdata['acountcost'] = $huitj['allcost'];
-        $cnewdata['yjcost'] = 0;
-        $cnewdata['pstype'] = 0;
-        $cnewdata['shopid'] =$shopinfo['id'];
-        $cnewdata['shopuid'] =$shopinfo['uid'];
-
-        $cnewdata['addtime'] = time();
-        $cnewdata['jstime'] = $nowmintime;
-        $this->mysql->insert(Mysite::$app->config['tablepre'].'shopjs', $cnewdata);
-        $orderid = $this->mysql->insertid();
-        /***自动  更新用户 账号余额***/
-        $this->mysql->update(Mysite::$app->config['tablepre'].'member', '`shopcost`=`shopcost`+'.$cnewdata['acountcost'].'+'.$newdata['acountcost'], "uid ='".$shopinfo['uid']."' ");
-
-        $newdatacb['cost'] = $cnewdata['acountcost'];
-        $newdatacb['type'] = 3;
-        $newdatacb['status'] = 2;
-        $newdatacb['addtime'] = time()+2;
-        $newdatacb['shopid'] = 0;
-        $newdatacb['shopuid'] =  $shopinfo['uid'];
-        $newdatacb['name'] = $jstime.'优惠买单日结算转入';
-        $newdatacb['yue'] = $memberinfo['shopcost']+$newdata['acountcost']+$cnewdata['acountcost'];
-        $newdatacb['jsid'] = $orderid;
-        //账号余额
-        $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx', $newdatacb);
-
-
 
         $this->success('success');
     }
