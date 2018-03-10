@@ -381,24 +381,24 @@ class method extends adminbaseclass
               case 'drawback'://退款成功
                 //获取退款记录
                 if ($orderinfo['status'] > 3) {
-                $this->message('订单状态不能退款');
+                    $this->message('订单状态不能退款');
                 }
                 if ($orderinfo['paystatus']  != 1) {
-                $this->message('订单未支付');
+                    $this->message('订单未支付');
                 }
                 if ($orderinfo['is_reback']  > 0) {
-                $this->message('已申请退款请到退款管理里处理退款');
+                    $this->message('已申请退款请到退款管理里处理退款');
                 }
 
                 //直接退款限制在下单后24小时
                 if ($orderinfo['status'] == 3) {
-                $this->message('订单已完成不能直接退款');
-                /*
-                $checktime = $orderinfo['sendtime']+86400;
-                if($checktime < time()){
-                $this->message('配送时间已超过24小时,退款失败');
-                }
-                */
+                    $this->message('订单已完成不能直接退款');
+                    /*
+                    $checktime = $orderinfo['sendtime']+86400;
+                    if($checktime < time()){
+                    $this->message('配送时间已超过24小时,退款失败');
+                    }
+                    */
                 }
                 //当订单已完成 限制在多少时间
                 $input = new WxPayRefund();
@@ -411,7 +411,7 @@ class method extends adminbaseclass
                 $result = WxPayApi::refund($input);
                 // 这句file_put_contents是用来查看服务器返回的退款结果 测试完可以删除了
                 //file_put_contents(APP_ROOT.'/Api/wxpay/logs/log4.txt',arrayToXml($result),FILE_APPEND);
-                if(($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')){
+                if (($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')) {
                     $zengcost = IReq::get('zengcost');
                     $is_phonenotice = IReq::get('is_phonenotice');
                     $notice_content = IReq::get('notice_content');
@@ -440,12 +440,12 @@ class method extends adminbaseclass
 
                     $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$id' and status != 3");  //写配送订单
                     //     $ordCls->noticeback($id);
-                }else if(($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')){
+                } elseif (($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')) {
                     //退款失败
                     //原因
                     $reason = (empty($result['err_code_des'])?$result['return_msg']:$result['err_code_des']);
                     $this->message($reason);
-                }else{
+                } else {
                     $this->message("退款失败");
                 }
                 //等待
@@ -876,11 +876,10 @@ class method extends adminbaseclass
                $input->SetOp_user_id(WxPayConfig::MCHID);
                //微信退款
                $result = WxPayApi::refund($input);
-               if(($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')){
-
+               if (($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')) {
                    $arr['is_reback'] = 2;//订单状态
                    $arr['status'] = 4;
-                    $this->mysql->update(Mysite::$app->config['tablepre'].'order', $arr, "id='".$id."'");
+                   $this->mysql->update(Mysite::$app->config['tablepre'].'order', $arr, "id='".$id."'");
                    $data['bkcontent'] = IReq::get('reasons');
                    $data['status'] = 1;//
                    $data['admin_id'] = ICookie::get('adminuid');
@@ -912,24 +911,24 @@ class method extends adminbaseclass
                            }
                        }
                    }
-                    /* if($orderinfo['pstype'] == 2){
-                        $psbinterface = new psbinterface();
-                        if($psbinterface->psbnoticereback($orderinfo['id'])){
+                   /* if($orderinfo['pstype'] == 2){
+                       $psbinterface = new psbinterface();
+                       if($psbinterface->psbnoticereback($orderinfo['id'])){
 
-                        }
-                    } */
+                       }
+                   } */
                    $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$id' and status != 3");
                    $ordCls = new orderclass();
 
                    $ordCls->writewuliustatus($orderinfo['id'], 14, $orderinfo['paytype']);  // 管理员退款给用户 物流信息
 
                  //  $ordCls->noticeback($id);
-               }else if(($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')){
+               } elseif (($result['return_code']=='FAIL') || ($result['result_code']=='FAIL')) {
                    //退款失败
                    //原因
                    $reason = (empty($result['err_code_des'])?$result['return_msg']:$result['err_code_des']);
                    $this->message($reason);
-               }else{
+               } else {
                    $this->message("退款失败");
                }
           break;
@@ -1719,7 +1718,7 @@ class method extends adminbaseclass
     //生成 结算单
     public function makejsorder()
     {
-        $jstime = IFilter::act(IReq::get('daytime'));
+        $jstime = date("Y-m-d",strtotime("-3 day"));
         $shopid = intval(IFilter::act(IReq::get('shopid')));
         if (empty($jstime)) {
             $this->message('请输入结算时间');
@@ -1870,10 +1869,10 @@ class method extends adminbaseclass
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 10);
         $shopname = trim(IFilter::act(IReq::get('shopname'))); //店铺名称
-          $status = IReq::get('status'); //状态
-          $starttime = IFilter::act(IReq::get('starttime')); //开始时间
-          $endtime =  IFilter::act(IReq::get('endtime')); //结束时间
-         $newlink = '';
+        $status = IReq::get('status'); //状态
+        $starttime = IFilter::act(IReq::get('starttime')); //开始时间
+        $endtime =  IFilter::act(IReq::get('endtime')); //结束时间
+        $newlink = '';
         if (empty($status)) {
             $where = " where type = 0 and status = 1 " ;
         } else {

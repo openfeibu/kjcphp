@@ -46,6 +46,7 @@ $("#txbtn").click(function(){
         success:function(content) {
             if(content.error ==  false){
                 artsucces('提交成功');
+                window.location.href = '<{ofunc type=url link="/shopcenter/txlog"}>';
             }else{
                 if(content.error == true)
          		{
