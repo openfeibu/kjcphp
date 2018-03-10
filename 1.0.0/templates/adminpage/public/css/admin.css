@@ -621,9 +621,19 @@ textarea, textarea#sendmail, textarea#attr1 {
 }
 input, #table input {
 	font-size:12px;
-	line-height:22px;
-	height:22px;
+	line-height:24px;
+	height:24px;
 	padding:0px 10px;
+	border:1px solid #ddd;
+border-radius: 2px;
+}
+.Wdate{
+	font-size:12px;
+	line-height:24px;
+	height:24px !important;
+	padding:0px 10px;
+	border:1px solid #ddd;
+border-radius: 2px;
 }
 .button {
 	/*background:url('../images/buttom_bg.gif') right bottom no-repeat;

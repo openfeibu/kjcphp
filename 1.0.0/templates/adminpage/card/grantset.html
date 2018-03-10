@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js"></script>
 <{/block}>
-<{block name=controlname}>优惠券设置<{/block}>
+<{block name=controlname}>代金券设置<{/block}>
 <{block name=bodylist}>
 <style>
 .set{border:1px solid #999d9c;width:80%}
@@ -40,37 +40,37 @@
                    </tr>
 
                     <!-- <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                      <td class="left">优惠券面值</td>
+                      <td class="left">代金券面值</td>
                       <td><input type="radio" name="costtype" id='fixedcost'  value="1"  <{if $juansetinfo['costtype'] == 1}>checked<{/if}>>&nbsp;固定&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           <input type="radio" name="costtype" id='randomcost'  value="2"  <{if $juansetinfo['costtype'] == 2}>checked<{/if}>>&nbsp;随机</td>
                    </tr> -->
                    <tr  onmouseout="this.bgColor='ffffff';">
-                      <td class="left">优惠券设置</td>
+                      <td class="left" style="width: 10%;">代金券设置</td>
                       <td>
-                          <div class='set' >
+                          <div class='set' style="width: 90%;">
                               <div class='settop' style='width:100%;border-bottom:1px solid #999d9c;background-color:#F5F5F5'>
                                   <!-- <div style='width:15%'>每人可领取</div> -->
-                                  <div style='width:25%'>面值</div>
-                                  <div style='width:29%'>使用条件</div>
-                                  <div style='width:29%'>过期时间</div>
-                                  <div style='width:15%'>数量</div>
-                                  <div style='width:29%'>操作<span class="faddjuan">+添加优惠券</span></div>
+                                  <div style='width:15%'>面值</div>
+                                  <div style='width:25%'>使用条件</div>
+                                  <div style='width:25%'>过期时间</div>
+                                  <div style='width:10%'>数量</div>
+                                  <div style='width:20%'>操作<span class="faddjuan">+添加代金券</span></div>
                               </div>
 
                               <div class='setcon fixedcost' style='width:100%;<{if $juansetinfo['costtype'] == 2}>display:none<{/if}>'>
                                   <!-- <div class='setconl'>
                                   <span class='fjuannum'><{count($juaninfo,0)}></span>张
                                   </div> -->
-                                  <div class='fsetconr' >
+                                  <div class='fsetconr' style="border-left: none;">
                                      <{foreach from=$juaninfo key=keys item=items}>
 
                                      <div class='setconrs'>
                                          <input type="hidden" name="id[]" value="<{$items["id"]}>">
-                                         <div style='width:20%'><input type="text" name="fjuancost[]" value="<{$items["cost"]}>" style='width:45px' >元</div>
-                                         <div style='width:34%'>满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style='width:45px' >元可使用</div>
-                                         <div><input class="Wdate datefmt" type="text" name="endtime[]" value="<{$items['endtime']|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" /></div>
+                                         <div style='width:15%'><input type="text" name="fjuancost[]" value="<{$items["cost"]}>" style='width:45px' >元</div>
+                                         <div style='width:25%'>满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style='width:45px' >元可使用</div>
+                                         <div style='width:25%'><input class="Wdate datefmt" type="text" name="endtime[]" value="<{$items['endtime']|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" /></div>
                                          <div style='width:10%'><input type="text" name="count[]" value="<{$items["count"]}>" style='width:45px' >张</div>
-                                         <div style='width:34%;color:#2585a6'><span class="fdeljuan">删除</span></div>
+                                         <div style='width:20%;color:#2585a6'><span class="fdeljuan">删除</span></div>
                                      </div>
 
                                      <{/foreach}>
@@ -145,7 +145,7 @@
             html += '<div style="width:34%;color:red"><span class="fdeljuan">删除</span></div></div>';
             $('.rsetconr').append(html);
       }else{
-         alert('最多只能添加5张优惠券噢~');
+         alert('最多只能添加5张代金券噢~');
       }
 
     });
@@ -166,7 +166,7 @@
             html += '<div style="width:34%;color:red"><span class="fdeljuan">删除</span></div></div>';
           $('.fsetconr').append(html);
       }else{
-         alert('最多只能添加5张优惠券噢~');
+         alert('最多只能添加5张代金券噢~');
       }
 
     });
