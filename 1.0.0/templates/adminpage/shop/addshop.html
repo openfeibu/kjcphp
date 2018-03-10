@@ -2,8 +2,9 @@
    <{block name=extendjs}>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
  <{/block}>
- <{block name=controlname}><span style="color:#ffffff;      font-size: 16px;   padding: 7px 10px;cursor:pointer;background: #ec7501;"><a style="color:#fff;" href="<{ofunc type=url link="/adminpage/shop/module/addshop"}>">单个添加店铺</a></span>
- <span style="  cursor:pointer;margin-left:40px;"><a href="<{ofunc type=url link="/adminpage/shop/module/moreaddshop"}>">批量添加店铺</a></span><{/block}>
+ <{block name=controlname}><span style="color:#ffffff;      font-size: 16px;   padding: 7px 10px;cursor:pointer;background: #ec7501;"><a style="color:#fff;" href="<{ofunc type=url link="/adminpage/shop/module/addshop"}>">添加店铺</a></span>
+ <!-- <span style="  cursor:pointer;margin-left:40px;"><a href="<{ofunc type=url link="/adminpage/shop/module/moreaddshop"}>">批量添加店铺</a></span> -->
+ <{/block}>
  <{block name=bodylist}>
    <div style="width:98%;overflow-y:auto;white-space:nowrap;">
 
@@ -35,6 +36,20 @@
 
                       </select>
                       	</td>
+                    </tr>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">提现账号类型</td>
+                      <td><input type="radio" name="txtype" value="ali">支付宝
+                          <input type="radio" name="txtype" value="bank">银行卡
+                      </td>
+                    </tr>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">提现账号姓名</td>
+                      <td><input type="text" name="txname" id="txname" value="" class="skey" style="width:150px;" ></td>
+                    </tr>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">提现账号</td>
+                      <td><input type="text" name="txaccount" id="txaccount" value="" class="skey" style="width:150px;" ></td>
                     </tr>
                     <!-- <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">所属城市</td>
@@ -96,6 +111,20 @@
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">确认密码</td>
                       <td><input type="text" name="password2" id="password2" value="" class="skey" style="width:150px;" ></td>
+                    </tr>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">提现账号类型</td>
+                      <td><input type="radio" name="txtype" value="ali">支付宝
+                          <input type="radio" name="txtype" value="bank">银行卡
+                      </td>
+                    </tr>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">提现账号姓名</td>
+                      <td><input type="text" name="txname" id="txname" value="" class="skey" style="width:150px;" ></td>
+                    </tr>
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                      <td class="left">提现账号</td>
+                      <td><input type="text" name="txaccount" id="txaccount" value="" class="skey" style="width:150px;" ></td>
                     </tr>
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">店铺类型</td>
