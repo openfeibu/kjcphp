@@ -1805,7 +1805,7 @@ class method extends adminbaseclass
         $orderid = $this->mysql->insertid();
         /***自动  更新用户 账号余额***/
         $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."' ");
-        // $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$newdata['acountcost'],"uid ='".$shopinfo['uid']."' ");
+
         $newdatac['cost'] = $newdata['acountcost'];
         $newdatac['type'] = 3;
         $newdatac['status'] = 2;
@@ -1817,7 +1817,7 @@ class method extends adminbaseclass
         $newdatac['jsid'] = $orderid;
         //账号余额
         $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx', $newdatac);
-
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$newdata['acountcost'],"uid ='".$shopinfo['uid']."' ");
         $this->success('success');
     }
 
