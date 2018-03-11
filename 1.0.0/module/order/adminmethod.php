@@ -194,7 +194,7 @@ class method extends adminbaseclass
         $querytype = IReq::get('querytype');
         $searchvalue = IReq::get('searchvalue');
         $orderstatus = intval(IReq::get('orderstatus'));
-        $cityid = intval(IReq::get('cityid'));
+        $stationid = intval(IReq::get('stationid'));
         $starttime = IReq::get('starttime');
         $endtime = IReq::get('endtime');
         $nowday = date('Y-m-d', time());
@@ -214,10 +214,10 @@ class method extends adminbaseclass
                 $data['querytype'] = $querytype;
             }
         }
-        if (!empty($cityid)) {
-            $data['cityid'] = $cityid;
-            $where .= empty($where)?' where ord.admin_id ='.$cityid:' and ord.admin_id = '.$cityid;
-            $newlink .= '/cityid/'.$cityid;
+        if (!empty($stationid)) {
+            $data['stationid'] = $stationid;
+            $where .= empty($where)?' where ord.stationid ='.$stationid:' and ord.admin_id = '.$stationid;
+            $newlink .= '/stationid/'.$stationid;
         }
 
         $data['orderstatus'] = '';
@@ -236,9 +236,9 @@ class method extends adminbaseclass
         $pageshow->setpage(IReq::get('page'), 5);
         //order: id  dno 订单编号 shopuid 店铺UID shopid 店铺ID shopname 店铺名称 shopphone 店铺电话 shopaddress 店铺地址 buyeruid 购买用户ID，0未注册用户 buyername
         //
-        $default_cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
-        $cityid	= empty($default_cityid)?0:$default_cityid;
-        $where .= ' and ord.admin_id ='.$cityid.'';
+        // $default_cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
+        // $cityid	= empty($default_cityid)?0:$default_cityid;
+        //$where .= ' and ord.admin_id ='.$cityid.'';
         $orderlist = $this->mysql->getarr("select ord.*,mb.username as acountname from ".Mysite::$app->config['tablepre']."order as ord left join  ".Mysite::$app->config['tablepre']."member as mb on mb.uid = ord.buyeruid   ".$where." order by ord.id desc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
         $shuliang  = $this->mysql->counts("select ord.*,mb.username as acountname from ".Mysite::$app->config['tablepre']."order as ord left join  ".Mysite::$app->config['tablepre']."member as mb on mb.uid = ord.buyeruid   ".$where." ");
         $pageshow->setnum($shuliang);
