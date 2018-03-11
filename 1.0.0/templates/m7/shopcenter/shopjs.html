@@ -59,8 +59,8 @@
                 <tr>
                     <th width="14%">描述</th>
                     <th width="8%">配送方式</th>
-                    <th width="8%">交易类型</th>
-                    <th width="8%">订单数</th>
+                    <!-- <th width="8%">交易类型</th>
+                    <th width="8%">订单数</th> -->
                     <th width="8%">金额</th>
                     <th width="8%">佣金比例</th>
                     <th width="8%">佣金</th>
@@ -74,8 +74,8 @@
 				  <tr>
 				  <td align="center" rowspan="2"> <{$items['name']}> </td>
 					<td align="center" rowspan="2"><{if $items['sendtype'] == 1}>店铺配送<{else}>平台配送<{/if}></td>
-						<td align="center" > 线上 </td>
-						<td align="center" > <{$items['onlinecount']}> </td>
+						<!-- <td align="center" > 线上 </td> -->
+						<!-- <td align="center" > <{$items['onlinecount']}> </td> -->
 						<td align="center" > <{$items['onlinecost']}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['yjb']*0.01,2)}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['yjcost'],2)}> </td>
