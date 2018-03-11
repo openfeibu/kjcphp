@@ -801,7 +801,7 @@ class method extends baseclass
         if (!in_array($gdtype, array(1,2))) {
             $this->message('未定义的商品类型');
         }
-        if ($smardb->setdb($this->mysql)->SetShopId($shopid)->SetGoodsType($gdtype)->AddGoods($goods_id)) {
+        if ($smardb->setdb($this->mysql)->SetShopId($shopid)->SetGoodsType($gdtype)->SetUid($this->member['uid'])->AddGoods($goods_id)) {
             $this->success('添加购物车成功');
         } else {
             $this->message($smardb->getError());
@@ -2622,12 +2622,10 @@ class method extends baseclass
         $nowmintime = strtotime($jstime);
         $where  = " where   id not in(select shopid from ".Mysite::$app->config['tablepre']."shopjs where jstime =".$nowmintime."  ) ";
         $shoplist =   $this->mysql->getarr("select id,shopname,uid  from ".Mysite::$app->config['tablepre']."shop  ".$where." order by id asc");
-        var_dump($this->makejsorder($jstime,893));
-        // foreach($shoplist as $key => $shop)
-        // {
-        //     $result = $this->makejsorder($jstime,$shop['id']);
-        //     var_dump($shop['id'].$result);
-        // }
+        foreach($shoplist as $key => $shop)
+        {
+            $result = $this->makejsorder($jstime,$shop['id']);
+        }
          exit;
     }
     //生成 结算单
@@ -2645,8 +2643,6 @@ class method extends baseclass
         if (empty($shopid)) {
             return '店铺ID错误';
         }
-
-
 
         $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$shopid."'  ");
         if (empty($shopinfo)) {

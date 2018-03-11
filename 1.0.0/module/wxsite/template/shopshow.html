@@ -889,14 +889,14 @@
         if($(this).hasClass("active") && $(".shop-car-icon").hasClass("active")){
           var id = "<{$id}>";
           var carturl = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+id;
-          window.location.href = carturl;   
+          window.location.href = carturl;
         }else{
           if(!$(".shop-car-icon").hasClass("active")){
             $.toast('购物车不可为空',"text")
           }else{
             $.toast($(this).text(),"text")
           }
-          
+
         }
     })
     function openType(id){
