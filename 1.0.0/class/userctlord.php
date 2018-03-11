@@ -135,6 +135,9 @@ class userctlord
     //用户确认收货
     public function sureorder()
     {
+        ini_set('display_errors', 1);            //错误信息
+        ini_set('display_startup_errors', 1);    //php启动错误信息
+        error_reporting(-1);
         if ($this->orderinfo() == false) {
             return false;
         }
@@ -176,12 +179,15 @@ class userctlord
         }
 
 
-
-
         $this->mysql->update(Mysite::$app->config['tablepre'].'order', $data, "id='".$this->orderinfo['id']."'");
         $this->mysql->update(Mysite::$app->config['tablepre'].'orderps', '`status`=3', "orderid ='".$this->orderinfo['id']."' ");
         $ordCls = new orderclass();
         $ordCls->writewuliustatus($this->orderinfo['id'], 10, $this->orderinfo['paytype']);  // 用户确认收货
+
+        /* 结算给商家 */
+        $orderCLs = new orderclass();
+        $orderCLs->clearing($this->orderinfo);
+
         //消费送积分
         if ($this->orderinfo['buyeruid'] > 0) {
             $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid ='".$this->orderinfo['buyeruid']."'");

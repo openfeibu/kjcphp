@@ -128,7 +128,7 @@ class orderclass
         $checkpsinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."orderps where orderid='".$orderinfo['id']."'   ");
         if (!empty($checkpsinfo)) {
             $psdata['status'] =4;
-            $this->mysql->ordmysql(Mysite::$app->config['tablepre'].'orderps', $psdata, "id='".$checkpsinfo['id']."'");
+            $this->ordmysql->ordmysql(Mysite::$app->config['tablepre'].'orderps', $psdata, "id='".$checkpsinfo['id']."'");
         }
         //-----------取消配送单---
         if (!empty($orderinfo['buyeruid'])) {
@@ -1122,7 +1122,7 @@ $ch = curl_init($url);
                     if ($auto_send == 1) {
                         $this->writewuliustatus($orderid, 6, $data['paytype']);//订单审核后自动 商家接单后自动发货
                         $orderdatac['sendtime'] = time();
-                        $this->mysql->update(Mysite::$app->config['tablepre'].'order', $orderdatac, "id ='".$orderid."' ");
+                        $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', $orderdatac, "id ='".$orderid."' ");
                     } else {
                         //自动生成配送单------|||||||||||||||-----------------------
                       if ($data['pstype'] == 0) {//网站配送自动生成配送费
@@ -1324,7 +1324,7 @@ $ch = curl_init($url);
                     $auto_send = Mysite::$app->config['auto_send'];
                     if ($auto_send == 1) {
                         $orderdatac['sendtime'] = time();
-                        $this->mysql->update(Mysite::$app->config['tablepre'].'order', $orderdatac, "id ='".$orderid."' ");
+                        $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', $orderdatac, "id ='".$orderid."' ");
                         $this->writewuliustatus($orderid, 6, $data['paytype']);//订单审核后自动 商家接单后自动发货
                     }
                 }
@@ -1447,5 +1447,49 @@ $ch = curl_init($url);
             }
         }*/
         return $status;
+    }
+    public function clearing($orderinfo)
+    {
+        if($orderinfo['is_js'] != 1)
+            $jstime = date("Y-m-d");
+            $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
+            $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', array('is_js' => 1), "id = '".$orderinfo['id']."' ");
+            $yjbl =   $shopinfo['yjin']< 1?Mysite::$app->config['yjin']:$shopinfo['yjin'];
+            $yjcost =  ($orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'])*$yjbl*0.01;
+
+            $newdata['onlinecount'] = 1;
+            $newdata['onlinecost'] = $orderinfo['allcost'];
+            $newdata['unlinecount'] = 0;
+            $newdata['unlinecost'] = 0;
+            $newdata['acountcost'] = $orderinfo['allcost']-$yjcost+$orderinfo['shopdowncost'];
+            $newdata['yjcost'] = $yjcost;
+            $newdata['pstype'] = $sendtype = 1;
+            $newdata['shopid'] = $shopinfo['id'];
+            $newdata['shopuid'] = $shopinfo['uid'];
+            //平台承担费用
+            $newdata['shopdowncost'] = $orderinfo['shopdowncost'];
+            $newdata['addtime'] = time();
+            $newdata['jstime'] = time();
+            $newdata['orderid'] = $orderinfo['id'];
+            $this->ordmysql->insert(Mysite::$app->config['tablepre'].'shopjs', $newdata);
+
+            $orderid = $this->ordmysql->insertid();
+            /***自动  更新用户 账号余额***/
+            $memberinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."' ");
+             $this->ordmysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$newdata['acountcost'],"uid ='".$shopinfo['uid']."' ");
+            $newdatac['cost'] = $newdata['acountcost'];
+            $newdatac['type'] = 3;
+            $newdatac['status'] = 2;
+            $newdatac['addtime'] = time()+1;
+            $newdatac['shopid'] = 0;
+            $newdatac['shopuid'] =  $shopinfo['uid'];
+            $newdatac['name'] = $jstime.'日结算转入';
+            $newdatac['yue'] = $memberinfo['shopcost']+$newdata['acountcost'];
+            $newdatac['jsid'] = $orderid;
+            //账号余额
+            $this->ordmysql->insert(Mysite::$app->config['tablepre'].'shoptx', $newdatac);
+
+            return 'success';
+        }
     }
 }
