@@ -27,7 +27,26 @@ class method extends adminbaseclass
         $where =  $this->sqllink($where, 'phone', $data['phone'], '=');
 		$where =  $this->sqllink($where, 'stationadminid', $data['stationadminid'], '=');
         $data['where'] = $where;
+        if($where){
+            $where = " where ".$where;
+        }else{
+            $where = '';
+        }
+        $pageinfo = new page();
+        $pageinfo->setpage(intval(IReq::get('page')), 20);
 
+        $member_list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."member $where   order by uid desc   limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
+        $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."member $where   order by uid desc");
+        $pageinfo->setnum($shuliang);
+        $pagelink = IUrl::creatUrl('adminpage/card/module/juanmarketing'.$newlink);
+        $data['pagecontent'] = $pageinfo->getpagebar($pagelink);
+        foreach($member_list as $key => $member)
+        {
+            $order_data = $this->mysql->select_one("select count(id) as order_count,sum(allcost) as allcost from ".Mysite::$app->config['tablepre']."order  where buyeruid = '".$member['uid']."' and status >1 and status < 4");
+            $member_list[$key]['order_count'] = $order_data['order_count'];
+            $member_list[$key]['allcost'] = $order_data['allcost'];
+        }
+        $data['member_list'] = $member_list;
         Mysite::$app->setdata($data);
     }
 

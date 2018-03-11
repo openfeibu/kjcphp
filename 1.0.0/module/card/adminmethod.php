@@ -45,11 +45,11 @@ class method extends adminbaseclass
     public function savegrantjuanset()
     {
         error_reporting(-1);
-        ini_set('display_errors',1);
+        ini_set('display_errors', 1);
         $followjuan = IReq::get('followjuan');//是否开启  0关闭 1开启
         $costtype = 1;//面值类型  1固定面值  2随机面值
         $id_arr = IReq::get('id');
-        $ids = implode(',',array_filter($id_arr));
+        $ids = implode(',', array_filter($id_arr));
         $cost = IReq::get('fjuancost');//代金券固定面值数组
         $flimitcost = IReq::get('fjuanlimitcost');//代金券固定面值限制金额数组
         $rlimitcost = IReq::get('rjuanlimitcost');//代金券随机面值限制金额数组
@@ -60,7 +60,7 @@ class method extends adminbaseclass
         $timetype = 2;// 失效时间类型 1固定天数 2固定时间段
         $days = IReq::get('juanday');  //失效天数
         if ($timetype == 1 && $days <=0) {
-           $this->message('请输入正确的失效天数');
+            $this->message('请输入正确的失效天数');
         }
         $starttime = IReq::get('starttime');//有效时间开始值
         $endtime = IReq::get('endtime');//有效时间结束值
@@ -81,7 +81,6 @@ class method extends adminbaseclass
         $data1['name'] = '代金券活动';
         if ($costtype == 1) { //固定面值
             foreach ($cost as $k1=>$v1) {
-
                 $data1['cost'] = $v1;
                 $data1['limitcost'] = $flimitcost[$k1];
                 if ($data1['cost']<= 0 || $data1['limitcost']<=0) {
@@ -91,11 +90,9 @@ class method extends adminbaseclass
                 $data1['endtime'] = strtotime($endtime[$k1].' 23:59:59');
                 $data1['count'] = $count[$k1];
 
-                if(isset($id_arr[$k1]) && !empty($id_arr[$k1]))
-                {
+                if (isset($id_arr[$k1]) && !empty($id_arr[$k1])) {
                     $this->mysql->update(Mysite::$app->config['tablepre'].'alljuan', $data1, "id = ".$id_arr[$k1]."");
-                }else{
-
+                } else {
                     $this->mysql->insert(Mysite::$app->config['tablepre'].'alljuan', $data1);
                 }
             }
