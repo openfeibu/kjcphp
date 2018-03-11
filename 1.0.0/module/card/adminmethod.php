@@ -487,7 +487,7 @@ class method extends adminbaseclass
         $cxinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where  id = ".$id."   ");
         $cityid = Mysite::$app->config['default_cityid'];
         $shoplist = array();
-        $shoplist = $this->mysql->getarr("select id,shopname,shoptype from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 and admin_id = ".$cityid."   ");
+        $shoplist = $this->mysql->getarr("select id,shopname,shoptype from ".Mysite::$app->config['tablepre']."shop where is_pass = 1   ");
         foreach ($shoplist as $k=>$v) {
             if ($v['shoptype']==1) {
                 $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$v['id']."   ");
