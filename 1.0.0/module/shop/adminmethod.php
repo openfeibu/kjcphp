@@ -575,11 +575,11 @@ class method extends adminbaseclass
         if (empty($userinfo)) {
             $this->message('店铺对应账号不存在');
         }
-        $cdata['backacount'] = trim(IReq::get('backacount'));
-        if (empty($cdata['backacount'])) {
-            $this->message('提现账号不能为空');
-        }
-        $this->mysql->update(Mysite::$app->config['tablepre'].'member', $cdata, "uid='".$userinfo['uid']."'");
+        // $cdata['backacount'] = trim(IReq::get('backacount'));
+        // if (empty($cdata['backacount'])) {
+        //     $this->message('提现账号不能为空');
+        // }
+        //$this->mysql->update(Mysite::$app->config['tablepre'].'member', $cdata, "uid='".$userinfo['uid']."'");
         $data['yjin'] = round($yjin, 2);//$yjin;
         $this->mysql->update(Mysite::$app->config['tablepre'].'shop', $data, "id='".$shopid."'");
         $this->success('success');
