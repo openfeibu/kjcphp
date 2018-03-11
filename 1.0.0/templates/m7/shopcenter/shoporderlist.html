@@ -163,7 +163,7 @@
 					<{else}>
 
 							<{if $items['is_reback'] == 1 }>已申请退款等待平台处理
-							<{elseif $items['is_reback'] == 2 }>已退款<{elseif $items['is_reback'] == 4}>已申请退款等待商家处理<{else}>待处理
+							<{elseif $items['is_reback'] == 2 }>已退款<{elseif $items['is_reback'] == 4}>已申请退款等待管理员处理<{else}>待处理
 							<{/if}>
 
 					<{/if}>
@@ -318,8 +318,8 @@
 						<span onclick="sendorder(<{$items['id']}>);" class="curbtn">
 						<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/peisongfahuo.png" /></span>
 					<{else}>
-						<span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
-						<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span>
+						<!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
+						<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
                     <{/if}>
 					<{/if}>
 
@@ -328,7 +328,7 @@
 		<{else}>
 			<{if $items['is_make'] < 2}>
 				<span onclick="unyudingorder(<{$items['id']}>);" class="curbtn">取消订单</span>
-                <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  ><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span>
+                <!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  ><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
 			<{elseif $items['is_make'] == 2}>已取消此预定订单
 		<{/if}>
 		<{/if}>
@@ -338,12 +338,12 @@
             <a href="<{$siteurl}>/index.php?ctrl=shopcenter&action=orderprint&orderid=<{$items['id']}>&printtype=1" target="_blank">
 			<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xiaopiaodayin.png" /></a>
 		<{if $items['status'] == 2}>
-            <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
-			<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span>
+            <!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
+			<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
         <{/if}>
 		<{if $items['is_reback'] == 4}>
-            <span class='drowback' onclick="rebackclick(<{$items['id']}>);"  >同意退款</span>
-			<span class='drowback' onclick="unrebackclick(<{$items['id']}>);" >拒绝退款</span>
+          <!--   <span class='drowback' onclick="rebackclick(<{$items['id']}>);"  >同意退款</span>
+			<span class='drowback' onclick="unrebackclick(<{$items['id']}>);" >拒绝退款</span> -->
         <{/if}>
 
 		<{if $items['psuid'] > 0}>
@@ -355,7 +355,7 @@
 			<span style="padding: 4px 8px; position:relative;top:-6px;background: #EC7501;curosr:text;"class="curbtn" >
 		<{if $items['is_reback'] == 1 }>已申请退款等待平台处理<{/if}>
 		<{if $items['is_reback'] == 2 }>管理员已退款给用户<{/if}>
-		<{if $items['is_reback'] == 4 }>已申请退款等待商家处理<{/if}>
+		<{if $items['is_reback'] == 4 }>已申请退款等待管理员处理<{/if}>
             </span>
 		<{/if}>
 		</div>
@@ -618,7 +618,7 @@ function palywav(){
 
 
 				  // $('#palywave').html('<embed id=cct src="<{$siteurl}>/wave.wav" loop="0" autostart="true" hidden="true"></embed>');
-				   setTimeout("playon()",3000);
+				   setTimeout("playon()",4000);
    }
 }
 function playon(){

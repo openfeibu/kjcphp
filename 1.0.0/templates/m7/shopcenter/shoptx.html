@@ -21,7 +21,7 @@
 			</div>
 			<div class="shoptx_form">
 				<form action="#" method="post">
-					<input type="text" name="cost" id="cost" placeholder="输入提现金额" <{if $member['cost'] <100}> disabled<{/if}>/>
+					<input type="text" name="cost" id="cost" placeholder="输入提现金额" <{if $member['shopcost'] <100}> disabled<{/if}>/>
 					<input type="submit" name="" value="申请提现" <{if $member['shopcost'] <100}> disabled <{else}>id="txbtn"<{/if}> />
 				</form>
 			</div>

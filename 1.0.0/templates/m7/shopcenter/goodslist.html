@@ -204,7 +204,7 @@ border-right: 1px solid #4c4a48;}
 									 
 										 <span style=" background:#27a9e3; padding:8px; color:#fff;" class="curbtn" onclick="editgoods('<{$ite['id']}>');">编辑</span>
 										  <span style=" background:#ec7501; padding:8px; color:#fff;" class="curbtn" onclick="delgoods('<{$ite['id']}>');">删除</span>
-                                         <span style=" background:#ec7501; padding:8px; color:#fff;" class="curbtn" onclick="setattr('<{$ite['id']}>');">上传多图</span>
+                                        
 									</div>
 							   </div> 
 							</div>
@@ -245,7 +245,7 @@ border-right: 1px solid #4c4a48;}
                       </div>
                       <div class="order_list" style="background:#303337;">
                        		 <div class="order_goodlist">
-                              <div class="cd_name" style=" border:none;">
+                              <div class="cd_name" style=" border:none;width:10%">
                                   <span style=" background:#27a9e3; padding:10px; color:#fff;" class="curbtn" id="addgoods">添加菜品</span>
                               </div>
 							  
@@ -318,7 +318,6 @@ function addtogoods(goodsinfo,fenleiid){
 	       html += '<div class="cd_caozuo" style="width:190px;">';
       html += '<span style=" background:#27a9e3; padding:8px; color:#fff;" class="curbtn" onclick="editgoods('+goodsinfo.id+');">编辑</span>';
       html += '<span style=" background:#ec7501; padding:8px;margin-left:5px; color:#fff;" class="curbtn" onclick="delgoods('+goodsinfo.id+');">删除</span>';
-        html+='<span style=" background:#ec7501; margin-left:5px;padding:8px; color:#fff;" class="curbtn" onclick="setattr('+goodsinfo.id+');">上传多图</span>';
       html += '</div>';
       html += '</div>';
       html += '</div>';
@@ -529,7 +528,6 @@ $('#saveaddgoods').live('click',function(){
               htmldata += '       <div class="cd_caozuo" style="width:190px;">';
               htmldata += '          <span style=" background:#27a9e3; padding:8px; color:#fff;" class="curbtn" onclick="editgoods(\''+backinfo.content.id+'\');">编辑</span>';
               htmldata += '            <span style=" background:#ec7501; padding:8px; color:#fff;" class="curbtn" onclick="delgoods(\''+backinfo.content.id+'\');">删除</span>';
-        htmldata+='<span style=" background:#ec7501; margin-left: 5px;padding:8px; color:#fff;" class="curbtn" onclick="setattr(\''+backinfo.content.id+'\');">上传多图</span>';
               htmldata += '      </div>';
               htmldata += '  </div> ';
               htmldata += '</div>'; 
@@ -621,7 +619,6 @@ function refreshgoods(info){
               htmldata += '       <div class="cd_caozuo" style="width:190px;">';
               htmldata += '          <span style=" background:#27a9e3; padding:8px; color:#fff;" class="curbtn" onclick="editgoods(\''+info.id+'\');">编辑</span>';
               htmldata += '            <span style=" background:#ec7501; padding:8px; color:#fff;" class="curbtn" onclick="delgoods(\''+info.id+'\');">删除</span>';
-                htmldata+='<span style=" background:#ec7501; margin-left:5px;padding:8px; color:#fff;" class="curbtn" onclick="setattr(\''+info.id+'\');">上传多图</span>';
               htmldata += '      </div>';
               htmldata += '  </div> ';
               htmldata += '</div>'; 
