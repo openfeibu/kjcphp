@@ -2417,7 +2417,7 @@ class method extends baseclass
             $this->message('emptycookshop');
         }
         $daymintime = strtotime(date('Y-m-d', time()));
-        $tempshu =  $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order where shopid='".$shopid."' and  is_make = 0  and  status <=  2 and posttime > ".$daymintime." limit 0,1000");
+        $tempshu =  $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order where shopid='".$shopid."' and  status <=  2 and posttime > ".$daymintime." limit 0,1000");
         $hidecount = $tempshu['shuliang'];
         $this->success($hidecount);
     }
