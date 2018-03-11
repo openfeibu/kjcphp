@@ -123,6 +123,30 @@ class method extends adminbaseclass
         $data['selecttype'] = $selecttype;
         Mysite::$app->setdata($data);
     }
+    public function shopcost()
+    {
+        //店铺统计
+
+        $selecttype = intval(IFilter::act(IReq::get('selecttype')));
+        // $tempselecttype = in_array($selecttype,array(0,1,2,3))?$selecttype:0;
+
+        $wherearray = array(
+            '0'=>' where 1 ',
+            '1'=>' where addtime > '.strtotime('-1 month'),
+            '2'=>' where addtime > '.strtotime('-7 day'),
+            '3'=>' where addtime > '.strtotime(date('Y-m-d', time()))
+        );
+        $tempdata =   $this->mysql->getarr(" SELECT sum(allcost) as shuliang ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%k') as month FROM ".Mysite::$app->config['tablepre']."order  ".$wherearray[$selecttype]." AND status = 3 AND is_reback = 0 GROUP BY month ");
+        $list = array();
+        if (is_array($tempdata)) {
+            foreach ($tempdata as $key=>$value) {
+                $list[$value['month']] = $value['shuliang'];
+            }
+        }
+        $data['list'] = $list;
+        $data['selecttype'] = $selecttype;
+        Mysite::$app->setdata($data);
+    }
     public function ordertotal()
     {
         $data['buyerstatus'] = array(
