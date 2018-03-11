@@ -1451,6 +1451,7 @@ $ch = curl_init($url);
     public function clearing($orderinfo)
     {
         if($orderinfo['is_js'] != 1)
+        {
             $jstime = date("Y-m-d");
             $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
             $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', array('is_js' => 1), "id = '".$orderinfo['id']."' ");
