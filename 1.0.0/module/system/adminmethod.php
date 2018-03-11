@@ -204,6 +204,7 @@ class method extends adminbaseclass
         $footerdata = trim(IReq::get('footerdata'));
         $companyname = IReq::get('companyname');
         $website = IReq::get('website');
+        $weixin = IReq::get('weixin');
 
         $siteinfo['default_cityid'] =  intval(IReq::get('default_cityid'));
 
@@ -223,6 +224,7 @@ class method extends adminbaseclass
         }
         $siteinfo['litel'] = IReq::get('litel');
         $siteinfo['sitename'] = $sitename;
+        $siteinfo['weixin'] = $weixin;
         $siteinfo['description'] = $description;
         $siteinfo['keywords'] = $keywords;
         $siteinfo['beian'] = $beian;
