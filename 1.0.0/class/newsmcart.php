@@ -41,7 +41,11 @@ class newsmcart
         $this->shopid = $shopid;
         return $this;
     }
-
+    public function SetUid($uid)
+    {
+        $this->uid = $uid;
+        return $this;
+    }
     public function SetGoodsType($goodstype)
     {//1表示普通商品 2有规格商品
         $this->goodstype=$goodstype;
@@ -117,7 +121,8 @@ class newsmcart
     //添加商品到购物车
     public function AddGoods($goodsid)
     {////若按周限时商品则此处需增加 判断
-
+        $starttime = strtotime(date('Y-m-d 00:00:00'));
+        $endtime = strtotime(date('Y-m-d 23:59:59'));
         if ($this->init()) {
             if ($this->goodstype == null) {
                 $this->errId = '未初始化商品类型';
@@ -125,10 +130,22 @@ class newsmcart
             }
             $goodsid = intval($goodsid);
             $goodsinfo = $this->onegoods($goodsid);
+
             #print_r($goodsinfo);exit;
             if (empty($goodsinfo)) {
                 $this->errId = '商品不存在';
                 return false;
+            }
+
+            if($goodsinfo['is_cx'] == 1)
+            {
+                 $orderdata = $this->mysql->select_one("select count(od.goodsid) as goodsidcount  from ".Mysite::$app->config['tablepre']."order as o join  ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id where o.buyeruid = '".$this->uid."' and od.goodsid =  '".$goodsid."' and o.addtime < $endtime and o.addtime > $starttime");
+                 $cart_goods_count = isset($this->carinfo['goods'][$goodsid]) ? $this->carinfo['goods'][$goodsid] : 0;
+                 $total_today_goods = $orderdata['goodsidcount'] + $cart_goods_count;
+                 if ($total_today_goods >= $goodsinfo['cxnum'] &&  $goodsinfo['cxnum']>0) {
+                     $this->errId = '已超过今天最大限购数量';
+                     return false;
+                 }
             }
 
             if ($this->goodstype == 1) {//正常商品
