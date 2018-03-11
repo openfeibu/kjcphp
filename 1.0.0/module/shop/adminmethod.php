@@ -775,7 +775,8 @@ class method extends adminbaseclass
         $data['shopname'] =  trim(IReq::get('shopname'));
         $data['username'] =  trim(IReq::get('username'));
         $data['phone'] = trim(IReq::get('phone'));
-        $data['cityid'] = intval(IReq::get('cityid'));
+        //$data['cityid'] = intval(IReq::get('cityid'));
+        $data['stationid'] = intval(IReq::get('stationid'));
         if (!empty($data['shopname'])) {
             $where .= " and shopname like '%".$data['shopname']."%'";
         }
@@ -785,8 +786,8 @@ class method extends adminbaseclass
         if (!empty($data['phone'])) {
             $where .=" and phone='".$data['phone']."'";
         }
-        if (!empty($data['cityid'])) {
-            $where .=" and admin_id='".$data['cityid']."'";
+        if (!empty($data['stationid'])) {
+            $where .=" and stationid='".$data['stationid']."'";
         }
 
         //构造查询条件

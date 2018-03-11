@@ -4,7 +4,7 @@
  <{/block}>
  <{block name=controlname}>店铺列表<{/block}>
  <{block name=bodylist}>
-
+        <{load_data assign="stationlist" table="stationadmininfo" fileds="*" limit="1000"  where="stationis_open = 0" orderby=" id desc"}>
       <div style="width:auto;overflow-x:hidden;overflow-y:auto">
 
       	<div class="search">
@@ -17,6 +17,13 @@
             	   <input type="hidden" name="ctrl" value="adminpage">
             	   <input type="hidden" name="action" value="shop">
             	   <input type="hidden" name="module" value="adminshoplist">
+                   <label>分站：</label>
+                   <select name="stationid">
+                       <option value="0">请选择</option>
+                       <{foreach from=$stationlist['list'] key=key  item=items}>
+                       <option value="<{$items['id']}>" <{if $stationadminid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
+                       <{/foreach}>
+                   </select>
             	   <label>店铺名:</label>
             	   <input type="text" name="shopname" value="<{$shopname|default:''}>">&nbsp;&nbsp;
             	   <label>用户名:</label>

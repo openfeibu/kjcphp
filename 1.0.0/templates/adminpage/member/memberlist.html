@@ -2,7 +2,7 @@
 
  <{block name=controlname}>会员列表<{/block}>
  <{block name=bodylist}>
-        <{load_data assign="stationlist" table="stationadmininfo" fileds="*"  where="stationis_open = 0" orderby=" id desc"}>
+        <{load_data assign="stationlist" table="stationadmininfo" fileds="*" limit="1000" where="stationis_open = 0" orderby=" id desc"}>
       <div style="width:auto;overflow-x:hidden;overflow-y:auto">
 
 
