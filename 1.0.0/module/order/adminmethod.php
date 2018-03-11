@@ -412,7 +412,7 @@ class method extends adminbaseclass
                 // 这句file_put_contents是用来查看服务器返回的退款结果 测试完可以删除了
                 //file_put_contents(APP_ROOT.'/Api/wxpay/logs/log4.txt',arrayToXml($result),FILE_APPEND);
                 if (($result['return_code']=='SUCCESS') && ($result['result_code']=='SUCCESS')) {
-                    $zengcost = IReq::get('zengcost');
+                    //$zengcost = IReq::get('zengcost');
                     $is_phonenotice = IReq::get('is_phonenotice');
                     $notice_content = IReq::get('notice_content');
 
@@ -432,7 +432,7 @@ class method extends adminbaseclass
                     $drawdata['addtime'] = time();
                     $drawdata['orderid'] = 	$orderinfo['id'];
                     $drawdata['shopid'] = 	$orderinfo['shopid'];
-                    $drawdata['cost'] = 	 $zengcost;
+                    $drawdata['cost'] = 	 $orderinfo['allcost'];
                     $drawdata['status'] = 	1;
                     $drawdata['admin_id'] = 	ICookie::get('adminuid');
                     $drawdata['type'] = 1;

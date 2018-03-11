@@ -128,15 +128,16 @@ class drawbacklog
         //如果订单已经制作  退款申请到商家   等待商家处理
         //如果商家同意退款   退款申请再到平台   等待平台处理
         //如果商家拒绝退款   订单返回原状态   平台不需要任何操作
-        if ($orderinfo['is_make'] ==1) {
-            $data['status'] = 3;//退款状态 0待处理 1为已退 2为拒绝退款 3待商家确认
-        }
+        // if ($orderinfo['is_make'] ==1) {
+        //     $data['status'] = 3;//退款状态 0待处理 1为已退 2为拒绝退款 3待商家确认
+        // }
         $this->mysql->insert(Mysite::$app->config['tablepre'].'drawbacklog', $data);
-        if ($orderinfo['is_make'] ==1) {
-            $udata['is_reback'] = 4;//如果商家确认制作后允许申请退款的话   客户申请退款   is_reback=4(申请退款，待商家确认)
-        } else {
-            $udata['is_reback'] = 1;
-        }
+        $udata['is_reback'] = 4;
+        // if ($orderinfo['is_make'] ==1) {
+        //     $udata['is_reback'] = 4;//如果商家确认制作后允许申请退款的话   客户申请退款   is_reback=4(申请退款，待商家确认)
+        // } else {
+        //     $udata['is_reback'] = 1;
+        // }
         $this->mysql->update(Mysite::$app->config['tablepre'].'order', $udata, "id='".$orderinfo['id']."'");
         $ordCls = new orderclass();
         $ordCls->writewuliustatus($orderinfo['id'], 13, $orderinfo['paytype']);  // 管理员 操作配送发货
