@@ -2618,6 +2618,7 @@ class method extends baseclass
     }
     public function shopjsall()
     {
+        exit;
         $jstime = date("Y-m-d",strtotime("-3 day"));
         $nowmintime = strtotime($jstime);
         $where  = " where   id not in(select shopid from ".Mysite::$app->config['tablepre']."shopjs where jstime =".$nowmintime."  ) ";
@@ -2626,11 +2627,12 @@ class method extends baseclass
         {
             $result = $this->makejsorder($jstime,$shop['id']);
         }
-         exit;
+
     }
     //生成 结算单
     public function makejsorder($jstime,$shopid)
     {
+        exit;
         if (empty($jstime)) {
             return '请输入结算时间';
         }
