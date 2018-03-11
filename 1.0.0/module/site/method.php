@@ -2622,10 +2622,13 @@ class method extends baseclass
         $nowmintime = strtotime($jstime);
         $where  = " where   id not in(select shopid from ".Mysite::$app->config['tablepre']."shopjs where jstime =".$nowmintime."  ) ";
         $shoplist =   $this->mysql->getarr("select id,shopname,uid  from ".Mysite::$app->config['tablepre']."shop  ".$where." order by id asc");
-        foreach($shoplist as $key => $shop)
-        {
-            $this->makejsorder($jstime,$shop['id']);
-        }
+        var_dump($this->makejsorder($jstime,893));
+        // foreach($shoplist as $key => $shop)
+        // {
+        //     $result = $this->makejsorder($jstime,$shop['id']);
+        //     var_dump($shop['id'].$result);
+        // }
+         exit;
     }
     //生成 结算单
     public function makejsorder($jstime,$shopid)
@@ -2663,9 +2666,9 @@ class method extends baseclass
 
         /***检测是否 生成过结算单***/
         $checkinfo = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."shopjs  where shopid = ".$shopid." and jstime =".$nowmintime."  ");
-        if ($checkinfo > 0) {
-            return '已生成结算单';
-        }
+        // if ($checkinfo > 0) {
+        //     return '已生成结算单';
+        // }
         $maxtime = $nowmintime +86400;
         //将所有 在配送时间段里的
         $canwhere = " where shopid = '".$shopid."'  and sendtime >= ".$nowmintime." and sendtime < ".$maxtime." and status >  1 and status < 3 and is_reback > 0 ";
@@ -2679,10 +2682,10 @@ class method extends baseclass
 
 
         $where2  = " where shopid = '".$shopid."'  and sendtime >= ".$nowmintime." and sendtime < ".$maxtime." ";
-        $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(allcost) as allcost,sum(shopps) as shopps,sum(bagcost) as bagcost   from ".Mysite::$app->config['tablepre']."order  ".$where2." and paytype =0 and shopcost > 0 and status = 3  order by id asc  limit 0,1000");
-        $line= $this->mysql->select_one("select count(id) as shuliang,sum(allcost) as allcost,sum(shopps) as shopps,sum(bagcost) as bagcost   from ".Mysite::$app->config['tablepre']."order  ".$where2." and paytype !=0  and paystatus =1 and shopcost > 0 and status = 3     order by id asc  limit 0,1000");
+        $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(allcost) as allcost,sum(shopps) as shopps,sum(bagcost) as bagcost ,sum(shopdowncost) as shopdowncost  from ".Mysite::$app->config['tablepre']."order  ".$where2." and paytype =0 and shopcost > 0 and status = 3 and is_js = 0 order by id asc");
+        $line= $this->mysql->select_one("select count(id) as shuliang,sum(allcost) as allcost,sum(shopps) as shopps,sum(bagcost) as bagcost ,sum(shopdowncost) as shopdowncost  from ".Mysite::$app->config['tablepre']."order  ".$where2." and paytype !=0  and paystatus =1 and shopcost > 0 and status = 3 and is_js = 0 order by id asc");
 
-
+        $this->mysql->update(Mysite::$app->config['tablepre'].'order', array('is_js' => 1), "shopid = '".$shopid."'  and sendtime >= ".$nowmintime." and sendtime < ".$maxtime."  and paytype !=0  and paystatus =1 and shopcost > 0 and status = 3 ");
 
         $newdata['onlinecount'] = $line['shuliang'];
         $newdata['onlinecost'] = $line['allcost'];
@@ -2692,16 +2695,18 @@ class method extends baseclass
         $newdata['yjb'] = empty($yjbl)?0:$yjbl; // 15.00
         $yjcost =  ($shoptj['allcost']+$line['allcost']-$shoptj['shopps']-$line['shopps']-$shoptj['bagcost']-$line['bagcost'])*$yjbl*0.01;
         $newdata['acountcost'] =  0;
-        if ($sendtype == 0) {//平台配送
-              $newdata['acountcost'] = $line['allcost']+$shoptj['allcost']-$yjcost-$shoptj['shopps']-$line['shopps'];//  线上金额-佣金比例+线下金额-线上配送费=平台配送金额
-        } else {//自行配送
-             $newdata['acountcost'] = $line['allcost']-$yjcost;
-        }
+        // if ($sendtype == 0) {//平台配送
+        //       $newdata['acountcost'] = $line['allcost']+$shoptj['allcost']-$yjcost-$shoptj['shopps']-$line['shopps'];//  线上金额-佣金比例+线下金额-线上配送费=平台配送金额
+        // }
+        // else {//自行配送
+             $newdata['acountcost'] = $line['allcost']-$yjcost+$line['shopdowncost']+ $shoptj['shopdowncost'];
+    //    }
         $newdata['yjcost'] = $yjcost;
         $newdata['pstype'] = $sendtype;
         $newdata['shopid'] =$shopinfo['id'];
         $newdata['shopuid'] =$shopinfo['uid'];
-
+        //平台承担费用
+        $newdata['shopdowncost'] = $line['shopdowncost'] + $shoptj['shopdowncost'];
         $newdata['addtime'] = time();
         $newdata['jstime'] = $nowmintime;
 
@@ -2711,7 +2716,7 @@ class method extends baseclass
         $orderid = $this->mysql->insertid();
         /***自动  更新用户 账号余额***/
         $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."' ");
-        // $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$newdata['acountcost'],"uid ='".$shopinfo['uid']."' ");
+         $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$newdata['acountcost'],"uid ='".$shopinfo['uid']."' ");
         $newdatac['cost'] = $newdata['acountcost'];
         $newdatac['type'] = 3;
         $newdatac['status'] = 2;

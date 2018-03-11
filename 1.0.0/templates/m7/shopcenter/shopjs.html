@@ -59,15 +59,16 @@
             <table cellpadding="0" cellspacing="0" width="100%">
               <tbody>
                 <tr>
-				 <th width="14%">描述</th>
-                 <th width="8%">配送方式</th>
-                 <th width="8%">交易类型</th>
-                  <th width="8%">订单数</th>
-                   <th width="8%">金额</th>
+                    <th width="14%">描述</th>
+                    <th width="8%">配送方式</th>
+                    <th width="8%">交易类型</th>
+                    <th width="8%">订单数</th>
+                    <th width="8%">金额</th>
                     <th width="8%">佣金比例</th>
-                     <th width="8%">佣金</th>
-                       <th width="8%">结算金额</th>
-                        <th width="20%">结算时间</th>
+                    <th width="8%">佣金</th>
+                    <th width="8%">平台承担优惠</th>
+                    <th width="8%">结算金额</th>
+                    <th width="20%">结算时间</th>
 
                 </tr>
                 <{foreach from=$jslist item=items}>
@@ -80,6 +81,7 @@
 						<td align="center" > <{$items['onlinecost']}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['yjb']*0.01,2)}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['yjcost'],2)}> </td>
+                        <td align="center" rowspan="2"> <{number_format($items['shopdowncost'],2)}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['acountcost'],2)}> </td>
 						<td align="center" rowspan="2"> <{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}> </td>
 
