@@ -39,16 +39,18 @@
                       <td><select name="group">
                        <{load_data assign="grouplist" table="group"    fileds="*" limit="10" }>
                       	<{foreach from=$grouplist['list'] key=myid  item=items}>
-                      	 <{if $items['type'] == 'font'}>
-                      	   <option value="<{$items['id']}>"
-							<{if !empty($info) }>
-								<{if $info['group'] == $items['id']}>selected<{/if}>
-							 <{else}>
-								<{if $items['id'] ==5}>selected<{/if}>
-							<{/if}>
+                            <{if $items['id'] != 2}>
+                        	   <{if $items['type'] == 'font'}>
+                        	   <option value="<{$items['id']}>"
+              							<{if !empty($info) }>
+              								<{if $info['group'] == $items['id']}>selected<{/if}>
+              							 <{else}>
+              								<{if $items['id'] ==5}>selected<{/if}>
+              							<{/if}>
 
-							><{$items['name']}></option>
+              							><{$items['name']}></option>
                       	 <{/if}>
+                         <{/if}>
                       	<{/foreach}>
                       	</select></td>
                     </tr>
