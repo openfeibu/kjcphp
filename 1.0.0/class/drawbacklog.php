@@ -132,7 +132,7 @@ class drawbacklog
         //     $data['status'] = 3;//退款状态 0待处理 1为已退 2为拒绝退款 3待商家确认
         // }
         $this->mysql->insert(Mysite::$app->config['tablepre'].'drawbacklog', $data);
-        $udata['is_reback'] = 4;
+        $udata['is_reback'] = 1;
         // if ($orderinfo['is_make'] ==1) {
         //     $udata['is_reback'] = 4;//如果商家确认制作后允许申请退款的话   客户申请退款   is_reback=4(申请退款，待商家确认)
         // } else {
