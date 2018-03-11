@@ -1,7 +1,7 @@
  <{extends file="<{$tempdir}>/public/admin.html"}>
    <{block name=extendjs}>
  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
- 
+
 <{/block}>
  <{block name=controlname}>店铺提现申请表 <{/block}>
  <{block name=bodylist}>
@@ -16,14 +16,14 @@
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/order/module/shoptx"}>">
 
             	  <label>店铺名：</label>
-            	   <input type="text" name="shopname" value="<{$shopname}>" style="width:150px;">  
+            	   <input type="text" name="shopname" value="<{$shopname}>" style="width:150px;">
 				   <label>状态：</label>
             	   <select name="status">
 				   <option value="1" <{if $status == 1}>selected<{/if}>>申请</option>
 				   <option value="2" <{if $status == 2}>selected<{/if}>>处理成功</option>
-				   <option value="3" <{if $status == 3}>selected<{/if}>>已取消</option>   
+				   <option value="3" <{if $status == 3}>selected<{/if}>>已取消</option>
 				   </select>
-            	   
+
             	   从<input class="Wdate datefmt" type="text" name="starttime" id="starttime" value="<{$starttime}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />
 			   	   到<input class="Wdate datefmt" type="text" name="endtime" id="endtime" value="<{$endtime}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />
 
@@ -33,10 +33,10 @@
             </div>
 
       	</div>
-		  
-		    
-		  
-		  
+
+
+
+
            <div class="tags">
 
 
@@ -60,24 +60,24 @@
 						 <th align="center">提现说明</th>
 						  <th align="center">账号</th>
                         <th align="center">提现金额</th>
-						
-						<th align="center">账号余额</th>  
-						<th align="center">状态</th> 
-						<th align="center">提交时间</th> 
-						<th align="center">操作</th> 
+
+						<th align="center">账号余额</th>
+						<th align="center">状态</th>
+						<th align="center">提交时间</th>
+						<th align="center">操作</th>
                       </tr>
 
                     </thead>
 
-                     <tbody> 
-		 
+                     <tbody>
+
 		                 	<{foreach from=$txlist item=items}>
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
                           <td align="center" ><input type="checkbox" name="id[]" value="<{$items['id']}>"></td>
                         <td align="center" ><{$items['id']}></td>
                         <td align="center" > <{$items['shopname']}> </td>
 						<td align="center" ><{$items['name']}></td>
-						<td align="center"><{$items['backacount']|default:'--'}></td>  
+						<td align="center"><{$items['backacount']|default:'--'}></td>
 						<td align="center" > <{$items['cost']}> </td>
 						<td align="center" ><{$items['yue']}> </td>
 						<td align="center" > <{$items['statusname']}> </td>
@@ -91,14 +91,14 @@
 							取消
 							</a>
 							<{else}>--
-							<{/if}> 
-							
+							<{/if}>
+
 						</td>
-						
+
                         </tr>
-						 
+
                        <{/foreach}>
-					   
+
 
                     </tbody>
 

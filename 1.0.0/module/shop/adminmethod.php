@@ -130,8 +130,8 @@ class method extends adminbaseclass
             if (empty($arr['txname'])) {
                 $this->message('请输入提现账号名称');
             }
-            $arr['txaccount'] = IReq::get('txaccount');
-            if (empty($arr['txaccount'])) {
+            $arr['backacount'] = IReq::get('backacount');
+            if (empty($arr['backacount'])) {
                 $this->message('请输入提现账号');
             }
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  shopname='".$data['shopname']."'  ");
@@ -203,8 +203,8 @@ class method extends adminbaseclass
             if (empty($arr['txname'])) {
                 $this->message('请输入提现账号名称');
             }
-            $arr['txaccount'] = IReq::get('txaccount');
-            if (empty($arr['txaccount'])) {
+            $arr['backacount'] = IReq::get('backacount');
+            if (empty($arr['backacount'])) {
                 $this->message('请输入提现账号');
             }
             $uid = 0;
@@ -1694,8 +1694,8 @@ class method extends adminbaseclass
             echo "<script>parent.uploaderror('请输入提现账号名称');</script>";
             exit;
         }
-        $arr['txaccount'] = IReq::get('txaccount');
-        if (empty($arr['txaccount'])) {
+        $arr['backacount'] = IReq::get('backacount');
+        if (empty($arr['backacount'])) {
             echo "<script>parent.uploaderror('请输入提现账号');</script>";
             exit;
         }

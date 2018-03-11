@@ -83,10 +83,12 @@
                           	<{$userinfo['username']}>
                         	</td>
                         <td align="center">
-                        <a onclick="starttask('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a> &nbsp;&nbsp;<a onclick="setps('<{$items['id']}>','<{$items['shopname']}>');" href="#">订单通知</a></td>
+                        <a onclick="starttask('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a> </td>
                         <td align="center"><{if $items['is_open'] == 1}>是<{else}>否<{/if}></td>
 
-                         <td align="center"><a href="#" onclick="addcost(<{$items['uid']}>);">增</a><{if $items['yjin']=='0'}>默认<{$yjin}><{else}><{$items['yjin']}><{/if}>/<{$userinfo['shopcost']|default:'0'}><a onclick="setyjin('<{$items['id']}>','<{$items['shopname']}>','<{$items['yjin']}>','<{$yjin}>','<{$userinfo['backacount']|default:''}>');" href="#">设置</a></td>
+                         <td align="center"><a onclick="setyjin('<{$items['id']}>','<{$items['shopname']}>','<{$items['yjin']}>','<{$yjin}>','<{$userinfo['backacount']|default:''}>');" href="#">设置</a><{if $items['yjin']=='0'}>默认<{$yjin}><{else}><{$items['yjin']}><{/if}>/<{$userinfo['shopcost']|default:'0'}>
+                             <a href="#" onclick="addcost(<{$items['uid']}>);">增</a>
+                         </td>
                         <td align="center"><input type="text" name="pxinput" data="<{$items['id']}>" value="<{$items['sort']}>" style="width:30px;padding:0px;"></td>
                         <td align="center"><a href="#" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
                           <td align="center">
@@ -198,8 +200,7 @@ function setyjin(shopid,shopname,myongjin,defaultyj,yinhang)
 	htmls += '<tbody><tr>';
 	htmls += '<td height="50px">佣金比例:</td>';
 	htmls += '<td> <input type="text" name="yjin" value="'+mytj+'" style="width:100px;"></td></tr>';
-	htmls += '<td height="50px">提现账号:</td>';
-	htmls += '<td> <input type="text" name="backacount" value="'+yinhang+'" style="width:200px;"></td></tr>';
+	htmls += '</tr>';
 
 	htmls += '</tbody></table> ';
   htmls += '<input type="hidden" value="'+shopid+'" name="shopid"> ';
