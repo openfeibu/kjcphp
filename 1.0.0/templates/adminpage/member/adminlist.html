@@ -35,8 +35,8 @@
                      <tbody>
                       <{load_data assign="list" table="admin" showpage="true" where=" `groupid` in (<{$ids}>) " }> 
                       <{foreach from=$list['list'] item=items}> 
+                      <{if $items['groupid'] != 1}>
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff"> 
-                         
                         <td align="center"><{$items['username']}></td> 
                         <td align="center"> <{$items['logintime']|date_format:"%Y-%m-%d %H:%M:%S"}> </td> 
                         <td align="center"><{$items['time']|date_format:"%Y-%m-%d %H:%M:%S"}></td>  
@@ -48,6 +48,7 @@
                         	
                         	</td> 
                       </tr> 
+                      <{/if}>
                        <{/foreach}> 
 
                     </tbody> 

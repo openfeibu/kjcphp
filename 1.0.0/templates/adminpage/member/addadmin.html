@@ -24,10 +24,13 @@
                       <td class="left" valign="top">所在用户分组</td>
                       <td>
                       <select name="groupid">
-                      	 <{load_data assign="grouplist" table="group"    fileds="*"  limit="10" }>
+                      	<{load_data assign="grouplist" table="group"    fileds="*"  limit="10" }>
                       	<{foreach from=$grouplist['list'] key=myid  item=items}>
                       	<{if $items['type'] == 'admin'}>
-                      	   <option value="<{$items['id']}>" <{if $info['groupid'] == $items['id']}>selected<{/if}>><{$items['name']}></option>
+                          <{if $items['id'] != 1}>
+                            <option value="<{$items['id']}>" <{if $info['groupid'] == $items['id']}>selected<{/if}>><{$items['name']}></option>
+                          <{/if}>
+                      	  
                       	<{/if}>
                       	<{/foreach}>
                       </select>
