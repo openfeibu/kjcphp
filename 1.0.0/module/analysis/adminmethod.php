@@ -125,26 +125,36 @@ class method extends adminbaseclass
     }
     public function shopcost()
     {
-        //店铺统计
-
-        $selecttype = intval(IFilter::act(IReq::get('selecttype')));
-        // $tempselecttype = in_array($selecttype,array(0,1,2,3))?$selecttype:0;
-
-        $wherearray = array(
-            '0'=>' where 1 ',
-            '1'=>' where addtime > '.strtotime('-1 month'),
-            '2'=>' where addtime > '.strtotime('-7 day'),
-            '3'=>' where addtime > '.strtotime(date('Y-m-d', time()))
-        );
-        $tempdata =   $this->mysql->getarr(" SELECT sum(allcost) as shuliang ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%k') as month FROM ".Mysite::$app->config['tablepre']."order  ".$wherearray[$selecttype]." AND status = 3 AND is_reback = 0 GROUP BY month ");
-        $list = array();
-        if (is_array($tempdata)) {
-            foreach ($tempdata as $key=>$value) {
-                $list[$value['month']] = $value['shuliang'];
-            }
+        $gdatemy = IReq::get('datemy');
+        $datemy = $gdatemy ? $gdatemy : date('Y-m');
+        if($datemy == date('Y-m'))
+        {
+            $BeginDate = date('Y-m-01');
+            $date = date('Y-m-d');
+        }else {
+            $BeginDate = date('Y-m-01', strtotime($datemy));
+            $date = date('Y-m-d', strtotime("$BeginDate +1 month -1 day"));
         }
-        $data['list'] = $list;
-        $data['selecttype'] = $selecttype;
+        $dates = $date_fronts = $consume_dates = $consumes = $keep_datas = [];
+        $days = 3;
+        for ($i=$days; $i >= 1; $i--) {
+            $dates[] = date('Y-m-d',strtotime($BeginDate." -$i day"));
+        }
+        //当月第几天
+        $j = date('j',strtotime($date));
+        for ($i=$j-1; $i >= 1; $i--) {
+            $dates[] = $consume_dates[] = date('Y-m-d',strtotime("$date -$i day"));
+        }
+        $consumes= array();
+        foreach($dates as $key => $value)
+        {
+            $datas = $this->mysql->select_one(" SELECT sum(allcost) as allcost ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') as day FROM ".Mysite::$app->config['tablepre']."order  where DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') = '".$value."' AND status = 3 AND is_reback = 0 GROUP BY day ");
+            $consumes[date('d',strtotime($value))] = $datas ? $datas['allcost'] : 0;
+        }
+        $data['consumes'] = $consumes;
+        $data['x'] = implode(',',array_keys($consumes));
+        $data['y'] = implode(',',array_values($consumes));
+        $data['datemy'] = $datemy;
         Mysite::$app->setdata($data);
     }
     public function ordertotal()

@@ -4,13 +4,14 @@
  <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
   <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/chart/highcharts.js"></script>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/chart/modules/exporting.js"></script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
 <script type="text/javascript">
 
 
 	function gotolink(obj){
 			  var checkvalue = $(obj).val();
-			  var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&selecttype=@selecttype@';
-		   	window.location.href= linkis.replace('@selecttype@', checkvalue);
+			  var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&datemy=@datemy@';
+		   	window.location.href= linkis.replace('@datemy@', checkvalue);
   }
 
 
@@ -24,10 +25,7 @@
       	 <div class="tags">
           <div id="tagscontent">
             <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
-            	 <input type="checkbox" name="selecttype" value="0" <{if empty($selecttype)}>checked<{/if}> onclick="gotolink(this);">所有
-            	 <input type="checkbox" name="selecttype" value="1" <{if $selecttype == 1}>checked<{/if}> onclick="gotolink(this);">最近1月
-            	 <input type="checkbox" name="selecttype" value="2"  <{if $selecttype == 2}>checked<{/if}> onclick="gotolink(this);">最近一周
-            	 <input type="checkbox" name="selecttype" value="3"  <{if $selecttype == 3}>checked<{/if}> onclick="gotolink(this);">当天
+                <input class="Wdate datefmt" type="text" name="datemy" id="datemy" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" />
             </div>
             <div id="con_one_1">
 
@@ -42,22 +40,21 @@
                   <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
                     <thead>
                       <tr>
-                        <th align="center">时间</th>
-                        <th align="center">下单数量</th>
+                        <th align="center">天</th>
+                        <th align="center">成功交易额（元）</th>
 
                       </tr>
                     </thead>
                      <tbody>
 
 
-                     	<{section name=loop start=6 loop=24 step=1 max=22 }>
-                     	 <tr>
+                     	<{foreach from=$consumes key=key item=item}>
+                           <tr>
+                            <td align="center"><{$key}></td>
+                            <td align="center"><{$item}></td>
+                          </tr>
+                       <{/foreach}>
 
-                        <td align="center"><{$smarty.section.loop.index}></td>
-                        <td align="center"><{if isset($list[$smarty.section.loop.index])}><{$list[$smarty.section.loop.index]}><{else}>0<{/if}></td>
-
-                      </tr>
-                       <{/section}>
                     </tbody>
                   </table>
                </form>
@@ -100,10 +97,7 @@ $(function () {
                 x:0
             },
             xAxis: {
-                categories: [
-                <{section name=loop start=6 loop=24 step=1 max=22 }>
-                <{$smarty.section.loop.index}> <{if $smarty.section.loop.index!= 23}>,<{/if}>
-                 <{/section}>
+                categories: [<{$x}>
               ]
             },
             yAxis: {
@@ -119,7 +113,7 @@ $(function () {
             tooltip: {
                 formatter: function() {
                         return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +'点: '+ this.y +'(元)';
+                        this.x +'号: '+ this.y +'(元)';
                 }
             },
             legend: {
@@ -131,10 +125,8 @@ $(function () {
                 borderWidth: 0
             },
             series: [{
-                name: '时间段交易额',
-                data: [<{section name=loop start=6 loop=24 step=1 max=22 }>
-                <{if isset($list[$smarty.section.loop.index])}><{$list[$smarty.section.loop.index]}><{else}>0<{/if}><{if $smarty.section.loop.index!= 23}>,<{/if}>
-                 <{/section}>]
+                name: '天交易额',
+                data: [<{$y}>]
             }]
         });
     });

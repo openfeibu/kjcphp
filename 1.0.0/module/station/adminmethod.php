@@ -223,12 +223,12 @@ class method extends adminbaseclass
                 $this->message('所选城市已占用，请选择其他城市');
             }
             */
-             if(empty($stationlnglat)){
-                 $this->message('请设置分站地图坐标');
-             }
-             /*
+            if (empty($stationlnglat)) {
+                $this->message('请设置分站地图坐标');
+            }
+            /*
             if (empty($stationaddress)) {
-                $this->message('请填写分站地址');
+               $this->message('请填写分站地址');
             }
 
             $arr['username'] = $username;
@@ -239,7 +239,7 @@ class method extends adminbaseclass
             $this->mysql->insert(Mysite::$app->config['tablepre'].'admin', $arr);
             $stationuid = $this->mysql->insertid();
             */
-            $stationlnglat = explode(',',$stationlnglat);
+            $stationlnglat = explode(',', $stationlnglat);
             $adddata = array();
             $adddata['uid'] = 1;
             $adddata['stationname'] = $stationname;
@@ -273,19 +273,19 @@ class method extends adminbaseclass
             if (empty($stationphone)) {
                 $this->message('分站负责人电话不能为空');
             }
-            if(empty($stationlnglat)){
-                 $this->message('请设置分站地图坐标');
-             }
-             /*
+            if (empty($stationlnglat)) {
+                $this->message('请设置分站地图坐标');
+            }
+            /*
             if (empty($stationaddress)) {
-                $this->message('请填写分站地址');
+               $this->message('请填写分站地址');
             }
 
             if (!empty($arr)) {
-                $this->mysql->update(Mysite::$app->config['tablepre'].'admin', $arr, "uid='".$uid."'");
+               $this->mysql->update(Mysite::$app->config['tablepre'].'admin', $arr, "uid='".$uid."'");
             }
             */
-            $stationlnglat = explode(',',$stationlnglat);
+            $stationlnglat = explode(',', $stationlnglat);
             $updataarr = array();
             $updataarr['stationname'] = $stationname;
             $updataarr['stationusername'] = $stationusername;
@@ -507,7 +507,6 @@ class method extends adminbaseclass
 
         if (is_array($stationtj)) {
             foreach ($stationtj as $key=>$value) {
-
                 $value['stationname'] = $value['stationname'];
 
                 $shopids = $this->mysql->getarr("select  id  from ".Mysite::$app->config['tablepre']."shop where stationid = ".$value['id']." ");
