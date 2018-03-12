@@ -27,7 +27,7 @@
                       	<{load_data assign="grouplist" table="group"    fileds="*"  limit="10" }>
                       	<{foreach from=$grouplist['list'] key=myid  item=items}>
                       	<{if $items['type'] == 'admin'}>
-                          <{if $items['id'] != 1}>
+                          <{if $items['id'] != 1 && $items['id'] != 4 && $items['id'] != 63 }>
                             <option value="<{$items['id']}>" <{if $info['groupid'] == $items['id']}>selected<{/if}>><{$items['name']}></option>
                           <{/if}>
                       	  
