@@ -463,9 +463,9 @@ class method extends adminbaseclass
         $searchvalue = IReq::get('searchvalue');
         $starttime = trim(IReq::get('starttime'));
         $endtime = trim(IReq::get('endtime'));
-        $cityid = intval(IReq::get('cityid'));
+        $stationid = intval(IReq::get('stationid'));
         $newlink = '';
-        $where= ' where  id > 0 and parent_id = 0  ';
+        $where= ' where  id > 0  ';
         $where2 = '';
         $where3 = "";
         $data['searchvalue'] = '';
@@ -490,28 +490,27 @@ class method extends adminbaseclass
             $where4 .=' and  jstime < '.strtotime($endtime.' 23:59:59').' ';
             $newlink .= '/endtime/'.$endtime;
         }
-        $data['cityid'] = '';
-        if (!empty($cityid)) {
+        $data['stationid'] = '';
+        if (!empty($stationid)) {
             $data['endtime'] = $endtime;
-            $where .= "  and adcode =   '".$cityid."'  ";
-            $newlink .= '/cityid/'.$cityid;
-            $data['cityid'] = $cityid;
+            $where .= "  and id =   '".$stationid."'  ";
+            $newlink .= '/stationid/'.$stationid;
+            $data['stationid'] = $stationid;
         }
         $link = IUrl::creatUrl('/adminpage/station/module/stationcount'.$newlink);
         $pageinfo = new page();
         $pageinfo->setpage(IReq::get('page'), 10);
 
-        $stationtj = $this->mysql->getarr("select adcode,name from ".Mysite::$app->config['tablepre']."area ".$where."   order by orderid asc  limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."");
+        $stationtj = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo ".$where."   order by id asc  limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."");
 
         $list = array();
 
         if (is_array($stationtj)) {
             foreach ($stationtj as $key=>$value) {
-                $stationinfo = $this->mysql->select_one("select  stationname  from ".Mysite::$app->config['tablepre']."stationadmininfo where cityid = '".$value['adcode']."'  ");
-                if (!empty($stationinfo)) {
-                    $value['stationname'] = $stationinfo['stationname'];
-                }
-                $shopids = $this->mysql->getarr("select  id  from ".Mysite::$app->config['tablepre']."shop where admin_id = ".$value['adcode']." ");
+
+                $value['stationname'] = $value['stationname'];
+
+                $shopids = $this->mysql->getarr("select  id  from ".Mysite::$app->config['tablepre']."shop where stationid = ".$value['id']." ");
 
                 if (!empty($shopids)) {
                     $yj = 0;
@@ -524,9 +523,9 @@ class method extends adminbaseclass
                     $value['yje'] = 0;
                 }
 
-                $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where admin_id > 0 and  admin_id = '".$value['adcode']."' and  paytype ='0'   and status = 3 ".$where2." order by id asc  ");
+                $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where stationid > 0 and  stationid = '".$value['id']."' and  paytype ='0'   and status = 3 ".$where2." order by id asc  ");
 
-                $line=  $this->mysql->select_one("select count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost,sum(shopcost) as shopcost, sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where  admin_id > 0 and admin_id = '".$value['adcode']."' and paytype !='0'  and paystatus =1  and status = 3 ".$where2."   order by id asc   ");
+                $line=  $this->mysql->select_one("select count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost,sum(shopcost) as shopcost, sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost,sum(allcost) as doallcost from ".Mysite::$app->config['tablepre']."order  where  stationid > 0 and stationid = '".$value['id']."' and paytype !='0'  and paystatus =1  and status = 3 ".$where2."   order by id asc   ");
 
                 $value['orderNum'] =  $shoptj['shuliang']+$line['shuliang'];//订单总个数
                 $value['online'] = $line['doallcost'];

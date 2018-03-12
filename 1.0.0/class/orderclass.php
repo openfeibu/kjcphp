@@ -640,7 +640,8 @@ $ch = curl_init($url);
         //检测店铺
 
         $data['shopuid'] = $info['shopinfo']['uid'];// 店铺UID
-      $data['shopid'] =  $info['shopinfo']['id']; //店铺ID
+        $data['shopid'] =  $info['shopinfo']['id']; //店铺ID
+        $data['stationid'] =  $info['shopinfo']['stationid']; //stationid
         $data['shopname'] = $info['shopinfo']['shopname']; //店铺名称
       $data['shopphone'] = $info['shopinfo']['phone']; //店铺电话
       $data['shopaddress'] = $info['shopinfo']['address'];// 店铺地址
