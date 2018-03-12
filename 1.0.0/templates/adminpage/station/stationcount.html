@@ -14,14 +14,14 @@
 
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/station/module/stationcount"}>">
 
-            	  <label>分站城市：</label>
-				   <select name="cityid">
+            	  <label>分站：</label>
+				   <!-- <select name="cityid">
 					<option value="0">全部</option>
                       	<{load_data assign="stationlist" table="stationadmininfo" fileds="*" limit="1000" where="stationis_open = 0" orderby=" id desc"}>
 							<{foreach from=$stationlist['list'] key=key  item=items}>
 							   <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
 							<{/foreach}>
-                      </select>
+                      </select> -->
 
 
              	    从<input class="Wdate datefmt" type="text" name="starttime" id="starttime" value="<{$starttime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />
@@ -56,7 +56,7 @@
                         <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall(this.form, 'id')"></th>
 <!--  商品销售金额     实际销售金额   支付宝付款金额   微信付款金额  促销金额   配送费  打包费 佣金 -->
                        <th align="center">分站名称</th>
-                       <th align="center">城市</th>
+                       <!-- <th align="center">城市</th> -->
                        <th align="center">商品销售金额</th>
                         <th align="center">实际销售金额</th>
                          <th align="center">线下支付金额</th>
@@ -80,7 +80,7 @@
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
                         <td align="center" ><input type="checkbox" name="id[]" value="<{$items['uid']}>"></td>
                         <td align="center"><{$items['stationname']}></td>
-                        <td align="center"><{$items['name']}></td>
+                        <!-- <td align="center"><{$items['name']}></td> -->
 						<td align="center"><{$items['goodscost']|default:'0'}></td>
 						<td align="center"><{$items['allcost']|default:'0'}></td>
 						<td align="center"><{$items['unline']|default:'0'}></td>
