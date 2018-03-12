@@ -2,7 +2,7 @@
  <{block name=extendjs}>
  <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
  <{/block}>
- <{block name=controlname}>添加分站<{/block}>
+ <{block name=controlname}>添加分校<{/block}>
  <{block name=bodylist}>
    <div style="width:auto;overflow-x:hidden;overflow-y:auto">
           <div class="tags">
@@ -14,15 +14,15 @@
                   <tbody>
                     <input type="hidden" name="stationid" id="stationid" value="<{$id}>" class="skey" style="width:150px;">
 				  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">分站名称</td>
+                      <td class="left">分校名称</td>
                       <td><input type="text" name="stationname" id="stationname" value="<{$stationinfo['stationname']|default:''}>" class="skey" style="width:250px;"></td>
                     </tr>
 					  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">分站负责人</td>
+                      <td class="left">分校负责人</td>
                       <td><input type="text" name="stationusername" id="stationusername" value="<{$stationinfo['stationusername']|default:''}>" class="skey" style="width:250px;"></td>
                     </tr>
 					<tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">分站联系电话</td>
+                      <td class="left">分校联系电话</td>
                       <td><input type="text" name="stationphone" id="stationphone" value="<{$stationinfo['stationphone']|default:''}>" class="skey" style="width:250px;"></td>
                     </tr>
 					<{if !empty($stationinfo)}>
@@ -48,9 +48,9 @@
 
 
 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">分站位置</td>
+                      <td class="left">分校位置</td>
                       <td><input type="text"  readonly  value="拾取坐标" class="skey" style="width:100px;" onclick="biaoji();">
-<input type="text" name="stationaddress" id="stationaddress" placeholder="分站地址" value="<{$stationinfo['stationaddress']|default:''}>" class="skey" style="width:250px;">
+<input type="text" name="stationaddress" id="stationaddress" placeholder="分校地址" value="<{$stationinfo['stationaddress']|default:''}>" class="skey" style="width:250px;">
 					  <input type="hidden" name="stationlnglat" id="stationlnglat" readonly  value="<{$stationinfo['lng']|default:''}>,<{$stationinfo['lat']|default:'lat'}>" class="skey" style="width:250px;">
 					  </td>
                     </tr>
@@ -58,7 +58,7 @@
 					<!-- <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
 					  <td class="left">优惠促销权限</td>
                       <td><input type="radio" <{if $stationinfo['is_selfsitecx'] == 1  }>checked<{/if}>  name="is_selfsitecx" value="1" />允许独立设置优惠促销
-                       <input type="radio" <{if $stationinfo['is_selfsitecx'] == 0  }>checked<{/if}>   name="is_selfsitecx" value="0">不允许独立设置优惠促销<font style="color:red">（当设置为不允许时，该分站后台独立设置的优惠促销活动将会被删除）</font></td>
+                       <input type="radio" <{if $stationinfo['is_selfsitecx'] == 0  }>checked<{/if}>   name="is_selfsitecx" value="0">不允许独立设置优惠促销<font style="color:red">（当设置为不允许时，该分校后台独立设置的优惠促销活动将会被删除）</font></td>
                     </tr> -->
 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
 					  <td class="left">排序</td>

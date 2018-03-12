@@ -120,7 +120,7 @@ class method extends adminbaseclass
             }
             $data['stationid'] = $arr['stationid'] = $stationid;
             if (empty($data['stationid'])) {
-                $this->message('请选择所属分站！');
+                $this->message('请选择所属分校！');
             }
             $arr['txtype'] = IReq::get('txtype');
             if (empty($arr['txtype'])) {
@@ -193,7 +193,7 @@ class method extends adminbaseclass
             }
             $sdata['stationid'] = $arr['stationid'] = $stationid;
             if (empty($sdata['stationid'])) {
-                $this->message('请选择所属分站！');
+                $this->message('请选择所属分校！');
             }
             $arr['txtype'] = IReq::get('txtype');
             if (empty($arr['txtype'])) {

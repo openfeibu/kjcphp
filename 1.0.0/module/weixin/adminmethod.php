@@ -304,7 +304,7 @@ class method   extends adminbaseclass
 	 	 $platpssetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid = '".$cityid."'  ");
 		 
 		 if( empty($platpssetinfo) ){
-			 $this->message('请在分站后台设置');
+			 $this->message('请在分校后台设置');
 		 }
 		 
 	     $data['wxkefu_open'] =  intval(IFilter::act(IReq::get('wxkefu_open'))); 

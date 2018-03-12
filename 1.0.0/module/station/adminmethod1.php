@@ -1,7 +1,7 @@
 <?php
 class method   extends adminbaseclass
 {
-	//分站列表
+	//分校列表
 	 function  stationlist(){
  	    	$querytype = IReq::get('querytype');
 	    	$searchvalue = IReq::get('searchvalue');
@@ -91,7 +91,7 @@ class method   extends adminbaseclass
 	     $this->mysql->delete(Mysite::$app->config['tablepre'].'areashop',"areaid = '$uid'");  
 	     $this->success('success');;
 	} 
-	//删除分站
+	//删除分校
 	function delstation()
 	{limitalert();
 
@@ -143,7 +143,7 @@ class method   extends adminbaseclass
 		$link = IUrl::creatUrl('station/citylist');
 		$this->success('success',$link);
 	 }	
-	 //添加分站
+	 //添加分校
 	  
 	 //后台添加管理员
 	 function savestationadmin(){
@@ -160,7 +160,7 @@ class method   extends adminbaseclass
 		    $orderid = intval(IReq::get('orderid'));
 		    $stationis_open = trim(IReq::get('stationis_open')); 
 		    $cityid = trim(IReq::get('cityid')); 
-			//如果不允许分站自行设置优惠促销，则删除该分站下的促销活动
+			//如果不允许分校自行设置优惠促销，则删除该分校下的促销活动
 			
 			if($is_selfsitecx == 0){
 				$this->mysql->delete(Mysite::$app->config['tablepre'] . 'rule', "cityid = '$cityid'");
@@ -175,13 +175,13 @@ class method   extends adminbaseclass
 		   	  if(!empty($testinfo)) $this->message('member_repeatname'); 
 			  
 			  if(empty($stationname)){
-				   $this->message('分站名称不能为空');
+				   $this->message('分校名称不能为空');
 			   }
 			   if(empty($stationusername)){
-				   $this->message('分站负责人不能为空');
+				   $this->message('分校负责人不能为空');
 			   }
 			   if(empty($stationphone)){
-				   $this->message('分站负责人电话不能为空');
+				   $this->message('分校负责人电话不能为空');
 			   } 
 			   if(empty($cityid)){
 				   $this->message('请选择所属城市');
@@ -194,10 +194,10 @@ class method   extends adminbaseclass
 			   }
 			   
 			  /*  if(empty($stationlnglat)){
-				   $this->message('请设置分站地图坐标');
+				   $this->message('请设置分校地图坐标');
 			   }  */
 			   if(empty($stationaddress)){
-				   $this->message('请填写分站地址');
+				   $this->message('请填写分校地址');
 			   }
 			
 			  
@@ -229,19 +229,19 @@ class method   extends adminbaseclass
 		   	  }
 			  
 			  if(empty($stationname)){
-				   $this->message('分站名称不能为空');
+				   $this->message('分校名称不能为空');
 			   }
 			   if(empty($stationusername)){
-				   $this->message('分站负责人不能为空');
+				   $this->message('分校负责人不能为空');
 			   }
 			   if(empty($stationphone)){
-				   $this->message('分站负责人电话不能为空');
+				   $this->message('分校负责人电话不能为空');
 			   }
 			  /*  if(empty($stationlnglat)){
-				   $this->message('请设置分站地图坐标');
+				   $this->message('请设置分校地图坐标');
 			   } */ 
 			   if(empty($stationaddress)){
-				   $this->message('请填写分站地址');
+				   $this->message('请填写分校地址');
 			   }
 			
 			  if( !empty($arr) ){
@@ -264,7 +264,7 @@ class method   extends adminbaseclass
 		   $this->success('success');
 		  // $this->json(array('error'=>false));
 	 }
-	 //分站商家
+	 //分校商家
 	 function stationshoplist(){
 	    $this->setstatus();
 	    $where = ' and admin_id > 0 ';
@@ -351,7 +351,7 @@ class method   extends adminbaseclass
 		$this->success($areacodelist);
 	}
 	 
-	//分站订单列表查看
+	//分校订单列表查看
 	   function stationorderlist(){
         $this->setstatus();
 	    	$querytype = IReq::get('querytype');
@@ -506,7 +506,7 @@ class method   extends adminbaseclass
 				$value['unline'] = $shoptj['doallcost'];  
 				
 				//商品销售金额     实际销售金额   支付宝付款金额   微信付款金额  促销金额   配送费  打包费 佣金 
-				//统计分站 商品销售金额(商品总金额不包含促销和配送费打包费) 实际销售金额（通过分站下单付给总站的总金额含配送费打包费不含促销）支付宝付款金额。 微信付款金额 促销金额 配送费  打包费。 佣金《商品销售金额百分比》
+				//统计分校 商品销售金额(商品总金额不包含促销和配送费打包费) 实际销售金额（通过分校下单付给总站的总金额含配送费打包费不含促销）支付宝付款金额。 微信付款金额 促销金额 配送费  打包费。 佣金《商品销售金额百分比》
 				$value['goodscost'] = round($shoptj['shopcost']+$line['shopcost'],2);
 				$value['cxcost'] = round($shoptj['cxcost']+$line['cxcost'],2);
 				$value['allcost'] = round($shoptj['doallcost']+$line['doallcost'],2);

@@ -2966,7 +2966,7 @@ function makeorder(){
 
 			$a = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where cityid =".$nowID."");
 
-	        if($a['stationis_open'] == 1) $this->message('分站已关闭');
+	        if($a['stationis_open'] == 1) $this->message('分校已关闭');
                     } 
  
 			 

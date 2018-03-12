@@ -2,7 +2,7 @@
    <{block name=extendjs}>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
  <{/block}>
- <{block name=controlname}>分站列表<{/block}>
+ <{block name=controlname}>分校列表<{/block}>
  <{block name=bodylist}>
  <div style="width:auto;overflow-x:hidden;overflow-y:auto">
 
@@ -25,10 +25,10 @@
             	  <select name="querytype">
             	  	<option value="0">未选择</option>
 
-            	  	<option value="st.shopname"  <{if $querytype == 'st.stationname'}>selected<{/if}>>分站名称</option>
-            	  	<option value="st.stationusername"  <{if $querytype == 'st.stationusername'}>selected<{/if}>>分站负责人</option>
-            	  	<option value="st.stationphone"  <{if $querytype == 'st.stationphone'}>selected<{/if}>>分站电话</option>
-            	  	<option value="st.stationphone"  <{if $querytype == 'st.stationphone'}>selected<{/if}>>分站电话</option>
+            	  	<option value="st.shopname"  <{if $querytype == 'st.stationname'}>selected<{/if}>>分校名称</option>
+            	  	<option value="st.stationusername"  <{if $querytype == 'st.stationusername'}>selected<{/if}>>分校负责人</option>
+            	  	<option value="st.stationphone"  <{if $querytype == 'st.stationphone'}>selected<{/if}>>分校电话</option>
+            	  	<option value="st.stationphone"  <{if $querytype == 'st.stationphone'}>selected<{/if}>>分校电话</option>
              	  </select>
             	  <label>查询条件：</label>
             	   <input type="text" name="searchvalue" value="<{$searchvalue}>">
@@ -69,12 +69,12 @@
                         <!-- <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th> -->
 
                         <th align="center">ID</th>
-                        <!-- <th align="center">分站账号</th> -->
-                        <th align="center">分站名称</th>
+                        <!-- <th align="center">分校账号</th> -->
+                        <th align="center">分校名称</th>
                         <th align="center">所属城市</th>
-                        <th align="center">分站负责人</th>
-                        <th align="center">分站电话</th>
-                        <th align="center">分站地址</th>
+                        <th align="center">分校负责人</th>
+                        <th align="center">分校电话</th>
+                        <th align="center">分校地址</th>
                         <th align="center">状态</th>
                         <th align="center">排序</th>
                         <th align="center">操作</th>

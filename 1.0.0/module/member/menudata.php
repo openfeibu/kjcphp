@@ -2,7 +2,7 @@
 return array(
 	 	       'adminlist'=>'管理员列表',
 	 	       'addadmin'=>'添加管理员',
-			    'memberstationlist'=>'分站管理员列表', 
+			    'memberstationlist'=>'分校管理员列表', 
 	 	       'memberlist'=>'普通会员列表',
 	 	       'memberlistshop'=>'商家会员列表',
 	 	       'memcostloglist'=>'会员余额操作日志', 

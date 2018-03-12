@@ -1925,12 +1925,12 @@ class method extends adminbaseclass
 		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
 		$this->success($info);
 	 }
-    //分站提现
+    //分校提现
     public function stationtx()
     {
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 10);
-        $cityid = trim(IFilter::act(IReq::get('cityid'))); //分站名称
+        $cityid = trim(IFilter::act(IReq::get('cityid'))); //分校名称
           $status = IReq::get('status'); //状态
           $starttime = IFilter::act(IReq::get('starttime')); //开始时间
           $endtime =  IFilter::act(IReq::get('endtime')); //结束时间
@@ -1979,7 +1979,7 @@ class method extends adminbaseclass
 
         Mysite::$app->setdata($data);
     }
-    //导出分站提现记录查询结果
+    //导出分校提现记录查询结果
     public function outstationtx()
     {
         $outtype = IReq::get('outtype');
@@ -2001,7 +2001,7 @@ class method extends adminbaseclass
             $where .= ' and id in('.$id.') ';
         }
 
-        $cityid = trim(IFilter::act(IReq::get('cityid'))); //分站cityid
+        $cityid = trim(IFilter::act(IReq::get('cityid'))); //分校cityid
         $starttime = IFilter::act(IReq::get('starttime')); //开始时间
         $endtime =  IFilter::act(IReq::get('endtime')); //结束时间
         $status = trim(IFilter::act(IReq::get('status')));
@@ -2031,9 +2031,9 @@ class method extends adminbaseclass
             }
         }
         $outexcel = new phptoexcel();
-        $titledata = array('id','分站名称','账号','提现金额','账号余额','状态','提交时间');
+        $titledata = array('id','分校名称','账号','提现金额','账号余额','状态','提交时间');
         $titlelabel = array('id','stationname','backacount','txcost','cost','statusname','adddate');
-        $outexcel->out($titledata, $titlelabel, $list, '', '分站提现');
+        $outexcel->out($titledata, $titlelabel, $list, '', '分校提现');
     }
 
     public function shoptx85()
@@ -2212,7 +2212,7 @@ class method extends adminbaseclass
         $info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$id." ");
         $this->success($info);
     }
-    //确认分站提现
+    //确认分校提现
     public function stationpsstx()
     {
         $txid =  intval(IFilter::act(IReq::get('txid')));
@@ -2226,7 +2226,7 @@ class method extends adminbaseclass
         $this->mysql->update(Mysite::$app->config['tablepre'].'txapply', '`status`=2', "id ='".$txid."' ");
         $this->success('success');
     }
-    //取消分站的提现申请
+    //取消分校的提现申请
     public function savestationtxreason()
     {
         $txid =  intval(IFilter::act(IReq::get('txid'))); //提现id
@@ -2240,7 +2240,7 @@ class method extends adminbaseclass
         }
         $admininfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."admin where uid='".$txinfo['stationuid']."'  ");
         if (empty($admininfo)) {
-            $this->message('分站不存在');
+            $this->message('分校不存在');
         }
         $this->mysql->update(Mysite::$app->config['tablepre'].'txapply', "`status`=3,`refusereason`= '".$refusereason."',`cost`=`cost`+".$txinfo['txcost']." ", "id ='".$txid."' ");
         $newdata['adminid'] = $txinfo['cityid'];

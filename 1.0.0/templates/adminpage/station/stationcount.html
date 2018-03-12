@@ -3,7 +3,7 @@
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/jquery.PrintArea.js" type="text/javascript" language="javascript"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
 <{/block}>
- <{block name=controlname}>分站统计<{/block}>
+ <{block name=controlname}>分校统计<{/block}>
  <{block name=bodylist}>
     <div style="width:98%;overflow-y:auto;white-space:nowrap;">
 
@@ -14,7 +14,7 @@
 
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/station/module/stationcount"}>">
 
-            	  <label>分站：</label>
+            	  <label>分校：</label>
 				   <!-- <select name="cityid">
 					<option value="0">全部</option>
                       	<{load_data assign="stationlist" table="stationadmininfo" fileds="*" limit="1000" where="stationis_open = 0" orderby=" id desc"}>
@@ -55,7 +55,7 @@
 
                         <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall(this.form, 'id')"></th>
 <!--  商品销售金额     实际销售金额   支付宝付款金额   微信付款金额  促销金额   配送费  打包费 佣金 -->
-                       <th align="center">分站名称</th>
+                       <th align="center">分校名称</th>
                        <!-- <th align="center">城市</th> -->
                        <th align="center">商品销售金额</th>
                         <th align="center">实际销售金额</th>
