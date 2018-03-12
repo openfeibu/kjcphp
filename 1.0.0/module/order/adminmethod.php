@@ -1891,6 +1891,40 @@ class method extends adminbaseclass
         $data['endtime'] = $endtime;
         Mysite::$app->setdata($data);
     }
+    //取消店铺的提现申请
+	  function shopuntx(){
+		 $txid =  intval(IFilter::act(IReq::get('txid'))); //店铺名称
+		 $txinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx where id='".$txid."'  ");
+		 if(empty($txinfo)){
+			$this->message('提现信息获取失败');
+		 }
+		 if($txinfo['status'] != 1){
+			 $this->message('提现已受理不能取消');
+		 }
+		 if($txinfo['type'] != 0){
+			 $this->message('不是店铺提现不能取消');
+		 }
+
+		 $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$txinfo['shopuid']."'  ");
+		 if(empty($userinfo)){
+			 $this->message('用户不存在');
+		 }
+	     $this->mysql->update(Mysite::$app->config['tablepre'].'shoptx','`status`=3',"id ='".$txid."' ");
+		 $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`+'.$txinfo['cost'],"uid ='".$txinfo['shopuid']."' ");
+
+		 $newdata['cost'] = $txinfo['cost'];
+		 $newdata['type'] = 2;
+		 $newdata['status'] = 2;
+		 $newdata['addtime'] = time();
+		 $newdata['shopid'] = 0;
+         $newdata['shopuid'] =  $txinfo['shopuid'];
+		 $newdata['name'] = '取消'.date('Y-m-d',$txinfo['addtime']).$txinfo['name'];
+		 $newdata['yue'] = $userinfo['shopcost']+$txinfo['cost'];
+		 $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
+		 $orderid = $this->mysql->insertid();
+		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
+		$this->success($info);
+	 }
     //分站提现
     public function stationtx()
     {
