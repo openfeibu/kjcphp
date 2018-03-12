@@ -216,6 +216,7 @@ class method extends wxbaseclass
 
     public function index()
     {
+	
         $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
@@ -3475,9 +3476,6 @@ class method extends wxbaseclass
     }
     public function createOrder($orderid)
     {
-        error_reporting(-1);
-        ini_set('display_errors',1);
-
         $weixindir = hopedir.'/plug/pay/weixin/';
 		require_once $weixindir."lib/WxPay.Api.php";
 		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
@@ -3492,7 +3490,7 @@ class method extends wxbaseclass
         $input = new WxPayUnifiedOrder();
         $input->SetBody("支付订单".$order['dno']);
         $input->SetAttach($order['dno']);
-        $input->SetOut_trade_no($order['id']);
+        $input->SetOut_trade_no($order['dno']);
         $input->SetTotal_fee($order['allcost']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));

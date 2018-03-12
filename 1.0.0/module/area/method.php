@@ -404,7 +404,7 @@ class method extends baseclass
     }
     public function shopbaidumap()
     {
-        $this->checkshoplogin();
+        //$this->checkshoplogin();
         $shopid = ICookie::get('adminshopid');
         $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  id = '".$shopid."' order by id asc");
         $data['dlng'] = empty($shopinfo['lng'])||$shopinfo['lng']=='0.000000'?Mysite::$app->config['baidulng']:$shopinfo['lng'];
@@ -414,19 +414,19 @@ class method extends baseclass
     }
     public function savemapshoplocation()
     {
-        $this->checkshoplogin();
+        //$this->checkshoplogin();
         $data['lng'] = IReq::get('lng');
         $data['lat'] = IReq::get('lat');
-        $shopid = ICookie::get('adminshopid');
+        //$shopid = ICookie::get('adminshopid');
         if (empty($data['lng'])) {
             $this->message('emptylng');
         }
         if (empty($data['lat'])) {
             $this->message('emptylat');
         }
-        if (empty($shopid)) {
-            $this->message('emptycookshop');
-        }
+        //if (empty($shopid)) {
+          //  $this->message('emptycookshop');
+      //  }
         $shopid = ICookie::get('adminshopid');
         $this->mysql->update(Mysite::$app->config['tablepre'].'shop', $data, "id='".$shopid."'");
         $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  id = '".$shopid."' order by id asc");
