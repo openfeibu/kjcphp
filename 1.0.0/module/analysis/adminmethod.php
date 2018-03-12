@@ -135,7 +135,7 @@ class method extends adminbaseclass
             $BeginDate = date('Y-m-01', strtotime($datemy));
             $date = date('Y-m-d', strtotime("$BeginDate +1 month -1 day"));
         }
-        $dates = $date_fronts = $consume_dates = $consumes = $keep_datas = [];
+        $dates = $date_fronts = $consume_dates = $consumes = $keep_datas = array();
         $days = 3;
         for ($i=$days; $i >= 1; $i--) {
             $dates[] = date('Y-m-d',strtotime($BeginDate." -$i day"));
