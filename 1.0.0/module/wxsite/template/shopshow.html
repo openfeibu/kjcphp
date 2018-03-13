@@ -874,6 +874,7 @@
         var dec = $(that).parents("dd").find(".shop-pro-des").attr("desc");
         var img = $(that).parents("dd").find(".shop-pro-img").attr("imgUrl");
         var money = $(that).parents("dd").find(".shop-pro-money").html();
+        dec = dec == '' ? '没有留下任何介绍' : dec;
         $(".pro_detail").find(".pro_detail_img").css("background", "url(" + img + ") no-repeat center/cover").end().find(".pro_detail_name").text(names).end().find(".pro_detail_con").text(dec).end().find(".pro_detail_money").html(money).end().fadeIn(
             100);
 
