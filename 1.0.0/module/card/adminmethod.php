@@ -90,8 +90,6 @@ class method extends adminbaseclass
         $data1['name'] = '代金券活动';
         if(!empty($cost))
         {
-
-
             if ($costtype == 1) { //固定面值
                 foreach ($cost as $k1=>$v1) {
                     $data1['cost'] = $v1;
