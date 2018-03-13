@@ -585,7 +585,7 @@ padding: 0 20px !important;
 overflow: hidden;
 display: block;
 border:none;
-margin:0 10px;
+margin:0 10px; 
 display: inline-block;
 }
 #tagscontent tr {
