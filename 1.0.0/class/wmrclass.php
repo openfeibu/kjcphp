@@ -172,11 +172,11 @@ class wmrclass
                         $backdata['canps'] = 1;
                     }
                 }
-
+                $backdata['pscost'] = end($pradiusvalue);
+                $backdata['canps'] = 1;
             }
         }
-        $backdata['pscost'] = end($pradiusvalue);
-        $backdata['canps'] = 1;
+
 
         $backdata['pstype'] = $shopinfo['sendtype'];
         $checkpstype = Mysite::$app->config['psbopen'];
