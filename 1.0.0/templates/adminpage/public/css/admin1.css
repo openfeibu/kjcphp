@@ -577,16 +577,16 @@ background: #fbfdff;
 	border-radius: 2px;
 	background: #1783b2;
 	cursor: pointer;
-height: 32px !important;
-line-height: 32px !important;
-cursor: pointer;
-text-align: center;
-padding: 0 20px !important;
-overflow: hidden;
-display: block;
-border:none;
-margin:0 10px; 
-display: inline-block;
+	height: 32px !important;
+	line-height: 32px !important;
+	cursor: pointer;
+	text-align: center;
+	padding: 0 20px !important;
+	overflow: hidden;
+	display: block;
+	border:none;
+	margin:0 10px; 
+	display: inline-block;
 }
 #tagscontent tr {
 	line-height:36px;

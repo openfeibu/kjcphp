@@ -10,7 +10,7 @@
 
           <div class="tags">
 
-          <div id="tagscontent">
+        <!--  <div id="tagscontent">
             <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/shop/module/saveshop/datatype/json"}>" onsubmit="return subform('<{ofunc type=url link="/adminpage/shop/module/adminshopwati"}>',this);">
               <div>
                 <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
@@ -60,7 +60,7 @@
                       		<{/foreach}>
                       </select>
                       	</td>
-                    </tr> -->
+                    </tr> 
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">所属分校</td>
                       <td><select name="stationid">
@@ -78,7 +78,7 @@
               <input type="hidden" name="subtype" value="1">
                <input type="submit" value="确认提交" class="button">
             </form>
-          </div>
+          </div> -->
           <div id="tagscontent">
             <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/shop/module/saveshop/datatype/json"}>" onsubmit="return subform('<{ofunc type=url link="/adminpage/shop/module/adminshoplist"}>',this);">
               <div>
@@ -86,7 +86,7 @@
                   <tbody>
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">&nbsp;</td>
-                      <td>直接创建会员和店铺</td>
+                      <td>创建商家用户和店铺信息</td>
                     </tr>
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">店铺名称</td>
@@ -96,12 +96,12 @@
                       <td class="left">会员名称</td>
                       <td><input type="text" name="username" id="username" value="" class="skey" style="width:150px;" ></td>
                     </tr>
-                   <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+                   <!-- <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">会员邮箱</td>
                       <td><input type="text" name="email" id="email" value="" class="skey" style="width:150px;" ></td>
-                    </tr>
+                    </tr> -->
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
-                      <td class="left">联系电话</td>
+                      <td class="left">手机号码</td>
                       <td><input type="text" name="maphone" id="maphone" value="" class="skey" style="width:150px;" ></td>
                     </tr>
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
@@ -114,7 +114,7 @@
                     </tr>
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left">提现账号类型</td>
-                      <td><input type="radio" name="txtype" value="ali">支付宝
+                      <td><input type="radio" name="txtype" value="ali" checked>支付宝
                           <input type="radio" name="txtype" value="bank">银行卡
                       </td>
                     </tr>

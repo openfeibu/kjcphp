@@ -60,10 +60,10 @@
                       <td><input type="radio" <{if $stationinfo['is_selfsitecx'] == 1  }>checked<{/if}>  name="is_selfsitecx" value="1" />允许独立设置优惠促销
                        <input type="radio" <{if $stationinfo['is_selfsitecx'] == 0  }>checked<{/if}>   name="is_selfsitecx" value="0">不允许独立设置优惠促销<font style="color:red">（当设置为不允许时，该分校后台独立设置的优惠促销活动将会被删除）</font></td>
                     </tr> -->
-					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
+<!-- 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
 					  <td class="left">排序</td>
                       <td><input type="text" name="orderid" id="orderid"   value="<{$stationinfo['orderid']|default:''}>" class="skey" style="width:100px;"></td>
-                    </tr>
+                    </tr> -->
 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
 					  <td class="left">是否启用</td>
                       <td><input type="radio" <{if $stationinfo['stationis_open'] == 0  }>checked<{/if}>  name="stationis_open" value="0" />是

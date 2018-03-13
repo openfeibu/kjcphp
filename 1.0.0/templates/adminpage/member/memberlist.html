@@ -15,18 +15,18 @@
 
             	   <label>用户名：</label>
             	   <input type="text" name="username" value="<{$username|default:''}>">
-            	   <label>邮箱：</label>
-            	   <input type="text" name="email" value="<{$email|default:''}>">
-                   <label>分校配送负责人：</label>
+            	   <!-- <label>邮箱：</label>
+            	   <input type="text" name="email" value="<{$email|default:''}>"> -->
+                  
+                 <label>手机：</label>
+            	   <input type="text" name="phone" value="<{$phone|default:''}>">
+                 <label>分校配送负责人：</label>
                    <select name="stationadminid">
                        <option value="0">请选择</option>
                        <{foreach from=$stationlist['list'] key=key  item=items}>
                        <option value="<{$items['id']}>" <{if $stationadminid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
                        <{/foreach}>
                    </select>
-                 <label>手机：</label>
-            	   <input type="text" name="phone" value="<{$phone|default:''}>">
-
             	    <input type="submit" value="提交查询" class="button">
             	 </form>
             </div>
