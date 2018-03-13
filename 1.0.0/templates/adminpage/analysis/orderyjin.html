@@ -15,6 +15,7 @@
             	 	<select name="admin_id">
             	 		<option value="0">选择区域管理</option>
             	 		<{foreach from=$quyuguanli item=items}>
+                  <{$admin_id}>
             	 		<option value="<{$items['cityid']}>" <{if $admin_id == $items['cityid']}>selected<{/if}>><{$items['stationname']}></option>
             	 		<{/foreach}>
             	 	</select>
@@ -80,7 +81,7 @@
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff" > 
                         <td align="center" ><input type="checkbox" name="id[]" value="<{$items['id']}>"></td> 
                         <td align="center" style="color:#666;font-weight:bold;"  ><{$items['shopname']}></td>   
-                        <td align="center" style="color:#666;font-weight:bold;"> <{$items['sendtype']|default:0}>  </td>  
+                        <td align="center" style="color:#666;font-weight:bold;"> 平台配送 <!-- <{$items['sendtype']|default:0}> -->  </td>  
                         
                           <td align="center" style="font-weight:bold;font-size: 16px;"> <{$items['orderNum']|default:0}>  </td>  
                            <td align="center" style="font-weight:bold;font-size: 16px;"> <{$items['online']|default:0}>  </td>  

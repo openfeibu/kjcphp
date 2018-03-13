@@ -25,7 +25,7 @@
 				 从<input class="Wdate datefmt" type="text" name="endtime" id="endtime" value="<{$endtime}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" />
 			   		 	 
             	    <input type="submit" value="提交查询" class="button">
-					<span>结算日期指普通订单发货时间和闪惠订单的生成时间</span>
+					<span>结算日期指普通订单发货时间</span>
             	 </form>
 				  
             </div>
@@ -54,7 +54,7 @@
                       <tr> 
                         <th align="center">id</th>
                          <th align="center">店铺名称</th>
-						 <th align="center">配送方式</th>
+						  <th align="center">配送方式</th>
                         <th align="center">交易类型</th>
 						
 						<th align="center">订单数</th>
@@ -73,29 +73,18 @@
 		 
 		                 	<{foreach from=$jslist item=items}>
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                       
-                        <td align="center" rowspan="2"><{$items['id']}></td>
-                        <td align="center" rowspan="2"> <{$items['shopname']}> </td>
-						<td align="center" rowspan="2"><{if $items['sendtype'] == 1}>店铺配送<{else}>平台配送<{/if}></td>
-						<td align="center" > 线上 </td>
-						<td align="center" > <{$items['onlinecount']|default:'0'}> </td>
-						<td align="center" > <{$items['onlinecost']|default:'0'}> </td>
-						<td align="center" rowspan="2"> <{if $items['yjin'] != 0}><{$items['yjin']*0.01}><{else}><{$items['yjb']*0.01}><{/if}> </td>
-						<td align="center" rowspan="2"> <{$items['yjcost']|default:'0'}> </td>
-						<td align="center" rowspan="2"> <{$items['acountcost']|default:'0'}> </td>
-						<td align="center" rowspan="2"> <{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}> </td>
-						
-                        </tr>
-						<tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
-                       
-                         
-						<td align="center" > 线下 </td>
-						<td align="center" > <{$items['unlinecount']|default:'0'}> </td>
-						<td align="center" > <{$items['unlinecost']|default:'0'}> </td>
-						 
-						
-                        </tr>
-                       <{/foreach}>
+                        <td align="center" ><{$items['id']}></td>
+                        <td align="center" > <{$items['shopname']}> </td>
+            						<td align="center" >平台配送</td>
+            						<td align="center" > 线上 </td>
+            						<td align="center" > <{$items['onlinecount']|default:'0'}> </td>
+            						<td align="center" > <{$items['onlinecost']|default:'0'}> </td>
+            						<td align="center" > <{if $items['yjin'] != 0}><{$items['yjin']*0.01}><{else}><{$items['yjb']*0.01}><{/if}> </td>
+            						<td align="center" > <{$items['yjcost']|default:'0'}> </td>
+            						<td align="center" > <{$items['acountcost']|default:'0'}> </td>
+            						<td align="center" > <{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}> </td>
+                      </tr>
+                      <{/foreach}>
 					   
 
                     </tbody>
