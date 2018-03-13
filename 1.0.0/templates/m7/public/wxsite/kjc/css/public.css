@@ -149,3 +149,5 @@
 .c_orderDetail .orderDetail_mask textarea{
   font-size: 0.3rem !important;
 }
+.pro_detail .pro_detail_img {width:4rem !important;height: 4rem !important;}
+.pro_detail{top: 10%  !important;}
