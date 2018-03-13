@@ -172,8 +172,12 @@ class wmrclass
                         $backdata['canps'] = 1;
                     }
                 }
+
             }
         }
+        $backdata['pscost'] = end($pradiusvalue);
+        $backdata['canps'] = 1;
+
         $backdata['pstype'] = $shopinfo['sendtype'];
         $checkpstype = Mysite::$app->config['psbopen'];
         if ($shopinfo['sendtype'] == 2) {
@@ -479,6 +483,7 @@ class wmrclass
             }
 
             $value['psimg'] = $shoppsimg;
+            $value['valuelist'] = empty($value['pradiusvalue'])? '':unserialize($value['pradiusvalue']);
 
             $value['mijuli'] = $value['juli'];
             $juli = $value['juli'];
@@ -493,8 +498,17 @@ class wmrclass
             }
             $value['pscost'] = '0';
             $value['canps'] = 0;
-
-
+            $valuelist = $value['valuelist'];
+            if(is_array($valuelist)){
+				// foreach($valuelist as $k=>$v){
+				// 	if($juliceshi == $k){
+				// 		$value['pscost'] = $v;
+				// 		$value['canps'] = 1;
+				// 	}
+				// }
+                $value['pscost'] = end($valuelist);
+                $value['canps'] = 1;
+			}
 
             $value['opentype'] = '1';//1营业  0未营业
             $checkinfo = $this->shopIsopen($value['is_open'], $value['starttime'], $value['is_orderbefore'], $nowhour);
@@ -544,7 +558,8 @@ class wmrclass
             $value['point'] = 	$shopstart;
 
             $pxvalue1[$key] = $value[$pxvalue];
-            unset($value['pradiusvalue']);
+            unset( $value['valuelist'] );
+            unset( $value['pradiusvalue'] );
             unset($value['postdate']);
             $datalist[] = $value;
         }

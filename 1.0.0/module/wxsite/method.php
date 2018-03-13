@@ -2647,11 +2647,12 @@ class method extends wxbaseclass
             $areaid = ICookie::get('myaddress');
             $tempinfo =   $this->pscost($shopcheckinfo);
             $backdata['pstype'] = $tempinfo['pstype'];
-            if ($shopshowtype == 'dingtai') {
-                $backdata['pscost'] = 0;
-            } else {
-                $backdata['pscost'] = $cxinfo['nops'] == true?0:$tempinfo['pscost'];
-            }
+            $backdata['pscost'] = $tempinfo['pscost'];
+            // if ($shopshowtype == 'dingtai') {
+            //     $backdata['pscost'] = 0;
+            // } else {
+            //     $backdata['pscost'] = $cxinfo['nops'] == true?0:$tempinfo['pscost'];
+            // }
             $backdata['canps'] = $tempinfo['canps'];
             $backdata['nops'] = $cxinfo['nops'];
 

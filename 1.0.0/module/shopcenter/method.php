@@ -371,14 +371,22 @@ class method extends baseclass
         $shopid = ICookie::get('adminshopid');
         $checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop  where id = '".$shopid."' ");
 
-        if ($checkinfo['shoptype'] == 0) {
+        //if ($checkinfo['shoptype'] == 0) {
             $data['shopfast'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopid."' ");
             if (empty($data['shopfast'])) {
                 $udata['shopid'] = $shopid;
                 $this->mysql->insert(Mysite::$app->config['tablepre']."shopfast", $udata);
                 $data['shopfast'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopid."' ");
             }
-        }
+            if(!empty($data['shopfast']['pradiusvalue']))
+            {
+                $data['shopfast']['pradiusvalue'] = unserialize($data['shopfast']['pradiusvalue']);
+                $data['shopfast']['pradiusvalue'] = end($data['shopfast']['pradiusvalue']);
+            }
+            else{
+                $data['shopfast']['pradiusvalue'] = 0;
+            }
+    //    }
         $data['shopfast']['is_autopreceipt'] = $checkinfo['is_autopreceipt'];
         $nowhout = strtotime(date('Y-m-d', time()));//当天最小linux 时间
         $timelist = !empty($data['shopfast']['postdate'])?unserialize($data['shopfast']['postdate']):array();
@@ -534,6 +542,7 @@ class method extends baseclass
             $data['personcount'] = intval(IFilter::act(IReq::get('personcount')));
             $data['arrivetime'] = IFilter::act(IReq::get('arrivetime'));
             $data['interval_minit'] = intval(IFilter::act(IReq::get('interval_minit')));
+            $data['pscost']  = intval(IFilter::act(IReq::get('pscost')));
 
             $pstimestime = IFilter::act(IReq::get('pstimestime'));
             $pstimeetime = IFilter::act(IReq::get('pstimeetime'));
@@ -574,7 +583,17 @@ class method extends baseclass
             // 	}
             // 	$data['pradiusvalue'] = serialize($tempdo);
             // }
+            $pradiusvalue = intval(IReq::get('pradiusvalue'));
 
+            if($pradiusvalue)
+            {
+                for($i = 0;$i < 30;$i++)
+                {
+                    $pradiusvalues[] = $pradiusvalue;
+                }
+                $data['pradiusvalue'] = serialize($pradiusvalues);
+
+            }
 
             $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopinfo['id']."'");
         } elseif ($shopinfo['shoptype'] == 1) { //超市
