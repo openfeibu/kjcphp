@@ -77,8 +77,8 @@ class wxbaseclass extends wmrclass
 
         // $lng = ICookie::get('lng');
         // $lat = ICookie::get('lat');
-        $data['lng'] = $this->lng = $mlng;
-        $data['lat'] = $this->lat = $mlat;
+        $data['lng'] = $this->lng = $lng;
+        $data['lat'] = $this->lat = $lat;
         $data['latitude'] = $lat;
         $data['longitude'] = $lng;
         $data['mlatitude'] = $mlat;
