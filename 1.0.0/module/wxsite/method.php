@@ -216,7 +216,7 @@ class method extends wxbaseclass
 
     public function index()
     {
-	
+
         $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
@@ -249,14 +249,17 @@ class method extends wxbaseclass
 
         // $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6");
         $time = time();
+        $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6 or name = '代金券活动' ");
         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 AND count > 0 AND endtime > $time AND starttime <= $time order by id asc ");
-        foreach ($juaninfo as $key => $value) {
-            $user_juan = $this->mysql->select_one("SELECT * FROM ".Mysite::$app->config['tablepre']."juan WHERE alljuanid = ".$value['id']." AND uid = ".$this->member['uid']." ");
-            if(empty($user_juan))
-            {
-                $have_juan = 1;
-            }
+        if(!empty($juansetinfo) && $juansetinfo['status'] == 1){
+            foreach ($juaninfo as $key => $value) {
+                $user_juan = $this->mysql->select_one("SELECT * FROM ".Mysite::$app->config['tablepre']."juan WHERE alljuanid = ".$value['id']." AND uid = ".$this->member['uid']." ");
+                if(empty($user_juan))
+                {
+                    $have_juan = 1;
+                }
 
+            }
         }
         $data['have_juan'] = $have_juan;
 

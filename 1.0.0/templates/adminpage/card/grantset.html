@@ -140,9 +140,9 @@
          $('.rjuannum').text(Number(num)+1);
          var html  = "<div class='setconrs'>";
             html += '<div style="width:20%"><input type="text" name="fjuancost[]" value="" style="width:45px" >元</div>';
-            html += '<div style="width:34%">满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style="width:45px" >元可使用</div>';
+            html += '<div style="width:25%">满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style="width:45px" >元可使用</div>';
             html += '<div style="width:10%"><input type="text" name="count[]" value="<{$items["count"]}>" style="width:45px" >张</div>';
-            html += '<div style="width:34%;color:red"><span class="fdeljuan">删除</span></div></div>';
+            html += '<div style="width:20%;color:red"><span class="fdeljuan">删除</span></div></div>';
             $('.rsetconr').append(html);
       }else{
          alert('最多只能添加5张代金券噢~');
@@ -160,10 +160,11 @@
       if(num < 5){
          $('.fjuannum').text(Number(num)+1);
          var html  = '<div class="setconrs"><input type="hidden" name="id[]" value="">';
-            html += '<div style="width:20%"><input type="text" name="fjuancost[]" value="" style="width:45px" >元</div>';
-            html += '<div style="width:34%">满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style="width:45px" >元可使用</div>';
+            html += '<div style="width:15%"><input type="text" name="fjuancost[]" value="" style="width:45px" >元</div>';
+            html += '<div style="width:25%">满 <input type="text" name="fjuanlimitcost[]" value="<{$items["limitcost"]}>" style="width:45px" >元可使用</div>';
+            html += '<div style="width:25%"><input class="Wdate datefmt" type="text" name="endtime[]" value=""  onFocus="WdatePicker({isShowClear:false,readOnly:true});" /></div>';
             html += '<div style="width:10%"><input type="text" name="count[]" value="<{$items["count"]}>" style="width:45px" >张</div>';
-            html += '<div style="width:34%;color:red"><span class="fdeljuan">删除</span></div></div>';
+            html += '<div style="width:20%;color:red"><span class="fdeljuan">删除</span></div></div>';
           $('.fsetconr').append(html);
       }else{
          alert('最多只能添加5张代金券噢~');
