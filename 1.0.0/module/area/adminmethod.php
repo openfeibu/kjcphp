@@ -25,7 +25,7 @@ class method   extends adminbaseclass
       }
 			if(!$this->mysql->insert(Mysite::$app->config['tablepre'].'area',$data)){
 			   $this->message('system_err');
-			} 
+			}
 		}else{
 			$link = IUrl::creatUrl('area/adminarealist/id/'.$id);
 			if(empty($data['name']))  $this->message('area_emptyname',$link);
@@ -67,15 +67,15 @@ class method   extends adminbaseclass
 		}
 		$platpssetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid = '".$cityid."'  ");
 		$platpssetinfo['radiusvalue'] = unserialize( $platpssetinfo['radiusvalue'] );
-		$data['psinfo'] = $platpssetinfo; 
+		$data['psinfo'] = $platpssetinfo;
 		Mysite::$app->setdata($data);
 	 }
 	 function savepsset(){
-		
+
 		 $cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
-	 	 
+
 	     $locationradius =  IFilter::act(IReq::get('locationradius'));
-  	 	 
+
 		 if($savearray['locationradius'] > 30){
 			 $this->message('配送半径最大30公里');
 		 }
@@ -83,21 +83,21 @@ class method   extends adminbaseclass
 	 	 for($i=0;$i<$locationradius;$i++){
 	 	   $temparray[$i] = IFilter::act(IReq::get('radiusvalue'.$i));
 	 	 }
- 		 $savearray['locationradius']  = $locationradius; 
-	 	 $savearray['radiusvalue'] = serialize($temparray); 
-		 $savearray['psycostset']  = intval(IFilter::act(IReq::get('psycostset'))); 
-		 $savearray['psycost']  = intval(IFilter::act(IReq::get('psycost'))); 
-		 $savearray['psybili']  = trim(IFilter::act(IReq::get('psybili'))); 
-		 	
+ 		 $savearray['locationradius']  = $locationradius;
+	 	 $savearray['radiusvalue'] = serialize($temparray);
+		 $savearray['psycostset']  = intval(IFilter::act(IReq::get('psycostset')));
+		 $savearray['psycost']  = intval(IFilter::act(IReq::get('psycost')));
+		 $savearray['psybili']  = trim(IFilter::act(IReq::get('psybili')));
+
 		$platpssetinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid = '".$cityid."'  ");
-		 
+
 		if( !empty($platpssetinfo) ){
-			 $this->mysql->update(Mysite::$app->config['tablepre'].'platpsset',$savearray,"cityid='".$cityid."'");	 
+			 $this->mysql->update(Mysite::$app->config['tablepre'].'platpsset',$savearray,"cityid='".$cityid."'");
 		}else{
 			 $savearray['cityid'] = $cityid;
-			  $this->mysql->insert(Mysite::$app->config['tablepre'].'platpsset',$savearray);  
-		} 
-	    $this->success('success'); 
+			  $this->mysql->insert(Mysite::$app->config['tablepre'].'platpsset',$savearray);
+		}
+	    $this->success('success');
 	}
 	 function adminarealist(){
 	 	 $areainfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."area   order by orderid asc");
@@ -113,34 +113,34 @@ class method   extends adminbaseclass
 	 	 $this->getgodigui($areainfo,0,0);
 	 	 $data['arealist'] = $this->digui;
 
-	  
-	  $adminlist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."admin where groupid='4' ");  
+
+	  $adminlist =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."admin where groupid='4' ");
 	 	 $temparr = array();
 	 	 foreach($adminlist as $key=>$value){
 	 	    $temparr[$value['uid']] = $value['username'];
 	 	 }
 	 	 $data['adminlist'] = $temparr;
 	   $data['adminall'] = $adminlist;
-	 
+
 	 	 Mysite::$app->setdata($data);
 	 }
 	 function setareaadmin(){
 	 		$areaid =  intval(IReq::get('areaid'));
-	 	  $admin_id =  intval(IReq::get('adminid')); 
+	 	  $admin_id =  intval(IReq::get('adminid'));
 	 	  if(empty($areaid)) $this->message('area_empty');
-	 	  $checkarea =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where id = '".$areaid."' ");  
+	 	  $checkarea =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where id = '".$areaid."' ");
 	 	  if(empty($checkarea)) $this->message('area_empty');
 	 	  if($checkarea['parent_id'] > 0) $this->message('area_isnotparent');
-	 	  $this->getgodiguiupdata($areaid,$admin_id); 
-	 	  $this->success('success'); 
+	 	  $this->getgodiguiupdata($areaid,$admin_id);
+	 	  $this->success('success');
    }
    function getgodiguiupdata($areaid,$admin_id){
-   	   $this->mysql->update(Mysite::$app->config['tablepre'].'area',array('admin_id'=>$admin_id),"id='".$areaid."'");	 
-   	   $arraylist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."area where parent_id = '".$areaid."' ");  
+   	   $this->mysql->update(Mysite::$app->config['tablepre'].'area',array('admin_id'=>$admin_id),"id='".$areaid."'");
+   	   $arraylist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."area where parent_id = '".$areaid."' ");
 	 	   if(count($arraylist) > 0){
-	 	      foreach($arraylist as $key=>$value){ 
-	 	              $this->getgodiguiupdata($value['id'],$admin_id); 
-	 	      } 
+	 	      foreach($arraylist as $key=>$value){
+	 	              $this->getgodiguiupdata($value['id'],$admin_id);
+	 	      }
 	 	   }
 	 }
 	 function setps(){
@@ -157,7 +157,7 @@ class method   extends adminbaseclass
 	 	  	 exit;
 	 	  }
 	 	  $tempinfo = array();
-	 	  if($shopinfo['shoptype'] == 0){ 
+	 	  if($shopinfo['shoptype'] == 0){
 	 	     $tempinfo = 	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where shopid=".$shopid."  ");
 	 	  }else{
 	 	  	$tempinfo = 	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where shopid=".$shopid."  ");
@@ -165,14 +165,14 @@ class method   extends adminbaseclass
          $data['shopid'] = $shopid;
 	   $data['shopinfo'] = $shopinfo;
 	   $data['shopdetinfo'] = $tempinfo;
-	   
-	   
-	   //城市信息 
-	    $areainfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."area where id > 0 and parent_id = 0  order by orderid asc"); 
-	 	 $data['citylist'] = $areainfo; 
-	 	 
-	 	 
-	 	 //配送费  
+
+
+	   //城市信息
+	    $areainfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."area where id > 0 and parent_id = 0  order by orderid asc");
+	 	 $data['citylist'] = $areainfo;
+
+
+	 	 //配送费
 	 	 $data['shopvalues'] = array();
 	 	 if(empty($tempinfo['pradiusvalue'])){
 	 	 	 $data['shopvalues'] = unserialize($this->platpsinfo['radiusvalue']);
@@ -180,46 +180,46 @@ class method   extends adminbaseclass
 	 	 	$data['shopvalues'] =  unserialize($tempinfo['pradiusvalue']);
 	 	 }
 	 	 $data['dolenth'] = count($data['shopvalues']);
-	 	 
-	 	  
+
+
 	   Mysite::$app->setdata($data);
 	}
 	function savesetps(){
 		$shopid =  intval(IReq::get('shopid'));
-		if(empty($shopid)){ 
+		if(empty($shopid)){
 			 echo "<script>parent.uploaderror('请先完善店铺的基本信息');</script>";
-		 	 exit; 
+		 	 exit;
 		}
 		$shopinfo= $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id=".$shopid."  ");
 		if(empty($shopinfo)){
 			echo "<script>parent.uploaderror('请先完善店铺的基本信息');</script>";
-		 	 exit; 
+		 	 exit;
 		}
 		 $tempinfo = array();
-	 	  if(empty($shopinfo['shoptype'])){ 
+	 	  if(empty($shopinfo['shoptype'])){
 	 	     $tempinfo = 	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where shopid=".$shopid."  ");
 	 	  }else{
 	 	  	$tempinfo = 	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where shopid=".$shopid."  ");
 	 	  }
 	  if(empty($tempinfo)){
 	  	echo "<script>parent.uploaderror('请先完善店铺的基本信息');</script>";
-		 	 exit; 
+		 	 exit;
 	  }
 	  $data['sendtype'] = intval(IReq::get('sendtype'));
 	  $data['pscost'] =  intval(IReq::get('pscost'));
 	  $data['pradius'] = IReq::get('pradius');
 	  if($data['pradius'] > 30){
 		  echo "<script>parent.uploaderror('配送半径最大30公里');</script>";
-		 	 exit; 
-	  }	 
+		 	 exit;
+	  }
 	  if(empty($tempinfo['pradiusvalue'])){
 	  $tempdo = array();
 	  for($i=0;$i< $data['pradius'];$i++){
 	    $tempdo[$i] = 0;
 	  }
-	  $data['pradiusvalue'] = serialize($tempdo); 
-	  } 
-	 if(empty($shopinfo['shoptype'])){ 
+	  $data['pradiusvalue'] = serialize($tempdo);
+	  }
+	 if(empty($shopinfo['shoptype'])){
 	 	   $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast',$data,"shopid='".$shopid."'");
 	 }else{
 	 	  $this->mysql->update(Mysite::$app->config['tablepre'].'shopmarket',$data,"shopid='".$shopid."'");
@@ -246,7 +246,7 @@ class method   extends adminbaseclass
 
 	   echo "<script>parent.uploadsucess('');</script>";
 		 exit;
-	  
+
 	}
 	function shoparea(){
 		$shopid = intval(IReq::get('shopid'));
@@ -337,7 +337,7 @@ class method   extends adminbaseclass
 		 }
 		 $data['arealng'] = $data['arealng'] == 0?Mysite::$app->config['baidulng']:$data['arealng'];
 		 $data['arealat'] = $data['arealat'] == 0?Mysite::$app->config['baidulat']:$data['arealat'];
-      
+
 		 $data['is_name'] = $is_name;
 		 $data['myareaid'] = $id;
 		 $data['baidumapkey'] = Mysite::$app->config['baidumapkey'];
@@ -354,17 +354,17 @@ class method   extends adminbaseclass
 		if(empty($data['lng'])) $this->message('emptylng');
 		if(empty($data['lat'])) $this->message('emptylat');
 		$this->mysql->update(Mysite::$app->config['tablepre'].'area',$data,"id='".$id."'");
-		
+
 	  $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  id = '".$id."' order by id asc");
 	  if(!empty($areainfo)){
-	    $areasearch = new areasearch($this->mysql);    
+	    $areasearch = new areasearch($this->mysql);
       $areasearch->setdata($areainfo['name'],'1',$id,$areainfo['lat'],$areainfo['lng']);
       $areasearch->del();
       if($areasearch->save()){
-    	
+
       }else{
-       $checkinfo = $areasearch->error(); 
-      } 
+       $checkinfo = $areasearch->error();
+      }
     }
 	  $this->success('success');
   }
@@ -387,37 +387,37 @@ class method   extends adminbaseclass
   	  $newlink .= "/typeid/".$typeid;
   	}
 
-  	
-   
+
+
   	$link = IUrl::creatUrl('/adminpage/area/module/searchkey'.$newlink);
-	    
+
 	    	$this->pageCls->setpage(IReq::get('page'),15);
-	    	
+
 	    	 //order: id  dno 订单编号 shopuid 店铺UID shopid 店铺ID shopname 店铺名称 shopphone 店铺电话 shopaddress 店铺地址 buyeruid 购买用户ID，0未注册用户 buyername
 	    	 //
 	    	$data['list'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."positionkey    ".$where." order by datatype,parent_id   limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."");
 	    	$shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."positionkey    ".$where."   ");
 	    	$this->pageCls->setnum($shuliang);
-	    	
+
 	    	$data['pagecontent'] = $this->pageCls->getpagebar($link);
-   
+
   	Mysite::$app->setdata($data);
   }
   function delsearch(){
 	  limitalert();
     $datatype =  intval(IReq::get('dataintype'));
   	$parent_id = intval(IReq::get('parent_id'));
-  	$areasearch = new areasearch($this->mysql);   
+  	$areasearch = new areasearch($this->mysql);
   	$areasearch->setdata('',$datatype,$parent_id);
   	$areasearch->del();
-  	$this->success('success'); 
+  	$this->success('success');
   }
   function clearsearch(){
 	  limitalert();
   	 $this->mysql->delete(Mysite::$app->config['tablepre'].'positionkey','datatype > 0');
   	 $this->success('success');
   }
-  
+
 	function setshow(){
 		limitalert();
 	  $id = intval(IReq::get('id'));
@@ -434,8 +434,8 @@ class method   extends adminbaseclass
 		 $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where  parent_id = '".$uid."' order by id asc");
 		 if(!empty($areainfo)) $this->message('area_isextchild');
 
-	   $this->mysql->delete(Mysite::$app->config['tablepre'].'area',"id = '$uid'"); 
-	   $this->mysql->delete(Mysite::$app->config['tablepre'].'areashop',"areaid = '$uid'"); 
+	   $this->mysql->delete(Mysite::$app->config['tablepre'].'area',"id = '$uid'");
+	   $this->mysql->delete(Mysite::$app->config['tablepre'].'areashop',"areaid = '$uid'");
 
 	   $this->success('success');;
 	}
@@ -454,14 +454,14 @@ class method   extends adminbaseclass
 	 	 $data['arealist'] = $this->digui;
 	 	 Mysite::$app->setdata($data);
 	}
-	
-	/**  
+
+	/**
 	  * @method 新增平台地图配送范围
 	  * &date 2016-12-20
 	  **/
 	function platformpsrange(){
 		$arealnglatstring = '';
-		
+
 		  $cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
  		  if( empty($cityid) ){
 			  $this->message("请先设置网站自营默认城市",'/index.php?ctrl=adminpage&action=system&module=siteset');
@@ -470,94 +470,94 @@ class method   extends adminbaseclass
 		if( !empty($platpssetinfo) ){
 			$arealnglatstring =$platpssetinfo['waimai_psrange'];
 		}
-		 
+
 		$temparealnglatarr = array();
 		if( !empty($arealnglatstring) ){
 			$arealnglatarr = explode('#',$arealnglatstring);
 			$temparealnglatarr = $arealnglatarr;
 		}
-		
+
 		$data['arealnglatarr'] = $temparealnglatarr;
  	 	 Mysite::$app->setdata($data);
 	}
-	
+
 	function sublnglatpsrange(){
 		limitalert();
-		 $cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0; 
+		 $cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
 	       if( empty($cityid) ){
 			  $this->message("请先设置网站自营默认城市");
 		  }
-	 	 
-		 $savearray['waimai_psrange']  = trim(IFilter::act(IReq::get('waimai_psrange'))); 
-			
+
+		 $savearray['waimai_psrange']  = trim(IFilter::act(IReq::get('waimai_psrange')));
+
 		 $platpssetinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid = '".$cityid."'  ");
-		 
+
 		 if( !empty($platpssetinfo) ){
-			 $this->mysql->update(Mysite::$app->config['tablepre'].'platpsset',$savearray,"cityid='".$cityid."'");	 
+			 $this->mysql->update(Mysite::$app->config['tablepre'].'platpsset',$savearray,"cityid='".$cityid."'");
 		 }else{
 			 $savearray['cityid'] = $cityid;
-			  $this->mysql->insert(Mysite::$app->config['tablepre'].'platpsset',$savearray);  
-		 } 
+			  $this->mysql->insert(Mysite::$app->config['tablepre'].'platpsset',$savearray);
+		 }
 	    $this->success('success');
-		 
+
  	}
 	//测试配送对接是否正常
-	function testpsblink(){ 
-		$psblink  =  trim(IReq::get('psblink'));//trim(FD('psblink')); 
+	function testpsblink(){
+		$psblink  =  trim(IReq::get('psblink'));//trim(FD('psblink'));
 		$bizid = trim(IReq::get('bizid')); //trim('bizid');
 		$key =  trim(IReq::get('psbkey'));//trim('psbkey');
 		// print_r($psblink);
-		$code =  trim(IReq::get('psbcode'));//trim('psbcode'); 
+		$code =  trim(IReq::get('psbcode'));//trim('psbcode');
 		$cityid = intval(Mysite::$app->config['default_cityid']);
-	 
+
 		$psbinterface = new psbinterface();
 		if($psbinterface->testlink($psblink,$bizid,$key,$code)){
 			$this->success('success');
 		}else{
 			$this->message($psbinterface->err());
 		}
-	
+
 	}
 	//获取配送站数据
 	function getstaionlist(){
 		$psbinterface = new psbinterface();
-		if($psbinterface->stationlist()){ 
+		if($psbinterface->stationlist()){
 			$data['stationlist'] = $psbinterface->getstationlist();
 		//	Mysite::$app->setdata($data);
 			$this->success($data);
 		}else{
 			$this->message($psbinterface->err());
 		}
-		
+
 	}
 	//获取配送宝的配送圈和配送组信息
 	function getstationchild(){
 		$stationid  =  intval(IReq::get('stationid'));
 		$psbinterface = new psbinterface();
-		if($psbinterface->getstationchild($stationid)){ 
+		if($psbinterface->getstationchild($stationid)){
 			$data['psgroup'] = $psbinterface->getpsgroup();
-			$data['bizdistrict'] = $psbinterface->getbizdistrict(); 
-			 
+			$data['bizdistrict'] = $psbinterface->getbizdistrict();
+
 			$this->success($data);
 		}else{
 			$this->message($psbinterface->err());
 		}
-	} 
+	}
 	function addacounttopsb(){
 		$stationid  =  intval(IReq::get('stationid'));
 		$shopid = intval(IReq::get('shopid'));
 		$psgroupid = intval(IReq::get('psgroupid'));
 		$bizdistrictid = intval(IReq::get('bizdistrictid'));
 		$psbinterface = new psbinterface();
-		if($psbinterface->createacount($shopid,$stationid,$psgroupid,$bizdistrictid)){  
+		if($psbinterface->createacount($shopid,$stationid,$psgroupid,$bizdistrictid)){
 			 $this->success('success');
 		}else{
 			$this->message($psbinterface->err());
 		}
 	}
-	
-	
-	
-	
-	
-} 
+
+
+
+
+
+}

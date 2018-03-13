@@ -96,7 +96,9 @@ function checkword(flag)
 	$("input[name='limit[]']").attr("checked",flag);
 }
 function biaoji(){
-    	mydialog = art.dialog.open(siteurl+'/index.php?ctrl=area&action=shopbaidumap',{height:'550px',width:'850px'},false);
+    var stationlnglat = $("#stationlnglat").val();
+    var lnglats = stationlnglat.split(',');
+    	mydialog = art.dialog.open(siteurl+'/index.php?ctrl=area&action=newshopbaidumap&lng='+lnglats[0]+'&lat= '+lnglats[1],{height:'550px',width:'850px'},false);
 	 	 mydialog.title('设置标记高德地图位置');
   }
   function closemydilog(){
