@@ -445,10 +445,6 @@ class method extends baseclass
             $areasearch->setdata($shopinfo['address'], '2', $shopinfo['id'], $data['lat'], $data['lng']);
             $areasearch->save();
         }
-
-
-
-
         $this->success('success');
     }
     public function setshoparea()
