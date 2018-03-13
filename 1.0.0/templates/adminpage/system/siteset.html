@@ -53,6 +53,13 @@
                      <td class="left">网站所在城市</td>
                      <td><input type="text" name="cityname" id="cityname" value="<{$cityname}>" class="skey" style="width:100px;"></td>
                    </tr>
+                   <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                    <td class="left">开启限时折扣</td>
+                    <td>
+                        <input type="radio" name="open_limited_discount" value="1" <{if $open_limited_discount == 1}> checked<{/if}> />是
+                        <input type="radio" name="open_limited_discount" value="0" <{if $open_limited_discount == 0}> checked<{/if}> />否
+                    </td>
+                  </tr>
                      <!--
 					  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff" >
                       <td class="left">短信签名</td>

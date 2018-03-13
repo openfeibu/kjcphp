@@ -205,6 +205,7 @@ class method extends adminbaseclass
         $companyname = IReq::get('companyname');
         $website = IReq::get('website');
         $weixin = IReq::get('weixin');
+        $open_limited_discount = IReq::get('open_limited_discount');
 
         $siteinfo['default_cityid'] =  intval(IReq::get('default_cityid'));
 
@@ -237,7 +238,7 @@ class method extends adminbaseclass
 
         $siteinfo['companyname'] = $companyname;
         $siteinfo['website'] = $website;
-
+        $siteinfo['open_limited_discount'] = $open_limited_discount;
 
         $config = new config('hopeconfig.php', hopedir);
         $config->write($siteinfo);

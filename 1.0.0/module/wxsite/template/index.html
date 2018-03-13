@@ -40,9 +40,11 @@
           <{/foreach}>
         </ul>
       </div>
+      <{if $open_limited_discount == 1}>
       <div class="pic_discount">
         <a href="<{ofunc type=url link="/wxsite/discount"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/pic_discount.jpg" alt=""></a>
       </div>
+      <{/if}>
       <div class="shop_group">
         <div class="shop_group_title">附近商家</div>
         <div class="shop_group_tab fb-clearfix">
