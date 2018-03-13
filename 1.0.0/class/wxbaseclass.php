@@ -58,8 +58,8 @@ class wxbaseclass extends wmrclass
         $lng = $lat = $stationid = 0;
         if($this->member['uid'])
         {
-            $lng = $this->member['lng'];
-            $lat = $this->member['lat'];
+            $mlng = $lng = $this->member['lng'];
+            $mlat = $lat = $this->member['lat'];
             $stationid = $this->member['stationid'];
         }
         if(!$stationid)
@@ -81,6 +81,8 @@ class wxbaseclass extends wmrclass
         $data['lat'] = $this->lat = $lat;
         $data['latitude'] = $lat;
         $data['longitude'] = $lng;
+        $data['mlatitude'] = $mlat;
+        $data['mlongitude'] = $mlng;
         $data['stationid'] = $this->stationid = $stationid;
 
         $CITY_NAME = ICookie::get('CITY_NAME');
