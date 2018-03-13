@@ -38,7 +38,7 @@ class method extends adminbaseclass
         $member_list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."member $where   order by uid desc   limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
         $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."member $where   order by uid desc");
         $pageinfo->setnum($shuliang);
-        $pagelink = IUrl::creatUrl('adminpage/card/module/juanmarketing'.$newlink);
+        $pagelink = IUrl::creatUrl('adminpage/member/module/memberlist'.$newlink);
         $data['pagecontent'] = $pageinfo->getpagebar($pagelink);
         foreach($member_list as $key => $member)
         {
