@@ -13,21 +13,19 @@
             <div class="search_content">
 
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/station/module/stationlist"}>">
-				  <select name="cityid">
-					<option value="0">全部</option>
-                      	 <{load_data assign="arealist" table="area"    fileds="*"  where=" parent_id=0 " orderby=" orderid asc " limit="1000" }>
-							<{foreach from=$arealist['list'] key=myid  item=items}>
-							   <option value="<{$items['adcode']}>" <{if $cityid == $items['adcode']}>selected<{/if}>><{$items['name']}></option>
-							<{/foreach}>
-                      </select>
-
+            		<!-- 		  <select name="cityid">
+            					<option value="0">全部</option>
+                                  	 <{load_data assign="arealist" table="area"    fileds="*"  where=" parent_id=0 " orderby=" orderid asc " limit="1000" }>
+            							<{foreach from=$arealist['list'] key=myid  item=items}>
+            							   <option value="<{$items['adcode']}>" <{if $cityid == $items['adcode']}>selected<{/if}>><{$items['name']}></option>
+            							<{/foreach}>
+                      </select> -->
+                <input type="hidden" name="cityid" value="0">
             	  <label>查询类型：</label>
             	  <select name="querytype">
             	  	<option value="0">未选择</option>
-
             	  	<option value="st.shopname"  <{if $querytype == 'st.stationname'}>selected<{/if}>>分校名称</option>
             	  	<option value="st.stationusername"  <{if $querytype == 'st.stationusername'}>selected<{/if}>>分校负责人</option>
-            	  	<option value="st.stationphone"  <{if $querytype == 'st.stationphone'}>selected<{/if}>>分校电话</option>
             	  	<option value="st.stationphone"  <{if $querytype == 'st.stationphone'}>selected<{/if}>>分校电话</option>
              	  </select>
             	  <label>查询条件：</label>
