@@ -22,7 +22,6 @@ class method extends adminbaseclass
                 $data['querytype'] = $querytype;
             }
         }
-//var_dump($where);exit;
         $data['status'] = '';
         if ($status > 0) {
             $newstatus = $status -1;
