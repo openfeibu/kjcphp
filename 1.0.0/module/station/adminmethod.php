@@ -4,6 +4,7 @@ class method extends adminbaseclass
     //分校列表
     public function stationlist()
     {
+        //var_dump(1);exit;
         $querytype = IReq::get('querytype');
         $searchvalue = IReq::get('searchvalue');
         $status = intval(IReq::get('status'));
@@ -21,7 +22,7 @@ class method extends adminbaseclass
                 $data['querytype'] = $querytype;
             }
         }
-
+//var_dump($where);exit;
         $data['status'] = '';
         if ($status > 0) {
             $newstatus = $status -1;
