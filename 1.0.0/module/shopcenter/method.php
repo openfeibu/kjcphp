@@ -583,17 +583,14 @@ class method extends baseclass
             // 	}
             // 	$data['pradiusvalue'] = serialize($tempdo);
             // }
-            $pradiusvalue = intval(IReq::get('pradiusvalue'));
-
-            if($pradiusvalue)
-            {
-                for($i = 0;$i < 30;$i++)
-                {
-                    $pradiusvalues[] = $pradiusvalue;
-                }
-                $data['pradiusvalue'] = serialize($pradiusvalues);
-
-            }
+            // $pradiusvalue = intval(IReq::get('pradiusvalue'));
+            //
+            // for($i = 0;$i < 30;$i++)
+            // {
+            //     $pradiusvalues[] = $pradiusvalue;
+            // }
+            // $data['pradiusvalue'] = serialize($pradiusvalues);
+            $data['pscost'] =  intval(IReq::get('pscost'));
 
             $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopinfo['id']."'");
         } elseif ($shopinfo['shoptype'] == 1) { //超市
