@@ -2650,12 +2650,8 @@ class method extends wxbaseclass
             $areaid = ICookie::get('myaddress');
             $tempinfo =   $this->pscost($shopcheckinfo);
             $backdata['pstype'] = $tempinfo['pstype'];
-            $backdata['pscost'] = $tempinfo['pscost'];
-            // if ($shopshowtype == 'dingtai') {
-            //     $backdata['pscost'] = 0;
-            // } else {
-            //     $backdata['pscost'] = $cxinfo['nops'] == true?0:$tempinfo['pscost'];
-            // }
+            $backdata['pscost'] = $tempinfo['pscost'] * $backdata['sumcount'];
+
             $backdata['canps'] = $tempinfo['canps'];
             $backdata['nops'] = $cxinfo['nops'];
 
@@ -3364,9 +3360,7 @@ class method extends wxbaseclass
         $areaid = ICookie::get('myaddress');
         $temp = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."address  where userid = ".$this->member['uid']." and `default`=1   ");
         $checkps = 	 $this->pscost($shopinfo, $temp['lng'], $temp['lat']);
-        // if ($checkps['canps'] != 1) {
-        //     $this->message('该店铺不在配送范围内');
-        // }
+
         $info['cattype'] = 0;//
         if (empty($info['username'])) {
             $this->message('联系人不能为空');
@@ -3438,7 +3432,7 @@ class method extends wxbaseclass
         $info['allcost'] = $carinfo['sum'] ;
         $info['bagcost'] = $carinfo['bagcost'];
         $info['allcount'] = $carinfo['count'];
-        $info['shopps'] = $checkps['pscost'];
+        $info['shopps'] = $checkps['pscost'] * $carinfo['count'];
         $info['goodslist']   = $carinfo['goodslist'];
         $info['cxcosttotal'] = $carinfo['cxcosttotal'];
 
