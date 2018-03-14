@@ -256,6 +256,14 @@ class method extends adminbaseclass
             if ($laiyuan == 1) {
                 $this->mysql->update(Mysite::$app->config['tablepre'].'member', array('shopid'=>$shopid), "uid='".$this->member['uid']."'");
             }
+
+            $data['shopfast'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast  where shopid = '".$shopid."' ");
+            if (empty($data['shopfast'])) {
+                $udata['shopid'] = $shopid;
+                $udata['sendtype'] = 1;
+                $udata['pscost'] = 1;
+                $this->mysql->insert(Mysite::$app->config['tablepre']."shopfast", $udata);
+            }
             $this->success('success');
         } else {
             $this->message('system_err');
