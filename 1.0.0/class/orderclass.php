@@ -255,8 +255,54 @@ class orderclass
         $open_acouttempdata = array('orderinfo'=>$orderinfo,'orderdet'=>$orderdet,'sitename'=>Mysite::$app->config['sitename'],'memberinfo'=>$memberinfo);
 
 
+        //微信通知商家  此功能要每天访问网站微信一次
+        $shopmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");
+        $gmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where guid = '".$shopmember['uid']."' ");
 
+        if($gmember){
+             $shopwxuser = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser where uid = '".$gmember['uid']."' ");
+             if($shopwxuser){
+                 $temp_content = '在'.Mysite::$app->config['sitename'].'下单成功'.'\n';
+                 $temp_content .= '店铺：'.$orderinfo['shopname'].'\n';
+                 $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
+                 if ($orderinfo['shoptype'] == 100) {
+                     $temp_content .='配送时间：'. $orderinfo['postdate'].'\n';
+                 } else {
+                     $temp_content .='配送时间：'.date('m-d H:i', $orderinfo['posttime']).'\n';
+                 }
+                 $temp_content .='支付方式'.$orderpaytype.','.$orderpastatus.' '.'\n';
+                 $temp_content .='收货人:'.$orderinfo['buyername'].'\n';
+                 $temp_content .='地址:'.$orderinfo['buyeraddress'].'\n';
+                 $temp_content .='联系电话:'.$orderinfo['buyerphone'].'\n';
+                 $temp_content .='单号:'.$orderinfo['dno'].'\n';
+                 $temp_content .='总价:'.$orderinfo['allcost'].'元,配送费:'.$orderinfo['shopps'].'元\n';
+                 $temp_content .='备注:'.$orderinfo['content'].'\n';
+                 foreach ($orderdet as $km=>$vc) {
+                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
+                 }
+                 $time = time();
+                 $tempstr = md5(Mysite::$app->config['wxtoken'].$time);
+	             $tempstr = substr($tempstr,3,15);
+                 $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=ordershow&orderid='.$orderinfo['id'];
 
+                 $backinfo = '';
+                 if(!empty($dolink)){
+                    $templink = $dolink;
+                    for($i=0;$i<strlen($templink);$i++){
+                        $backinfo .= ord($templink[$i]).',';
+                    }
+                 }
+                 $linkstr =  Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=index&openid='.$shopwxuser['openid'].'&actime='.$time.'&sign='.$tempstr.'&backinfo='.$backinfo;
+                 $temp_content .= '<a href=\''.trim($dolink).'\'>查看详情</a>';
+                 // var_dump($temp_content);exit;
+                 if($wx_s->sendmsg($temp_content, $shopwxuser['openid'])){
+                     logwrite('商家微信客服发送开始');
+                 }else{
+                     logwrite('商家微信客服发送错误:'.$wx_s->err());
+                 }
+             }
+        }
+exit;
         /*
           $psCls = new apppsyclass();
          if( $orderinfo['shoptype'] == '100' ){
@@ -267,43 +313,6 @@ class orderclass
                        $psCls->sendbytag('订单提醒','有新订单待送货','admin_id'.$orderinfo['admin_id']);
                }
            }  */
-        /*发送APP到商家**/
-        if (in_array(3, $checknotice)) {
-            $neirong = Mysite::$app->config['sitename'].'下单提醒';
-            foreach ($orderdet  as $key=>$value) {
-                $neirong .=  ','.$value['goodsname'].$value['goodscount'].'份';
-            }
-            $appCls = new appclass();
-            $appCls->SetUid($orderinfo['shopuid'])
-                      ->SetExtra('dno|'.$orderinfo['dno'])
-                      ->sendNewmsg(Mysite::$app->config['sitename'].'订单提醒', $neirong);
-        }
-
-        /*短信通知商家*/
-        if (in_array(1, $checknotice)) {
-            if (IValidate::suremobi($orderinfo['shopphone'])) {
-                //需要后加
-
-                $default_tpl = new config('tplset.php', hopedir);
-                $tpllist = $default_tpl->getInfo();
-                if (!isset($tpllist['shopphonetpl']) || empty($tpllist['shopphonetpl'])) {
-                    // logwrite('短信发送商家模板加载失败');
-                } else {
-                    $contents = Mysite::$app->statichtml($tpllist['shopphonetpl'], $tempdata);
-                    $phonecode = new phonecode($this->ordmysql, 0, $orderinfo['shopphone']);
-
-                    $phonecode->sendother($contents);
-                }
-            } else {
-                logwrite('短信发送商家'.$shopinfo['shopname'].'联系电话错误');
-            }
-        }
-
-
-
-
-        //微信通知商家  此功能要每天访问网站微信一次
-
 
         //打印机 通知商家
 
@@ -446,7 +455,6 @@ class orderclass
                 }
             }
         }
-
 
 
         //短信通知买家有效
@@ -643,13 +651,14 @@ $ch = curl_init($url);
         $data['shopid'] =  $info['shopinfo']['id']; //店铺ID
         $data['stationid'] =  $info['shopinfo']['stationid']; //stationid
         $data['shopname'] = $info['shopinfo']['shopname']; //店铺名称
-      $data['shopphone'] = $info['shopinfo']['phone']; //店铺电话
-      $data['shopaddress'] = $info['shopinfo']['address'];// 店铺地址
-      $data['buyeraddress'] = $info['addressdet'];
+        $data['shopphone'] = $info['shopinfo']['phone']; //店铺电话
+        $data['shopaddress'] = $info['shopinfo']['address'];// 店铺地址
+        $data['buyeraddress'] = $info['addressdet'];
         $data['ordertype'] = $info['ordertype'];//来源方式;
-      $data['buyeruid'] = $userid;// 购买用户ID，0未注册用户
+        $data['buyeruid'] = $userid;// 购买用户ID，0未注册用户
         $data['buyername'] =  $info['username'];//购买热名称
         $data['buyerphone'] = $info['mobile'];// 联系电话
+        $data['goodscxcost'] = $info['cxcosttotal']; //单个商品促销总价，用于佣金计算
         $panduan = Mysite::$app->config['man_ispass'];
         $data['status'] = 0;
         if ($panduan != 1 && $data['paytype'] == 0) {
@@ -675,16 +684,12 @@ $ch = curl_init($url);
         if ($ordertime2 < $ordertime1) {
             $data['posttime'] = $ordertime1;
         }
-
-
-
-
         $data['postdate'] = $info['postdate'];//配送时间段
-      $data['othertext'] = $info['othercontent'];//其他说明
-      if ($info['shopinfo']['is_autopreceipt'] ==1) {
+        $data['othertext'] = $info['othercontent'];//其他说明
+        if ($info['shopinfo']['is_autopreceipt'] ==1) {
           $data['is_make'] =1;
           $data['maketime'] =time();
-      }
+        }
         $data['is_goshop'] = 0;
         //  :审核时间
         $data['passtime'] = time();
@@ -1458,12 +1463,14 @@ $ch = curl_init($url);
             $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', array('is_js' => 1), "id = '".$orderinfo['id']."' ");
             $yjbl = $shopinfo['yjin']< 1?Mysite::$app->config['yjin']:$shopinfo['yjin'];
             $newdata['yjb'] = empty($yjbl)?0:$yjbl;
-            $yjcost =  ($orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'])*$yjbl*0.01;
+            $shop_getcost = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'];
+            $yjcost =  ($shop_getcost-$orderinfo['goodscxcost'])*$yjbl*0.01;
             $newdata['onlinecount'] = 1;
-            $newdata['onlinecost'] = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'];
+            $newdata['onlinecost'] = $shop_getcost;
             $newdata['unlinecount'] = 0;
             $newdata['unlinecost'] = 0;
-            $newdata['acountcost'] = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost']-$yjcost+$orderinfo['shopdowncost'];
+            $newdata['acountcost'] = $shop_getcost-$yjcost+$orderinfo['shopdowncost'];
+            $newdata['goodscxcost'] = $orderinfo['goodscxcost'];
             $newdata['yjcost'] = $yjcost;
             $newdata['pstype'] = $sendtype = 1;
             $newdata['shopid'] = $shopinfo['id'];

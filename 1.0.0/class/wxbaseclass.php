@@ -29,7 +29,7 @@ class wxbaseclass extends wmrclass
         $data['member'] = $this->member;
         $data['admininfo'] = $this->admin;
         $logintype = ICookie::get('logintype');
-
+        $this->adminshopid = ICookie::get('adminshopid');
 
         $cityId = 0;
         $CITY_ID = ICookie::get('CITY_ID');

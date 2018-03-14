@@ -68,6 +68,58 @@ class memberclass
             return true;
         }
     }
+    public function shopLogin($uname, $pwd)
+    {
+        $md5c = md5($pwd);
+        $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where  email='".$uname."' or username='".$uname."' or phone='".$uname."'   ");
+
+        if (empty($userinfo)) {
+            $this->error = '登录账号错误';
+            return false;//and password  = '".$md5c."'
+        } elseif ($userinfo['password']  !=$md5c) {
+            $this->error = '密码错误';
+            return false;
+        } else {
+            //更新用户信息
+            $data['loginip'] = IClient::getIp();
+            $data['logintime'] = time();
+            $checktime = date('Y-m-d', time());
+            $checktime = strtotime($checktime);
+            $userlogininfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."memberlog  where  userid ='".$userinfo['uid']."' and addtime >  '".$checktime."' and content  like '%用户登陆赠送积分%' ");
+            if (Mysite::$app->config['loginscore'] > 0 &&  empty($userlogininfo)) {
+                $data['score'] = $userinfo['score']+Mysite::$app->config['loginscore'];
+                $mess['content'] = '用户登陆赠送积分'.Mysite::$app->config['loginscore'].'总积分'.$data['score'];
+                $this->addlog($userinfo['uid'], 1, 1, Mysite::$app->config['loginscore'], '每天登陆', $mess['content'], $data['score']);
+            }
+
+
+            $this->mysql->update(Mysite::$app->config['tablepre'].'member', $data, "uid='".$userinfo['uid']."'");
+
+            /*
+            $logintype = ICookie::get('adlogintype');
+            $token = ICookie::get('adtoken');
+            $openid = ICookie::get('adopenid');
+            if (!empty($logintype)) {
+                $apiinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."otherlogin where loginname='".$logintype."'  ");
+                if (!empty($apiinfo)) {
+                    $this->mysql->update(Mysite::$app->config['tablepre'].'oauth', array('uid'=>$userinfo['uid']), "openid='".$openid."' and type = '".$logintype."'");
+                    ICookie::clear('adlogintype');
+                    ICookie::clear('adtoken');
+                    ICookie::clear('adopenid');
+                }
+            }
+
+
+
+            ICookie::set('email', $userinfo['email'], 86400);
+            ICookie::set('memberpwd', $pwd, 86400);
+            ICookie::set('membername', $userinfo['username'], 86400);
+            ICookie::set('uid', $userinfo['uid'], 86400);
+            $this->uid = $userinfo['uid'];
+            */
+            return $userinfo['uid'];
+        }
+    }
     //普通用户注册
     public function regester($email, $tname, $password, $phone, $group, $userlogo='', $address='', $cost=0, $score=0, $admin_id,$stationadminid = 0)
     {

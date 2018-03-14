@@ -216,7 +216,12 @@ class method extends wxbaseclass
 
     public function index()
     {
-
+        ini_set('display_errors', 1);            //错误信息
+        ini_set('display_startup_errors', 1);    //php启动错误信息
+        error_reporting(-1);
+        $orderCLs = new orderClass();
+        $orderCLs->sendmess('33094');
+        exit;
         $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
@@ -8005,6 +8010,53 @@ CREATE TABLE `xiaozu_shophuiorder` (
         }
         $data['phone'] = $phone;
         $this->mysql->update(Mysite::$app->config['tablepre'].'member',$data,"uid ='".$this->member['uid']."' ");
+        $this->success('success');
+    }
+
+    public function shoptx()
+    {
+        if(empty($this->member['guid']))
+        {
+            header('Location:'.IUrl::creatUrl('wxsite/shopLogin'));
+        }
+    }
+    public function shopLogin()
+    {
+        if($this->member['guid']){
+            header('Location:'.IUrl::creatUrl('wxsite/shoptx'));
+        }
+    }
+    public function bindShopLogin()
+    {
+        if($this->member['guid']){
+            $this->message('您已绑定过店铺');
+        }
+        $uname = IFilter::act(IReq::get('uname'));
+        $pwd = IFilter::act(IReq::get('pwd'));
+        if (empty($uname)) {
+            $this->message('member_emptyname');
+        }
+        if (empty($pwd)) {
+            $this->message('member_emptypwd');
+        }
+        if (!$checkuid = $this->memberCls->shopLogin($uname, $pwd)) {
+            $this->message($this->memberCls->ero());
+        }
+        $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where is_pass=1 and uid=".$checkuid." ");
+
+        if (empty($shopinfo)) {
+            $this->message('shop_noexit');
+        }
+        //判断是否绑定过
+        $gmember = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where guid = ".$checkuid." ");
+        if (!empty($gmember)) {
+            $this->message('该店铺已绑定其他账号！请联系管理员');
+        }
+        else{
+            $data['guid'] = $checkuid;
+            $this->mysql->update(Mysite::$app->config['tablepre'].'member', $data, "uid='".$this->member['uid']."'");
+        }
+        ICookie::set('adminshopid', $shopinfo['id'], 86400);
         $this->success('success');
     }
 }

@@ -1,0 +1,29 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/shop.css">
+<body ontouchstart >
+    <div class="main">
+      <div class="shoptx">
+        <div class="shoptxInfo">
+          <p>账户类型：支付宝</p>
+          <p>账户名称：杨嘉城</p>
+          <p>提现账户：6222023602100730050</p>
+          <p>余额：<span>0.00</span>元(低于100元不可提现)</p>
+        </div>
+
+      <div class="shoptx_form">
+        <form action="#" method="post">
+          <input type="text" name="cost" id="cost" placeholder="输入提现金额" >
+          <input type="submit" name="" value="申请提现" disabled="">
+        </form>
+      </div>
+      <div class="shoptx_des">
+        注：提现成功后，将在3个工作日内打款至对应账户，如有任何疑问，请及时联系我们
+      </div>
+      </div>
+    </div>
+
+</body>
+<{/block}>
+<{block name=footer}><{/block}>
