@@ -1457,12 +1457,13 @@ $ch = curl_init($url);
             $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
             $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', array('is_js' => 1), "id = '".$orderinfo['id']."' ");
             $yjbl =   $shopinfo['yjin']< 1?Mysite::$app->config['yjin']:$shopinfo['yjin'];
+            $newdata['yjb'] = empty($yjbl)?0:$yjbl;
             $yjcost =  ($orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'])*$yjbl*0.01;
-
             $newdata['onlinecount'] = 1;
-            $newdata['onlinecost'] = $orderinfo['allcost'];
+            $newdata['onlinecost'] = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'];
             $newdata['unlinecount'] = 0;
             $newdata['unlinecost'] = 0;
+            $newdata['yjbl'] = $yjbl;
             $newdata['acountcost'] = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost']-$yjcost+$orderinfo['shopdowncost'];
             $newdata['yjcost'] = $yjcost;
             $newdata['pstype'] = $sendtype = 1;
