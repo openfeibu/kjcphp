@@ -1456,7 +1456,7 @@ $ch = curl_init($url);
             $jstime = date("Y-m-d");
             $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
             $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', array('is_js' => 1), "id = '".$orderinfo['id']."' ");
-            $yjbl =   $shopinfo['yjin']< 1?Mysite::$app->config['yjin']:$shopinfo['yjin'];
+            $yjbl = $shopinfo['yjin']< 1?Mysite::$app->config['yjin']:$shopinfo['yjin'];
             $newdata['yjb'] = empty($yjbl)?0:$yjbl;
             $yjcost =  ($orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'])*$yjbl*0.01;
             $newdata['onlinecount'] = 1;
