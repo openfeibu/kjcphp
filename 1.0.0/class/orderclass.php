@@ -1463,7 +1463,6 @@ $ch = curl_init($url);
             $newdata['onlinecost'] = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost'];
             $newdata['unlinecount'] = 0;
             $newdata['unlinecost'] = 0;
-            $newdata['yjbl'] = $yjbl;
             $newdata['acountcost'] = $orderinfo['allcost']-$orderinfo['shopps']-$orderinfo['bagcost']-$yjcost+$orderinfo['shopdowncost'];
             $newdata['yjcost'] = $yjcost;
             $newdata['pstype'] = $sendtype = 1;
