@@ -21,7 +21,7 @@
                    <select name="stationid">
                        <option value="0">请选择</option>
                        <{foreach from=$stationlist['list'] key=key  item=items}>
-                       <option value="<{$items['id']}>" <{if $stationadminid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
+                       <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
                        <{/foreach}>
                    </select>
             	   <label>店铺名:</label>

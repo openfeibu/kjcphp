@@ -256,13 +256,13 @@ class method extends adminbaseclass
             $newlink .= '/endtime/'.$endtime;
         }
 
-        $admin_id = intval(IReq::get('admin_id'));
-        if (!empty($admin_id)) {
-            $where .=empty($where)?' where admin_id = \''.$admin_id.'\'': ' and admin_id = \''.$admin_id.'\' ';
-            $newlink .= '/admin_id/'.$admin_id;
+        $stationid = intval(IReq::get('stationid'));
+        if (!empty($stationid)) {
+            $where .=empty($where)?' where stationid = \''.$stationid.'\'': ' and stationid = \''.$stationid.'\' ';
+            $newlink .= '/stationid/'.$stationid;
         }
 
-        $data['admin_id'] = $admin_id;
+        $data['stationid'] = $stationid;
 
         $link = IUrl::creatUrl('adminpage/analysis/module/orderyjin'.$newlink);
         $data['outlink'] =IUrl::creatUrl('adminpage/analysis/module/outtjorder/outtype/query'.$newlink);
