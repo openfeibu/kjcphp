@@ -4959,6 +4959,10 @@ class method extends wxbaseclass
             $this->message('未登陆', $link);
         }
     }
+    public function checkshopmemberlogin()
+    {
+        if(empty($this->member['shopinfo'])) $this->message('店铺不存在');
+    }
     public function checkbackinfo()
     {
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {    //判断是微信浏览器不
@@ -8127,5 +8131,36 @@ CREATE TABLE `xiaozu_shophuiorder` (
 			break;
 		}
     }
+    public function shoptxadd(){
+        $this->checkshopmemberlogin();
 
+        $shopid = $this->member['shopinfo']['id'];
+        $shopinfo = $this->member['shopinfo'];
+		$uid = $shopinfo['uid'];
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+		$cost = trim(IFilter::act(IReq::get('cost')));
+
+		$userinfo = $member;
+		$checkcost = intval($cost);
+		if($checkcost < 100){
+			$this->message('提现金额不能少于100元');
+		}
+		if($userinfo['shopcost'] < $checkcost){
+			$this->message('账号金额小于提现金额');
+		}
+		$newdata['cost'] = $checkcost;
+		$newdata['type'] = 0;
+		$newdata['status'] = 1;
+		$newdata['addtime'] = time();
+		$newdata['shopid'] = $shopid;
+        $newdata['shopuid'] =  $uid;
+		$newdata['name'] = '申请提现';
+	    $newdata['yue'] = $userinfo['shopcost']-$checkcost;
+
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`-'.$checkcost,"uid ='".$uid."' ");
+		$this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
+	    $orderid = $this->mysql->insertid();
+		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
+		$this->success($info);
+	}
 }

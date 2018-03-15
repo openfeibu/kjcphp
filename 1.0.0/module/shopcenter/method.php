@@ -3488,7 +3488,7 @@ class method extends baseclass
     /*** 2016.3.5 新增
 	商家申请提现
 	***/
-	function shoptxadd(){
+	public function shoptxadd(){
         $this->checkshoplogin();
 
         $shopid = ICookie::get('adminshopid');

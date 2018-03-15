@@ -16,7 +16,7 @@
       <div class="shoptx_form">
         <form action="#" method="post">
           <input type="text" name="cost" id="cost" placeholder="输入提现金额" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
-          <input type="submit" name="" value="申请提现" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
+          <input type="submit" name="" id="txbtn" value="申请提现" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
         </form>
       </div>
       <div class="shoptx_des">
@@ -26,5 +26,39 @@
     </div>
 
 </body>
+<script>
+$("#txbtn").click(function(){
+    $F.loading();
+    var cost = $("#cost").val();
+    var url = '<{ofunc type=url link="/wxsite/shoptxadd/datatype/json"}>';
+    $.ajax({
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        dataType: "json",
+        async:false,
+        data:{'cost':cost},
+        success:function(content) {
+            $F.closeLoading();
+            if(content.error ==  false){
+                $.toast('提交成功!','text');
+                window.location.href = '<{ofunc type=url link="/wxsite/shoptx"}>';
+            }else{
+                if(content.error == true)
+         		{
+                    $.toast(content.msg,'text');
+         		}else{
+                    $.toast(content,'text');
+         		}
+            }
+            return false;
+        },
+        error:function(){
+            $.toast('提交数据失败','text');
+            $F.closeLoading();
+            return false;
+        }
+    });
+    return false;
+})
+</script>
 <{/block}>
 <{block name=footer}><{/block}>

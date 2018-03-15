@@ -288,6 +288,12 @@
       <div class="shop_info_item">
         商家电话：<{$shopinfo['phone']}>
       </div>
+      <div class="shop_info_item">
+        商家简介：<{$shopinfo['intr_info']|htmlspecialchars_decode|default:'暂无'}>
+      </div>
+      <div class="shop_info_item">
+        商家公告：<{$shopinfo['notice_info']|htmlspecialchars_decode|default:'暂无'}>
+      </div>
     </div>
     <div class="shop_img">
       <div class="weui-flex">
