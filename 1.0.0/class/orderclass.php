@@ -346,8 +346,8 @@ class orderclass
         //微信通知配送员有效
 
         if (!empty($orderinfo['buyeruid'])) {
-            $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
-            if (!empty($wxbuyer)) {
+            // $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
+            // if (!empty($wxbuyer)) {
                 if ($orderinfo['is_goshop'] == 0 &&  $orderinfo['bagcost'] > 0) {
                     $bagcostContent =  ',打包费:'.$orderinfo['bagcost'].'元 ';
                 } else {
@@ -402,7 +402,7 @@ class orderclass
                         }
                     }
                 }
-            }
+            //}
         }
         //微信通知商家
         $shopmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");

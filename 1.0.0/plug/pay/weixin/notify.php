@@ -108,7 +108,7 @@ class PayNotifyCallBack extends WxPayNotify
                     if (!empty($backinfog) && $backinfog['status'] == 0&& $total_fee >=  $backinfog['allcost']) {
                         mysql_query("UPDATE  `".$cfg['tablepre']."order` SET  `paystatus` =  1,`status` = 1 ,`is_make` = 1,`maketime` ='".time()."', `trade_no` = ".$result['transaction_id']." ,`paytype_name` = 'weixin'   where `dno`=".$result['out_trade_no']."");
 
-                        $info = file_get_contents($cfg['siteurl']."/index.php?ctrl=site&action=postmsgbypay&orderid=".$result['out_trade_no']);
+                        $info = file_get_contents($cfg['siteurl']."/index.php?ctrl=site&action=postmsgbypay&orderid=".$backinfog['id']);
                     }
                 }
             }
