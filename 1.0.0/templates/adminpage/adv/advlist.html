@@ -45,7 +45,7 @@
 	 	                      <{/foreach}>
 
 	 	                    <{/if}>
-                      <{load_data assign="list" table="adv" showpage="true"  fileds="*" where="cityid=<{$default_cityid}>  or cityid = 0 "  }>
+                      <{load_data assign="list" table="adv" showpage="true"  fileds="*" where=""  }>
                       <{foreach from=$list['list'] item=items}>
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
                         <td align="center" ><input type="checkbox" name="id[]" value="<{$items['id']}>"></td>
