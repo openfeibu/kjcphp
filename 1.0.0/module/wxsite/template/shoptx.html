@@ -6,16 +6,17 @@
     <div class="main">
       <div class="shoptx">
         <div class="shoptxInfo">
-          <p>账户类型：支付宝</p>
-          <p>账户名称：杨嘉城</p>
-          <p>提现账户：6222023602100730050</p>
-          <p>余额：<span>0.00</span>元(低于100元不可提现)</p>
+          <p>店铺名称：<{$member['shopinfo']['shopname']}></p>
+          <p>账户类型：<{if $member['shopmember']['txtype'] == 'ali'}>支付宝<{else}>银行卡<{/if}></p>
+          <p>账户名称：<{$member['shopmember']['txname']}></p>
+          <p>提现账户：<{$member['shopmember']['txaccount']}></p>
+          <p>余额：<span><{$member['shopmember']['shopcost']}></span>元(低于100元不可提现)</p>
         </div>
 
       <div class="shoptx_form">
         <form action="#" method="post">
-          <input type="text" name="cost" id="cost" placeholder="输入提现金额" >
-          <input type="submit" name="" value="申请提现" disabled="">
+          <input type="text" name="cost" id="cost" placeholder="输入提现金额" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
+          <input type="submit" name="" value="申请提现" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
         </form>
       </div>
       <div class="shoptx_des">

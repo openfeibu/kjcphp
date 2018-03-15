@@ -444,14 +444,17 @@ class memberclass
         } else {
             $userinfo['gradename'] = '未定义';
         }
-        $userinfo['shopinfo'] = array();
+        $userinfo['shopinfo'] = $userinfo['shopmember'] = array();
         if($userinfo['guid']){
-            $userinfo['shopinfo'] = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['guid']."' ");
+            $shopinfo = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['guid']."' ");
         }else{
-            $shopinfo = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['uid']."' ");
-            $userinfo['shopinfo'] = !empty($shopinfo) ? $shopinfo : array();
+            $shopinfo = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['uid']."' ");
         }
-
+        $userinfo['shopinfo'] = !empty($shopinfo) ? $shopinfo : array();
+        if($shopinfo){
+            $shopmember = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");
+            $userinfo['shopmember'] = !empty($shopmember) ? $shopmember : array();
+        }
         return $userinfo;
     }
     public function getadmininfo()
