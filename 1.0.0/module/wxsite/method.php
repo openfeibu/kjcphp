@@ -216,12 +216,6 @@ class method extends wxbaseclass
 
     public function index()
     {
-        ini_set('display_errors', 1);            //错误信息
-        ini_set('display_startup_errors', 1);    //php启动错误信息
-        error_reporting(-1);
-        $orderCLs = new orderClass();
-        $orderCLs->sendmess('33094');
-        exit;
         $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
@@ -2225,10 +2219,6 @@ class method extends wxbaseclass
     }
     public function ordershow()
     {
-        ini_set('display_errors',1);            //错误信息
-        ini_set('display_startup_errors',1);    //php启动错误信息
-        error_reporting(-1);
-
         $link = IUrl::creatUrl('wxsite/index');
         if ($this->member['uid'] == 0) {
             $this->message('未登陆', $link);
@@ -8058,5 +8048,9 @@ CREATE TABLE `xiaozu_shophuiorder` (
         }
         ICookie::set('adminshopid', $shopinfo['id'], 86400);
         $this->success('success');
+    }
+    public function shopordershow()
+    {
+
     }
 }

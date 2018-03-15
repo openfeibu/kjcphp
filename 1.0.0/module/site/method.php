@@ -2234,8 +2234,8 @@ class method extends baseclass
         $data['buyerphone'] = trim(IFilter::act(IReq::get('phone')));
         $data['addtime'] = time();
         $data['ordertype'] = 1;//订单类型
-         $data['shoptype'] = 100;//订单类型
-         $data['buyeruid']  = $this->member['uid'];
+        $data['shoptype'] = 100;//订单类型
+        $data['buyeruid']  = $this->member['uid'];
         $data['dno'] = time().rand(1000, 9999);
         $data['posttime'] = time();
         $data['ipaddress'] = "";

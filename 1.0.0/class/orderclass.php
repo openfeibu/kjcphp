@@ -255,54 +255,7 @@ class orderclass
         $open_acouttempdata = array('orderinfo'=>$orderinfo,'orderdet'=>$orderdet,'sitename'=>Mysite::$app->config['sitename'],'memberinfo'=>$memberinfo);
 
 
-        //微信通知商家  此功能要每天访问网站微信一次
-        $shopmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");
-        $gmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where guid = '".$shopmember['uid']."' ");
 
-        if($gmember){
-             $shopwxuser = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser where uid = '".$gmember['uid']."' ");
-             if($shopwxuser){
-                 $temp_content = "<a href='javascript:;' style='color:red'>在".Mysite::$app->config['sitename']."下单成功</a>".'\n';
-                 $temp_content .= '店铺：'.$orderinfo['shopname'].'\n';
-                 $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
-                 if ($orderinfo['shoptype'] == 100) {
-                     $temp_content .='配送时间：'. $orderinfo['postdate'].'\n';
-                 } else {
-                     $temp_content .='配送时间：'.date('m-d H:i', $orderinfo['posttime']).'\n';
-                 }
-                 $temp_content .='支付方式'.$orderpaytype.','.$orderpastatus.' '.'\n';
-                 $temp_content .='收货人:'.$orderinfo['buyername'].'\n';
-                 $temp_content .='地址:'.$orderinfo['buyeraddress'].'\n';
-                 $temp_content .='联系电话:'.$orderinfo['buyerphone'].'\n';
-                 $temp_content .='单号:'.$orderinfo['dno'].'\n';
-                 $temp_content .='总价:'.$orderinfo['allcost'].'元,配送费:'.$orderinfo['shopps'].'元\n';
-                 $temp_content .='备注:'.$orderinfo['content'].'\n';
-                 foreach ($orderdet as $km=>$vc) {
-                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
-                 }
-                 $time = time();
-                 $tempstr = md5(Mysite::$app->config['wxtoken'].$time);
-	             $tempstr = substr($tempstr,3,15);
-                 $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=ordershow&orderid='.$orderinfo['id'];
-
-                 $backinfo = '';
-                 if(!empty($dolink)){
-                    $templink = $dolink;
-                    for($i=0;$i<strlen($templink);$i++){
-                        $backinfo .= ord($templink[$i]).',';
-                    }
-                 }
-                 $linkstr =  Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=index&openid='.$shopwxuser['openid'].'&actime='.$time.'&sign='.$tempstr.'&backinfo='.$backinfo;
-                 $temp_content .= '<a href=\''.trim($dolink).'\' style=\'color:red\'>查看详情</a>';
-                 // var_dump($temp_content);exit;
-                 if($wx_s->sendmsg($temp_content, $shopwxuser['openid'])){
-                     logwrite('商家微信客服发送开始');
-                 }else{
-                     logwrite('商家微信客服发送错误:'.$wx_s->err());
-                 }
-             }
-        }
-exit;
         /*
           $psCls = new apppsyclass();
          if( $orderinfo['shoptype'] == '100' ){
@@ -390,7 +343,7 @@ exit;
 
 
 
-        //微信通知买家有效
+        //微信通知配送员有效
 
         if (!empty($orderinfo['buyeruid'])) {
             $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
@@ -404,12 +357,12 @@ exit;
                 $temp_content = '在'.Mysite::$app->config['sitename'].'下单成功'.'\n';
                 $temp_content .= '店铺：'.$orderinfo['shopname'].'\n';
                 $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
-                if ($orderinfo['shoptype'] == 100) {
-                    $temp_content .='配送时间：'. $orderinfo['postdate'].'\n';
-                } else {
-                    $temp_content .='配送时间：'.date('m-d H:i', $orderinfo['posttime']).'\n';
-                }
-                $temp_content .='支付方式'.$orderpaytype.','.$orderpastatus.' '.'\n';
+                // if ($orderinfo['shoptype'] == 100) {
+                //     $temp_content .='配送时间：'. $orderinfo['postdate'].'\n';
+                // } else {
+                //     $temp_content .='配送时间：'.date('m-d H:i', $orderinfo['posttime']).'\n';
+                // }
+                // $temp_content .='支付方式'.$orderpaytype.','.$orderpastatus.' '.'\n';
                 $temp_content .='收货人:'.$orderinfo['buyername'].'\n';
                 $temp_content .='地址:'.$orderinfo['buyeraddress'].'\n';
                 $temp_content .='联系电话:'.$orderinfo['buyerphone'].'\n';
@@ -448,14 +401,39 @@ exit;
                             logwrite('配送员微信客服发送错误:'.$wx_s->err());
                         }
                     }
-                    // if ($wx_s->sendmsg($contents, $wxbuyer['openid'])) {
-                    // } else {
-                    //     logwrite('微信客服发送错误:'.$wx_s->err());
-                    // }
                 }
             }
         }
+        //微信通知商家
+        $shopmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");
+        $gmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where guid = '".$shopmember['uid']."' ");
 
+        if($gmember){
+             $shopwxuser = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser where uid = '".$gmember['uid']."' ");
+             if($shopwxuser){
+                 $temp_content = $orderinfo['shopname'].'收到新的订单，共计'.$orderinfo['allcost'].'元\n';
+                 $temp_content .='单号:'.$orderinfo['dno'].'\n';
+                 $temp_content .='订单内容:'.$orderinfo['content'].'\n';
+                 foreach ($orderdet as $km=>$vc) {
+                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
+                 }
+                 $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
+                 $temp_content .='收货人:'.$orderinfo['buyername'].'\n';
+                 $temp_content .='联系电话:'.$orderinfo['buyerphone'].'\n';
+                 $temp_content .='地址:'.$orderinfo['buyeraddress'].'\n';
+                 $temp_content .='请点详情及时处理订单，不要让顾客就等哦\n';
+
+                 $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=shopordershow&orderid='.$orderinfo['id'];
+
+                 $temp_content .= '<a href=\''.trim($dolink).'\' style=\'color:red\'>查看详情</a>';
+
+                 if($wx_s->sendmsg($temp_content, $shopwxuser['openid'])){
+                     logwrite('商家微信客服发送开始');
+                 }else{
+                     logwrite('商家微信客服发送错误:'.$wx_s->err());
+                 }
+             }
+        }
 
         //短信通知买家有效
         $contents = '';
