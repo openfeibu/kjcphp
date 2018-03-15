@@ -474,7 +474,57 @@ class shopctlord
 		return true;
 	}
 
+	public function closeorder()
+	{
+		if($this->orderinfo() == false){
+			return false;
+		}
+		if($this->orderinfo['is_reback'] > 0){
+			$this->err = '退款处理中';
+			return false;
+		}
+		if($this->orderinfo['status'] > 3){
+			$this->err = '订单已取消';
+			return false;
+		}
+		if($this->orderinfo['status'] == 2){
+			$this->err = '订单已发货';
+			return false;
+		}
+		if($this->orderinfo['status'] == 3){
+			$this->err = '订单已完成';
+			return false;
+		}
+		if($this->orderinfo['status'] == 0){
+			$this->err = '订单还未通过审核，不能受理';
+			return false;
+		}
+		$udata['is_make'] = 2;
+		$this->mysql->update(Mysite::$app->config['tablepre'].'order',$udata,"id='".$this->orderid."'");
+		$ordCls = new orderclass();
+		$ordCls->noticeunmake($this->orderid);
+		$ordCls->writewuliustatus($this->orderid,5,$this->orderinfo['paytype']);  //商家不接单  物流状态
+		if( $this->orderinfo['paytype'] == 1 &&  $this->orderinfo['paystatus'] == 1 ){
+			$drawbacklog = new drawbacklog($this->mysql,$this->memberCls);
+			$drawdata = array();
+			$drawdata['allcost'] = $this->orderinfo['allcost'];
+			$drawdata['orderid'] = $this->orderinfo['id'];
+			$drawdata['reason'] =  '商家取消订单';
+			$drawdata['content'] = '商家取消订单,由于某原因不能制作此订单';
+			$drawdata['typeid'] = 1;
+			$check = $drawbacklog->setsavedraw($drawdata)->shopcnetersave();
+			if($check == true){
 
+			}else{
+
+			}
+		}else{
+            $data['status'] = 5;
+		    $this->mysql->update(Mysite::$app->config['tablepre']."order",$data,"id='".$this->orderinfo['id']."'");
+
+		}
+		return true;
+	}
 
 	public function Error()
 	{
@@ -485,9 +535,6 @@ class shopctlord
 	{
 
 	}
-
-
-
 
 }
 ?>

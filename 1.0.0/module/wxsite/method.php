@@ -2224,9 +2224,6 @@ class method extends wxbaseclass
             $this->message('未登陆', $link);
         }
         $orderid = intval(IReq::get('orderid'));
-        $wxclass = new wx_s();
-        $signPackage = $wxclass->getSignPackage();
-        $data['signPackage'] = $signPackage;
 
         $orderclass = new orderclass();
 
@@ -3924,6 +3921,7 @@ class method extends wxbaseclass
             Mysite::$app->setdata($data);
         }
     }
+    /*
     public function shopcontrol()
     {
         $this->checkmemberlogin();
@@ -3938,68 +3936,69 @@ class method extends wxbaseclass
         switch ($controlname) {
             case 'unorder':
 
-         $reason = trim(IFilter::act(IReq::get('reason')));
-         if (empty($reason)) {
-             $this->message('关闭理由不能为空');
-         }
-         $ordercontrol = new ordercontrol($orderid);
-         if ($ordercontrol->sellerunorder($shopinfo['uid'], $reason)) {
-             $this->success('操作成功');
-         } else {
-             $this->message($ordercontrol->Error());
-         }
+                $reason = trim(IFilter::act(IReq::get('reason')));
+                if (empty($reason)) {
+                    $this->message('关闭理由不能为空');
+                }
+                $ordercontrol = new ordercontrol($orderid);
+                if ($ordercontrol->sellerunorder($shopinfo['uid'], $reason)) {
+                    $this->success('操作成功');
+                } else {
+                    $this->message($ordercontrol->Error());
+                }
             break;
             case 'sendorder':
-          $ordercontrol = new ordercontrol($orderid);
-          if ($ordercontrol->sendorder($shopinfo['uid'])) {
-              $this->success('操作成功');
-          } else {
-              $this->message($ordercontrol->Error());
-          }
+                $ordercontrol = new ordercontrol($orderid);
+                if ($ordercontrol->sendorder($shopinfo['uid'])) {
+                    $this->success('操作成功');
+                } else {
+                    $this->message($ordercontrol->Error());
+                }
             break;
             case 'shenhe':
-          $ordercontrol = new ordercontrol($orderid);
-          if ($ordercontrol->shenhe($shopinfo['uid'])) {
-              $this->success('操作成功');
-          } else {
-              $this->message($ordercontrol->Error());
-          }
+                $ordercontrol = new ordercontrol($orderid);
+                if ($ordercontrol->shenhe($shopinfo['uid'])) {
+                    $this->success('操作成功');
+                } else {
+                    $this->message($ordercontrol->Error());
+                }
             break;
             case 'delorder':
-            $ordercontrol = new ordercontrol($orderid);
-          if ($ordercontrol->sellerdelorder($shopinfo['uid'])) {
-              $this->success('操作成功');
-          } else {
-              $this->message($ordercontrol->Error());
-          }
+                $ordercontrol = new ordercontrol($orderid);
+                if ($ordercontrol->sellerdelorder($shopinfo['uid'])) {
+                    $this->success('操作成功');
+                } else {
+                    $this->message($ordercontrol->Error());
+                }
             break;
             case 'domake':
-            if ($ordertempinfo['status'] != 1) {
-                $this->message('订单状态不可操作是否制作');
-            }
-            if (!empty($ordertempinfo['is_make'])) {
-                $this->message('订单已设置过是否制作，如要取消 请联系网站客服');
-            }
-            $newdata['is_make'] = 1;
-            $this->mysql->update(Mysite::$app->config['tablepre'].'order', $newdata, "id='".$orderid."'");
-            $this->success('操作成功');
+                if ($ordertempinfo['status'] != 1) {
+                    $this->message('订单状态不可操作是否制作');
+                }
+                if (!empty($ordertempinfo['is_make'])) {
+                    $this->message('订单已设置过是否制作，如要取消 请联系网站客服');
+                }
+                $newdata['is_make'] = 1;
+                $this->mysql->update(Mysite::$app->config['tablepre'].'order', $newdata, "id='".$orderid."'");
+                $this->success('操作成功');
             break;
             case 'unmake':
-            if ($ordertempinfo['status'] != 1) {
-                $this->message('订单状态不可操作是否制作');
-            }
-            if (!empty($ordertempinfo['is_make'])) {
-                $this->message('订单已设置过是否制作，如要取消 请联系网站客服');
-            }
-            $newdata['is_make'] = 2;
-            $this->mysql->update(Mysite::$app->config['tablepre'].'order', $newdata, "id='".$orderid."'");
-            $this->success('操作成功');
+                if ($ordertempinfo['status'] != 1) {
+                    $this->message('订单状态不可操作是否制作');
+                }
+                if (!empty($ordertempinfo['is_make'])) {
+                    $this->message('订单已设置过是否制作，如要取消 请联系网站客服');
+                }
+                $newdata['is_make'] = 2;
+                $this->mysql->update(Mysite::$app->config['tablepre'].'order', $newdata, "id='".$orderid."'");
+                $this->success('操作成功');
             break;
             default:
-            $this->message('未定义的操作');
+                $this->message('未定义的操作');
             break;
         }
     }
+    */
     public function ajaxlocation()
     {
         $lat = IFilter::act(IReq::get('lat'));
@@ -4957,7 +4956,7 @@ class method extends wxbaseclass
         }
         if ($this->member['uid'] <= 0) {
             $link = IUrl::creatUrl('wxsite/login');
-            $this->message('', $link);
+            $this->message('未登陆', $link);
         }
     }
     public function checkbackinfo()
@@ -8018,6 +8017,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
     }
     public function bindShopLogin()
     {
+        $this->checkwxweb();
         if($this->member['guid']){
             $this->message('您已绑定过店铺');
         }
@@ -8051,6 +8051,81 @@ CREATE TABLE `xiaozu_shophuiorder` (
     }
     public function shopordershow()
     {
+        $orderid = intval(IReq::get('orderid'));
+        $orderclass = new orderClass();
+        if (!empty($orderid)) {
+            $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where shopuid='".$this->member['shopinfo']['uid']."' and id = ".$orderid."");
+            if(empty($order))
+            {
+                echo "订单不存在或没有权限";
+                exit;
+            }else{
+                $scoretocost =Mysite::$app->config['scoretocost'];
+                $order['scoredown'] =  $order['scoredown']/$scoretocost;//抵扣积分
+                $order['ps'] = $order['shopps'];
+                // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagcost
+                $orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$order['id']."'");
+                $order['cp'] = count($orderdet);
+                $buyerstatus= array(
+                  '0'=>'等待处理',
+                  '1'=>'订餐成功处理中',
+                  '2'=>'订单已发货',
+                  '3'=>'订单完成',
+                  '4'=>'订单已取消',
+                  '5'=>'订单已取消'
+                  );
 
+                $order['is_acceptorder'] = $order['is_acceptorder'];
+                $order['surestatus'] = $order['status'];
+                $order['basetype'] = $order['paytype'];
+                $order['basepaystatus'] =$order['paystatus'];
+                $order['paytype'] =  $order['paytype'];
+                $order['paystatus'] = $order['paystatus'] ;
+                $order['setime'] = 15 * 60 - (time() - $order['addtime']);
+                $order['addtime'] = date('Y-m-d H:i:s', $order['addtime']);
+                $order['posttime'] = date('Y-m-d H:i:s', $order['posttime']);
+
+                $order['order_status'] = $orderclass->handleOrderStatus($order);
+
+                $data['order'] = $order;
+                $data['orderdet'] = $orderdet;
+
+                $data['psbpsyinfo'] = array();
+                Mysite::$app->setdata($data);
+            }
+
+        } else {
+            echo "订单不存在";
+            exit;
+        }
     }
+
+    public function shopctlord()
+    {
+        $this->checkwxweb();
+        $controlname =trim(IFilter::act(IReq::get('controlname')));
+		$orderid = intval(IReq::get('orderid'));
+        $shopid = $this->member['shopinfo']['id'];
+        $shopctlord = new shopctlord($orderid,$shopid,$this->mysql);
+        switch($controlname){
+			case 'sendorder':
+				if($shopctlord->sendorder()){
+					$this->success('success');
+				}else{
+					$this->message($shopctlord->Error());
+				}
+			break;
+			case 'closeorder':
+				if($shopctlord->SetMemberls($this->memberCls)->closeorder()){
+					$this->success('success');
+				}else{
+					$this->message($shopctlord->Error());
+				}
+			break;
+			default:
+			$this->message('nodefined_func');
+			break;
+		}
+    }
+
 }

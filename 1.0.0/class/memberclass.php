@@ -444,8 +444,13 @@ class memberclass
         } else {
             $userinfo['gradename'] = '未定义';
         }
-
-
+        $userinfo['shopinfo'] = array();
+        if($userinfo['guid']){
+            $userinfo['shopinfo'] = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['guid']."' ");
+        }else{
+            $shopinfo = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['uid']."' ");
+            $userinfo['shopinfo'] = !empty($shopinfo) ? $shopinfo : array();
+        }
 
         return $userinfo;
     }

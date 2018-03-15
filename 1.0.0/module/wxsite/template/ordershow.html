@@ -115,7 +115,11 @@
         <{/if}>
         <{else}>
             <{if $order['is_reback'] == 1}>
+                <{if $order['is_make'] == 2}>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">退款中(商家无法制作关闭订单)</a></div>
+                <{else}>
                 <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a></div>
+                <{/if}>
             <{else if $order['is_reback'] == 2}>
                 <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a></div>
             <{else if $order['is_reback'] == 3}>

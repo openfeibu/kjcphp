@@ -29,7 +29,7 @@ class wxbaseclass extends wmrclass
         $data['member'] = $this->member;
         $data['admininfo'] = $this->admin;
         $logintype = ICookie::get('logintype');
-        $this->adminshopid = ICookie::get('adminshopid');
+        //$this->adminshopid = ICookie::get('adminshopid');
 
         $cityId = 0;
         $CITY_ID = ICookie::get('CITY_ID');
@@ -40,21 +40,6 @@ class wxbaseclass extends wmrclass
         #	print_R($cityId);
         $this->CITY_ID = $cityId = 440100;
 
-		/*测试 start */
-	//	$adcode = '410100';
-        /*
-        $lat = 23.282178;
-        $lng = 113.615325;
-        $addressname = '广东农工商职业技术学院北校区';
-		$city_name = "广州市";
-        ICookie::set('lat', $lat);
-        ICookie::set('lng', $lng);
-        ICookie::set('addressname', $addressname);
-        ICookie::set('mapname', $addressname);
-		ICookie::set('CITY_ID', $cityId);
-		ICookie::set('CITY_NAME', $city_name);
-        */
-		/*测试 end */
         $lng = $lat = $stationid = 0;
         if($this->member['uid'])
         {
@@ -131,6 +116,7 @@ class wxbaseclass extends wmrclass
                         }
                     }
                 }
+
             //}
         }
         $this->doshare();
