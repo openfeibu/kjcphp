@@ -101,12 +101,12 @@ class PayNotifyCallBack extends WxPayNotify
                     }
                 } else {    // 微信支付  普通订单
 
-                    $info =  mysql_query("SELECT * from `".$cfg['tablepre']."order` where id = ".$result['out_trade_no']." ");
+                    $info =  mysql_query("SELECT * from `".$cfg['tablepre']."order` where dno = ".$result['out_trade_no']." ");
                     $backinfog = mysql_fetch_assoc($info);
                     $total_fee = $result['total_fee']*0.01;
 
                     if (!empty($backinfog) && $backinfog['status'] == 0&& $total_fee >=  $backinfog['allcost']) {
-                        mysql_query("UPDATE  `".$cfg['tablepre']."order` SET  `paystatus` =  1,`status` = 1 ,`is_make` = 1,`maketime` ='".time()."', `trade_no` = ".$result['transaction_id']." ,`paytype_name` = 'weixin'   where `id`=".$result['out_trade_no']."");
+                        mysql_query("UPDATE  `".$cfg['tablepre']."order` SET  `paystatus` =  1,`status` = 1 ,`is_make` = 1,`maketime` ='".time()."', `trade_no` = ".$result['transaction_id']." ,`paytype_name` = 'weixin'   where `dno`=".$result['out_trade_no']."");
 
                         $info = file_get_contents($cfg['siteurl']."/index.php?ctrl=site&action=postmsgbypay&orderid=".$result['out_trade_no']);
                     }
