@@ -2296,7 +2296,7 @@ class method extends baseclass
             $orderCLs->writewuliustatus($orderinfo['id'], 4, $orderinfo['paytype']);  //商家自动确认接单
             $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
             if ($shopinfo['is_autopreceipt'] == 1) {
-                $this->writewuliustatus($orderid,6,$orderinfo['paytype']);//订单审核后自动 商家接单后自动发货
+                $orderCLs->writewuliustatus($orderid,6,$orderinfo['paytype']);//订单审核后自动 商家接单后自动发货
                 $orderdatac['status'] = 2;
                 $orderdatac['sendtime'] = time();
                 $orderCLs->writewuliustatus($orderinfo['id'],6,$orderinfo['paytype']);
