@@ -303,62 +303,62 @@
               </tr>
             </table>
             <div class="order_bottom"  id="<{$items['id']}>">
-            	<{if $items['status'] == 1}>
-					<{if $items['is_goshop'] != 1}>
-						<{if $items['is_make'] == 0}>
-				            <{if empty($items['drawbacklog']) }>
-								<span onclick="unmakeorder(<{$items['id']}>);" class="curbtn">
-								<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/buzhizuo.png" /></span>
-						        <span  onclick="makeorder(<{$items['id']}>);" class="curbtn">
-								<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/zhizuodingdan.png" /></span>
-							<{/if}>
-						<{elseif $items['is_make'] == 1}>
-					<{if $items['is_reback'] != 4}>
-					<{if $items['is_goshop'] != 1 }>
-						<span onclick="sendorder(<{$items['id']}>);" class="curbtn">
-						<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/peisongfahuo.png" /></span>
-					<{else}>
-						<!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
-						<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
+                <{if $items['status'] == 1}>
+                    <{if $items['is_goshop'] != 1}>
+                        <{if $items['is_make'] == 0}>
+                            <{if empty($items['drawbacklog']) }>
+                                <span onclick="unmakeorder(<{$items['id']}>);" class="curbtn">
+                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/buzhizuo.png" /></span>
+                                <span  onclick="makeorder(<{$items['id']}>);" class="curbtn">
+                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/zhizuodingdan.png" /></span>
+                            <{/if}>
+                        <{elseif $items['is_make'] == 1}>
+                            <{if $items['is_reback'] != 4}>
+                                <{if $items['is_goshop'] != 1 }>
+                                <span onclick="closeorder(<{$items['id']}>);" class="curbtn">
+                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/peisongfahuo.png" /></span>
+                                <span onclick="sendorder(<{$items['id']}>);" class="curbtn">
+                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/peisongfahuo.png" /></span>
+                                <{else}>
+
+                                <{/if}>
+                            <{/if}>
+
+                        <{elseif $items['is_make'] == 2}>订单取消制作
+                        <{/if}>
+                    <{else}>
+                        <{if $items['is_make'] < 2}>
+                            <span onclick="unyudingorder(<{$items['id']}>);" class="curbtn">取消订单</span>
+                        <{elseif $items['is_make'] == 2}>已取消此预定订单
+                        <{/if}>
                     <{/if}>
-					<{/if}>
+                <{/if}>
+                <a href="<{$siteurl}>/index.php?ctrl=shopcenter&action=orderprint&orderid=<{$items['id']}>&printtype=0" target="_blank">
+                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dayindingdan.png" /></a>
+                <a href="<{$siteurl}>/index.php?ctrl=shopcenter&action=orderprint&orderid=<{$items['id']}>&printtype=1" target="_blank">
+                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xiaopiaodayin.png" /></a>
+                <{if $items['status'] == 2}>
+                <!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
+                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
+                <{/if}>
+                <{if $items['is_reback'] == 4}>
+                <!--   <span class='drowback' onclick="rebackclick(<{$items['id']}>);"  >同意退款</span>
+                <span class='drowback' onclick="unrebackclick(<{$items['id']}>);" >拒绝退款</span> -->
+                <{/if}>
 
-				<{elseif $items['is_make'] == 2}>订单取消制作
-			<{/if}>
-		<{else}>
-			<{if $items['is_make'] < 2}>
-				<span onclick="unyudingorder(<{$items['id']}>);" class="curbtn">取消订单</span>
-                <!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  ><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
-			<{elseif $items['is_make'] == 2}>已取消此预定订单
-		<{/if}>
-		<{/if}>
-       	<{/if}>
-            <a href="<{$siteurl}>/index.php?ctrl=shopcenter&action=orderprint&orderid=<{$items['id']}>&printtype=0" target="_blank">
-			<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dayindingdan.png" /></a>
-            <a href="<{$siteurl}>/index.php?ctrl=shopcenter&action=orderprint&orderid=<{$items['id']}>&printtype=1" target="_blank">
-			<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xiaopiaodayin.png" /></a>
-		<{if $items['status'] == 2}>
-            <!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
-			<img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
-        <{/if}>
-		<{if $items['is_reback'] == 4}>
-          <!--   <span class='drowback' onclick="rebackclick(<{$items['id']}>);"  >同意退款</span>
-			<span class='drowback' onclick="unrebackclick(<{$items['id']}>);" >拒绝退款</span> -->
-        <{/if}>
-
-		<{if $items['psuid'] > 0}>
-		<{if $items['status'] > 0 && $items['status'] < 3}>
-            <span onclick="pickorder(<{$items['id']}>);" class="curbtn">通知取单</span>
-		<{/if}>
-		<{/if}>
-        <{if !empty($items['drawbacklog'])}>
-			<span style="padding: 4px 8px; position:relative;top:-6px;background: #EC7501;curosr:text;"class="curbtn" >
-		<{if $items['is_reback'] == 1 }>已申请退款等待平台处理<{/if}>
-		<{if $items['is_reback'] == 2 }>管理员已退款给用户<{/if}>
-		<{if $items['is_reback'] == 4 }>已申请退款等待管理员处理<{/if}>
-            </span>
-		<{/if}>
-		</div>
+                <{if $items['psuid'] > 0}>
+                    <{if $items['status'] > 0 && $items['status'] < 3}>
+                    <span onclick="pickorder(<{$items['id']}>);" class="curbtn">通知取单</span>
+                    <{/if}>
+                <{/if}>
+                <{if !empty($items['drawbacklog'])}>
+                    <span style="padding: 4px 8px; position:relative;top:-6px;background: #EC7501;curosr:text;"class="curbtn" >
+                    <{if $items['is_reback'] == 1 }>已申请退款等待平台处理<{/if}>
+                    <{if $items['is_reback'] == 2 }>管理员已退款给用户<{/if}>
+                    <{if $items['is_reback'] == 4 }>已申请退款等待管理员处理<{/if}>
+                    </span>
+                <{/if}>
+		      </div>
 			</div>
         </div>
       </div>
@@ -490,10 +490,16 @@ function refreshorder(){
 
 	 }
 
-	 function sendorder(orderid)
+	function sendorder(orderid)
 	{
 		if(confirm('订单已审核通过，确认发货吗？')){
 		   myajax('<{ofunc type=url link="/shopcenter/shopcontrol/controlname/sendorder/datatype/json"}>',{'orderid':orderid});
+		}
+	}
+    function closeorder(orderid)
+	{
+		if(confirm('确认作废订单吗？')){
+		   myajax('<{ofunc type=url link="/shopcenter/shopcontrol/controlname/closeorder/datatype/json"}>',{'orderid':orderid});
 		}
 	}
 	function shenhe(orderid)

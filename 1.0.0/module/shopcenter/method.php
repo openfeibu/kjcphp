@@ -2275,6 +2275,13 @@ class method extends baseclass
                     $this->message($shopctlord->Error());
                 }
             break;
+            case 'closeorder':
+				if($shopctlord->SetMemberls($this->memberCls)->closeorder()){
+					$this->success('success');
+				}else{
+					$this->message($shopctlord->Error());
+				}
+			break;
             case 'unmakeorder':
 
                 if ($shopctlord->SetMemberls($this->memberCls)->unmakeorder()) {
