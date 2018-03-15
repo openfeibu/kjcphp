@@ -2299,6 +2299,7 @@ class method extends baseclass
                 $this->writewuliustatus($orderid,6,$orderinfo['paytype']);//订单审核后自动 商家接单后自动发货
                 $orderdatac['status'] = 2;
                 $orderdatac['sendtime'] = time();
+                $orderCLs->writewuliustatus($orderinfo['id'],6,$orderinfo['paytype']);
                 $this->mysql->update(Mysite::$app->config['tablepre'].'order',$orderdatac,"id ='".$orderid."' ");
                 $orderCLs->sendpsmess($orderid);
             }
