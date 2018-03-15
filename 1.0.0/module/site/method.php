@@ -2280,7 +2280,8 @@ class method extends baseclass
 
     //8.6
     public function postmsgbypay()
-    {   // 普通订单 在线支付成功 后返回数据处理
+    {
+        // 普通订单 在线支付成功 后返回数据处理
         $orderid = intval(IReq::get('orderid'));
         if (empty($orderid)) {
             echo '订单号错误';
@@ -2294,7 +2295,7 @@ class method extends baseclass
         $orderCLs->sendmess($orderid);
         if ($orderinfo['is_make']  == 1) {
             $orderCLs->writewuliustatus($orderinfo['id'], 4, $orderinfo['paytype']);  //商家自动确认接单
-            $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
+            $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
             if ($shopinfo['is_autopreceipt'] == 1) {
                 $orderdatac['status'] = 2;
                 $orderdatac['sendtime'] = time();
