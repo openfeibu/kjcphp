@@ -113,7 +113,7 @@ class wxbaseclass extends wmrclass
         $datatype = IFilter::act(IReq::get('datatype'));
         $ulogin = intval(IFilter::act(IReq::get('ulogin')));
         $loadaction=array('index','noticelist','ajaxnoticelist','notice','shopshow','mkshopshow','mkcatefoods','loadindexcontent','indexshoplistdata','shoplistdata','saveloation','shoplist','specialpagelistdata','loginmode','choice','marketshop','specialpage','marketlistdata','waimai','marketlist','paotui','togethersay','togethersaydata','foodshow','getshopmorecomment','getshopcomment','getdetailinfo','commentwxuser');
-        if ($datatype == 'json' || in_array($action, $loadaction)) {
+        if ($datatype == 'json') {
         } else {
             //if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) { //判断是微信浏览器不
                 if ($this->member['uid'] <= 0) {
