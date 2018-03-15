@@ -262,7 +262,7 @@ class orderclass
         if($gmember){
              $shopwxuser = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser where uid = '".$gmember['uid']."' ");
              if($shopwxuser){
-                 $temp_content = '在'.Mysite::$app->config['sitename'].'下单成功'.'\n';
+                 $temp_content = "<a href='javascript:;' style='color:red'>在".Mysite::$app->config['sitename']."下单成功</a>".'\n';
                  $temp_content .= '店铺：'.$orderinfo['shopname'].'\n';
                  $temp_content .='下单时间：'.date('m-d H:i', $orderinfo['addtime']).'\n';
                  if ($orderinfo['shoptype'] == 100) {
@@ -293,7 +293,7 @@ class orderclass
                     }
                  }
                  $linkstr =  Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=index&openid='.$shopwxuser['openid'].'&actime='.$time.'&sign='.$tempstr.'&backinfo='.$backinfo;
-                 $temp_content .= '<a href=\''.trim($dolink).'\'>查看详情</a>';
+                 $temp_content .= '<a href=\''.trim($dolink).'\' style=\'color:red\'>查看详情</a>';
                  // var_dump($temp_content);exit;
                  if($wx_s->sendmsg($temp_content, $shopwxuser['openid'])){
                      logwrite('商家微信客服发送开始');
