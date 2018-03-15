@@ -407,7 +407,6 @@ class orderclass
         //微信通知商家
         $shopmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");
         $gmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where guid = '".$shopmember['uid']."' ");
-
         if($gmember){
              $shopwxuser = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser where uid = '".$gmember['uid']."' ");
              if($shopwxuser){
