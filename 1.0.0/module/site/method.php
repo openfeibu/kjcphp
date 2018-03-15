@@ -2282,8 +2282,6 @@ class method extends baseclass
     public function postmsgbypay()
     {   // 普通订单 在线支付成功 后返回数据处理
         $orderid = intval(IReq::get('orderid'));
-
-
         if (empty($orderid)) {
             echo '订单号错误';
             exit;
@@ -2296,67 +2294,15 @@ class method extends baseclass
         $orderCLs->sendmess($orderid);
         if ($orderinfo['is_make']  == 1) {
             $orderCLs->writewuliustatus($orderinfo['id'], 4, $orderinfo['paytype']);  //商家自动确认接单
-            $auto_send = Mysite::$app->config['auto_send'];
-            if ($auto_send == 888) {
-                //					 $this->writewuliustatus($orderid,6,$orderinfo['paytype']);//订单审核后自动 商家接单后自动发货
-//					 $orderdatac['sendtime'] = time();
-//					 $this->mysql->update(Mysite::$app->config['tablepre'].'order',$orderdatac,"id ='".$orderid."' ");
-            } else {
-                //自动生成配送单------|||||||||||||||-----------------------
-                if ($orderinfo['shoptype'] != 100) {
-                    if ($orderinfo['pstype'] == 0) {//网站配送自动生成配送费
-                        /*
-                                $orderpsinfo  =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."orderps where  orderid ='".$orderid."'   ");
-                                if(empty($orderpsinfo)){
-                                      $psdata['orderid'] = $orderinfo['id'];
-                                      $psdata['shopid'] = $orderinfo['shopid'];
-                                      $psdata['status'] =0;
-                                      $psdata['dno'] = $orderinfo['dno'];
-                                      $psdata['addtime'] = time();
-                                      $psdata['pstime'] = $orderinfo['posttime'];
-                                      $admin_id = $orderinfo['admin_id'];
-                                                                            $psset = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."platpsset  where cityid= '".$admin_id."'   ");
-                                                                            $checkpsyset = $psset['psycostset'];
-                                                                            $bilifei =$psset['psybili']*0.01*$orderinfo['allcost'];
-                                                                            $psdata['psycost'] = $checkpsyset == 1?$psset['psycost']:$bilifei;
-                                      $this->mysql->insert(Mysite::$app->config['tablepre'].'orderps',$psdata);  //写配送订单
-                                }
-                                */
-                        $checkflag = true;
-                    } elseif ($orderinfo['pstype'] == 2) {
-                        $psbinterface = new psbinterface();
-                        if ($psbinterface->psbnoticeorder($orderid)) {
-                            $checkflag = false;
-                        }
-                    }
-                } else {
-                    logwrite("跑腿订单调起配送宝start:".$orderid);
-                    $checkflag = false;
-                    $psbinterface = new psbinterface();
-                    if ($psbinterface->paotuitopsb($orderid)) {
-                    }
-                }
-            }
-        } else {
-            if ($orderinfo['shoptype'] == 100) {
-                $checkflag = false;
-                $psbinterface = new psbinterface();
-                if ($psbinterface->paotuitopsb($orderid)) {
-                }
+            $shopinfo = $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
+            if ($shopinfo['is_autopreceipt'] == 1) {
+                $this->writewuliustatus($orderid,6,$orderinfo['paytype']);//订单审核后自动 商家接单后自动发货
+                $orderdatac['status'] = 2;
+                $orderdatac['sendtime'] = time();
+                $this->mysql->update(Mysite::$app->config['tablepre'].'order',$orderdatac,"id ='".$orderid."' ");
+                $orderCLs->sendpsmess($orderid);
             }
         }
-
-
-        //$info =  mysql_query("SELECT * from `".$cfg['tablepre']."onlinelog` where id = '".$out_trade_no."' ");
-        if ($checkflag == true) {
-            $psylist =  $this->mysql->getarr("select a.*  from ".Mysite::$app->config['tablepre']."apploginps as a left join ".Mysite::$app->config['tablepre']."member as b on a.uid = b.uid where b.admin_id = ".$orderinfo['admin_id']."");
-            $psCls = new apppsyclass();
-            $psCls->SetUserlist($psylist)->sendNewmsg('订单提醒', '有新订单可以处理');
-        }
-
-        // $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."'  ");
-        //	$orderclass = new orderclass();
-
         echo 'success';
         exit;
     }
