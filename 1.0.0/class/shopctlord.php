@@ -240,7 +240,8 @@ class shopctlord
 		$this->mysql->update(Mysite::$app->config['tablepre'].'order',$udata,"id='".$this->orderid."'");
 		$ordCls = new orderclass();
 		$ordCls->writewuliustatus($this->orderinfo['id'],6,$this->orderinfo['paytype']);
-		$ordCls->noticesend($this->orderid);
+	//	$ordCls->noticesend($this->orderid);
+		$ordCls->sendpsmess($this->orderid);
 		return true;
 	}
 	//商家删除订单
