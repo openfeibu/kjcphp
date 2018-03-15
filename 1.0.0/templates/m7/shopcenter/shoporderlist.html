@@ -315,10 +315,11 @@
                         <{elseif $items['is_make'] == 1}>
                             <{if $items['is_reback'] != 4}>
                                 <{if $items['is_goshop'] != 1 }>
-                                <span onclick="closeorder(<{$items['id']}>);" class="curbtn">
-                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/peisongfahuo.png" /></span>
+                                
                                 <span onclick="sendorder(<{$items['id']}>);" class="curbtn">
-                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/peisongfahuo.png" /></span>
+                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/qrfh.png" /></span>
+                                <span onclick="closeorder(<{$items['id']}>);" class="curbtn">
+                                <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/zfdd.png" /></span>
                                 <{else}>
 
                                 <{/if}>
