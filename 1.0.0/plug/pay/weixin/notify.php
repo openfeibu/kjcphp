@@ -115,7 +115,6 @@ class PayNotifyCallBack extends WxPayNotify
             mysql_close($lnk);
 
 
-
             return true;
         }
         return false;
