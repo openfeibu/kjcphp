@@ -23,15 +23,16 @@
     </script>
 <![endif]-->
 </head>
-<body>
+<body >
 <{load_data assign="shopinfo" table="shop" where="`id`=<{$adminshopid}>"  type="one"}>
-<div style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: -1;background:url('<{$siteurl}>/templates/<{$tempdir}>/public/images/shoplogin_bg.jpg') no-repeat center/cover;"></div>
+<!-- <div style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: -1;background:url('<{$siteurl}>/templates/<{$tempdir}>/public/images/shoplogin_bg.jpg') no-repeat center/cover;"></div> -->
 <!---header start--->
 	<div class="header">
     	<div class="top">
         	<div class="topLeft fl">
-            	<ul class="fr">
-
+            	<ul>
+                    <li>今日营业额：XXX元</li>
+                    <li>总营业额：XXXX元</li>
 
                 </ul>
                  <div class="cl"></div>
@@ -116,19 +117,7 @@
 <!------以下是公共的底部部分------->
 
     <div class="footer">
-    	<div class="foot1">
-        <center>
-        	<div class="db">
-        	   <{if !empty($toplink)}>
-	 	      <{$toplink = $toplink|unserialize}>
-		  	  <{foreach from=$toplink key=myid item=items}>
-			         <a href="<{$items['typeurl']}>"><{$items['typename']}></a> |
-			    <{/foreach}>
-			<{/if}>
-
-            </div></center>
-            <div class="cl"></div>
-        </div>
+    
         <div class="foot2">
         	<p>@2008-2012 <{$sitename}> <{$beian}> <{$footerdata|stripslashes}></p>
         </div>

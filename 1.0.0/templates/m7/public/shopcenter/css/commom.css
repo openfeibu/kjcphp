@@ -35,10 +35,10 @@ scrollBar-base-color:pink;*/
 	
 	}
 .header{ height:70px;background:#45423f;}
-.top{ height:70px; width:1059px; background:#45423f; margin:0 auto; position:relative;}
+.top{ height:70px; width:1200px;margin:0 auto; position:relative;}
 .topLeft{ width:413px; hieght:70px;}
 .top ul li a{ color:#c7c7c7;}
-.topLeft ul li { float:left; font-size:14px; width:100px; text-align:center; color:#c7c7c7; font-family:"微软雅黑"; height:70px; line-height:70px;}
+.topLeft ul li { float:left; font-size:14px; width:auto; text-align:center; color:#c7c7c7; font-family:"微软雅黑"; height:70px; line-height:70px;margin:0 10px;color: #27a9e3;font-size: 16px;}
 .topRight .cost{font-size:14px; height:70px; line-height:70px; text-align:center; color:#ec7501; margin-right:26px; }
 .cost img,.username img{margin-left:11px; margin-bottom:2px;}
 .username{font-size:14px; height:70px; line-height:70px; color:#2f90bb; margin-right:32px;}
@@ -47,7 +47,7 @@ scrollBar-base-color:pink;*/
 .shangjiaTop .sjgl span{ margin-left:10px;  font-family:"宋体"; font-weight:600; color:#f0f0f0; font-size:24px; height:70px; line-height:70px;}
 
 
-.footer{ height:100px; margin-top:76px;}
+.footer{ height:50px; margin-top:76px;}
 .foot1{  background:#5e5955; height:50px;}
 .foot1 .db{ width:1240px; height:50px;  margin:0 auto;text-align: center; color:#c7c7c7;}
 
