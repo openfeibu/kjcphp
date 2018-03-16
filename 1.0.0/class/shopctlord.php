@@ -82,7 +82,7 @@ class shopctlord
 		$this->releasestroe();
 		$ordCls = new orderclass();
 		$this->mysql->delete(Mysite::$app->config['tablepre'].'orderps',"orderid = '".$this->orderid."' and status !=3 ");  //删除不为完成的配送单
-		$ordCls->noticeclose($this->orderid,$reason);
+		//$ordCls->noticeclose($this->orderid,$reason);
 		return true;
 	}
 	//商家制作订单
