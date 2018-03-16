@@ -227,6 +227,7 @@ class method extends wxbaseclass
         $data['lat'] = $lat;
         $data['lng'] = $lng;
         $data['addressname'] = $station['stationname'];
+        $data['addressid'] = $station['id'];
         //判断平台类型  //2微信端,3web端
         $source = 3;
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
