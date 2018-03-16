@@ -7854,13 +7854,14 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $checktime = $nowtime-strtotime($nowdate);
         $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid join ".Mysite::$app->config['tablepre']."shop as s on g.shopid = s.id WHERE s.stationid = ".$this->stationid." AND g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ";
         $goods_list = $this->mysql->getarr($sql);
+
         foreach ($goods_list as $key => $goods) {
             $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
             $goods_list[$key]['zhekou'] = $goods['cxzhe']*0.1;
-            $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .' and ord.status = 3  and is_reback = 0';
-            //$where1 = ' where ord.addtime > '.$goods['cxstarttime'] .'';
-            $sql = "select count(ordet.id) as shuliang from ".Mysite::$app->config['tablepre']."orderdet  as ordet left join  ".Mysite::$app->config['tablepre']."order as ord on ordet.order_id = ord.id  ".$where1." and  ordet.goodsid = ".$goods['id']."";
+            $where1 = ' where ord.addtime > '.$goods['cxstarttime'] .' and ord.status >=1  and ord.is_reback = 0';
+            $sql = "select count(ordet.id) as shuliang from ".Mysite::$app->config['tablepre']."orderdet  as ordet left join  ".Mysite::$app->config['tablepre']."order as ord on ordet.order_id = ord.id  ".$where1." and  ordet.goodsid = ".$goods['goodsid']."";
             $goods_count_data = $this->mysql->select_one($sql);
+            //var_dump($goods_count_data);exit;
             $sell_count = $goods_count_data['shuliang'];
             $goods_list[$key]['sell_count'] = $sell_count;
             $all_count = $sell_count + $goods['count'];

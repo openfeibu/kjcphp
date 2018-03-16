@@ -58,12 +58,24 @@ class method extends adminbaseclass
         $data['email'] =  trim(IReq::get('email'));
         $data['groupid'] = 3;
         $data['phone'] =  trim(IReq::get('phone'));
+        $data['stationid'] =  intval(IReq::get('stationid'));
         //构造查询条件
-        $where = '';
-        $where =  $this->sqllink($where, 'username', $data['username'], '=');
-        $where =  $this->sqllink($where, 'email', $data['email'], '=');
-        $where =  $this->sqllink($where, 'group', $data['groupid'], '=');
-        $where =  $this->sqllink($where, 'phone', $data['phone'], '=');
+        $where = ' where 1';
+        $where .=   $data['username'] ? "AND m.username ='".$data['username']."'" : '';
+        $where .=   $data['email'] ? " AND m.email ='".$data['email']."'" : '';
+        $where .=   $data['group'] ? " AND m.group ='".$data['group']."'" : '';
+        $where .=   $data['stationid'] ? " AND s.stationid ='".$data['stationid']."'" : '';
+
+        $pageshow = new page();
+        $pageshow->setpage(IReq::get('page'), 20);
+        $link = IUrl::creatUrl('/adminpage/member/module/memberlistshop');
+
+        $memberlistshop = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."member as m join ".Mysite::$app->config['tablepre']."shop as s on s.uid = m.uid ".$where."  order by m.uid desc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
+
+        $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."member as m join ".Mysite::$app->config['tablepre']."shop as s on s.uid = m.uid ".$where." ");
+        $pageshow->setnum($shuliang);
+        $data['pagecontent'] = $pageshow->getpagebar($link);
+        $data['memberlistshop'] = $memberlistshop;
         $data['where'] = $where;
 
         Mysite::$app->setdata($data);
@@ -161,35 +173,7 @@ class method extends adminbaseclass
         } else {
             $cost = IReq::get('cost');
         }
-/*
-        $is_zengjian = IReq::get('is_zengjian'); //增加/减少积分  0未选择 1增加 2减少
 
-        if ($is_zengjian == 0) {
-            $data['cost'] = $cost;
-        }
-
-        if ($is_zengjian == 1) {
-            $yuecost = IReq::get('yuecost');
-            $data['cost'] = $cost+$yuecost;
-        }
-        if ($is_zengjian == 2) {
-            $yuecost = IReq::get('yuecost');
-            $data['cost'] = $cost-$yuecost;
-            if ($data['cost'] < 0) {
-                $this->message("减少金额大于用户余额");
-            }
-        }
-
-
-
-        if (!IValidate::email($data['email'])) {
-            $this->message('erremail');
-        }
-        #  if(!IValidate::phone($data['phone'])) $this->message('errphone');
-        if (empty($data['username'])) {
-            $this->message('member_emptyname');
-        }
-	*/
         if (empty($uid)) {
             if ($this->memberCls->regester($data['email'], $data['username'], $data['password'], $data['phone'], $data['group'], '', $data['address'], $data['cost'], $data['score'], $data['admin_id'],$data['stationadminid'])) {
                 $this->success('success');
