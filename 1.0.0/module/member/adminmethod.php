@@ -169,6 +169,12 @@ class method extends adminbaseclass
         $this->mysql->delete(Mysite::$app->config['tablepre'].'applogin', "uid = '$uid'");
         $this->success('success');
     }
+    public function addmember()
+    {
+        $url = $_SERVER["HTTP_REFERER"];
+        $data['ref_url'] = $url;
+        Mysite::$app->setdata($data);
+    }
     //后台保存会员
     public function savemember()
     { //limitalert();
