@@ -216,7 +216,7 @@ class method extends wxbaseclass
 
     public function index()
     {
-        $this->checkwxweb();
+        // $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
         $lng = $this->lng;
