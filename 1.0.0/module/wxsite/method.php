@@ -109,7 +109,7 @@ class method extends wxbaseclass
 
     public function choice()
     {
-        #	$this->checkwxweb();
+        #   $this->checkwxweb();
         $id =IFilter::act(IReq::get('id'));
         if ($id > 0) {
             $checkinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."area where id=".$id."  ");
@@ -216,7 +216,7 @@ class method extends wxbaseclass
 
     public function index()
     {
-        // $this->checkwxweb();
+        $this->checkwxweb();
         $areacodeone =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='18768891083' ");
         $areacodeoness =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$areacodeone."' ");
         $lng = $this->lng;
@@ -360,7 +360,7 @@ class method extends wxbaseclass
         $catid = intval(IReq::get('catid'));//店铺分类id
 
         $sendtype = intval(IReq::get('sendtype')); //2平台配送   1店铺配送
-        $cxtype = intval(IReq::get('cxtype'));	//1送赠品  2满减  3折扣  4免配送费
+        $cxtype = intval(IReq::get('cxtype'));  //1送赠品  2满减  3折扣  4免配送费
 
         $lng = $this->lng;
         $lat = $this->lat;
@@ -631,7 +631,7 @@ class method extends wxbaseclass
         $catid = intval(IReq::get('catid'));//店铺分类id
 
         $sendtype = intval(IReq::get('sendtype')); //2平台配送   1店铺配送
-        $cxtype = intval(IReq::get('cxtype'));	//1送赠品  2满减  3折扣  4免配送费
+        $cxtype = intval(IReq::get('cxtype'));  //1送赠品  2满减  3折扣  4免配送费
 
         $lng = $this->lng;
         $lat = $this->lat;
@@ -813,7 +813,7 @@ class method extends wxbaseclass
                         $valq['sellcount'] = $valq['sellcount']+$valq['virtualsellcount'];
                         $newdet[]=$valq;
                     }
-                    $val['det']=	$newdet;
+                    $val['det']=    $newdet;
 
                     $tempids[] = $val['id'];
                     $soncate[] = $val;
@@ -889,7 +889,7 @@ class method extends wxbaseclass
                     $val['sellcount'] = $val['sellcount']+$val['virtualsellcount'];
                     $newdet[]=$val;
                 }
-                $value['det']=	$newdet;
+                $value['det']=  $newdet;
                 #print_r($value['det']);
                 $data['goodstype'][]  = $value;
             }
@@ -999,7 +999,7 @@ class method extends wxbaseclass
         }
     }
     public function foodsgg()
-    {  	//8.6新增  规格弹窗
+    {   //8.6新增  规格弹窗
         $shopshowtype = ICookie::get('shopshowtype');
         $data['shopshowtype'] = $shopshowtype;
         $id = intval(IReq::get('id'));
@@ -1093,7 +1093,7 @@ class method extends wxbaseclass
 
     /* 8.2 改变函数 */
     public function foodshow()
-    {  	//菜品详情
+    {   //菜品详情
         $shopshowtype = ICookie::get('shopshowtype');
         $data['shopshowtype'] = $shopshowtype;
         $id = intval(IReq::get('id'));
@@ -1105,9 +1105,9 @@ class method extends wxbaseclass
         // $shopinfo1 = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$id."'  ");
         //  // print_r($shopinfo1);
         // if( empty($shopinfo1) ){
-        // 	$shopinfo1['shopname'] = Mysite::$app->config['sitename'];
-        // 	$shopinfo1['shoplogo'] = Mysite::$app->config['sitelogo'];
-        // 	$shopinfo1['intr_info'] = Mysite::$app->config['sitename'];
+        //  $shopinfo1['shopname'] = Mysite::$app->config['sitename'];
+        //  $shopinfo1['shoplogo'] = Mysite::$app->config['sitelogo'];
+        //  $shopinfo1['intr_info'] = Mysite::$app->config['sitename'];
         // }
         // $data['shopinfo1'] = $shopinfo1;
 
@@ -1398,7 +1398,7 @@ class method extends wxbaseclass
         $data['commentlist'] = $commentlist;
         #  print_r($data['commentlist']);
 
-        /* 	$datas = json_encode($data);
+        /*  $datas = json_encode($data);
               echo 'showmoreorder('.$datas.')';
               exit;
                  */
@@ -1412,7 +1412,7 @@ class method extends wxbaseclass
         $id = IFilter::act(IReq::get('id'));
 
         $data['scoretocost'] = Mysite::$app->config['scoretocost'];
-        //	id	card 优惠劵卡号	card_password 优惠劵密码	status 状态，0未使用，1已绑定，2已使用，3无效	creattime 制造时间	cost 优惠金额	limitcost 购物车限制金额下限	endtime 失效时间	uid 用户ID	username 用户名	usetime 使用时间	name
+        //  id  card 优惠劵卡号  card_password 优惠劵密码 status 状态，0未使用，1已绑定，2已使用，3无效    creattime 制造时间  cost 优惠金额   limitcost 购物车限制金额下限 endtime 失效时间    uid 用户ID    username 用户名    usetime 使用时间    name
         $data['juanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan  where uid='".$this->member['uid']."' and endtime > ".time()." and status = 1   ");
 
         $shopinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where shopid = ".$id."   ");
@@ -1449,7 +1449,7 @@ class method extends wxbaseclass
                     $tempt['s'] = date('H:i', $nowhout+$value['s']);
                     $tempt['e'] = date('H:i', $nowhout+$value['e']);
                     $tempt['d'] = date('Y-m-d', $stime);
-                    //	$tempt['s'] = $tempt['d'].' '.$tempt['s'];
+                    //  $tempt['s'] = $tempt['d'].' '.$tempt['s'];
                     $tempt['s'] = $tempt['s'];
                     $tempt['i'] =  $value['i'];
                     $tempt['cost'] =  isset($value['cost'])?$value['cost']:0;
@@ -1473,7 +1473,7 @@ class method extends wxbaseclass
     {//购物车
         $id = IFilter::act(IReq::get('id'));
         $data['scoretocost'] = Mysite::$app->config['scoretocost'];
-        //	id	card 优惠劵卡号	card_password 优惠劵密码	status 状态，0未使用，1已绑定，2已使用，3无效	creattime 制造时间	cost 优惠金额	limitcost 购物车限制金额下限	endtime 失效时间	uid 用户ID	username 用户名	usetime 使用时间	name
+        //  id  card 优惠劵卡号  card_password 优惠劵密码 status 状态，0未使用，1已绑定，2已使用，3无效    creattime 制造时间  cost 优惠金额   limitcost 购物车限制金额下限 endtime 失效时间    uid 用户ID    username 用户名    usetime 使用时间    name
         $data['juanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan  where uid='".$this->member['uid']."' and endtime > ".time()." and status = 1   ");
 
         $shopinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where shopid = ".$id."   ");
@@ -1509,7 +1509,7 @@ class method extends wxbaseclass
                     $tempt['s'] = date('H:i', $nowhout+$value['s']);
                     $tempt['e'] = date('H:i', $nowhout+$value['e']);
                     $tempt['d'] = date('Y-m-d', $stime);
-                    //	$tempt['s'] = $tempt['d'].' '.$tempt['s'];
+                    //  $tempt['s'] = $tempt['d'].' '.$tempt['s'];
                     $tempt['s'] =  $tempt['s'];
                     $tempt['i'] =  $value['i'];
                     $tempt['cost'] =  isset($value['cost'])?$value['cost']:0;
@@ -1548,14 +1548,14 @@ class method extends wxbaseclass
         $this->checkwxweb();
         $id = IFilter::act(IReq::get('id'));
         $data['scoretocost'] = Mysite::$app->config['scoretocost'];
-        //	id	card 优惠劵卡号	card_password 优惠劵密码	status 状态，0未使用，1已绑定，2已使用，3无效	creattime 制造时间	cost 优惠金额	limitcost 购物车限制金额下限	endtime 失效时间	uid 用户ID	username 用户名	usetime 使用时间	name
+        //  id  card 优惠劵卡号  card_password 优惠劵密码 status 状态，0未使用，1已绑定，2已使用，3无效    creattime 制造时间  cost 优惠金额   limitcost 购物车限制金额下限 endtime 失效时间    uid 用户ID    username 用户名    usetime 使用时间    name
         $data['juanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."juan  where uid='".$this->member['uid']."' and endtime > ".time()." and status = 1   ");
 
         $data['juancount'] = !empty($data['juanlist']) ? count($data['juanlist']) : 0;
-        //id	juanid	fafangtime	uid 顾客uid	username 顾客姓名	juanname 优惠卷名称	juancost 面值	juanlimitcost 限制金额	endtime 过期时间	lqstatus 默认0是未领取 1是用户已领取	status 状态 0未使，1已使用，2无效	juanshu 优惠卷数量	usetime 优惠卷使用时间
+        //id    juanid  fafangtime  uid 顾客uid   username 顾客姓名   juanname 优惠卷名称  juancost 面值 juanlimitcost 限制金额  endtime 过期时间    lqstatus 默认0是未领取 1是用户已领取    status 状态 0未使，1已使用，2无效  juanshu 优惠卷数量   usetime 优惠卷使用时间
         $data['wxjuanlist'] =  $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."wxuserjuan  where uid='".$this->member['uid']."' and endtime > ".time()." and lqstatus = 1 and status = 0   ");
 
-        # 	print_r($data['wxjuanlist']);
+        #   print_r($data['wxjuanlist']);
 
         $shopinfo =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast as a left join ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id  where shopid = ".$id."   ");
         if (empty($shopinfo)) {
@@ -1703,7 +1703,7 @@ class method extends wxbaseclass
         if (empty($wxuser)) {
             $this->message('未关注我们，不可绑定帐号');
         }
-        //		if($wxuser['is_bang'] == 1) $this->message('已绑订帐号不可重复绑定');
+        //      if($wxuser['is_bang'] == 1) $this->message('已绑订帐号不可重复绑定');
 
         if (empty($wxbanguser)) {
             $this->message('绑定帐号失败,帐号为空');
@@ -1737,11 +1737,11 @@ class method extends wxbaseclass
         $all['is_bang'] = 1;
         $this->mysql->update(Mysite::$app->config['tablepre'].'member', $all, "uid='".$info['uid']."'");
         //合并积分
-        //			 $this->mysql->delete(Mysite::$app->config['tablepre'].'member',"uid ='".$wxuser['uid']."'");
+        //           $this->mysql->delete(Mysite::$app->config['tablepre'].'member',"uid ='".$wxuser['uid']."'");
         $this->success('绑定帐号成功');
 
 
-        #	print_r($this->member['uid']);
+        #   print_r($this->member['uid']);
 
     //绑定未注册的用户   插入用户信息
     /*
@@ -1856,7 +1856,7 @@ class method extends wxbaseclass
 
 
     public function exchangcard()
-    {		//充值卡充值
+    {       //充值卡充值
         $this->checkmemberlogin();
         $card = trim(IFilter::act(IReq::get('card')));
         $password = trim(IFilter::act(IReq::get('password')));
@@ -2018,7 +2018,7 @@ class method extends wxbaseclass
     }
     public function savemyaddress()
     {
-        //	if( $this->checkbackinfo() ){
+        //  if( $this->checkbackinfo() ){
         if ($this->member['uid'] == 0) {
             $username = IFilter::act(IReq::get('contactname'));
             $phone = IFilter::act(IReq::get('phone'));
@@ -2027,10 +2027,10 @@ class method extends wxbaseclass
             ICookie::set('wxguest_username', $username, 86400);
             ICookie::set('wxguest_phone', $phone, 86400);
             ICookie::set('wxguest_address', $address, 86400);
-            #	$this->message(ICookie::get('wxguest_username'));
+            #   $this->message(ICookie::get('wxguest_username'));
             $this->success('success');
         }
-        //	 }
+        //   }
         $addressid = intval(IReq::get('addressid'));
         if (empty($addressid)) {
             $checknum = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."address where userid='".$this->member['uid']."' ");
@@ -2115,11 +2115,11 @@ class method extends wxbaseclass
 
     public function order()
     {
-		$weixindir = hopedir.'/plug/pay/weixin/';
-		require_once $weixindir."lib/WxPay.Api.php";
-		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
+        $weixindir = hopedir.'/plug/pay/weixin/';
+        require_once $weixindir."lib/WxPay.Api.php";
+        require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
         $tools = new JsApiPay();
-	//	$openId = $tools->GetOpenid();
+    //  $openId = $tools->GetOpenid();
         $order = new orderclass();
         $this->checkwxweb();
         $link = IUrl::creatUrl('wxsite/index');
@@ -2193,7 +2193,7 @@ class method extends wxbaseclass
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$value['shopid']."'");
             // print_r($shopinfo);
             $value['shoplogo'] = $shopinfo['shoplogo'];
-            //	$value['shoptype'] = $temparray[$value['shoptype']];
+            //  $value['shoptype'] = $temparray[$value['shoptype']];
 
             $orderwuliustatus = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."orderstatus where   orderid = ".$value['id']." order by id desc limit 0,1 ");
 
@@ -2280,7 +2280,7 @@ class method extends wxbaseclass
                 $scoretocost =Mysite::$app->config['scoretocost'];
                 $order['scoredown'] =  $order['scoredown']/$scoretocost;//抵扣积分
                 $order['ps'] = $order['shopps'];
-                // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagcost
+                // 超市商品总价    超市配送配送 shopcost 店铺商品总价 shopps 店铺配送费    pstype 配送方式 0：平台1：个人    bagcost
                 $orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$order['id']."'");
                 $order['cp'] = count($orderdet);
                 $buyerstatus= array(
@@ -2446,7 +2446,7 @@ class method extends wxbaseclass
                 foreach ($tempcoment as $key=>$value) {
                     $data['comment'][$value['orderdetid']] = $value;
                 }
-                //  id		orderdetid	shopid	goodsid	uid	content	addtime	replycontent	replytime	 评分	is_show 0展示，1不展示
+                //  id      orderdetid  shopid  goodsid uid content addtime replycontent    replytime    评分 is_show 0展示，1不展示
                 Mysite::$app->setdata($data);
             }
         } else {
@@ -2515,7 +2515,7 @@ class method extends wxbaseclass
         $wxujuan['list'] = $this->mysql->getarr("select a.*,b.cartdesrc from ".Mysite::$app->config['tablepre']."wxuserjuan as a left join ".Mysite::$app->config['tablepre']."wxjuan as b on a.juanid = b.id where a.uid = ".$this->member['uid']." and a.endtime > ".$nowtime." and a.lqstatus = 1 ");
         $data['wxujuan'] = $wxujuan;
         $data['pcjuan'] = $pcjuan;
-        #	print_r($data['wxujuan']);
+        #   print_r($data['wxujuan']);
         $data['wjuan'] = $wjuan;
         $data['ujuan'] = $ujuan;
         $data['ojuan'] = $ojuan;
@@ -2686,15 +2686,15 @@ class method extends wxbaseclass
 
         $getphone = trim(IReq::get('getphone'));  // 取货电话
         $shouphone = trim(IReq::get('shouphone'));  // 收货电话
-        $minit = trim(IReq::get('minit'));			// 收/取 货时间
-        $ptkg = trim(IReq::get('ptkg'));	// 货 公斤 数
-        $ptkm = trim(IReq::get('ptkm'));	//  收取货 地址 两地 距离 km
-        $allkgcost = trim(IReq::get('allkgcost'));		// 重量价格
-        $allkmcost = trim(IReq::get('allkmcost'));		// 距离价格
-        $farecost = trim(IReq::get('farecost'));		// 加价（小费）
-        $allcost = trim(IReq::get('allcost'));		// 总价格
-        $pttype = trim(IReq::get('pttype'));		// 	1为帮我送 2为帮我买
-        $paytype = trim(IReq::get('paytype'));		//  支付方式，默认为在线支付
+        $minit = trim(IReq::get('minit'));          // 收/取 货时间
+        $ptkg = trim(IReq::get('ptkg'));    // 货 公斤 数
+        $ptkm = trim(IReq::get('ptkm'));    //  收取货 地址 两地 距离 km
+        $allkgcost = trim(IReq::get('allkgcost'));      // 重量价格
+        $allkmcost = trim(IReq::get('allkmcost'));      // 距离价格
+        $farecost = trim(IReq::get('farecost'));        // 加价（小费）
+        $allcost = trim(IReq::get('allcost'));      // 总价格
+        $pttype = trim(IReq::get('pttype'));        //  1为帮我送 2为帮我买
+        $paytype = trim(IReq::get('paytype'));      //  支付方式，默认为在线支付
 
         if (empty($demandcontent)) {
             $this->message("请简要填写需求内容");
@@ -2759,9 +2759,9 @@ class method extends wxbaseclass
         $data['shopaddress']  = $getaddress;
         $data['buyeraddress']  = $shouaddress;
         if ($pttype==1) {
-            $data['shopphone']  = $getphone;			//取件电话
+            $data['shopphone']  = $getphone;            //取件电话
         }
-        $data['buyerphone']  = $shouphone;			//收件电话
+        $data['buyerphone']  = $shouphone;          //收件电话
         $data['addtime'] = time();
         if ($this->checkbackinfo()) {
             $data['ordertype'] = 3;//订单类型
@@ -2794,7 +2794,7 @@ class method extends wxbaseclass
         $juli = $this->GetDistance($getlat, $getlng, $shoulat, $shoulng, 1, 1);
 
         $tempmi = $juli;
-        #	$juli = $juli > 1000? round($juli/1000,1).'km':$juli.'m';
+        #   $juli = $juli > 1000? round($juli/1000,1).'km':$juli.'m';
         $juli = round($juli/1000, 1);
 
         $tmpallkmcost =  0;
@@ -2810,7 +2810,7 @@ class method extends wxbaseclass
         echo "<br />";
         print_r($juli);
         if($juli != $ptkm )$this->message("获取距离错误"); */
-        //		if($tmpallkmcost != $allkmcost )$this->message("获取距离总金额错误");
+        //      if($tmpallkmcost != $allkmcost )$this->message("获取距离总金额错误");
 
 
         /* 计算重量  并且 判断是否与前台的  公斤金额是否一致 */
@@ -2871,7 +2871,7 @@ class method extends wxbaseclass
         // if($panduan != 1)
         // {
 
-        // 	  $orderclass = new orderclass();
+        //    $orderclass = new orderclass();
 
         // $orderclass->sendmess($orderid);
 
@@ -2908,15 +2908,15 @@ class method extends wxbaseclass
 
         $getphone = trim(IReq::get('getphone'));  // 取货电话
         $shouphone = trim(IReq::get('shouphone'));  // 收货电话
-        $minit = trim(IReq::get('minit'));			// 收/取 货时间
-        $ptkg = trim(IReq::get('ptkg'));	// 货 公斤 数
-        $ptkm = trim(IReq::get('ptkm'));	//  收取货 地址 两地 距离 km
-        $allkgcost = trim(IReq::get('allkgcost'));		// 重量价格
-        $allkmcost = trim(IReq::get('allkmcost'));		// 距离价格
-        $farecost = trim(IReq::get('farecost'));		// 加价（小费）
-        $allcost = trim(IReq::get('allcost'));		// 总价格
-        $pttype = trim(IReq::get('pttype'));		// 	1为帮我送 2为帮我买
-        $paytype = trim(IReq::get('paytype'));		//  支付方式，默认为在线支付
+        $minit = trim(IReq::get('minit'));          // 收/取 货时间
+        $ptkg = trim(IReq::get('ptkg'));    // 货 公斤 数
+        $ptkm = trim(IReq::get('ptkm'));    //  收取货 地址 两地 距离 km
+        $allkgcost = trim(IReq::get('allkgcost'));      // 重量价格
+        $allkmcost = trim(IReq::get('allkmcost'));      // 距离价格
+        $farecost = trim(IReq::get('farecost'));        // 加价（小费）
+        $allcost = trim(IReq::get('allcost'));      // 总价格
+        $pttype = trim(IReq::get('pttype'));        //  1为帮我送 2为帮我买
+        $paytype = trim(IReq::get('paytype'));      //  支付方式，默认为在线支付
 
         if (empty($demandcontent)) {
             $this->message("请简要填写需求内容");
@@ -2982,9 +2982,9 @@ class method extends wxbaseclass
         $data['shopaddress']  = $getaddress;
         $data['buyeraddress']  = $shouaddress;
         if ($pttype==1) {
-            $data['shopphone']  = $getphone;			//取件电话
+            $data['shopphone']  = $getphone;            //取件电话
         }
-        $data['buyerphone']  = $shouphone;			//收件电话
+        $data['buyerphone']  = $shouphone;          //收件电话
         $data['addtime'] = time();
         if ($this->checkbackinfo()) {
             $data['ordertype'] = 3;//订单类型
@@ -3019,7 +3019,7 @@ class method extends wxbaseclass
         /* 计算两点之间的距离  并且 判断是否与前台的  千米距离金额是否一致 */
         $juli = $this->GetDistance($getlat, $getlng, $shoulat, $shoulng, 1, 1);
         $tempmi = $juli;
-        #	$juli = $juli > 1000? round($juli/1000,1).'km':$juli.'m';
+        #   $juli = $juli > 1000? round($juli/1000,1).'km':$juli.'m';
         $juli = round($juli/1000, 1);
 
         $tmpallkmcost =  0;
@@ -3037,7 +3037,7 @@ class method extends wxbaseclass
         if ($juli != $ptkm) {
             $this->message("获取距离错误");
         }
-        //		if($tmpallkmcost != $allkmcost )$this->message("获取距离总金额错误");
+        //      if($tmpallkmcost != $allkmcost )$this->message("获取距离总金额错误");
 
 
         /* 计算重量  并且 判断是否与前台的  公斤金额是否一致 */
@@ -3132,7 +3132,7 @@ class method extends wxbaseclass
                 $value['pttype']="帮我买";
             }
             //$value['shoptype'] =''; $temparray[$value['shoptype']];
-            //				$value['addtime'] = date('Y-m-d H:i',$value['addtime']);
+            //              $value['addtime'] = date('Y-m-d H:i',$value['addtime']);
             $value['addtime'] = date('Y-m-d', $value['addtime']);
             $backdata[] =$value;
         }
@@ -3179,7 +3179,7 @@ class method extends wxbaseclass
                 $scoretocost = Mysite::$app->config['scoretocost'];
                 $order['scoredown'] = $order['scoredown'] / $scoretocost;//抵扣积分
                 $order['ps'] = $order['shopps'];
-                // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagcost
+                // 超市商品总价    超市配送配送 shopcost 店铺商品总价 shopps 店铺配送费    pstype 配送方式 0：平台1：个人    bagcost
                 $orderdet = $this->mysql->getarr("select * from " . Mysite::$app->config['tablepre'] . "orderdet where order_id='" . $order['id'] . "'");
                 $order['cp'] = count($orderdet);
                 $buyerstatus = array(
@@ -3315,7 +3315,7 @@ class method extends wxbaseclass
         $info['paytype'] =  1;//支付方式
         $info['dikou'] =  intval(IReq::get('dikou'));//抵扣金额
 
-    //	 $info['senddate'] = date('Y-m-d',time());// IFilter::act(IReq::get('senddate'));
+    //   $info['senddate'] = date('Y-m-d',time());// IFilter::act(IReq::get('senddate'));
         $info['minit'] = IFilter::act(IReq::get('minit'));
         $info['juanid']  =  intval(IReq::get('juanid'));//优惠劵ID
         if ($this->checkbackinfo()) {
@@ -3352,7 +3352,7 @@ class method extends wxbaseclass
         }
         $areaid = ICookie::get('myaddress');
         $temp = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."address  where userid = ".$this->member['uid']." and `default`=1   ");
-        $checkps = 	 $this->pscost($shopinfo, $temp['lng'], $temp['lat']);
+        $checkps =   $this->pscost($shopinfo, $temp['lng'], $temp['lat']);
 
         $info['cattype'] = 0;//
         if (empty($info['username'])) {
@@ -3383,7 +3383,7 @@ class method extends wxbaseclass
                 $info['ipaddress']='0';
             }
         }
-        //area1 二级地址名称	area2 三级地址名称	area3
+        //area1 二级地址名称  area2 三级地址名称    area3
         $info['areaids'] = '';
 
         #  logwrite($info['postdate']);
@@ -3468,15 +3468,15 @@ class method extends wxbaseclass
     public function createOrder($orderid)
     {
         $weixindir = hopedir.'/plug/pay/weixin/';
-		require_once $weixindir."lib/WxPay.Api.php";
-		require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
-		$wxopenid = ICookie::get('wxopenid');
+        require_once $weixindir."lib/WxPay.Api.php";
+        require_once $weixindir."WxPay.JsApiPay.php";        //错误信息
+        $wxopenid = ICookie::get('wxopenid');
         $tools = new JsApiPay();
-		// $openId = $tools->GetOpenid();
+        // $openId = $tools->GetOpenid();
         $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where buyeruid='".$this->member['uid']."' and id = ".$orderid."");
         $data['error'] = false;
         $data['msg'] = '';
-		$data['orderid'] = $orderid;
+        $data['orderid'] = $orderid;
         //②、统一下单
         $input = new WxPayUnifiedOrder();
         $input->SetBody("支付订单".$order['dno']);
@@ -3491,18 +3491,18 @@ class method extends wxbaseclass
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($wxopenid);
         try{
-			$ordermm = WxPayApi::unifiedOrder($input);
-			if($ordermm['return_code'] == 'SUCCESS'){
-				$jsApiParameters = $tools->GetJsApiParameters($ordermm);
-				$data['wxdata'] = $jsApiParameters;
-			}else{
+            $ordermm = WxPayApi::unifiedOrder($input);
+            if($ordermm['return_code'] == 'SUCCESS'){
+                $jsApiParameters = $tools->GetJsApiParameters($ordermm);
+                $data['wxdata'] = $jsApiParameters;
+            }else{
                 $data['error'] = true;
-				$data['msg']  = $ordermm['return_msg'];
-			}
-		}catch (Exception $e) {
+                $data['msg']  = $ordermm['return_msg'];
+            }
+        }catch (Exception $e) {
             $data['error'] = true;
-		    $data['msg'] = $e->getmessage();
-		}
+            $data['msg'] = $e->getmessage();
+        }
         return json_encode($data);
         exit;
     }
@@ -3740,7 +3740,7 @@ class method extends wxbaseclass
 
 
         $order['ps'] = $order['shopps'];
-        // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagc
+        // 超市商品总价    超市配送配送 shopcost 店铺商品总价 shopps 店铺配送费    pstype 配送方式 0：平台1：个人    bagc
         if (empty($order)) {
             $this->message('订单获取失败');
         }
@@ -3798,7 +3798,7 @@ class method extends wxbaseclass
 
                 try {
                     $ordermm = WxPayApi::unifiedOrder($input);
-					//var_dump($ordermm);exit;
+                    //var_dump($ordermm);exit;
                     if ($ordermm['return_code'] == 'SUCCESS') {
                         $jsApiParameters = $tools->GetJsApiParameters($ordermm);
 
@@ -3885,7 +3885,7 @@ class method extends wxbaseclass
                 Mysite::$app->setdata($data);
             } else {
                 $order['ps'] = $order['shopps'];
-                // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagcost
+                // 超市商品总价    超市配送配送 shopcost 店铺商品总价 shopps 店铺配送费    pstype 配送方式 0：平台1：个人    bagcost
                 $orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$order['id']."'");
                 $order['cp'] = count($orderdet);
                 $buyerstatus= array(
@@ -4075,156 +4075,156 @@ class method extends wxbaseclass
         if ($color == 'green') {
             $colorhtml = '<style>
 
-									.titCon {
+                                    .titCon {
 
-									    background-color: #01cd88!important;
+                                        background-color: #01cd88!important;
 
-									}
+                                    }
 
-									.cipuSubsucCon .cipuSubsucBot b{
+                                    .cipuSubsucCon .cipuSubsucBot b{
 
-										background: #01cd88!important;
+                                        background: #01cd88!important;
 
-										border: 1px solid #01cd88!important;
+                                        border: 1px solid #01cd88!important;
 
-									}
+                                    }
 
 
 
-							</style>';
+                            </style>';
         } elseif ($color == 'yellow') {
             $colorhtml = '<style>
 
-									.titCon {
+                                    .titCon {
 
-									    background-color: #ff7600!important;
+                                        background-color: #ff7600!important;
 
-									}
+                                    }
 
-									.cipuSubsucCon .cipuSubsucBot b{
+                                    .cipuSubsucCon .cipuSubsucBot b{
 
-										background: #ff7600!important;
+                                        background: #ff7600!important;
 
-										border: 1px solid #ff7600!important;
+                                        border: 1px solid #ff7600!important;
 
-									}
+                                    }
 
 
 
-							</style>';
+                            </style>';
         } else {
             $colorhtml = '<style>
 
-									.titCon {
+                                    .titCon {
 
-									    background-color: #ff6e6e!important;
+                                        background-color: #ff6e6e!important;
 
-									}
+                                    }
 
-									.cipuSubsucCon .cipuSubsucBot b{
+                                    .cipuSubsucCon .cipuSubsucBot b{
 
-										background: #ff6e6e!important;
+                                        background: #ff6e6e!important;
 
-										border: 1px solid #ff6e6e!important;
+                                        border: 1px solid #ff6e6e!important;
 
-									}
+                                    }
 
 
 
-							</style>';
+                            </style>';
         }
 
 
         if ($data['paysure'] == true) {
             $tempcontent = '<div class="titCon">
 
-							<div class="titBox">
+                            <div class="titBox">
 
 
 
-								 <div class="titC" style= "width: 100%;">
+                                 <div class="titC" style= "width: 100%;">
 
-										<h2 style="t">支付结果</h2></div>
+                                        <h2 style="t">支付结果</h2></div>
 
 
 
-							</div>
+                            </div>
 
-						</div>
+                        </div>
 
-						<div class="cipuSubsucCon">
+                        <div class="cipuSubsucCon">
 
-								<div class="cipuSubsucTop">
+                                <div class="cipuSubsucTop">
 
-									<i style="background-image: url(/upload/images/icon_zfcg.png);"></i>
+                                    <i style="background-image: url(/upload/images/icon_zfcg.png);"></i>
 
-									<h2>订单支付成功</h2>
+                                    <h2>订单支付成功</h2>
 
-								</div>
+                                </div>
 
-								<div class="cipuSubsucCen">
+                                <div class="cipuSubsucCen">
 
-									<ul>
+                                    <ul>
 
-										<li>订单标号：<span style="color: #333;">'.$data['reason']['dno'].'</span></li>
+                                        <li>订单标号：<span style="color: #333;">'.$data['reason']['dno'].'</span></li>
 
-										<li>订单金额：<span>￥'.$data['reason']['allcost'].'元</span></li>
+                                        <li>订单金额：<span>￥'.$data['reason']['allcost'].'元</span></li>
 
-									</ul>
+                                    </ul>
 
-								</div>
+                                </div>
 
-								<div class="cipuSubsucBot">
+                                <div class="cipuSubsucBot">
 
-										<a href="'.Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action='.$act.'&orderid='.$data['id'].'"  style="color:#fff;text-decoration:none;"><span> 查看订单</span></a>
+                                        <a href="'.Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action='.$act.'&orderid='.$data['id'].'"  style="color:#fff;text-decoration:none;"><span> 查看订单</span></a>
 
-									<b><a href="'.Mysite::$app->config['siteurl'].'" style="color:#fff;text-decoration:none;">返回首页</a></b>
+                                    <b><a href="'.Mysite::$app->config['siteurl'].'" style="color:#fff;text-decoration:none;">返回首页</a></b>
 
-								</div>
+                                </div>
 
-							</div>';
+                            </div>';
         } else {
             $tempcontent = '<div class="titCon">
 
-							<div class="titBox">
+                            <div class="titBox">
 
 
 
-								 <div class="titC" style= "width: 100%;">
+                                 <div class="titC" style= "width: 100%;">
 
-										<h2>支付结果</h2></div>
+                                        <h2>支付结果</h2></div>
 
 
 
-							</div>
+                            </div>
 
-						</div>
+                        </div>
 
-						<div class="cipuSubsucCon">
+                        <div class="cipuSubsucCon">
 
-								<div class="cipuSubsucTop">
+                                <div class="cipuSubsucTop">
 
-									<i style="background-image: url(/upload/images/icon_zfcg.png);"></i>
+                                    <i style="background-image: url(/upload/images/icon_zfcg.png);"></i>
 
-									<h2>订单支付失败</h2>
+                                    <h2>订单支付失败</h2>
 
-								</div>
+                                </div>
 
-								<div class="cipuSubsucCen">
+                                <div class="cipuSubsucCen">
 
-									<h3 style="color:red;">原因:'.$data['reason'].'</h3>
+                                    <h3 style="color:red;">原因:'.$data['reason'].'</h3>
 
-								</div>
+                                </div>
 
-								<div class="cipuSubsucBot">
+                                <div class="cipuSubsucBot">
 
-									<a href="'.Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action='.$act.'&orderid='.$data['id'].'"  style="color:#fff;text-decoration:none;"><span> 查看订单</span></a>
+                                    <a href="'.Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action='.$act.'&orderid='.$data['id'].'"  style="color:#fff;text-decoration:none;"><span> 查看订单</span></a>
 
-									<b><a href="'.Mysite::$app->config['siteurl'].'" style="color:#fff;text-decoration:none;">返回首页</a></b>
+                                    <b><a href="'.Mysite::$app->config['siteurl'].'" style="color:#fff;text-decoration:none;">返回首页</a></b>
 
-								</div>
+                                </div>
 
-							</div>';
+                            </div>';
         }
 
         $html = '<!DOCTYPE html>
@@ -4239,11 +4239,11 @@ class method extends wxbaseclass
 
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 
-	<title>支付返回信息</title>
+    <title>支付返回信息</title>
 
 
 
-	 '.$colorhtml.'
+     '.$colorhtml.'
 
 
 
@@ -4297,7 +4297,7 @@ class method extends wxbaseclass
             }
         }
         $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid."  ");  //获取主单
-        //	print_r($orderinfo);
+        //  print_r($orderinfo);
         if (empty($orderinfo)) {
             $errdata['url'] = $payerrlink;
             $errdata['reason'] = '订单数据获取失败';
@@ -4410,11 +4410,11 @@ class method extends wxbaseclass
             $this->message($msg);
         }
     }
-    //	一起说 列表
+    //  一起说 列表
     public function togethersay()
     {
 
-    #	$this->checkwxweb();
+    #   $this->checkwxweb();
 
         $wxclass = new wx_s();
         $signPackage = $wxclass->getSignPackage();
@@ -4423,7 +4423,7 @@ class method extends wxbaseclass
 
 
         $togethersaylist1 = $this->mysql->getarr(" select * from ".Mysite::$app->config['tablepre']."wxcomment as a left join ".Mysite::$app->config['tablepre']."member  as b  on a.uid = b.uid where a.is_top=0  and is_show=1   order by addtime desc ");
-        #	print_r($togethersaylist);
+        #   print_r($togethersaylist);
         $togethersaylist = array();
         foreach ($togethersaylist1 as $key=>$value) {
             $value['pingjiazongshu'] =  $this->mysql->counts(" select * from ".Mysite::$app->config['tablepre']."wxreplycomment where parentid  = ".$value['id']."  ");
@@ -4434,10 +4434,10 @@ class method extends wxbaseclass
         }
         $data['togethersaylist'] = $togethersaylist;
 
-        #	print_r($togethersaylist);
+        #   print_r($togethersaylist);
 
         $togethersaylist2 = $this->mysql->getarr(" select * from ".Mysite::$app->config['tablepre']."wxcomment as a left join ".Mysite::$app->config['tablepre']."admin  as b  on a.uid = b.uid where a.is_top=1  and is_show=1   order by addtime desc ");
-        #	print_r($togethersaylist);
+        #   print_r($togethersaylist);
         $togethersaycomlist = array();
         foreach ($togethersaylist2 as $key=>$value) {
             $value['pingjiazongshu'] =  $this->mysql->counts(" select * from ".Mysite::$app->config['tablepre']."wxreplycomment where parentid  = ".$value['id']."  ");
@@ -4462,7 +4462,7 @@ class method extends wxbaseclass
         #print_r( $signPackage );
         $data['signPackage'] = $signPackage;
         $togethersaylist1 = $this->mysql->getarr(" select * from ".Mysite::$app->config['tablepre']."wxcomment as a left join ".Mysite::$app->config['tablepre']."member  as b  on a.uid = b.uid where a.is_top=0  and is_show=1   order by addtime desc  limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
-        #	print_r($togethersaylist);
+        #   print_r($togethersaylist);
         $togethersaylist = array();
         foreach ($togethersaylist1 as $key=>$value) {
             $value['pingjiazongshu'] =  $this->mysql->counts(" select * from ".Mysite::$app->config['tablepre']."wxreplycomment where parentid  = ".$value['id']."  ");
@@ -4473,10 +4473,10 @@ class method extends wxbaseclass
         }
         $data['togethersaylist'] = $togethersaylist;
 
-        #	print_r($togethersaylist);
+        #   print_r($togethersaylist);
 
         $togethersaylist2 = $this->mysql->getarr(" select * from ".Mysite::$app->config['tablepre']."wxcomment as a left join ".Mysite::$app->config['tablepre']."admin  as b  on a.uid = b.uid where a.is_top=1  and is_show=1   order by addtime desc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
-        #	print_r($togethersaylist);
+        #   print_r($togethersaylist);
         $togethersaycomlist = array();
         foreach ($togethersaylist2 as $key=>$value) {
             $value['pingjiazongshu'] =  $this->mysql->counts(" select * from ".Mysite::$app->config['tablepre']."wxreplycomment where parentid  = ".$value['id']."  ");
@@ -4504,7 +4504,7 @@ class method extends wxbaseclass
         $data['userimages'] = explode('@', $wxcommentone['userimg']);
 
         $wxreplylist = $this->mysql->getarr(" select * from ".Mysite::$app->config['tablepre']."wxreplycomment as a left join ".Mysite::$app->config['tablepre']."member  as b  on a.uid = b.uid where a.parentid = ".$wxcommentone['id']."  order by addtime desc "); //获取其它微信用户回复的评论
-        #	print_r($wxreplylist);
+        #   print_r($wxreplylist);
         $data['zongzanshu']  = $this->mysql->counts(" select * from ".Mysite::$app->config['tablepre']."wxpjzan where commentid  = ".$wxcommentone['id']."  ");
         $data['wxreplylist'] = $wxreplylist;
         $data['wxcommentone'] = $wxcommentone;
@@ -4664,7 +4664,7 @@ class method extends wxbaseclass
 
     //微信收藏商家
     public function collectshopdata()
-    {		// 首页获取附近商家列表（外卖和超市）
+    {       // 首页获取附近商家列表（外卖和超市）
         $typelx = IFilter::act(IReq::get('typelx'));
 
         if (!empty($typelx)) {
@@ -4709,7 +4709,7 @@ class method extends wxbaseclass
 
         $orderarray = array(
                             '0' =>" (2 * 6378.137* ASIN(SQRT(POW(SIN(3.1415926535898*(".$lat."-lat)/360),2)+COS(3.1415926535898*".$lat."/180)* COS(lat * 3.1415926535898/180)*POW(SIN(3.1415926535898*(".$lng."-lng)/360),2))))*1000  ASC      ",
-                            // 	'0'=>'   sort asc      ',
+                            //  '0'=>'   sort asc      ',
                           );
 
         /*获取店铺*/
@@ -4742,8 +4742,8 @@ class method extends wxbaseclass
                                 $attra['checkbox'] =  $attra['checkbox'] > 0?$attra['checkbox']:$vall['id'];
                             }
                         }
-                        #		print_r($attra);
-                        #		echo("11111111");
+                        #       print_r($attra);
+                        #       echo("11111111");
 
                         if ($values['shoptype'] == 1) {
                             $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$values['id']."   ");
@@ -4763,7 +4763,7 @@ class method extends wxbaseclass
 
                             $attrdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopattr where  cattype = ".$values['shoptype']." and shopid = ".$values['id']."");
                             $cxclass->setdata($values['id'], 1000, $values['shoptype']);
-                            #		 print_r($attrdet);
+                            #        print_r($attrdet);
 
 
 
@@ -4772,9 +4772,9 @@ class method extends wxbaseclass
                             $tempmi = $mi;
                             $mi = $mi > 1000? round($mi/1000, 2).'km':$mi.'m';
 
-                            $values['juli'] = 		$mi;
+                            $values['juli'] =       $mi;
 
-                            $checkps = 	 $this->pscost($values);
+                            $checkps =   $this->pscost($values);
                             $values['pscost'] = $checkps['pscost'];
 
                             /* $valuelist = empty($values['pradiusvalue'])? unserialize($this->platpsinfo['radiusvalue']):unserialize($values['pradiusvalue']);
@@ -4791,8 +4791,8 @@ class method extends wxbaseclass
                     }*/
 
 
-                            //	 $shopcounts = $this->mysql->select_one( "select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where   status = 3 and  shopid = ".$values['id']."" );
-                            $shopcounts = $this->mysql->select_one("select sellcount as shuliang  from ".Mysite::$app->config['tablepre']."shop	 where    id = ".$values['id']."");
+                            //   $shopcounts = $this->mysql->select_one( "select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order   where   status = 3 and  shopid = ".$values['id']."" );
+                            $shopcounts = $this->mysql->select_one("select sellcount as shuliang  from ".Mysite::$app->config['tablepre']."shop  where    id = ".$values['id']."");
                             if (empty($shopcounts['shuliang'])) {
                                 $values['ordercount'] = 0;
                             } else {
@@ -4818,7 +4818,7 @@ class method extends wxbaseclass
                             } else {
                                 $shopstart= 0;
                             }
-                            $values['point'] = 	$shopstart;
+                            $values['point'] =  $shopstart;
                             $values['attrdet'] = array();
                             foreach ($attrdet as $k=>$v) {
                                 if ($v['firstattr'] == $attra['input']) {
@@ -4830,7 +4830,7 @@ class method extends wxbaseclass
                                 }
                             }
 
-                            #		 print_r($values['attrdet']);
+                            #        print_r($values['attrdet']);
 
                             $templist[] = $values;
                         }
@@ -5037,7 +5037,7 @@ class method extends wxbaseclass
                     if (!empty($shopshui)) {
                         $values['shopshui']=$shopshui;
                         $firstday = strtotime(date('Y-m-01 00:00:00', strtotime(date("Y-m-d H:i:s"))));   //当月第一天
-                        $shopcounts = $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where suretime >= ".$firstday."   and status = 3 and  shopid = ".$values['id']."");
+                        $shopcounts = $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order     where suretime >= ".$firstday."   and status = 3 and  shopid = ".$values['id']."");
                         if (empty($shopcounts['shuliang'])) {
                             $values['ordercount'] = 0;//月销量
                         } else {
@@ -5059,7 +5059,7 @@ class method extends wxbaseclass
                         $values['newstartime']  =  $checkinfo['newstartime'];
                         $attrdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shopattr where  cattype = 0 and shopid = ".$values['id']."");
 
-                        $checkps = 	 $this->pscost($values);
+                        $checkps =   $this->pscost($values);
                         $values['pscost'] = $checkps['pscost'];
 
 
@@ -5075,7 +5075,7 @@ class method extends wxbaseclass
                         } else {
                             $shopstart= 0;
                         }
-                        $values['point'] = 	$shopstart;
+                        $values['point'] =  $shopstart;
                         $values['attrdet'] = array();
                         foreach ($attrdet as $k=>$v) {
                             if ($v['firstattr'] == $attra['input']) {
@@ -5102,7 +5102,7 @@ class method extends wxbaseclass
     }
     public function subpayhui()
     {
-        //		$userid = empty($this->member['uid'])?0:$this->member['uid'];
+        //      $userid = empty($this->member['uid'])?0:$this->member['uid'];
         $orderid = intval(IReq::get('orderid'));
         if (empty($orderid)) {
             $this->message('闪慧买单获取失败');
@@ -5113,7 +5113,7 @@ class method extends wxbaseclass
         }
         $order = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophuiorder where uid='".$this->member['uid']."' and id = ".$orderid."");
 
-        // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagc
+        // 超市商品总价    超市配送配送 shopcost 店铺商品总价 shopps 店铺配送费    pstype 配送方式 0：平台1：个人    bagc
         if (empty($order)) {
             $this->message('订单获取失败');
         }
@@ -5279,7 +5279,7 @@ class method extends wxbaseclass
 
 
                     if (in_array($weeknum, $weekarray)  &&  $nowtime >= $shophuiinfo['starttime']  &&  $nowtime <= $shophuiinfo['endtime'] && $find==true) {
-                        $is_shophui = 1;  	// 当前时间有闪慧
+                        $is_shophui = 1;    // 当前时间有闪慧
                     } else {
                         $is_shophui = 0;
                     }
@@ -5309,7 +5309,7 @@ class method extends wxbaseclass
     }
     /*
 
-    id	name 规则名称	\
+    id  name 规则名称   \
     limittype 是否指定具体时间1否2指定星期3指定小时
     limitweek 具体时间：周几
     limittimes 限制每天具体时间
@@ -5365,7 +5365,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $shopid = intval(IFilter::act(IReq::get('shopid')));
         $huiid =  intval(IFilter::act(IReq::get('huiid')));
         $xfcost =  IFilter::act(IReq::get('xfcost')) ;  //消费金额
-//		 $buyorderphone = trim(IFilter::act(IReq::get('buyorderphone')));		 // 买单人 联系号
+//       $buyorderphone = trim(IFilter::act(IReq::get('buyorderphone')));        // 买单人 联系号
          $yhcost =  0 ;  //优惠金额
          $sjcost =  0 ;  //实际支付金额
 
@@ -5377,8 +5377,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
         } else {
             $this->message('消费金额不能为0');
         }
-        //		  if(empty($buyorderphone)) $this->message('买单人联系电话不能为空');
-        //		  if(!(IValidate::suremobi($buyorderphone)))  $this->message('买单人联系电话错误');
+        //        if(empty($buyorderphone)) $this->message('买单人联系电话不能为空');
+        //        if(!(IValidate::suremobi($buyorderphone)))  $this->message('买单人联系电话错误');
 
 
 
@@ -5485,7 +5485,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                         [uid] => fc7675243777ff844f776ea6
                             )
             )
-        )					 */
+        )                    */
 
         $searchvalue = trim(IFilter::act(IReq::get('searchvalue')));
         //http://api.map.baidu.com/place/v2/search?q=饭店&region=北京&output=json&ak=E4805d16520de693a3fe707cdc962045&
@@ -5723,7 +5723,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         Mysite::$app->setdata($data);
     }
     public function catefoods()
-    {	//外卖点击分类ajax获取分类下的所有商品
+    {   //外卖点击分类ajax获取分类下的所有商品
         $weekji = date('w');
         $shopid = intval(IFilter::act(IReq::get('shopid'))) ;
         $parentid = intval(IFilter::act(IReq::get('parentid'))) ;
@@ -5778,7 +5778,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         Mysite::$app->setdata($data);
     }
     public function mkcatefoods()
-    {	//超市点击分类ajax获取分类下的所有商品
+    {   //超市点击分类ajax获取分类下的所有商品
         $weekji = date('w');
         $shopid = intval(IFilter::act(IReq::get('shopid'))) ;
         $curcateid = intval(IFilter::act(IReq::get('curcateid'))) ;
@@ -5826,7 +5826,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
 
             $parentcateinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where id = ".$parentid." ");
-            #	print_r($catefoodslist);
+            #   print_r($catefoodslist);
             $cateinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."marketcate where id = ".$curcateid." ");
             $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id=".$parentcateinfo['shopid']." ");
             $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where shopid = ".$shopinfo['id']." ");
@@ -5926,7 +5926,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         /* 搜索店铺 结果  */
         $where = '';
         $shopsearch = IFilter::act(IReq::get('searchname'));
-        $shopsearch		 = urldecode($shopsearch);
+        $shopsearch      = urldecode($shopsearch);
         if (!empty($shopsearch)) {
             $where=" and shopname like '%".$shopsearch."%' ";
         }
@@ -5954,7 +5954,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $tempdd = array();
         //and is_recom = 1
         $tempdd[] =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and (   admin_id='".$this->CITY_ID."'  or  admin_id = 0 )     and endtime > ".time()."  ".$where." ");
-        #	$tempdd[] =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and (   admin_id='".$this->CITY_ID."'  or  admin_id = 0 )  and is_open = 1  and is_recom != 1 and endtime > ".time()."  ".$where." ");
+        #   $tempdd[] =   $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  and (   admin_id='".$this->CITY_ID."'  or  admin_id = 0 )  and is_open = 1  and is_recom != 1 and endtime > ".time()."  ".$where." ");
         // print_r($tempdd);
         $nowhour = date('H:i:s', time());
         $nowhour = strtotime($nowhour);
@@ -5996,7 +5996,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
 
 
-                        $checkps = 	 $this->pscost($values);
+                        $checkps =   $this->pscost($values);
                         $values['pscost'] = $checkps['pscost'];
 
 
@@ -6004,9 +6004,9 @@ CREATE TABLE `xiaozu_shophuiorder` (
                         $tempmi = $mi;
                         $mi = $mi > 1000? round($mi/1000, 2).'km':$mi.'m';
 
-                        $values['juli'] = 		$mi;
+                        $values['juli'] =       $mi;
 
-                        $shopcounts = $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where status = 3 and  shopid = ".$values['id']."");
+                        $shopcounts = $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order     where status = 3 and  shopid = ".$values['id']."");
 
                         if (empty($shopcounts['shuliang'])) {
                             $values['ordercount'] = 0;
@@ -6038,7 +6038,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                         } else {
                             $shopstart= 0;
                         }
-                        $values['point'] = 	$shopstart;
+                        $values['point'] =  $shopstart;
 
                         // print_r($values['point']);
                         $values['attrdet'] = array();
@@ -6060,7 +6060,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $data['shopsearchlist']   = $templist;
 
 
-        #	print_r($data['shopsearchlist']);
+        #   print_r($data['shopsearchlist']);
 
 
 
@@ -6069,7 +6069,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $weekji = date('w');
         $goodwhere = '';
         $goodssearch = IFilter::act(IReq::get('searchname'));
-        $goodssearch		 = urldecode($goodssearch);
+        $goodssearch         = urldecode($goodssearch);
         if (!empty($goodssearch)) {
             $goodlistwhere=" and name like '%".$goodssearch."%' ";
         }
@@ -6146,9 +6146,9 @@ CREATE TABLE `xiaozu_shophuiorder` (
                     }
                     $goodssearchlist = $vakk;
 
-                    #			$vatt['goodsdet'] = $this->mysql->getarr("  ");
+                    #           $vatt['goodsdet'] = $this->mysql->getarr("  ");
 
-                                #		$templist11[] = $vatt;
+                                #       $templist11[] = $vatt;
                 }
             }
         }
@@ -6415,12 +6415,12 @@ CREATE TABLE `xiaozu_shophuiorder` (
                     $link = IUrl::creatUrl("wxsite/marketlist/typeid/{$ztyinfo['listids']}");
                 }
 //
-                //				if($ztyinfo['cx_type'] == 6){
-                //					$link = IUrl::creatUrl('wxsite/waimai');
-                //				}
-                //				if($ztyinfo['cx_type'] == 7){
-                //					$link = IUrl::creatUrl('wxsite/marketlist');
-                //				}
+                //              if($ztyinfo['cx_type'] == 6){
+                //                  $link = IUrl::creatUrl('wxsite/waimai');
+                //              }
+                //              if($ztyinfo['cx_type'] == 7){
+                //                  $link = IUrl::creatUrl('wxsite/marketlist');
+                //              }
                 if ($ztyinfo['cx_type'] == 8) {
                     $link = IUrl::creatUrl('wxsite/dingtai');
                 }
@@ -6464,7 +6464,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
         $speciallist = $this->getztyshowlist($ztyinfo['is_custom'], $ztyinfo['showtype'], $ztyinfo['cx_type'], $ztyinfo['listids'], $latx, $lngx, $page);
 
-        //		$speciallist = $this->getztyshowlist($ztyinfo['is_custom'],$ztyinfo['showtype'],$ztyinfo['cx_type'],$ztyinfo['listids'],$latx,$lngx,$ctidx,$page);
+        //      $speciallist = $this->getztyshowlist($ztyinfo['is_custom'],$ztyinfo['showtype'],$ztyinfo['cx_type'],$ztyinfo['listids'],$latx,$lngx,$ctidx,$page);
 
         #print_r($speciallist);
 
@@ -6481,7 +6481,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         exit;
         $this->success($data);
 
-        /* 	 print_r($backdata);
+        /*   print_r($backdata);
                 exit;  */
         $this->success($backdata);
     }
@@ -6496,18 +6496,18 @@ CREATE TABLE `xiaozu_shophuiorder` (
     专题页管理
     xiaozu_specialpage  专题页活动表
         id
-        name	名称
-        indeximg	首页显示图片
-        specialimg	专题页头部显示图片
-        color	专题页背景主色调
-***		is_custom 	是否是自定义	默认为1固定的  0为自定义的
-***		showtype	针对的是商品还是店铺  默认0为店铺 1为商品
-***		cx_type		如果是商品1为折扣  如果是店铺 1为推荐店铺  2为免减商家 3为打折商家 4免配送费
-***		listids		如果是自定义的话 所对应的店铺id集或者商品id集
-        ruleintro	规则说明
-        is_show		是否展示 默认1展示 0不展示
-        orderid		排序
-        addtime		添加时间
+        name    名称
+        indeximg    首页显示图片
+        specialimg  专题页头部显示图片
+        color   专题页背景主色调
+***     is_custom   是否是自定义  默认为1固定的  0为自定义的
+***     showtype    针对的是商品还是店铺  默认0为店铺 1为商品
+***     cx_type     如果是商品1为折扣  如果是店铺 1为推荐店铺  2为免减商家 3为打折商家 4免配送费
+***     listids     如果是自定义的话 所对应的店铺id集或者商品id集
+        ruleintro   规则说明
+        is_show     是否展示 默认1展示 0不展示
+        orderid     排序
+        addtime     添加时间
     */
     public function getztyshowlist($is_custom, $showtype, $cx_type, $listids, $latx=0, $lngx=0, $ctidx=0, $page=0)
     {
@@ -6565,8 +6565,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
             case 1:
                 //专题页8.7修改
                 $list = $this->getdycxshops(1, $page);
-//				$ztywhere =  "  and  is_recom = 1   ";
-//				$list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 ".$ztywhere."  ".$where."   order by sort asc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
+//              $ztywhere =  "  and  is_recom = 1   ";
+//              $list = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop where is_pass = 1 ".$ztywhere."  ".$where."   order by sort asc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
                 break;
                case 2:
                 $list = $this->getdycxshops(2, $page);
@@ -6632,7 +6632,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                         $cxclass->setdata($values['id'], 1000, $values['shoptype']);
 
 
-                        $checkps = 	 $this->pscost($values);
+                        $checkps =   $this->pscost($values);
                         $values['pscost'] = $checkps['pscost'];
 
 
@@ -6640,10 +6640,10 @@ CREATE TABLE `xiaozu_shophuiorder` (
                         $tempmi = $mi;
                         $mi = $mi > 1000? round($mi/1000, 2).'km':$mi.'m';
 
-                        $values['juli'] = 		$mi;
+                        $values['juli'] =       $mi;
 
-                        $shopcounts = $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order	 where   status = 3 and  shopid = ".$values['id']."");
-                        #	print_r(  $shopcounts );
+                        $shopcounts = $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order     where   status = 3 and  shopid = ".$values['id']."");
+                        #   print_r(  $shopcounts );
                         if (empty($shopcounts['shuliang'])) {
                             $values['ordercount'] = 0;
                         } else {
@@ -6667,7 +6667,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                         } else {
                             $shopstart= 0;
                         }
-                        $values['point'] = 	$shopstart;
+                        $values['point'] =  $shopstart;
                         $values['attrdet'] = array();
                         foreach ($attrdet as $k=>$v) {
                             if ($v['firstattr'] == $attra['input']) {
@@ -6735,7 +6735,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                             $checkinfo = $this->shopIsopen($vatt['is_open'], $vatt['starttime'], $shopdet['is_orderbefore'], $nowhour);
                             $valq['opentype'] = $checkinfo['opentype'];
                             $valq['shopname'] = $vatt['shopname'];
-                            //	print_r($valq['is_cx']);
+                            //  print_r($valq['is_cx']);
                             if ($is_custom == 1) {
                                 if ($valq['is_cx'] == 1) {
                                     $templist[]  = $valq;
@@ -6757,8 +6757,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function getdycxshops($type, $page)
     {  // 获取对应促销类型的商家
 
-        //			    $pageinfo = new page();
-        //			    $pageinfo->setpage(intval(IReq::get('page')),10);
+        //              $pageinfo = new page();
+        //              $pageinfo->setpage(intval(IReq::get('page')),10);
 
         //  limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."
         $d = (date("w") ==0) ?7:date("w") ;
@@ -6799,7 +6799,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
         if ($uid > 0) {
             $memberinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member  where uid = '".$uid."' ");
-            $data['shopinfo'] =	$this->mysql->select_one("select id,is_pass from ".Mysite::$app->config['tablepre']."shop  where id = '".$memberinfo['shopid']."' ");
+            $data['shopinfo'] = $this->mysql->select_one("select id,is_pass from ".Mysite::$app->config['tablepre']."shop  where id = '".$memberinfo['shopid']."' ");
         } else {
             $data['shopinfo'] = array();
         }
@@ -6810,12 +6810,12 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $this->message('', $link);
             //}
         }
-        #	print_r($data['shopinfo']);
+        #   print_r($data['shopinfo']);
         Mysite::$app->setdata($data);
     }
     public function sjapplyrz()
     {
-        $shopphone	 =    IFilter::act(IReq::get('shopphone'));
+        $shopphone   =    IFilter::act(IReq::get('shopphone'));
         $shopname    =    IFilter::act(IReq::get('shopname'));
         $shopaddress =    IFilter::act(IReq::get('shopaddress'));
         $shoplicense =    IFilter::act(IReq::get('shoplicense'));
@@ -6853,7 +6853,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
     }
     public function shangjiaapply()
     {
-        $shopphone	 =    IFilter::act(IReq::get('shopphone'));
+        $shopphone   =    IFilter::act(IReq::get('shopphone'));
         $shopname    =    IFilter::act(IReq::get('shopname'));
         $shopaddress =    IFilter::act(IReq::get('shopaddress'));
         $shoplicense =    IFilter::act(IReq::get('shoplicense'));
@@ -6891,7 +6891,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function shangjiaresult()
     {
         $shopid =    intval(IReq::get('shopid'));
-        $data['shopinfo'] =	$this->mysql->select_one("select id,is_pass from ".Mysite::$app->config['tablepre']."shop  where id = '".$shopid."' ");
+        $data['shopinfo'] = $this->mysql->select_one("select id,is_pass from ".Mysite::$app->config['tablepre']."shop  where id = '".$shopid."' ");
 
         Mysite::$app->setdata($data);
     }
@@ -6920,7 +6920,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function notice()
     {
         $id =    intval(IReq::get('id'));
-        $data['noticeinfo'] =	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information   where type= 1 and  id = '".$id."' ");
+        $data['noticeinfo'] =   $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information   where type= 1 and  id = '".$id."' ");
         Mysite::$app->setdata($data);
     }
     /* 新增生活助手 */
@@ -6941,7 +6941,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function lifeass()
     {
         $id =    intval(IReq::get('id'));
-        $data['lifeassinfo'] =	$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information  where type = 2 and  id = '".$id."' ");
+        $data['lifeassinfo'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."information  where type = 2 and  id = '".$id."' ");
         Mysite::$app->setdata($data);
     }
 
@@ -7507,8 +7507,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
                                 $attra['checkbox'] =  $attra['checkbox'] > 0?$attra['checkbox']:$vall['id'];
                             }
                         }
-                        #		print_r($attra);
-                        #		echo("11111111");
+                        #       print_r($attra);
+                        #       echo("11111111");
 
                         if ($values['shoptype'] == 1) {
                             $shopdet = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$values['id']."   ");
@@ -7530,12 +7530,12 @@ CREATE TABLE `xiaozu_shophuiorder` (
                             $tempmi = $mi;
                             $mi = $mi > 1000? round($mi/1000, 2).'km':$mi.'m';
 
-                            $values['juli'] = 		$mi;
+                            $values['juli'] =       $mi;
 
-                            $checkps = 	 $this->pscost($values);
+                            $checkps =   $this->pscost($values);
                             $values['pscost'] = $checkps['pscost'];
 
-                            $shopcounts = $this->mysql->select_one("select sellcount as shuliang  from ".Mysite::$app->config['tablepre']."shop	 where    id = ".$values['id']."");
+                            $shopcounts = $this->mysql->select_one("select sellcount as shuliang  from ".Mysite::$app->config['tablepre']."shop  where    id = ".$values['id']."");
                             if (empty($shopcounts['shuliang'])) {
                                 $values['ordercount'] = 0;
                             } else {
@@ -7562,7 +7562,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                             } else {
                                 $shopstart= 0;
                             }
-                            $values['point'] = 	$shopstart;
+                            $values['point'] =  $shopstart;
                             $values['attrdet'] = array();
                             foreach ($attrdet as $k=>$v) {
                                 if ($v['firstattr'] == $attra['input']) {
@@ -7574,7 +7574,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                                 }
                             }
 
-                            #		 print_r($values['attrdet']);
+                            #        print_r($values['attrdet']);
 
                             $templist[] = $values;
                         }
@@ -7613,7 +7613,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $this->showpayhtml($errdata);
         }
         $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shophuiorder where id=".$orderid."  ");  //获取主单
-        //	print_r($orderinfo);
+        //  print_r($orderinfo);
         if (empty($orderinfo)) {
             $errdata['url'] = $payerrlink;
             $errdata['reason'] = '订单数据获取失败';
@@ -7737,7 +7737,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
         /* $wxclass = new wx_s();
         $signPackage = $wxclass->getSignPackage();
-        $data['signPackage'] = $signPackage;		 */
+        $data['signPackage'] = $signPackage;         */
         $uid = $this->member['uid'];
         $shareinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."juanshowinfo where id = 3 ");
         if (empty($shareinfo)) {
@@ -7918,7 +7918,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $juandata['status'] = 1;// 状态，0未使用，1已绑定，2已使用，3无效
             $juandata['card'] = $nowtime.rand(100,999);
             $juandata['card_password'] =  substr(md5($juandata['card']),0,5);
-            $juandata['limitcost']	= $juaninfo['limitcost'];
+            $juandata['limitcost']  = $juaninfo['limitcost'];
             $juandata['alljuanid'] = $id;
 
             if($juansetinfo['timetype'] == 1){
@@ -7950,14 +7950,14 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function page()
     {
         $code = trim(IFilter::act(IReq::get('code')));
-		$data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
-	    Mysite::$app->setdata($data);
+        $data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
+        Mysite::$app->setdata($data);
     }
     public function about()
     {
         $code = 'about';
-		$data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
-	    Mysite::$app->setdata($data);
+        $data['single'] =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."single where  code ='".$code."'   order by id asc limit 0,1");
+        Mysite::$app->setdata($data);
     }
     public function contact()
     {
@@ -8069,7 +8069,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
                 $scoretocost =Mysite::$app->config['scoretocost'];
                 $order['scoredown'] =  $order['scoredown']/$scoretocost;//抵扣积分
                 $order['ps'] = $order['shopps'];
-                // 超市商品总价	 超市配送配送	shopcost 店铺商品总价	shopps 店铺配送费	pstype 配送方式 0：平台1：个人	bagcost
+                // 超市商品总价    超市配送配送 shopcost 店铺商品总价 shopps 店铺配送费    pstype 配送方式 0：平台1：个人    bagcost
                 $orderdet = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."orderdet where order_id='".$order['id']."'");
                 $order['cp'] = count($orderdet);
                 $buyerstatus= array(
@@ -8110,59 +8110,59 @@ CREATE TABLE `xiaozu_shophuiorder` (
     {
         $this->checkwxweb();
         $controlname =trim(IFilter::act(IReq::get('controlname')));
-		$orderid = intval(IReq::get('orderid'));
+        $orderid = intval(IReq::get('orderid'));
         $shopid = $this->member['shopinfo']['id'];
         $shopctlord = new shopctlord($orderid,$shopid,$this->mysql);
         switch($controlname){
-			case 'sendorder':
-				if($shopctlord->sendorder()){
-					$this->success('success');
-				}else{
-					$this->message($shopctlord->Error());
-				}
-			break;
-			case 'closeorder':
-				if($shopctlord->SetMemberls($this->memberCls)->closeorder()){
-					$this->success('success');
-				}else{
-					$this->message($shopctlord->Error());
-				}
-			break;
-			default:
-			$this->message('nodefined_func');
-			break;
-		}
+            case 'sendorder':
+                if($shopctlord->sendorder()){
+                    $this->success('success');
+                }else{
+                    $this->message($shopctlord->Error());
+                }
+            break;
+            case 'closeorder':
+                if($shopctlord->SetMemberls($this->memberCls)->closeorder()){
+                    $this->success('success');
+                }else{
+                    $this->message($shopctlord->Error());
+                }
+            break;
+            default:
+            $this->message('nodefined_func');
+            break;
+        }
     }
     public function shoptxadd(){
         $this->checkshopmemberlogin();
 
         $shopid = $this->member['shopinfo']['id'];
         $shopinfo = $this->member['shopinfo'];
-		$uid = $shopinfo['uid'];
+        $uid = $shopinfo['uid'];
         $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
-		$cost = trim(IFilter::act(IReq::get('cost')));
+        $cost = trim(IFilter::act(IReq::get('cost')));
 
-		$userinfo = $member;
-		$checkcost = intval($cost);
-		if($checkcost < 100){
-			$this->message('提现金额不能少于100元');
-		}
-		if($userinfo['shopcost'] < $checkcost){
-			$this->message('账号金额小于提现金额');
-		}
-		$newdata['cost'] = $checkcost;
-		$newdata['type'] = 0;
-		$newdata['status'] = 1;
-		$newdata['addtime'] = time();
-		$newdata['shopid'] = $shopid;
+        $userinfo = $member;
+        $checkcost = intval($cost);
+        if($checkcost < 100){
+            $this->message('提现金额不能少于100元');
+        }
+        if($userinfo['shopcost'] < $checkcost){
+            $this->message('账号金额小于提现金额');
+        }
+        $newdata['cost'] = $checkcost;
+        $newdata['type'] = 0;
+        $newdata['status'] = 1;
+        $newdata['addtime'] = time();
+        $newdata['shopid'] = $shopid;
         $newdata['shopuid'] =  $uid;
-		$newdata['name'] = '申请提现';
-	    $newdata['yue'] = $userinfo['shopcost']-$checkcost;
+        $newdata['name'] = '申请提现';
+        $newdata['yue'] = $userinfo['shopcost']-$checkcost;
 
         $this->mysql->update(Mysite::$app->config['tablepre'].'member','`shopcost`=`shopcost`-'.$checkcost,"uid ='".$uid."' ");
-		$this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
-	    $orderid = $this->mysql->insertid();
-		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
-		$this->success($info);
-	}
+        $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
+        $orderid = $this->mysql->insertid();
+        $info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
+        $this->success($info);
+    }
 }
