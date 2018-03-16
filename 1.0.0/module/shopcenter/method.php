@@ -3503,7 +3503,8 @@ class method extends baseclass
 	***/
 	public function shoptxadd(){
         $this->checkshoplogin();
-
+        require_once hopedir."class/LockSystem.php";
+        $lockSystem = new LockSystem(LockSystem::LOCK_TYPE_FILE);
         $shopid = ICookie::get('adminshopid');
         $shopinfo = $this->shopinfo();
 		$uid = $shopinfo['uid'];
@@ -3514,6 +3515,11 @@ class method extends baseclass
 		if(empty($shopinfo)){
 			$this->message('未开启店铺');
 		}
+
+        //获取锁
+        $lockKey = 'pay'.$shopid;
+        $lockSystem->getLock($lockKey,8);
+
 		$shopid = $shopinfo['id'];
 		$userinfo = $member;
 		$checkcost = intval($cost);
@@ -3535,6 +3541,8 @@ class method extends baseclass
 		$this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
 	    $orderid = $this->mysql->insertid();
 		$info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
+        //释放锁
+        $lockSystem->releaseLock($lockKey);
 		$this->success($info);
 	}
 }

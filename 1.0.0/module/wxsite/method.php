@@ -8157,11 +8157,18 @@ CREATE TABLE `xiaozu_shophuiorder` (
     public function shoptxadd(){
         $this->checkshopmemberlogin();
 
+        require_once hopedir."class/LockSystem.php";
+        $lockSystem = new LockSystem(LockSystem::LOCK_TYPE_FILE);
+
         $shopid = $this->member['shopinfo']['id'];
         $shopinfo = $this->member['shopinfo'];
         $uid = $shopinfo['uid'];
         $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
         $cost = trim(IFilter::act(IReq::get('cost')));
+
+        //获取锁
+        $lockKey = 'pay'.$shopid;
+        $lockSystem->getLock($lockKey,8);
 
         $userinfo = $member;
         $checkcost = intval($cost);
@@ -8184,6 +8191,8 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $this->mysql->insert(Mysite::$app->config['tablepre'].'shoptx',$newdata);
         $orderid = $this->mysql->insertid();
         $info = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shoptx  where id = ".$orderid." ");
+        //释放锁
+        $lockSystem->releaseLock($lockKey);
         $this->success($info);
     }
 }
