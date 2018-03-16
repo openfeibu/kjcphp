@@ -590,7 +590,7 @@ class method extends baseclass
             //     $pradiusvalues[] = $pradiusvalue;
             // }
             // $data['pradiusvalue'] = serialize($pradiusvalues);
-            $data['pscost'] =  intval(IReq::get('pscost'));
+            //$data['pscost'] =  intval(IReq::get('pscost'));
 
             $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopinfo['id']."'");
         } elseif ($shopinfo['shoptype'] == 1) { //超市
@@ -2169,6 +2169,7 @@ class method extends baseclass
         if (empty($shopid)) {
             $this->message('emptycookshop');
         }
+        $fastfood = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shopfast where shopid=".$shopid."  ");
         $starttime = trim(IFilter::act(IReq::get('starttime')));
         $orderSource = intval(IReq::get('orderSource'));
         $nowday = date('Y-m-d', time());
@@ -2225,7 +2226,19 @@ class method extends baseclass
         $tempshu =  $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order where shopid='".$shopid."' and  status > 0  and  status <  4 and posttime > ".$daymintime." limit 0,1000");
         //统计当天订单
         $data['hidecount'] = $tempshu['shuliang'];
-        $data['playwave'] = ICookie::get('playwave'); //shoporderlist
+        $data['playwave'] = ICookie::get('playwave');
+        /*
+        $is_wave = 0;
+        if($data['playwave'] == 0)
+        {
+            $no_send = $this->mysql->select_one("select count(id) as no_send_count  from ".Mysite::$app->config['tablepre']."order where shopid='".$shopid."' and  status = 1 and is_reback = 0 and posttime > ".$daymintime." limit 0,1000");
+            $no_send_count = $no_send['no_send_count'];
+            if($no_send_count){
+                $is_wave = 1;
+            }
+        }
+        $data['is_wave'] = 1;
+        */
         Mysite::$app->setdata($data);
     }
     public function wavecontrol()
@@ -2440,7 +2453,7 @@ class method extends baseclass
             $this->message('emptycookshop');
         }
         $daymintime = strtotime(date('Y-m-d', time()));
-        $tempshu =  $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order where shopid='".$shopid."' and  status <=  2 and posttime > ".$daymintime." limit 0,1000");
+        $tempshu =  $this->mysql->select_one("select count(id) as shuliang  from ".Mysite::$app->config['tablepre']."order where shopid='".$shopid."' and  status > 0 and status <  4 and posttime > ".$daymintime." limit 0,1000");
         $hidecount = $tempshu['shuliang'];
         $this->success($hidecount);
     }

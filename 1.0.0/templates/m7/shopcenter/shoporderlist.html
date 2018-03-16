@@ -315,7 +315,7 @@
                         <{elseif $items['is_make'] == 1}>
                             <{if $items['is_reback'] != 4}>
                                 <{if $items['is_goshop'] != 1 }>
-                                
+
                                 <span onclick="sendorder(<{$items['id']}>);" class="curbtn">
                                 <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/qrdd.png" /></span>
                                 <span onclick="closeorder(<{$items['id']}>);" class="curbtn">
@@ -401,27 +401,25 @@
  	<{else}>
  		var playwave = false;
  	<{/if}>
-				$(function(){
-					 if(playwave == true){
-					 	$('#startwave').css('background','#ec7501');
-					}else{
-						$('#closetwave').css('background','#ec7501');
-					}
-					$("#startwave").click(function(){
-						$(this).css('background','#ec7501');//.siblings().css('background','');
-						$('#closetwave').css('background','');
-						playwave =   true;
-						ajaxback('<{ofunc type=url link="/shopcenter/wavecontrol/type/openwave/datatype/json"}>','');
-					});
-					$("#closetwave").click(function(){
-						$(this).css('background','#ec7501');//.siblings().css('background','');
-							$('#startwave').css('background','');
-								playwave = false;
-					    	ajaxback('<{ofunc type=url link="/shopcenter/wavecontrol/type/closewave/datatype/json"}>','');
-
-					});
-
-				});
+	$(function(){
+		 if(playwave == true){
+		 	$('#startwave').css('background','#ec7501');
+		}else{
+			$('#closetwave').css('background','#ec7501');
+		}
+		$("#startwave").click(function(){
+			$(this).css('background','#ec7501');//.siblings().css('background','');
+			$('#closetwave').css('background','');
+			playwave =   true;
+			ajaxback('<{ofunc type=url link="/shopcenter/wavecontrol/type/openwave/datatype/json"}>','');
+		});
+		$("#closetwave").click(function(){
+			$(this).css('background','#ec7501');//.siblings().css('background','');
+				$('#startwave').css('background','');
+					playwave = false;
+		    	ajaxback('<{ofunc type=url link="/shopcenter/wavecontrol/type/closewave/datatype/json"}>','');
+		});
+	});
 function refreshorder(){
 	window.location.reload();
 }

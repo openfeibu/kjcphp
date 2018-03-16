@@ -4399,7 +4399,28 @@ class method extends wxbaseclass
         if (empty($this->member['uid'])) {
             $this->message('member_nologin');
         }
-
+        $orderid = intval(IReq::get('orderid'));
+        $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id='".$orderid."' and buyeruid=".$this->member['uid']."  ");
+        $err = '';
+        if($orderinfo['is_reback'] > 0){
+			$err = '退款处理中，不能受理';
+		}
+		if($orderinfo['status'] > 3){
+			$err = '订单已取消，不能受理';
+		}
+		if($orderinfo['status'] == 2){
+			$err = '订单已发货，不能受理';
+		}
+		if($orderinfo['status'] == 3){
+			$err = '订单已完成，不能受理';
+		}
+		if($orderinfo['status'] == 0){
+			$err = '订单还未通过审核，不能受理';
+		}
+        if($err)
+        {
+            $this->message($err);
+        }
         $drawbacklog = new drawbacklog($this->mysql, $this->memberCls);
 
         $check = $drawbacklog->save();
