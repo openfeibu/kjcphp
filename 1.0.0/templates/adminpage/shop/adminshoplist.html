@@ -101,7 +101,7 @@
                         <td align="center">
                         <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">提现账号设置</a></td>
                         <td align="center">
-                            <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>');" href="#"><{$items['pscost']}></a>
+                            <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>','<{$items['pscost']}>');" href="#"><{$items['pscost']}></a>
                         </td>
                          <td align="center"><a href="<{ofunc type=url link="/adminpage/shop/module/resetdefualt/shopid/<{$items['id']}>"}>" target="_blank"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/but.png"></a></td>
                       </tr>
@@ -287,10 +287,39 @@ function psset(shopid,shopname){
 function txset(shopid,shopname){
 	 dialogs = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=shop&module=settx&shopid='+shopid,{height:'300px',width:'700px'},false);
 }
-function pscostset()
+
+function pscostset(shopid,shopname,pscost)
 {
-    dialogs = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=shop&module=settx&shopid='+shopid,{height:'300px',width:'700px'},false);
+	var pscost = pscost;
+  var	htmls = '<form method="post" id="subpscost" action="#" style="text-align:center;"><table>';
+	htmls += '<tbody><tr>';
+	htmls += '<td height="50px">配送费:</td>';
+	htmls += '<td> <input type="text" name="pscost" value="'+pscost+'" style="width:100px;"></td></tr>';
+	htmls += '</tr>';
+
+	htmls += '</tbody></table> ';
+  htmls += '<input type="hidden" value="'+shopid+'" name="shopid"> ';
+	htmls += '<input type="button" value="确认提交" class="button" id="buttonsubpscost" ></form>';
+  art.dialog({
+    id: 'testID4',
+    title:'设置'+shopname+'配送费',
+    content: htmls
+  });
 }
+$('#buttonsubpscost').live('click',function(){
+	$.post('<{ofunc type=url link="/adminpage/shop/module/savesetshoppscost/datatype/json"}>', $('#subpscost').serialize() ,function (data, textStatus){
+			if(data.error == false){
+     	  	diasucces('操作成功','');
+     	}else{
+     		if(data.error == true)
+     		{
+     			diaerror(data.msg);
+     		}else{
+     			diaerror(data);
+     		}
+     	}
+	 }, 'json');
+});
 </script>
 <!--newmain 结束-->
 <{/block}>

@@ -1722,4 +1722,16 @@ class method extends adminbaseclass
         echo "<script>parent.uploadsucess1('操作成功');</script>";
         exit;
     }
+    public function savesetshoppscost()
+    {
+        $shopid =  intval(IReq::get('shopid'));
+        $pscost = IReq::get('pscost') ? IReq::get('pscost') : 0;
+        if(empty($shopid))
+        {
+            $this->message("店铺不存在");
+        }
+        $data['pscost'] = $pscost;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopid."'");
+        $this->success('success');
+    }
 }
