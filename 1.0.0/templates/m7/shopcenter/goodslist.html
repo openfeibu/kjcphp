@@ -111,6 +111,9 @@ $("#bldsearch").keyup(function(){
 
                     <div class="caidanTitle" style="height:auto;overflow:auto;">
                 	<ul>
+                        <{if !empty($cx_goods_list) }>
+                        <li data="0" dataname="促销" class="active" dataorder="0">促销</li>
+                        <{/if}>
                 		<{foreach from=$list key=myid item=items}>
                     	<li  data="<{$items['id']}>"  dataname="<{$items['name']}>" dataorder="<{$items['orderid']}>"><{$items['name']}></li>
                      <{/foreach}>
@@ -174,6 +177,44 @@ text-align: center;
 border-right: 1px solid #4c4a48;}
                         .is_live{cursor:pointer;}
 						</style>
+                        <{if !empty($cx_goods_list) }>
+                            <div id="subaddtype_0">
+                            <{foreach from=$cx_goods_list item=ite }>
+                                    <div class="order_list	listgoodsdet goodsdiv_0  goodstr_<{$ite['parentid']}>"   data="<{$ite['id']}>" id="goodstr_<{$ite['id']}>" have_det="<{$ite['have_det']}>" goodname="<{$ite['name']}>" >
+        								 <div class="order_goodlist">
+        									<div class="cd_name" style="width:247px;">
+        										<p class="name"><{$ite['name']}></p>
+        									</div>
+        									<div class="cd_price">
+        										<p class="cost"><{$ite['cost']}></p>
+        									</div>
+        									<div class="cd_dbf">
+        										 <p class="bagcost"><{$ite['bagcost']}></p>
+        									</div>
+        									<div class="cd_dayNum"style="width:80px;">
+        										 <p class="count"><{$ite['count']}></p>
+        									</div>
+
+                                             <div class="cd_dayNum"style="width:80px;">
+                                                 <span class="is_live"><{if $ite['is_live'] ==1}>下架<{else}>上架<{/if}></span>
+                                             </div>
+
+
+        									  <div class="cd_order"style="width:79px;">
+        										 <p class="good_order"><{$ite['good_order']}></p>
+        									</div>
+        									 <div class="cd_caozuo" style="width:190px;">
+
+        										 <span style=" background:#27a9e3; padding:8px; color:#fff;" class="curbtn" onclick="editgoods('<{$ite['id']}>');">编辑</span>
+        										  <span style=" background:#ec7501; padding:8px; color:#fff;" class="curbtn" onclick="delgoods('<{$ite['id']}>');">删除</span>
+
+        									</div>
+        							   </div>
+        							</div>
+
+                            <{/foreach}>
+                            </div>
+                        <{/if}>
                       <{foreach from=$list key=myid item=items}>
 		 <div id="subaddtype_<{$items['id']}>">
                       <{foreach from=$items['det']  item=ite}>

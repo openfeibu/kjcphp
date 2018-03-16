@@ -804,6 +804,17 @@ class method extends baseclass
         $data['checksign'] = $checksign;
         $data['showshu'] = count($goodssign);
         $data['jsondata'] = json_encode($goodssign);
+
+        /*  优惠商品开始  */
+        $cx_goodsids = array();
+        $nowtime = time();
+        $nowdate = date('Y-m-d', time());
+        $checktime = $nowtime-strtotime($nowdate);
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid WHERE g.shopid = $shopid AND g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) ";
+        $goods_list = $this->mysql->getarr($sql);
+        $data['cx_goods_list'] = $goods_list;
+        $data['cx_goodsids'] = $cx_goodsids;
+
         Mysite::$app->setdata($data);
     }
     //超市产品
