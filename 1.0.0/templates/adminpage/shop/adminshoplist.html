@@ -68,6 +68,7 @@
                         <!-- <th align="center">排序</th> -->
                         <th align="center">有效时间</th>
                         <th align="center">提现账号</th>
+                        <th align="center">配送费</th>
                         <th align="center">操作</th>
 
                       </tr>
@@ -76,8 +77,7 @@
 
                      <tbody>
 
-                     <{load_data assign="list" table="shop" showpage="true"  where="is_pass='1' <{$where}>"  orderby=" sort asc "  }>
-                      <{foreach from=$list['list'] item=items}>
+                      <{foreach from=$shoplist item=items}>
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
                         <td align="center" ><input type="checkbox" name="id[]" value="<{$items['id']}>"></td>
                         <td align="center"><{$items['shopname']}>[<font color=red><{$shoptype[$items['shoptype']]}></font>]</td>
@@ -98,8 +98,11 @@
                          </td>
                         <!-- <td align="center"><input type="text" name="pxinput" data="<{$items['id']}>" value="<{$items['sort']}>" style="width:30px;padding:0px;"></td> -->
                         <td align="center"><a href="#" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
-                          <td align="center">
+                        <td align="center">
                         <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">提现账号设置</a></td>
+                        <td align="center">
+                            <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>');" href="#"><{$items['pscost']}></a>
+                        </td>
                          <td align="center"><a href="<{ofunc type=url link="/adminpage/shop/module/resetdefualt/shopid/<{$items['id']}>"}>" target="_blank"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/but.png"></a></td>
                       </tr>
                        <{/foreach}>
@@ -119,7 +122,7 @@
 
 
                  	     	</div>
-                       <div class="show_page"><ul><{$list['pagecontent']}></ul></div>
+                       <div class="show_page"><ul><{$pagecontent}></ul></div>
                  </div>
 
                 <div class="blank20"></div>
@@ -283,6 +286,10 @@ function psset(shopid,shopname){
 }
 function txset(shopid,shopname){
 	 dialogs = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=shop&module=settx&shopid='+shopid,{height:'300px',width:'700px'},false);
+}
+function pscostset()
+{
+    dialogs = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=shop&module=settx&shopid='+shopid,{height:'300px',width:'700px'},false);
 }
 </script>
 <!--newmain 结束-->

@@ -20,18 +20,27 @@ class method extends adminbaseclass
         $data['phone'] =  trim(IReq::get('phone'));
 		$data['stationadminid'] =  trim(IReq::get('stationadminid'));
         //构造查询条件
-        $where = '';
-        $where =  $this->sqllink($where, 'username', $data['username'], '=');
-        $where =  $this->sqllink($where, 'email', $data['email'], '=');
-        $where =  $this->sqllink($where, 'group', $data['groupid'], '=');
-        $where =  $this->sqllink($where, 'phone', $data['phone'], '=');
-		$where =  $this->sqllink($where, 'stationadminid', $data['stationadminid'], '=');
-        $data['where'] = $where;
-        if($where){
-            $where = " where ".$where;
-        }else{
-            $where = '';
+        $newlink = '';
+        $where = ' where 1 ';
+        if (!empty($data['username'])) {
+            $where .= " and username like '%".$data['username']."%'";
+            $newlink .= '/username/'.$data['username'];
         }
+        if (!empty($data['phone'])) {
+            $where .=" and phone='".$data['phone']."'";
+            $newlink .= '/phone/'.$data['phone'];
+        }
+        if (!empty($data['email'])) {
+            $where .=" and email='".$data['email']."'";
+            $newlink .= '/phone/'.$data['email'];
+        }
+        if (!empty($data['stationadminid'])) {
+            $where .=" and stationadminid='".$data['stationadminid']."'";
+            $newlink .= '/stationadminid/'.$data['stationadminid'];
+        }
+
+        $data['where'] = $where;
+
         $pageinfo = new page();
         $pageinfo->setpage(intval(IReq::get('page')), 20);
 
@@ -61,14 +70,23 @@ class method extends adminbaseclass
         $data['stationid'] =  intval(IReq::get('stationid'));
         //构造查询条件
         $where = ' where 1';
-        $where .=   $data['username'] ? "AND m.username ='".$data['username']."'" : '';
-        $where .=   $data['email'] ? " AND m.email ='".$data['email']."'" : '';
-        $where .=   $data['group'] ? " AND m.group ='".$data['group']."'" : '';
-        $where .=   $data['stationid'] ? " AND s.stationid ='".$data['stationid']."'" : '';
+        $newlink = '';
+        if (!empty($data['username'])) {
+            $where .= " and m.username like '%".$data['username']."%'";
+            $newlink .= '/username/'.$data['username'];
+        }
+        if (!empty($data['email'])) {
+            $where .=" and m.email='".$data['email']."'";
+            $newlink .= '/phone/'.$data['email'];
+        }
+        if (!empty($data['stationid'])) {
+            $where .=" and s.stationid='".$data['stationid']."'";
+            $newlink .= '/stationid/'.$data['stationid'];
+        }
 
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 20);
-        $link = IUrl::creatUrl('/adminpage/member/module/memberlistshop');
+        $link = IUrl::creatUrl('/adminpage/member/module/memberlistshop'.$newlink);
 
         $memberlistshop = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."member as m join ".Mysite::$app->config['tablepre']."shop as s on s.uid = m.uid ".$where."  order by m.uid desc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
 

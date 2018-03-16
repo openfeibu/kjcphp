@@ -777,27 +777,37 @@ class method extends adminbaseclass
     public function adminshoplist()
     {
         $this->setstatus();
-        //$default_cityid = empty(Mysite::$app->config['default_cityid'])?0:Mysite::$app->config['default_cityid'];
-        //$where = " and ( admin_id = '".$default_cityid."' or admin_id = 0 ) ";
-		$where = ' and stationid > 0 ';
+		$where = ' where s.stationid > 0 ';
         $data['shopname'] =  trim(IReq::get('shopname'));
         $data['username'] =  trim(IReq::get('username'));
         $data['phone'] = trim(IReq::get('phone'));
-        //$data['cityid'] = intval(IReq::get('cityid'));
         $data['stationid'] = intval(IReq::get('stationid'));
+        $newlink = '';
         if (!empty($data['shopname'])) {
-            $where .= " and shopname like '%".$data['shopname']."%'";
+            $where .= " and s.shopname like '%".$data['shopname']."%'";
+            $newlink .= '/shopname/'.$data['shopname'];
         }
         if (!empty($data['username'])) {
-            $where .= " and uid in(select uid from ".Mysite::$app->config['tablepre']."member where username='".$data['username']."')";
+            $where .= " and s.uid in(select uid from ".Mysite::$app->config['tablepre']."member where username='".$data['username']."')";
+            $newlink .= '/username/'.$data['username'];
         }
         if (!empty($data['phone'])) {
-            $where .=" and phone='".$data['phone']."'";
+            $where .=" and s.phone='".$data['phone']."'";
+            $newlink .= '/phone/'.$data['phone'];
         }
         if (!empty($data['stationid'])) {
-            $where .=" and stationid='".$data['stationid']."'";
+            $where .=" and s.stationid='".$data['stationid']."'";
+            $newlink .= '/stationid/'.$data['stationid'];
         }
+        $pagelink = IUrl::creatUrl('adminpage/shop/module/adminshoplist'.$newlink);
+        $pageinfo = new page();
+        $pageinfo->setpage(intval(IReq::get('page')), 20);
+        $shoplist = $this->mysql->getarr("select s.* ,sf.pscost from ".Mysite::$app->config['tablepre']."shop as s join ".Mysite::$app->config['tablepre']."shopfast as sf on s.id = sf.shopid $where order by s.id desc limit ".$pageinfo->startnum().", ".$pageinfo->getsize()." ");
+        $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."shop as s join ".Mysite::$app->config['tablepre']."shopfast as sf on s.id = sf.shopid $where");
 
+        $pageinfo->setnum($shuliang);
+        $data['pagecontent'] = $pageinfo->getpagebar($pagelink);
+        $data['shoplist'] = $shoplist;
         //构造查询条件
         $data['where'] = $where;
         Mysite::$app->setdata($data);
