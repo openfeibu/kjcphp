@@ -7977,7 +7977,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $stationlist = $this->mysql->getarr("select id,lng,lat from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 order by id desc");
         $distancedata = array();
         foreach ($stationlist as $key => $value) {
-            $distance = distance($lat,$lng,$value['lat'],$stationlnglat['lng']);
+            $distance = distance($lat,$lng,$value['lat'],$value['lng']);
             $distancedata[$value['id']] = $distance;
         }
         asort($distancedata);
