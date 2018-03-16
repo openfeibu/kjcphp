@@ -1366,6 +1366,14 @@ $ch = curl_init($url);
         }*/
         return $status;
     }
+    /*
+    shopdowncost：满减平台承担优惠
+    allcost：用户付总费用
+    shopps：费送费
+    bagcost：打包费
+    goodscxcost：促销价格（不参与佣金）
+    yhjcost:优惠券价格，平台承担优惠
+    */
     public function clearing($orderinfo)
     {
         if($orderinfo['is_js'] != 1)
@@ -1381,14 +1389,14 @@ $ch = curl_init($url);
             $newdata['onlinecost'] = $shop_getcost;
             $newdata['unlinecount'] = 0;
             $newdata['unlinecost'] = 0;
-            $newdata['acountcost'] = $shop_getcost-$yjcost+$orderinfo['shopdowncost'];
+            $newdata['acountcost'] = $shop_getcost-$yjcost+$orderinfo['shopdowncost']+$orderinfo['yhjcost'];
             $newdata['goodscxcost'] = $orderinfo['goodscxcost'];
             $newdata['yjcost'] = $yjcost;
             $newdata['pstype'] = $sendtype = 1;
             $newdata['shopid'] = $shopinfo['id'];
             $newdata['shopuid'] = $shopinfo['uid'];
             //平台承担费用
-            $newdata['shopdowncost'] = $orderinfo['shopdowncost'];
+            $newdata['shopdowncost'] = $orderinfo['shopdowncost'] + $orderinfo['yhjcost'];
             $newdata['addtime'] = time();
             $newdata['jstime'] = time();
             $newdata['orderid'] = $orderinfo['id'];
