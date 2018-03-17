@@ -610,15 +610,15 @@ function get_status(){//<span id="timeshow" data="20" style="color:#666;"></div>
 function palywav(){
 	if(playwave == true){
 				if(navigator.userAgent.indexOf("Chrome") > -1){
-				$('#palywave').html('<audio src="<{$siteurl}>/upload/wave.mp3" type="audio/mp3" autoplay=”autoplay” hidden="true"></audio>');
+				$('#palywave').html('<audio src="<{$siteurl}>/upload/wave.m4a" type="audio/mp3" autoplay=”autoplay” hidden="true"></audio>');
 				}else if(navigator.userAgent.indexOf("Firefox")!=-1){
-				$('#palywave').html('<embed src="<{$siteurl}>/upload/wave.mp3" type="audio/mp3" hidden="true" loop="false" mastersound></embed>');
+				$('#palywave').html('<embed src="<{$siteurl}>/upload/wave.m4a" type="audio/mp3" hidden="true" loop="false" mastersound></embed>');
 				}else if(navigator.appName.indexOf("Microsoft Internet Explorer")!=-1 && document.all){
-				$('#palywave').html('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95"><param name="AutoStart" value="1" /><param name="Src" value="<{$siteurl}>/upload/wave.mp3" /></object>');
+				$('#palywave').html('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95"><param name="AutoStart" value="1" /><param name="Src" value="<{$siteurl}>/upload/wave.m4a" /></object>');
 				}else if(navigator.appName.indexOf("Opera")!=-1){
-				$('#palywave').html('<embed src="<{$siteurl}>/upload/wave.mp3" type="audio/mpeg" loop="false"></embed>');
+				$('#palywave').html('<embed src="<{$siteurl}>/upload/wave.m4a" type="audio/mpeg" loop="false"></embed>');
 				}else{
-				$('#palywave').html('<embed src="<{$siteurl}>/upload/wave.mp3" type="audio/mp3" hidden="true" loop="false" mastersound></embed>');
+				$('#palywave').html('<embed src="<{$siteurl}>/upload/wave.m4a" type="audio/mp3" hidden="true" loop="false" mastersound></embed>');
 				}
 
 
@@ -627,7 +627,7 @@ function palywav(){
    }
 }
 function playon(){
-	//$('#cct').load("<{$siteurl}>/upload/wave.mp3");
+	//$('#cct').load("<{$siteurl}>/upload/wave.m4a");
 
  	location.reload();
 }
