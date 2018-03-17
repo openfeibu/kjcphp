@@ -31,15 +31,15 @@
     	<div class="top">
         	<div class="topLeft fl">
             	<ul>
-                    <li>今日营业额：XXX元</li>
-                    <li>总营业额：XXXX元</li>
+                    <li>今日营业额：<{$todayshopcost}>元</li>
+                    <li>总营业额：<{$allshopcost}>元</li>
 
                 </ul>
                  <div class="cl"></div>
             </div>
             <div class="topRight fr">
 
-                    
+
                     <span class="username curbtn" onclick="openlink('<{ofunc type=url link="/member/loginout"}>');">退出</span>
 
 
@@ -117,7 +117,7 @@
 <!------以下是公共的底部部分------->
 
     <div class="footer">
-    
+
         <div class="foot2">
         	<p>@2018-2018 <{$sitename}> <{$beian}> <{$footerdata|stripslashes}></p>
         </div>
