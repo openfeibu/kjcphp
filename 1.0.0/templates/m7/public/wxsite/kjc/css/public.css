@@ -138,7 +138,7 @@
 }
 .c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_num{
   width: 12% !important;
-  
+
 }
 .c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_money {
   width: 20% !important;
@@ -153,7 +153,7 @@
 .pro_detail{top: 10%  !important;}
 
 .shop_header {background: #ff3156 !important;}
-.discount {background: #ff3156 !important;}
+/* .discount {background: #ff3156 !important;} */
 .shop_name{color: #fff !important;}
 .shop-detail .shop_header .shop_text_desc,.shop_text_date{color: #fff !important;}
 .shop-detail .shop_header .discount .discount_j{color: #fff !important;}
