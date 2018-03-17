@@ -160,10 +160,10 @@ class newsmcart
                 if (isset($this->carinfo['goods'][$goodsid])) {
                     $checkstock = $this->carinfo['goods'][$goodsid]+1;
                     if ($goodsinfo['is_cx'] == 1) {
-                        if ($checkstock > $goodsinfo['cxnum'] &&  $goodsinfo['cxnum']>0) {
-                            $this->errId = '已超过最大限购数量';
-                            return false;
-                        }
+                        // if ($checkstock > $goodsinfo['cxnum'] &&  $goodsinfo['cxnum']>0) {
+                        //     $this->errId = '已超过最大限购数量';
+                        //     return false;
+                        // }
                         if ($checkstock > $goodsinfo['count']) {
                             $this->errId = '商品库存不足';
                             return false;
@@ -194,10 +194,10 @@ class newsmcart
                 if (isset($this->carinfo['ggoods'][$goodsid])) {
                     $checkstock = $this->carinfo['ggoods'][$goodsid]+1;
                     if ($goodsinfo['is_cx'] == 1) {
-                        if ($checkstock > $goodsinfo['cxnum'] &&  $goodsinfo['cxnum']>0) {
-                            $this->errId = '已超过最大限购数量';
-                            return false;
-                        }
+                        // if ($checkstock > $goodsinfo['cxnum'] &&  $goodsinfo['cxnum']>0) {
+                        //     $this->errId = '已超过最大限购数量';
+                        //     return false;
+                        // }
                         if ($checkstock > $goodsinfo['count']) {
                             $this->errId = '商品库存不足';
                             return false;
