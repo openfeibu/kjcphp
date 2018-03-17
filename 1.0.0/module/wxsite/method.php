@@ -3436,10 +3436,16 @@ class method extends wxbaseclass
         #print_r($info['shopps']);
 
         //检测库存
+        //var_dump($info['goodslist']);exit;
         foreach ($info['goodslist'] as $key=>$value) {
-            if ($value['stock'] < $value['count']) {
-                $this->message('商品库存不足');
+            if($value['is_live'] !=1)
+            {
+                $this->message($value['name'].'已下架');
             }
+            if ($value['stock'] < $value['count']) {
+                $this->message($value['name'].'商品库存不足，剩余'.$value['stock']);
+            }
+
         }
 
         if (!strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {    //判断是微信浏览器不
