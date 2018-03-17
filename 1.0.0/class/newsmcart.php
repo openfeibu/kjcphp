@@ -198,6 +198,10 @@ class newsmcart
                             $this->errId = '已超过最大限购数量';
                             return false;
                         }
+                        if ($checkstock > $goodsinfo['count']) {
+                            $this->errId = '商品库存不足';
+                            return false;
+                        }
                     } else {
                         if ($checkstock > $goodsinfo['count']) {
                             $this->errId = '商品库存不足';
