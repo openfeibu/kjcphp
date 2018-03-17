@@ -676,6 +676,8 @@ class method extends adminbaseclass
     {
         $jstime = IFilter::act(IReq::get('daytime')); //结算日
         $searchvalue = IReq::get('searchvalue');
+        $stationid = IReq::get('stationid');
+
         $yjb=Mysite::$app->config['yjin'];
 
         $nowtime = time();
@@ -703,6 +705,11 @@ class method extends adminbaseclass
             $where2 .= ' where shopname = \''.$searchvalue.'\' ';
             $newlink .= '/searchvalue/'.$searchvalue;
         }
+        if (!empty($stationid)) {
+            $data['stationid'] = $stationid;
+            $where2 .= ' where stationid = \''.$stationid.'\' ';
+            $newlink .= '/stationid/'.$stationid;
+        }
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 10);
         $shoplist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shop  ".$where2." order by id desc   limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
@@ -719,7 +726,6 @@ class method extends adminbaseclass
                 $txlist =   $this->mysql->select_one("select sum(onlinecost) as onlinecost, sum(onlinecount) as onlinecount,sum(unlinecount) as unlinecount,sum(unlinecost) as unlinecost,sum(yjcost) as yjcost,pstype,sum(acountcost) as acountcost,addtime from ".Mysite::$app->config['tablepre']."shopjs  ".$where." and shopid = ".$value['id']." order by addtime desc   limit 0,1000");
                 $value['yjb']=$yjb;
                 $txlist['sendtype']=$shoppsinfo['sendtype'];
-//                  print_R($txlist['sendtype']);exit;
                 $newarray =  array_merge($value, $txlist);
                 $datalist[] = $newarray;
             }
@@ -728,7 +734,7 @@ class method extends adminbaseclass
         $data['pagecontent'] = $pageshow->getpagebar($link);
 
         $data['jslist'] = $datalist;
-
+        $data['stationid'] = $stationid ;
 
         Mysite::$app->setdata($data);
     }
