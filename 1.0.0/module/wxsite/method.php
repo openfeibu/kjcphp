@@ -972,7 +972,7 @@ class method extends wxbaseclass
         $nowtime = time();
         $nowdate = date('Y-m-d', time());
         $checktime = $nowtime-strtotime($nowdate);
-        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid WHERE g.shopid = $shopid AND g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) ";
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid WHERE g.shopid = $shopid AND g.is_cx = 1 AND g.is_live = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) ";
         $goods_list = $this->mysql->getarr($sql);
         foreach ($goods_list as $key => $goods) {
             $goods_list[$key]['cost'] = $goods['cost']*$goods['cxzhe']*0.01;
@@ -7874,7 +7874,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         $nowtime = time();
         $nowdate = date('Y-m-d', time());
         $checktime = $nowtime-strtotime($nowdate);
-        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid join ".Mysite::$app->config['tablepre']."shop as s on g.shopid = s.id WHERE s.stationid = ".$this->stationid." AND g.is_cx = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ";
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."goods as g left join ".Mysite::$app->config['tablepre']."goodscx as gc on g.id = gc.goodsid join ".Mysite::$app->config['tablepre']."shop as s on g.shopid = s.id WHERE s.stationid = ".$this->stationid." AND g.is_cx = 1 AND g.is_live = 1 AND ".$nowtime." > gc.cxstarttime AND ".$nowtime." < gc.ecxendttime AND (($checktime > gc.cxstime1 AND $checktime < gc.cxetime1) OR ($checktime > gc.cxstime2 AND $checktime < gc.cxetime2)) limit ".$pageinfo->startnum().", ".$pageinfo->getsize()."  ";
         $goods_list = $this->mysql->getarr($sql);
 
         foreach ($goods_list as $key => $goods) {
