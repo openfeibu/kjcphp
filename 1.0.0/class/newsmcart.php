@@ -136,11 +136,11 @@ class newsmcart
                 $this->errId = '商品不存在';
                 return false;
             }
-            if($goodsinfo['is_live'] !=1)
-            {
-                $this->errId = '商品已下架';
-                return false;
-            }
+            // if($goodsinfo['is_live'] !=1)
+            // {
+            //     $this->errId = '商品已下架';
+            //     return false;
+            // }
             if($goodsinfo['is_cx'] == 1)
             {
                  $orderdata = $this->mysql->select_one("select count(od.goodsid) as goodsidcount  from ".Mysite::$app->config['tablepre']."order as o join  ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id where o.buyeruid = '".$this->uid."' and od.goodsid =  '".$goodsid."' and o.addtime < $endtime and o.addtime > $starttime");
