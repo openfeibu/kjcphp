@@ -167,6 +167,9 @@ class method extends baseclass
                 $data['otherlink'] = IFilter::act(IReq::get('otherlink'));
                 $data['IMEI'] = IFilter::act(IReq::get('IMEI'));
                 $data['maphone'] =  IFilter::act(IReq::get('maphone'));
+                $data['machine_code'] =  IFilter::act(IReq::get('machine_code'));
+                $data['mKey'] =  IFilter::act(IReq::get('mKey'));
+
                 $link = IUrl::creatUrl('shopcenter/base');
                 if (!(IValidate::len($data['shopname'], 2, 50))) {
                     $this->message('shop_shopnamelenth');

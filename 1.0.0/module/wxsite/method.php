@@ -579,6 +579,9 @@ class method extends wxbaseclass
         ini_set('display_errors', 1);            //错误信息
         ini_set('display_startup_errors', 1);    //php启动错误信息
         error_reporting(-1);
+        $orderclass = new orderclass();
+        $orderclass->sendmess('33124');
+        exit;
         echo $this->CITY_ID;
         $data['shoplist'] = $this->Tdata($this->stationid, array(), array('sell'=>'desc'), '34.788678', '113.664677', 3);
         //Tdata($cityid,$limitarr,$paixuarr,$lat,$lng,$source,$limitjuli=0)

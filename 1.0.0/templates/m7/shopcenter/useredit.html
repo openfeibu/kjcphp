@@ -94,7 +94,7 @@
                         </div>
                         <div class="cl"></div>
                     </div>
-                 
+
 
                      <{assign var=foo value="|"|explode:$shopinfo['starttime']}>
                      <{foreach from=$foo key=myid item=items}>
@@ -170,8 +170,24 @@
                         </div>
                         <div class="cl"></div>
                     </div>
-
-
+                    <div class="serxuanze">
+                        <div class="xuanze_left">
+                           <span>打印机编号SN：</span>
+                          </div>
+                          <div class="dianpu_right" style="background:none;">
+                              <input type="text"  style="width:387px; " name="machine_code"   value="<{$shopinfo['machine_code']}>" >
+                          </div>
+                       <div class="cl"></div>
+                    </div>
+                    <div class="serxuanze">
+                        <div class="xuanze_left">
+                           <span>打印机识别码KEY：</span>
+                          </div>
+                          <div class="dianpu_right" style="background:none;">
+                           <input type="text" style="width:387px; "  name="mKey"   value="<{$shopinfo['mKey']}>" >
+                          </div>
+                       <div class="cl"></div>
+                    </div>
 
 
 
@@ -249,8 +265,9 @@ var defaultid = '';
         var starttime = alltime1+alltime2+alltime3;
         var otherlink = $('input[name="otherlink"]').val();
         var baidumap = $('input[name="baidumap"]').val();
-
-        var backinfo = ajaxback('<{ofunc type=url link="/shopcenter/useredit/datatype/json"}>',{'shopname':shopname,'IMEI':IMEI,'phone':phone,'address':address,'shortname':shortname,'email':email,'goodattrdefault':goodattrdefault,'is_open':is_open,'is_onlinepay':is_onlinepay,'is_daopay':is_daopay,'starttime':starttime,'otherlink':otherlink,'baidumap':baidumap,'maphone':$('input[name="maphone"]').val()});
+        var machine_code = $('input[name="machine_code"]').val();
+        var mKey = $('input[name="mKey"]').val();
+        var backinfo = ajaxback('<{ofunc type=url link="/shopcenter/useredit/datatype/json"}>',{'shopname':shopname,'IMEI':IMEI,'phone':phone,'address':address,'shortname':shortname,'email':email,'goodattrdefault':goodattrdefault,'is_open':is_open,'is_onlinepay':is_onlinepay,'is_daopay':is_daopay,'starttime':starttime,'otherlink':otherlink,'baidumap':baidumap,'machine_code':machine_code,'mKey':mKey,'maphone':$('input[name="maphone"]').val()});
         if(backinfo.flag == true)
         {
             diaerror(backinfo.content);

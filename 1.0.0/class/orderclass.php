@@ -236,6 +236,9 @@ class orderclass
     //发送下单通知
     public function sendmess($orderid)
     {
+        require_once hopedir."class/HttpClient.php";
+        require_once hopedir."class/printclass.php";
+
         $smtp = new ISmtp(Mysite::$app->config['smpt'], 25, Mysite::$app->config['emailname'], Mysite::$app->config['emailpwd'], false);
         $wx_s = new wx_s();
         $orderinfo =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."order  where id= '".$orderid."'   ");
@@ -280,7 +283,7 @@ class orderclass
             } else {
                 $bagcostContent = '';
             }
-
+/*
             $msg = '
 编号：'.$orderinfo['daycode'].'
 *******************************
@@ -306,7 +309,30 @@ class orderclass
 *******************************
 编号:'.$orderinfo['daycode'].'
 ';
-            $this->dosengprint($msg, $shopinfo['machine_code'], $shopinfo['mKey']);
+$this->dosengprint($msg, $shopinfo['machine_code'], $shopinfo['mKey']);
+*/
+$orderInfo = '<CB>测试打印</CB><BR>';
+$orderInfo .= '名称　　　　　 单价  数量 金额<BR>';
+$orderInfo .= '--------------------------------<BR>';
+$orderInfo .= '饭　　　　　 　10.0   10  10.0<BR>';
+$orderInfo .= '炒饭　　　　　 10.0   10  10.0<BR>';
+$orderInfo .= '蛋炒饭　　　　 10.0   100 100.0<BR>';
+$orderInfo .= '鸡蛋炒饭　　　 100.0  100 100.0<BR>';
+$orderInfo .= '西红柿炒饭　　 1000.0 1   100.0<BR>';
+$orderInfo .= '西红柿蛋炒饭　 100.0  100 100.0<BR>';
+$orderInfo .= '西红柿鸡蛋炒饭 15.0   1   15.0<BR>';
+$orderInfo .= '备注：加辣<BR>';
+$orderInfo .= '--------------------------------<BR>';
+$orderInfo .= '合计：xx.0元<BR>';
+$orderInfo .= '送货地点：广州市南沙区xx路xx号<BR>';
+$orderInfo .= '联系电话：13888888888888<BR>';
+$orderInfo .= '订餐时间：2014-08-08 08:08:08<BR>';
+$orderInfo .= '<QR>http://www.dzist.com</QR>';//把二维码字符串用标签套上即可自动生成二维码
+
+$printclass = new printclass();
+//打开注释可测试
+$printclass->wp_print($shopinfo['machine_code'],$orderInfo,1);
+
         }
 
 
