@@ -88,9 +88,9 @@
   var page=0
   var loading = false;
     $('body').infinite(50).on("infinite", function() {
-      if(loading) return;
-      loading = true;
-      loadmore(_this);
+	var _this = this;
+        if(_this.loading) return;
+        loadmore(_this);
     });
 
 

@@ -2643,8 +2643,8 @@ class method extends wxbaseclass
             $areaid = ICookie::get('myaddress');
             $tempinfo =   $this->pscost($shopcheckinfo);
             $backdata['pstype'] = $tempinfo['pstype'];
-            $backdata['pscost'] = $tempinfo['pscost'] * $backdata['sumcount'];
-
+            //$backdata['pscost'] = $tempinfo['pscost'] * $backdata['sumcount'];
+$backdata['pscost'] = $tempinfo['pscost'];
             $backdata['canps'] = $tempinfo['canps'];
             $backdata['nops'] = $cxinfo['nops'];
 
@@ -3425,7 +3425,8 @@ class method extends wxbaseclass
         $info['allcost'] = $carinfo['sum'] ;
         $info['bagcost'] = $carinfo['bagcost'];
         $info['allcount'] = $carinfo['count'];
-        $info['shopps'] = $checkps['pscost'] * $carinfo['count'];
+      //  $info['shopps'] = $checkps['pscost'] * $carinfo['count'];
+	  $info['shopps'] = $checkps['pscost'];
         $info['goodslist']   = $carinfo['goodslist'];
         $info['cxcosttotal'] = $carinfo['cxcosttotal'];
 
