@@ -236,7 +236,6 @@ class orderclass
     //发送下单通知
     public function sendmess($orderid)
     {
-        require_once hopedir."class/HttpClient.php";
         require_once hopedir."class/printclass.php";
 
         $smtp = new ISmtp(Mysite::$app->config['smpt'], 25, Mysite::$app->config['emailname'], Mysite::$app->config['emailpwd'], false);
@@ -275,64 +274,34 @@ class orderclass
         if (!empty($shopinfo['machine_code'])&&!empty($shopinfo['mKey'])) {
             $temp_content = '';
             foreach ($orderdet as $km=>$vc) {
-                $temp_content .= $vc['goodsname'].'('.$vc['goodscount'].'份) \n ';
+                $temp_content .= $vc['goodsname'].'('.$vc['goodscount'].'份) ('.$vc['goodscost'].'元) <BR>';
             }
 
             if ($orderinfo['is_goshop'] == 0 &&  $orderinfo['bagcost'] > 0) {
-                $bagcostContent =  '打包费：'.$orderinfo['bagcost'].'元 ';
+                $bagcostContent =  '打包费：'.$orderinfo['bagcost'].'元 <BR>';
             } else {
                 $bagcostContent = '';
             }
-/*
-            $msg = '
-编号：'.$orderinfo['daycode'].'
-*******************************
-商家：'.$shopinfo['shopname'].'
-订餐热线：'.Mysite::$app->config['litel'].'
-订单状态：'.$orderpaytype.',('.$orderpastatus.')
-姓名：'.$orderinfo['buyername'].'
-电话：'.$orderinfo['buyerphone'].'
-地址：'.$orderinfo['buyeraddress'].'
-下单时间：'.date('m-d H:i', $orderinfo['addtime']).'
-配送时间：'.date('m-d H:i', $orderinfo['posttime']).'
-*******************************
-'.$temp_content.'
-*******************************
 
-'.$bagcostContent.'
-配送费：'.$orderinfo['shopps'].'元
-合计：'.$orderinfo['allcost'].'元
-※※※※※※※※※※※※※※
-谢谢惠顾，欢迎下次光临
-订单编号'.$orderinfo['dno'].'
-备注'.$orderinfo['content'].'
-*******************************
-编号:'.$orderinfo['daycode'].'
-';
-$this->dosengprint($msg, $shopinfo['machine_code'], $shopinfo['mKey']);
-*/
-$orderInfo = '<CB>测试打印</CB><BR>';
-$orderInfo .= '名称　　　　　 单价  数量 金额<BR>';
-$orderInfo .= '--------------------------------<BR>';
-$orderInfo .= '饭　　　　　 　10.0   10  10.0<BR>';
-$orderInfo .= '炒饭　　　　　 10.0   10  10.0<BR>';
-$orderInfo .= '蛋炒饭　　　　 10.0   100 100.0<BR>';
-$orderInfo .= '鸡蛋炒饭　　　 100.0  100 100.0<BR>';
-$orderInfo .= '西红柿炒饭　　 1000.0 1   100.0<BR>';
-$orderInfo .= '西红柿蛋炒饭　 100.0  100 100.0<BR>';
-$orderInfo .= '西红柿鸡蛋炒饭 15.0   1   15.0<BR>';
-$orderInfo .= '备注：加辣<BR>';
-$orderInfo .= '--------------------------------<BR>';
-$orderInfo .= '合计：xx.0元<BR>';
-$orderInfo .= '送货地点：广州市南沙区xx路xx号<BR>';
-$orderInfo .= '联系电话：13888888888888<BR>';
-$orderInfo .= '订餐时间：2014-08-08 08:08:08<BR>';
-$orderInfo .= '<QR>http://www.dzist.com</QR>';//把二维码字符串用标签套上即可自动生成二维码
+            $msg = '<CB>'.$shopinfo['shopname'].'</CB><BR>';
+            $msg .= '姓名：'.$orderinfo['buyername'].'<BR>';
+            $msg .= '电话：'.$orderinfo['buyerphone'].'<BR>';
+            $msg .= '地址：'.$orderinfo['buyeraddress'].'<BR>';
+            $msg .= '下单时间：'.date('m-d H:i', $orderinfo['addtime']).'<BR>';
+            $msg .= '*******************************<BR>';
+            $msg .= ''.$temp_content.'';
+            $msg .= '*******************************<BR>';
+            $msg .= ''.$bagcostContent.'';
+            $msg .= '配送费：'.$orderinfo['shopps'].'元<BR>';
+            $msg .= '合计：'.$orderinfo['allcost'].'元<BR>';
+            $msg .= '※※※※※※※※※※※※※※<BR>';
+            $msg .= '谢谢惠顾，欢迎下次光临<BR>';
+            $msg .= '订单编号'.$orderinfo['dno'].'<BR>';
+            $msg .= '备注'.$orderinfo['content'].'<BR>';
+            $msg .= '*******************************<BR>';
 
-$printclass = new printclass();
-//打开注释可测试
-$printclass->wp_print($shopinfo['machine_code'],$orderInfo,1);
-
+            //把二维码字符串用标签套上即可自动生成二维码
+            wp_print($shopinfo['machine_code'],$msg,1);
         }
 
 
