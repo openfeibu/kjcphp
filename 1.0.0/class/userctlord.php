@@ -178,6 +178,11 @@ class userctlord
 
         $this->mysql->update(Mysite::$app->config['tablepre'].'order', $data, "id='".$this->orderinfo['id']."'");
         $this->mysql->update(Mysite::$app->config['tablepre'].'orderps', '`status`=3', "orderid ='".$this->orderinfo['id']."' ");
+
+        $shop = $this->mysql->select_one("select ordercount from ".Mysite::$app->config['tablepre']."shop where id='".$this->orderinfo['shopid']."' ");
+		$data1['ordercount'] = $shop['ordercount'] + 1;
+		$this->mysql->update(Mysite::$app->config['tablepre'].'shop',$data1," id=".$this->orderinfo['shopid']." ");
+
         $ordCls = new orderclass();
         $ordCls->writewuliustatus($this->orderinfo['id'], 10, $this->orderinfo['paytype']);  // 用户确认收货
 
