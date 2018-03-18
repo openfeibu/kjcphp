@@ -338,7 +338,58 @@ class wx_s
             return false;
         }
     }
-
+    /*
+    //推送模板信息    参数：发送给谁的openid,客户姓名，客户电话，推荐楼盘（参数自定）
+    public function sendMessage($openid,$customName,$customPhone,$reportBuilding) {
+        //获取全局token
+        if ($this->checktoken()) {
+            $url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$this->access_token;　　//模板信息请求地址
+            //发送的模板信息(微信要求json格式，这里为数组（方便添加变量）格式，然后转为json)
+            $post_data = array(
+                    "touser"=>$openid,　　//推送给谁,openid
+                    "template_id"=>"nKu4eyktzxOslxq0KfPxhGXbiOo873K9mIxKvs23EVU",　　//微信后台的模板信息id
+                    "url"=>"http://www.baidu.com",　　　　//下面为预约看房模板示例
+                    "data"=> array(
+                            "first" => array(
+                                    "value"=>"您有新客户，请及时查看！",
+                                    "color"=>"#173177"
+                            ),
+                            "customName"=>array(
+                                    "value"=>$customName,　　//传的变量
+                                    "color"=>"#173177"
+                            ),
+                            "customPhone"=>array(
+                                    "value"=>$customPhone,
+                                    "color"=>"#173177"
+                            ),
+                            "reportBuilding"=> array(
+                                    "value"=>$reportBuilding,
+                                    "color"=>"#173177"
+                            ),
+                            "reportTime"=> array(
+                                    "value"=>date('Y-m-d H:i:s'),
+                                    "color"=>"#173177"
+                            ),
+                            "remark"=> array(
+                                    "value"=>"请及时联系客户哦！",
+                                    "color"=>"#173177"
+                            ),
+                    )
+            );
+            $post_data = json_encode($post_data);
+            $data = $this->vpost($url,$post_data);
+            $data = json_decode($data,true); //将json数据转成数组
+            if ($data['errcode'] == 0) {
+                return true;
+            } else {
+                $this->errId = $data['errcode'];
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
+    */
     /*
     根据OpenID列表群发【订阅号不可用，服务号认证后可用】
 接口调用请求说明
