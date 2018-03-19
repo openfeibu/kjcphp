@@ -339,16 +339,16 @@ class wx_s
         }
     }
     //推送模板信息    参数：发送给谁的openid,客户姓名，客户电话，推荐楼盘（参数自定）
-    public function sendMbMessage($openid,$template_id,$data,$url) {
+    public function sendMbMessage($openid,$template_id,$data,$dolink) {
         //获取全局token
         if ($this->checktoken()) {
-            $url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$this->access_token;
+             $url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$this->access_token;
             //发送的模板信息(微信要求json格式，这里为数组（方便添加变量）格式，然后转为json)
             $post_data = array(
-                   "touser"=>$openid,　　//推送给谁,openid
-                    "template_id"=>$template_id = '43qUhi2wxxF5EWfHFCsB19YLceuNKm0DrBNlez1u_Xs',　　//微信后台的模板信息id
-                    "url"=>$url,　　　　//下面为预约看房模板示例
-                    "data"=> $data
+				'touser' => $openid,
+				'template_id' => $template_id,
+				'url' => $dolink,
+				'data' => $data
             );
             $post_data = json_encode($post_data);
             $data = $this->vpost($url,$post_data);

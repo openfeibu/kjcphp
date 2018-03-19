@@ -247,7 +247,7 @@ class method extends wxbaseclass
 
         $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo where stationis_open = 0 order by id desc");
 
-        // $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6");
+        $data['juansetinfo'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6");
         $time = time();
         $juansetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."alljuanset where type = 6 or name = '代金券活动' ");
         $juaninfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."alljuan where type = 6 AND count > 0 AND endtime > $time AND starttime <= $time order by id asc ");
@@ -580,7 +580,8 @@ class method extends wxbaseclass
         ini_set('display_startup_errors', 1);    //php启动错误信息
         error_reporting(-1);
         $orderclass = new orderclass();
-        $orderclass->sendmess('33124');
+        //$orderclass->sendmess('33129');
+		//$orderclass->sendpsmess('33129');
         echo 'success';
         exit;
         Mysite::$app->setdata($data);

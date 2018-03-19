@@ -324,7 +324,7 @@ class orderclass
                  $temp_content .='收货人:'.$orderinfo['buyername'].'\n';
                  $temp_content .='联系电话:'.$orderinfo['buyerphone'].'\n';
                  $temp_content .='地址:'.$orderinfo['buyeraddress'].'\n';
-                 $temp_content .='请点详情及时处理订单，不要让顾客就等哦\n';
+                 $temp_content .='请点详情及时处理订单，不要让顾客久等哦\n';
 
                  $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=shopordershow&orderid='.$orderinfo['id'];
 
@@ -340,9 +340,9 @@ class orderclass
              if($shopwxuser){
                  $temp_content = '';
                  foreach ($orderdet as $km=>$vc) {
-                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
+                     $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)";
                  }
-                 $template_id = '88eaR02txV8yKVNKmPDQOoXxresHFooXA2BByBaWVt4';
+                 $template_id = Mysite::$app->config['order_template_id'];
                  $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=shopordershow&orderid='.$orderinfo['id'];
                  $data = array(
                      "first" => array(
@@ -358,15 +358,19 @@ class orderclass
                              "color"=>"#173177"
                      ),
                      "keyword3"=>array(
+                             "value"=>$orderinfo['buyername'].$orderinfo['buyerphone'].' '.$orderinfo['buyeraddress'],
+                             "color"=>"#173177"
+                     ),
+					 "keyword4"=>array(
                              "value"=>'微信支付',
                              "color"=>"#173177"
                      ),
-                     "keyword4"=>array(
-                             "value"=>$orderinfo['content'].'\n',
+                     "keyword5"=>array(
+                             "value"=>$orderinfo['content'],
                              "color"=>"#173177"
                      ),
                      "remark"=> array(
-                             "value"=>"请点详情及时处理订单，不要让顾客就等哦",
+                             "value"=>"请点详情及时处理订单，不要让顾客久等哦",
                              "color"=>"#173177"
                      ),
                  );
@@ -390,6 +394,8 @@ class orderclass
         if (!empty($orderinfo['buyeruid'])) {
             // $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
             // if (!empty($wxbuyer)) {
+				//客服消息
+				/*
                 if ($orderinfo['is_goshop'] == 0 &&  $orderinfo['bagcost'] > 0) {
                     $bagcostContent =  ',打包费:'.$orderinfo['bagcost'].'元 ';
                 } else {
@@ -427,6 +433,50 @@ class orderclass
                         }
                     }
                 }
+				*/
+				//模板消息
+				$temp_content = '';
+                foreach ($orderdet as $km=>$vc) {
+                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)";
+                }
+				$temp_content .= "\n配送费:".$orderinfo['shopps'].'元';
+                $temp_content .= "\n打包费:".$orderinfo['bagcost'].'元';
+                $template_id = Mysite::$app->config['order_template_id'];
+                $data = array(
+                    "first" => array(
+                            "value"=> $orderinfo['shopname'].'收到新的订单，单号：'.$orderinfo['dno'],
+                            "color"=>"#173177"
+                    ),
+					"keyword1"=>array(
+						"value"=> $temp_content,
+						"color"=>"#173177"
+					),
+					"keyword2"=>array(
+						"value"=> $orderinfo['allcost'],
+						"color"=>"#173177"
+					),
+					"keyword3"=>array(
+						"value"=>$orderinfo['buyername'].$orderinfo['buyerphone'].' '.$orderinfo['buyeraddress'],
+						"color"=>"#173177"
+					),
+					"keyword4"=>array(
+						"value"=>'微信支付',
+						"color"=>"#173177"
+					),
+					"keyword5"=>array(
+						"value"=>$orderinfo['content'],
+						"color"=>"#173177"
+					),
+					"remark"=> array(
+						"value"=>"请及时配送，不要让顾客久等哦",
+						"color"=>"#173177"
+					),
+                );
+				$to_sender = $orderinfo['buyername'].$to_sender;
+				foreach($senders as $senderkey => $sender){
+					$wx_s->sendMbMessage($sender['openid'],$template_id,$data,'');
+				}
+                
             //}
         }
     }
