@@ -9,7 +9,7 @@
           <p>店铺名称：<{$member['shopinfo']['shopname']}></p>
           <p>账户类型：<{if $member['shopmember']['txtype'] == 'ali'}>支付宝<{else}>银行卡<{/if}></p>
           <p>账户名称：<{$member['shopmember']['txname']}></p>
-          <p>提现账户：<{$member['shopmember']['txaccount']}></p>
+          <p>提现账户：<{$member['shopmember']['backacount']}></p>
           <p>余额：<span><{$member['shopmember']['shopcost']}></span>元(低于100元不可提现)</p>
         </div>
 

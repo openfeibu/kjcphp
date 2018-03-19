@@ -1876,8 +1876,10 @@ class method extends adminbaseclass
                 $memberinfo =$this->mysql->select_one(" select *  from ".Mysite::$app->config['tablepre']."member where uid=".$value['shopuid']." ");
                 if (empty($memberinfo)) {
                     $value['backacount'] ='';
+                    $value['txname'] = '';
                 } else {
                     $value['backacount'] = $memberinfo['backacount'];
+                    $value['txname'] = $memberinfo['txname'];
                 }
                 //  $value['name'] = isset($typearray[$value['type']])?$typearray[$value['type']]:'未定义';
                 $value['statusname'] = isset($statusarray[$value['status']])?$statusarray[$value['status']]:'未定义';
