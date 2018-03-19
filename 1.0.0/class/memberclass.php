@@ -445,6 +445,7 @@ class memberclass
             $userinfo['gradename'] = '未定义';
         }
         $userinfo['shopinfo'] = $userinfo['shopmember'] = array();
+
         if($userinfo['guid']){
             $shopinfo = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."shop where uid = '".$userinfo['guid']."' ");
         }else{

@@ -8041,14 +8041,14 @@ CREATE TABLE `xiaozu_shophuiorder` (
 
     public function shoptx()
     {
-        if(empty($this->member['guid']))
+        if(empty($this->member['shopinfo']))
         {
             header('Location:'.IUrl::creatUrl('wxsite/shopLogin'));
         }
     }
     public function shopLogin()
     {
-        if($this->member['guid']){
+        if($this->member['shopinfo']){
             header('Location:'.IUrl::creatUrl('wxsite/shoptx'));
         }
     }
@@ -8083,6 +8083,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
             $data['guid'] = $checkuid;
             $this->mysql->update(Mysite::$app->config['tablepre'].'member', $data, "uid='".$this->member['uid']."'");
         }
+        ICookie::set('adminshopid', $shopinfo['id'], 86400);
         $this->success('success');
     }
     public function shopordershow()
