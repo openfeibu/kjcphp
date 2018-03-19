@@ -275,30 +275,30 @@ class orderclass
         if (!empty($shopinfo['machine_code'])&&!empty($shopinfo['mKey'])) {
             $temp_content = '';
             foreach ($orderdet as $km=>$vc) {
-                $temp_content .= $vc['goodsname'].'('.$vc['goodscount'].'份) ('.$vc['goodscost'].'元) <BR>';
+                $temp_content .= '<L><BOLD>'.$vc['goodsname'].'('.$vc['goodscount'].'份) ('.$vc['goodscost'].'元) </BOLD></L><BR>';
             }
 
             if ($orderinfo['is_goshop'] == 0 &&  $orderinfo['bagcost'] > 0) {
-                $bagcostContent =  '打包费：'.$orderinfo['bagcost'].'元 <BR>';
+                $bagcostContent =  '<L>打包费：'.$orderinfo['bagcost'].'元 </L><BR>';
             } else {
                 $bagcostContent = '';
             }
 
             $msg = '<CB>'.$shopinfo['shopname'].'</CB><BR>';
-            $msg .= '姓名：'.$orderinfo['buyername'].'<BR>';
-            $msg .= '电话：'.$orderinfo['buyerphone'].'<BR>';
-            $msg .= '地址：'.$orderinfo['buyeraddress'].'<BR>';
-            $msg .= '下单时间：'.date('m-d H:i', $orderinfo['addtime']).'<BR>';
+            $msg .= '<L>姓名：'.$orderinfo['buyername'].'</L><BR>';
+            $msg .= '<L>电话：'.$orderinfo['buyerphone'].'</L><BR>';
+            $msg .= '<L>地址：'.$orderinfo['buyeraddress'].'</L><BR>';
+            $msg .= '<L>下单时间：'.date('m-d H:i', $orderinfo['addtime']).'</L><BR>';
             $msg .= '*******************************<BR>';
-            $msg .= '<L><BOLD>'.$temp_content.'</BOLD></L>';
+            $msg .= ''.$temp_content.'';
             $msg .= '*******************************<BR>';
             $msg .= ''.$bagcostContent.'';
-            $msg .= '配送费：'.$orderinfo['shopps'].'元<BR>';
-            $msg .= '合计：'.$orderinfo['allcost'].'元<BR>';
+            $msg .= '<L>配送费：'.$orderinfo['shopps'].'元</L><BR>';
+            $msg .= '<L>合计：'.$orderinfo['allcost'].'元</L><BR>';
             $msg .= '※※※※※※※※※※※※※※<BR>';
-            $msg .= '谢谢惠顾，欢迎下次光临<BR>';
-            $msg .= '订单编号'.$orderinfo['dno'].'<BR>';
-            $msg .= '备注'.$orderinfo['content'].'<BR>';
+            $msg .= '<L>谢谢惠顾，欢迎下次光临</L><BR>';
+            $msg .= '<L>订单编号'.$orderinfo['dno'].'</L><BR>';
+            $msg .= '<L>备注'.$orderinfo['content'].'</L><BR>';
             $msg .= '*******************************<BR>';
 
             //把二维码字符串用标签套上即可自动生成二维码
