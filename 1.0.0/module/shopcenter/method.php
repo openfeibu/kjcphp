@@ -559,7 +559,7 @@ class method extends baseclass
             $data['personcount'] = intval(IFilter::act(IReq::get('personcount')));
             $data['arrivetime'] = IFilter::act(IReq::get('arrivetime'));
             $data['interval_minit'] = intval(IFilter::act(IReq::get('interval_minit')));
-            $data['pscost']  = intval(IFilter::act(IReq::get('pscost')));
+            //$data['pscost']  = intval(IFilter::act(IReq::get('pscost')));
 
             $pstimestime = IFilter::act(IReq::get('pstimestime'));
             $pstimeetime = IFilter::act(IReq::get('pstimeetime'));
