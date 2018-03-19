@@ -184,8 +184,12 @@
       });
     }
   });
+  var loop = false;
+  if($(".swiper-slide").length > 1){
+    loop = true
+  }
   var mySwiper = new Swiper ('.swiper-container-banner', {
-    loop: true,
+    loop: loop,
     autoplay:3000,
     autoHeight:true,
     autoplayDisableOnInteraction : false,
