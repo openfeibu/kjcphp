@@ -346,7 +346,7 @@ class wx_s
             //发送的模板信息(微信要求json格式，这里为数组（方便添加变量）格式，然后转为json)
             $post_data = array(
                    "touser"=>$openid,　　//推送给谁,openid
-                    "template_id"=>$template_id,　　//微信后台的模板信息id
+                    "template_id"=>$template_id = '43qUhi2wxxF5EWfHFCsB19YLceuNKm0DrBNlez1u_Xs',　　//微信后台的模板信息id
                     "url"=>$url,　　　　//下面为预约看房模板示例
                     "data"=> $data
             );
