@@ -233,6 +233,7 @@ class orderclass
             // }
         }
     }
+    
     //发送下单通知
     public function sendmess($orderid)
     {
@@ -310,6 +311,8 @@ class orderclass
         $gmember = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where guid = '".$shopmember['uid']."' ");
         if($gmember){
              $shopwxuser = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser where uid = '".$gmember['uid']."' ");
+             //（微信客服）
+             /*
              if($shopwxuser){
                  $temp_content = $orderinfo['shopname'].'收到新的订单，共计'.$orderinfo['allcost'].'元\n';
                  $temp_content .='单号:'.$orderinfo['dno'].'\n';
@@ -332,10 +335,47 @@ class orderclass
                  }else{
                      logwrite('商家微信客服发送错误:'.$wx_s->err());
                  }
+             }*/
+             //消息模板
+             if($shopwxuser){
+                 $temp_content = '';
+                 foreach ($orderdet as $km=>$vc) {
+                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
+                 }
+                 $template_id = '88eaR02txV8yKVNKmPDQOoXxresHFooXA2BByBaWVt4';
+                 $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=shopordershow&orderid='.$orderinfo['id'];
+                 $data = array(
+                     "first" => array(
+                             "value"=> $orderinfo['shopname'].'收到新的订单，单号：'.$orderinfo['dno'],
+                             "color"=>"#173177"
+                     ),
+                     "keyword1"=>array(
+                             "value"=> $temp_content,
+                             "color"=>"#173177"
+                     ),
+                     "keyword2"=>array(
+                             "value"=> $orderinfo['allcost'],
+                             "color"=>"#173177"
+                     ),
+                     "keyword3"=>array(
+                             "value"=>'微信支付',
+                             "color"=>"#173177"
+                     ),
+                     "keyword4"=>array(
+                             "value"=>$orderinfo['content'].'\n',
+                             "color"=>"#173177"
+                     ),
+                     "remark"=> array(
+                             "value"=>"请点详情及时处理订单，不要让顾客就等哦",
+                             "color"=>"#173177"
+                     ),
+                 );
+                 $wx_s->sendMbMessage($shopwxuser['openid'],$template_id,$data,$dolink);
              }
         }
 
     }
+    /*配送员通知*/
     public function sendpsmess($orderid)
     {
         $wx_s = new wx_s();

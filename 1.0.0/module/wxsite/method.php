@@ -581,11 +581,8 @@ class method extends wxbaseclass
         error_reporting(-1);
         $orderclass = new orderclass();
         $orderclass->sendmess('33124');
+        echo 'success';
         exit;
-        echo $this->CITY_ID;
-        $data['shoplist'] = $this->Tdata($this->stationid, array(), array('sell'=>'desc'), '34.788678', '113.664677', 3);
-        //Tdata($cityid,$limitarr,$paixuarr,$lat,$lng,$source,$limitjuli=0)
-        print_r($data['shoplist']);
         Mysite::$app->setdata($data);
     }
 
