@@ -39,8 +39,8 @@
       <span id="showday">
 
       </span>
-	   <span>总额：<span class="ddnum"><{$tjdata['online']+$tjdata['unline']}>元</span></span>
-       <span>佣金：<span class="ddnum"><{$tjdata['yj']}>元</span></span>
+	   <!-- <span>总额：<span class="ddnum"><{$tjdata['online']+$tjdata['unline']}>元</span></span>
+       <span>佣金：<span class="ddnum"><{$tjdata['yj']}>元</span></span> -->
 	    <span>结算额：<span class="ddnum"><{number_format($tjdata['actcost'],2)}>元</span></span>
         <span class="tingjiSer curbtn" id="dosubmit"></span>
 
@@ -58,13 +58,13 @@
               <tbody>
                 <tr>
                     <th width="14%">描述</th>
-                    <th width="8%">配送方式</th>
+                    <!-- <th width="8%">配送方式</th> -->
                     <!-- <th width="8%">交易类型</th>
                     <th width="8%">订单数</th> -->
-                    <th width="8%">金额</th>
+                    <!-- <th width="8%">金额</th>
                     <th width="8%">佣金比例</th>
                     <th width="8%">佣金</th>
-                    <th width="8%">平台承担优惠</th>
+                    <th width="8%">平台承担优惠</th> -->
                     <th width="8%">结算金额</th>
                     <th width="20%">结算时间</th>
 
@@ -73,13 +73,13 @@
 
 				  <tr>
 				  <td align="center" rowspan="2"> <{$items['name']}> </td>
-					<td align="center" rowspan="2"><{if $items['sendtype'] == 1}>店铺配送<{else}>平台配送<{/if}></td>
+					<!-- <td align="center" rowspan="2"><{if $items['sendtype'] == 1}>店铺配送<{else}>平台配送<{/if}></td> -->
 						<!-- <td align="center" > 线上 </td> -->
 						<!-- <td align="center" > <{$items['onlinecount']}> </td> -->
-						<td align="center" > <{$items['onlinecost']}> </td>
+						<!-- <td align="center" > <{$items['onlinecost']}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['yjb']*0.01,2)}> </td>
 						<td align="center" rowspan="2"> <{number_format($items['yjcost'],2)}> </td>
-                        <td align="center" rowspan="2"> <{number_format($items['shopdowncost'],2)}> </td>
+                        <td align="center" rowspan="2"> <{number_format($items['shopdowncost'],2)}> </td> -->
 						<td align="center" rowspan="2"> <{number_format($items['acountcost'],2)}> </td>
 						<td align="center" rowspan="2"> <{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}> </td>
 
