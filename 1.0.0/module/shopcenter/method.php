@@ -11,14 +11,11 @@ class method extends baseclass
         $shopid = ICookie::get('adminshopid');
         $start = date('Y-m-d 00:00:00');
         $end = date('Y-m-d H:i:s');
-        $todayshopcost = $this->mysql->select_one(" SELECT sum(shopcost) as shopcost FROM ".Mysite::$app->config['tablepre']."order  where `addtime` >= unix_timestamp( '$start' ) AND `addtime` <= unix_timestamp( '$end' ) AND status = 3 AND is_reback = 0 AND shopid = '".$shopid."'");
-        $todayshopcost = !empty($todayshopcost['shopcost']) ? $todayshopcost['shopcost'] : 0;
-        $allshopcost = $this->mysql->select_one(" SELECT sum(shopcost) as shopcost FROM ".Mysite::$app->config['tablepre']."order  where status = 3 AND is_reback = 0 AND shopid = '".$shopid."'");
-        $allshopcost = !empty($allshopcost['shopcost']) ? $allshopcost['shopcost'] : 0;
-        $data['todayshopcost'] = $todayshopcost;
-        $data['allshopcost'] = $allshopcost;
 
-        
+        $todaytjdata =  $this->mysql->select_one("select sum(acountcost) as actcost from ".Mysite::$app->config['tablepre']."shopjs  where shopid = ".$shopid." AND `addtime` >= unix_timestamp( '$start' ) AND `addtime` <= unix_timestamp( '$end' )  ");
+        $data['todayshopcost'] = $todaytjdata['actcost'] ? $todaytjdata['actcost'] : 0;
+        $tjdata = $this->mysql->select_one("select sum(acountcost) as actcost from ".Mysite::$app->config['tablepre']."shopjs  where shopid = ".$shopid."    ");
+        $data['allshopcost'] = $tjdata['actcost'] ? $tjdata['actcost'] : 0;
         Mysite::$app->setdata($data);
     }
     public function outgoods()
