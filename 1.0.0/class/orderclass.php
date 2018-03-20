@@ -285,6 +285,7 @@ class orderclass
             }
             $msg = '<CB>#'.$orderinfo['daycode'].' '.Mysite::$app->config['sitename'].'</CB><BR>';
             $msg .= '<C><BOLD>*'.$shopinfo['shopname'].'*</BOLD></C><BR>';
+            $msg .= '--------------------------------<BR>';
             $msg .= '<L>姓名：'.$orderinfo['buyername'].'</L><BR>';
             $msg .= '<L>电话：'.$orderinfo['buyerphone'].'</L><BR>';
             $msg .= '<B>地址：'.$orderinfo['buyeraddress'].'</B><BR>';
@@ -299,8 +300,6 @@ class orderclass
             $msg .= '--------------------------------<BR>';
             $msg .= '<B>备注'.$orderinfo['content'].'</B><BR>';
             $msg .= '谢谢惠顾，欢迎下次光临<BR>';
-
-            $msg .= '*******************************<BR>';
 
             //把二维码字符串用标签套上即可自动生成二维码
             wp_print($shopinfo['machine_code'],$msg,1);
