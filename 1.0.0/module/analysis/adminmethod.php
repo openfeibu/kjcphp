@@ -133,7 +133,7 @@ class method extends adminbaseclass
 
         $diff = diffBetweenTwoDays($BeginDate, $EndDate);
 
-        $dates = $consume_dates = [];
+        $dates = $consume_dates = array();
         for ($i= $diff; $i >= 1; $i--) {
             $dates[] = $consume_dates[] = date('Y-m-d',strtotime("$EndDate -$i day"));
         }
