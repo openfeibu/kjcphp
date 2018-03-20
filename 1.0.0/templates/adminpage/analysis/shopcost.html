@@ -25,9 +25,9 @@
       	 <div class="tags">
           <div id="tagscontent">
             <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
-                <input class="Wdate datefmt" type="text" name="datemy" id="datemy" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" />
-                -
-                <input class="Wdate datefmt" type="text" name="datemy" id="datemy" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" />
+                月份：<input class="Wdate datefmt" type="text" name="datemy" id="datemy" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" />
+                <!-- -
+                <input class="Wdate datefmt" type="text" name="datemy1" id="datemy1" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" /> -->
             </div>
             <div id="con_one_1">
 
@@ -52,7 +52,7 @@
 
                      	<{foreach from=$consumes key=key item=item}>
                            <tr>
-                            <td align="center"><{$key}></td>
+                            <td align="center"><{$key}>号</td>
                             <td align="center"><{$item}></td>
                           </tr>
                        <{/foreach}>

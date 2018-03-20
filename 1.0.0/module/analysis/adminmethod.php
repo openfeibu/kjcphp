@@ -155,6 +155,7 @@ class method extends adminbaseclass
         $data['x'] = implode(',',array_keys($consumes));
         $data['y'] = implode(',',array_values($consumes));
         $data['datemy'] = $datemy;
+        $data['BeginDate'] = $BeginDate;
         Mysite::$app->setdata($data);
     }
     public function ordertotal()
