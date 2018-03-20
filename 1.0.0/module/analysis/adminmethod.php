@@ -125,37 +125,31 @@ class method extends adminbaseclass
     }
     public function shopcost()
     {
-        $gdatemy = IReq::get('datemy');
-        $datemy = $gdatemy ? $gdatemy : date('Y-m');
-        if($datemy == date('Y-m'))
-        {
-            $BeginDate = date('Y-m-01');
-            $date = date('Y-m-d');
-        }else {
-            $BeginDate = date('Y-m-01', strtotime($datemy));
-            $date = date('Y-m-d', strtotime("$BeginDate +1 month -1 day"));
+        $BeginDate = IReq::get('BeginDate');
+        $BeginDate = $BeginDate ? $BeginDate : date('Y-m-01');
+
+        $EndDate = IReq::get('EndDate');
+        $EndDate = $EndDate ? $EndDate : date('Y-m-d');
+
+        $diff = diffBetweenTwoDays($BeginDate, $EndDate);
+
+        $dates = $consume_dates = [];
+        for ($i= $diff; $i >= 1; $i--) {
+            $dates[] = $consume_dates[] = date('Y-m-d',strtotime("$EndDate -$i day"));
         }
-        $dates = $date_fronts = $consume_dates = $consumes = $keep_datas = array();
-        $days = 3;
-        for ($i=$days; $i >= 1; $i--) {
-            $dates[] = date('Y-m-d',strtotime($BeginDate." -$i day"));
-        }
-        //当月第几天
-        $j = date('j',strtotime($date));
-        for ($i=$j-1; $i >= 1; $i--) {
-            $dates[] = $consume_dates[] = date('Y-m-d',strtotime("$date -$i day"));
-        }
+
         $consumes= array();
         foreach($dates as $key => $value)
         {
             $datas = $this->mysql->select_one(" SELECT sum(allcost) as allcost ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') as day FROM ".Mysite::$app->config['tablepre']."order  where DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') = '".$value."' AND status = 3 AND is_reback = 0 GROUP BY day ");
-            $consumes[date('d',strtotime($value))] = $datas ? $datas['allcost'] : 0;
+            $consumes[date('md',strtotime($value))] = $datas ? $datas['allcost'] : 0;
         }
         $data['consumes'] = $consumes;
         $data['x'] = implode(',',array_keys($consumes));
         $data['y'] = implode(',',array_values($consumes));
         $data['datemy'] = $datemy;
         $data['BeginDate'] = $BeginDate;
+        $data['EndDate'] = $EndDate;
         Mysite::$app->setdata($data);
     }
     public function ordertotal()

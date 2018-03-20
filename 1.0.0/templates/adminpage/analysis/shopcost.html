@@ -8,10 +8,12 @@
 <script type="text/javascript">
 
 
-	function gotolink(obj){
-			  var checkvalue = $(obj).val();
-			  var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&datemy=@datemy@';
-		   	window.location.href= linkis.replace('@datemy@', checkvalue);
+	function gotolink(){
+			  var BeginDate = $("#BeginDate").val();
+               var EndDate = $("#EndDate").val();
+			  var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&EndDate=@EndDate@&BeginDate=@BeginDate@';
+		   	linkis = linkis.replace('@BeginDate@', BeginDate);
+            window.location.href= linkis.replace('@EndDate@', EndDate);
   }
 
 
@@ -25,9 +27,9 @@
       	 <div class="tags">
           <div id="tagscontent">
             <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
-                月份：<input class="Wdate datefmt" type="text" name="datemy" id="datemy" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" />
-                <!-- -
-                <input class="Wdate datefmt" type="text" name="datemy1" id="datemy1" value="<{$datemy}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink(this)" /> -->
+                <input class="Wdate datefmt" type="text" name="BeginDate" id="BeginDate" value="<{$BeginDate}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink()" />
+             -
+                <input class="Wdate datefmt" type="text" name="EndDate" id="EndDate" value="<{$EndDate}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink()" />
             </div>
             <div id="con_one_1">
 
@@ -52,7 +54,7 @@
 
                      	<{foreach from=$consumes key=key item=item}>
                            <tr>
-                            <td align="center"><{$key}>号</td>
+                            <td align="center"><{$key}></td>
                             <td align="center"><{$item}></td>
                           </tr>
                        <{/foreach}>
