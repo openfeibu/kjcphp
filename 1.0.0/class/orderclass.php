@@ -283,7 +283,7 @@ class orderclass
             } else {
                 $bagcostContent = '';
             }
-            $msg = '<CB>'.Mysite::$app->config['sitename'].'</CB><BR>';
+            $msg = '<CB>#'.$orderinfo['daycode'].' '.Mysite::$app->config['sitename'].'</CB><BR>';
             $msg .= '<B>*'.$shopinfo['shopname'].'*</B><BR>';
             $msg .= '<L>姓名：'.$orderinfo['buyername'].'</L><BR>';
             $msg .= '<L>电话：'.$orderinfo['buyerphone'].'</L><BR>';
