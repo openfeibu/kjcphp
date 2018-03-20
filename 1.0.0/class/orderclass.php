@@ -283,8 +283,8 @@ class orderclass
             } else {
                 $bagcostContent = '';
             }
-
-            $msg = '<CB>'.$shopinfo['shopname'].'</CB><BR>';
+            $msg = '<CB>'.Mysite::$app->config['sitename'].'</CB><BR>';
+            $msg .= '<B>*'.$shopinfo['shopname'].'*</B><BR>';
             $msg .= '<L>姓名：'.$orderinfo['buyername'].'</L><BR>';
             $msg .= '<L>电话：'.$orderinfo['buyerphone'].'</L><BR>';
             $msg .= '<L>地址：'.$orderinfo['buyeraddress'].'</L><BR>';
