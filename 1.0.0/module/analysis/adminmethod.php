@@ -142,7 +142,7 @@ class method extends adminbaseclass
         foreach($dates as $key => $value)
         {
             $datas = $this->mysql->select_one(" SELECT sum(allcost) as allcost ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') as day FROM ".Mysite::$app->config['tablepre']."order  where DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') = '".$value."' AND status = 3 AND is_reback = 0 GROUP BY day ");
-            $consumes[date('md',strtotime($value))] = $datas ? $datas['allcost'] : 0;
+            $consumes["'".date('md',strtotime($value))."'"] = $datas ? $datas['allcost'] : 0;
         }
         $data['consumes'] = $consumes;
         $data['x'] = implode(',',array_keys($consumes));
