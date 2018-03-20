@@ -35,7 +35,7 @@
 
               <div class="table_td" style="margin-top:10px;">
 
-         <div  id="container" style="min-width: 400px; height: 400px; margin: 0 auto">
+             <div  id="container" style="min-width: 400px; height: 400px; margin: 0 auto">
 
               </div>
 
@@ -51,14 +51,20 @@
                     </thead>
                      <tbody>
 
-
+                    
                      	<{foreach from=$consumes key=key item=item}>
                            <tr>
-                            <td align="center"><{$key}></td>
+                            <td align="center"><{str_replace("'",'',$key)}></td>
                             <td align="center"><{$item}></td>
                           </tr>
                        <{/foreach}>
-
+                         <tr>
+                            <td align="center">总计</td>
+                            <td align="center">
+                                  
+                            </td>
+                          </tr>
+    
                     </tbody>
                   </table>
                </form>
@@ -101,8 +107,7 @@ $(function () {
                 x:0
             },
             xAxis: {
-                categories: [<{$x}>
-              ]
+                categories: [<{$x}>]
             },
             yAxis: {
                 title: {
