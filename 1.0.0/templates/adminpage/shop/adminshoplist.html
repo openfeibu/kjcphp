@@ -36,7 +36,7 @@
             </div>
 
       	</div>
-
+ 
 
            <div class="tags">
 
@@ -45,7 +45,7 @@
 
             <div id="con_one_1">
 
-              <div class="table_td" style="margin-top:10px;">
+              <div class="table_td fb_shoplist" style="margin-top:10px;">
 
               <form method="post" action="" onsubmit="return remind();"  id="delform">
 
@@ -55,7 +55,7 @@
 
                       <tr>
 
-                        <th width="60px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th>
+                        <th width="30px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th>
 
                         <th align="center">店铺名称</th>
                         <!-- <th align="center">所属城市</th> -->
@@ -100,12 +100,12 @@
                         <!-- <td align="center"><input type="text" name="pxinput" data="<{$items['id']}>" value="<{$items['sort']}>" style="width:30px;padding:0px;"></td> -->
                         <td align="center"><a href="#" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
                         <td align="center">
-                        <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">提现账号设置</a></td>
+                        <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a></td>
                         <{load_data assign="member" table="member" type="one" where="guid='<{$items['uid']}>'" fileds="username" }>
 
                         <td align="center">
                             <{if !empty($member)}>
-                            <{$member['username']}> <a onclick="unblind(<{$items['id']}>);" >  解绑</a></td>
+                            <{$member['username']}> <a onclick="unblind(<{$items['id']}>);" style="cursor: pointer;display: block;" >  解绑</a></td>
                             <{/if}>
                         <td align="center">
                             <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>','<{$items['pscost']}>');" href="#"><{$items['pscost']}></a>

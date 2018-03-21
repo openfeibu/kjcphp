@@ -752,3 +752,8 @@ border-radius: 2px;
     cursor: pointer;
     margin: 0 10px;
 }
+ 
+.fb_shoplist{
+
+}
+.fb_shoplist tr td{line-height: 24px;padding:5px 0;}
