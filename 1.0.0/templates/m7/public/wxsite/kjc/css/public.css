@@ -152,9 +152,10 @@
 .pro_detail .pro_detail_img {width:4rem !important;height: 4rem !important;}
 .pro_detail{top: 10%  !important;}
 
-/* .shop_header {background: #ff3156 !important;} */
-/* .discount {background: #ff3156 !important;} */
-/* .shop_name{color: #fff !important;} */
-/* .shop-detail .shop_header .shop_text_desc,.shop_text_date{color: #fff !important;}
-.shop-detail .shop_header .discount .discount_j{color: #fff !important;}
-.shop-detail .shop_header .discount .discount_t{color: #fff !important;} */
+ .shop-detail_header {background: #ff3156 !important;} 
+ .shop-detail_header .discount {background: #ff3156 !important;} 
+.shop-detail_header .shop_name{color: #fff !important;} 
+.shop-detail_header  .shop_text_desc,.shop-detail_header  .shop_text_date{color: #fff !important;}
+.shop-detail_header  .discount .discount_j{color: #fff !important;}
+.shop-detail_header  .discount .discount_t{color: #fff !important;} 
+ 
