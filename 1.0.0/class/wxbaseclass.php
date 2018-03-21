@@ -203,7 +203,14 @@ class wxbaseclass extends wmrclass
         if ($loginmode==0) {
             $this->setLoginInfo($wxuser, $userinfo);
             $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
-            //header("location:".$newlink);
+            $query_str = $_SERVER['QUERY_STRING'];
+            parse_str($query_str);
+            parse_str($query_str, $query_arr);
+            if(isset($query_arr['action']) && !empty($query_arr['action']))
+            {
+                $newlink .= "&action=".$query_arr['action'];
+            }
+            header("location:".$newlink);
         } else {
             $data['wxuser'] = $wxuser;
             $data['userinfo'] = $userinfo;
