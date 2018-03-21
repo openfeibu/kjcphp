@@ -1849,11 +1849,11 @@ class method extends adminbaseclass
             $data['status'] = $status;
         }
         if (!empty($starttime)) {
-            $where.=" and addtime > ".strtotime($starttime)." ";
+            $where.=" and addtime > ".strtotime($starttime." 00:00:00")." ";
             $newlink .= '/starttime/'.$starttime.'/endtime/'.$endtime;
         }
         if (!empty($endtime)) {
-            $where.=" and addtime < ".strtotime($endtime)." ";
+            $where.=" and addtime < ".strtotime($endtime." 23:59:59")." ";
             $newlink .= '/endtime/'.$endtime;
         }
 
@@ -1949,11 +1949,11 @@ class method extends adminbaseclass
             $data['status'] = $status;
         }
         if (!empty($starttime)) {
-            $where.=" and addtime > ".strtotime($starttime)." ";
+            $where.=" and addtime > ".strtotime($starttime ." 00:00:00")." ";
             $newlink .= '/starttime/'.$starttime.'/endtime/'.$endtime;
         }
         if (!empty($endtime)) {
-            $where.=" and addtime < ".strtotime($endtime)." ";
+            $where.=" and addtime < ".strtotime($endtime ." 23:59:59")." ";
             $newlink .= '/endtime/'.$endtime;
         }
 
@@ -2015,10 +2015,10 @@ class method extends adminbaseclass
             $where.=" and status = ".$status." ";
         }
         if (!empty($starttime)) {
-            $where.=" and addtime > ".strtotime($starttime)." ";
+            $where.=" and addtime > ".strtotime($starttime ." 00:00:00")." ";
         }
         if (!empty($endtime)) {
-            $where.=" and addtime < ".strtotime($endtime)." ";
+            $where.=" and addtime < ".strtotime($endtime ." 23:59:59")." ";
         }
 
         $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."txapply  ".$where."  order by addtime desc ");
@@ -2055,11 +2055,11 @@ class method extends adminbaseclass
             $newlink .= '/shopname/'.$shopname;
         }
         if (!empty($starttime)) {
-            $where.=" and addtime > ".strtotime($starttime)." ";
+            $where.=" and addtime > ".strtotime($starttime ." 00:00:00")." ";
             $newlink .= '/starttime/'.$starttime.'/endtime/'.$endtime;
         }
         if (!empty($endtime)) {
-            $where.=" and addtime < ".strtotime($endtime)." ";
+            $where.=" and addtime < ".strtotime($endtime ." 23:59:59")." ";
             $newlink .= '/endtime/'.$endtime;
         }
 
@@ -2130,10 +2130,10 @@ class method extends adminbaseclass
             }
         }
         if (!empty($starttime)) {
-            $where.=" and addtime > ".strtotime($starttime)." ";
+            $where.=" and addtime > ".strtotime($starttime ." 00:00:00")." ";
         }
         if (!empty($endtime)) {
-            $where.=" and addtime < ".strtotime($endtime)." ";
+            $where.=" and addtime < ".strtotime($endtime ." 23:59:59")." ";
         }
 
         $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by addtime desc ");
@@ -2277,11 +2277,11 @@ class method extends adminbaseclass
             $newlink.='/shopname/'.$shopname;
         }
         if (!empty($starttime)) {
-            $where.=" and addtime > ".strtotime($starttime)." ";
+            $where.=" and addtime > ".strtotime($starttime ." 00:00:00")." ";
             $newlink.='/starttime/'.$starttime;
         }
         if (!empty($endtime)) {
-            $where.=" and addtime < ".strtotime($endtime)." ";
+            $where.=" and addtime < ".strtotime($endtime ." 23:59:59")." ";
             $newlink.='/endtime/'.$endtime;
         }
         $link = IUrl::creatUrl('/adminpage/order/module/shoptxtlog'.$newlink);

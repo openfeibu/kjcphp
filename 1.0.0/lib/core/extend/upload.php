@@ -23,7 +23,7 @@ class upload
     // @param fileFormat 文件格式限制数组
     // @param maxSize 文件最大尺寸
     // @param overwriet 是否覆盖 1 允许覆盖 0 禁止覆盖
-   
+
     function upload($savePath, $fileFormat = '', $maxSize = 0, $overwrite = 0 , $fileInput = 'imgFile' , $changeName=1){
         $this->setSavepath($savePath);
 		$this->makeDirectory($savePath);//创建上传目录
@@ -110,7 +110,7 @@ class upload
         }
         // 文件上传
         if (!move_uploaded_file($fileArray["tmp_name"], $this->savePath . $this->saveName)) {
-            $this->errno = $fileArray["error"]; 
+            $this->errno = $fileArray["error"];
             return false;
         } elseif ($this->thumb) { //创建缩略图
             $CreateFunction = "imagecreatefrom" . ($this->ext == 'jpg' ? 'jpeg' : $this->ext);
@@ -135,25 +135,28 @@ class upload
             $originalWidth = ImageSX($Original);
             $this->returninfo['originalHeight'] = $originalHeight;
             $this->returninfo['originalWidth'] = $originalWidth;
-            if (($originalHeight < $this->thumbHeight && $originalWidth < $this->thumbWidth)) {
+            if (($originalWidth < 100)) {
                 // 如果比期望的缩略图小，那只Copy
                 copy($this->savePath . $this->saveName, $this->savePath . $this->thumbPrefix . $this->saveName);
             } else {
-                if ($originalWidth > $this->thumbWidth) { // 宽 > 设定宽度
-                    $thumbWidth = $this->thumbWidth;
-                    $thumbHeight = $this->thumbWidth * ($originalHeight / $originalWidth);
-                    if ($thumbHeight > $this->thumbHeight) { //高 > 设定高度
-                        $thumbWidth = $this->thumbHeight * ($thumbWidth / $thumbHeight);
-                        $thumbHeight = $this->thumbHeight;
-                    }
-                } elseif ($originalHeight > $this->thumbHeight) { //高 > 设定高度
-                    $thumbHeight = $this->thumbHeight;
-                    $thumbWidth = $this->thumbHeight * ($originalWidth / $originalHeight);
-                    if ($thumbWidth > $this->thumbWidth) { //宽 > 设定宽度
-                        $thumbHeight = $this->thumbWidth * ($thumbHeight / $thumbWidth);
-                        $thumbWidth = $this->thumbWidth;
-                    }
-                }
+                $ratio = $originalWidth>600 ? 600/$originalWidth : 1 ;
+        	  	$thumbWidth = $ratio * $originalWidth * 0.8;
+        	  	$thumbHeight = $ratio * $originalHeight * 0.8;
+                // if ($originalWidth > $this->thumbWidth) { // 宽 > 设定宽度
+                //     $thumbWidth = $this->thumbWidth;
+                //     $thumbHeight = $this->thumbWidth * ($originalHeight / $originalWidth);
+                //     if ($thumbHeight > $this->thumbHeight) { //高 > 设定高度
+                //         $thumbWidth = $this->thumbHeight * ($thumbWidth / $thumbHeight);
+                //         $thumbHeight = $this->thumbHeight;
+                //     }
+                // } elseif ($originalHeight > $this->thumbHeight) { //高 > 设定高度
+                //     $thumbHeight = $this->thumbHeight;
+                //     $thumbWidth = $this->thumbHeight * ($originalWidth / $originalHeight);
+                //     if ($thumbWidth > $this->thumbWidth) { //宽 > 设定宽度
+                //         $thumbHeight = $this->thumbWidth * ($thumbHeight / $thumbWidth);
+                //         $thumbWidth = $this->thumbWidth;
+                //     }
+                // }
                 if ($thumbWidth == 0)
                     $thumbWidth = 1;
                 if ($thumbHeight == 0)
@@ -236,7 +239,7 @@ class upload
     function setThumb($thumb, $thumbPrefix, $thumbWidth = 0, $thumbHeight = 0)
     {
         $this->thumb = $thumb;
-        $this->thumbPrefix = $thumbPrefix;
+        $this->thumbPrefix = '';
         if ($thumbWidth)
             $this->thumbWidth = $thumbWidth;
         if ($thumbHeight)
@@ -286,27 +289,27 @@ class upload
     {
         $errormsg = array(
 								  0 => '1',
-								  1 => '上传的文件过大!', 
+								  1 => '上传的文件过大!',
 								  2 => '上传的文件过大!',
-								  3 => '文件只有部分被上传!', 
-								  4 => '没有提交任何上传信息!', 
-								  6 => '创建缩略图失败，你的PHP版本过低!', 
-								  7 => '创建缩略图失败，你的PHP版本过低!', 
-								  10 => '表单文件域不存在!', 
-								  11 => '不允许上传该格式文件!', 
-								  12 => '上传目录不存在或不可写!', 
-								  13 => '该文件已上传!', 
-								  14 => '上传的文件过大!', 
-								  15 => '1', 
+								  3 => '文件只有部分被上传!',
+								  4 => '没有提交任何上传信息!',
+								  6 => '创建缩略图失败，你的PHP版本过低!',
+								  7 => '创建缩略图失败，你的PHP版本过低!',
+								  10 => '表单文件域不存在!',
+								  11 => '不允许上传该格式文件!',
+								  12 => '上传目录不存在或不可写!',
+								  13 => '该文件已上传!',
+								  14 => '上传的文件过大!',
+								  15 => '1',
 								  16 => 'Your version of PHP does not appear to have GIF thumbnailing support.',
             17 => 'Your version of PHP does not appear to have JPEG thumbnailing support.',
             18 => 'Your version of PHP does not appear to have pictures thumbnailing support.',
-            19 => 'An error occurred while attempting to copy the source image . 
+            19 => 'An error occurred while attempting to copy the source image .
                      Your version of php (' . phpversion() .
             ') may not have this image type support.', 20 =>
             'An error occurred while attempting to create a new image.', 21 =>
             'An error occurred while copying the source image to the thumbnail image.', 22 =>
-            'An error occurred while saving the thumbnail image to the filesystem. 
+            'An error occurred while saving the thumbnail image to the filesystem.
                      Are you sure that PHP has been configured with both read and write access on this folder?', );
         if ($this->errno == 0)
             return false;
@@ -330,8 +333,8 @@ class upload
 
         return $temp;
     }
-    
- 
+
+
     /*
 * 功能：PHP图片水印 (水印支持图片或文字)
 * 参数：
@@ -360,7 +363,7 @@ class upload
 *        5   水印文字颜色格式不正确
 *        6   水印背景图片格式目前不支持
 * 修改记录：
-*         
+*
 * 注意：Support GD 2.0，Support FreeType、GIF Read、GIF Create、JPG 、PNG
 *       $waterImage 和 $waterText 最好不要同时使用，选其中之一即可，优先使用 $waterImage。
 *       当$waterImage有效时，参数$waterString、$stringFont、$stringColor均不生效。
@@ -371,7 +374,7 @@ class upload
 */
     function imageWaterMark($groundImage,$waterPos=0,$waterImage="",$waterText="",$fontSize=12,$textColor="#CCCCCC", $fontfile='font.ttf',$xOffset=0,$yOffset=0)
    {
-   	
+
    	 if(Mysite::$app->config['is_water'] != 1){
    	  return 0;
    	 }
@@ -388,7 +391,7 @@ class upload
          $water_w     = $water_info[0];//取得水印图片的宽
          $water_h     = $water_info[1];//取得水印图片的高
 
-         switch($water_info[2])   {    //取得水印图片的格式  
+         switch($water_info[2])   {    //取得水印图片的格式
              case 1:$water_im = imagecreatefromgif($waterImage);break;
              case 2:$water_im = imagecreatefromjpeg($waterImage);break;
              case 3:$water_im = imagecreatefrompng($waterImage);break;
@@ -402,22 +405,22 @@ class upload
          $ground_w     = $ground_info[0];//取得背景图片的宽
          $ground_h     = $ground_info[1];//取得背景图片的高
 
-         switch($ground_info[2]) {    //取得背景图片的格式  
+         switch($ground_info[2]) {    //取得背景图片的格式
              case 1:$ground_im = imagecreatefromgif($groundImage);break;
              case 2:$ground_im = imagecreatefromjpeg($groundImage);break;
              case 3:$ground_im = imagecreatefrompng($groundImage);break;
              default:return 1;
          }
-     } else { 
+     } else {
          return 2;
      }
 
      //水印位置
-     if($isWaterImage) { //图片水印  
+     if($isWaterImage) { //图片水印
          $w = $water_w;
          $h = $water_h;
          $label = "图片的";
-         } else {  
+         } else {
      //文字水印
         $fontfile =dirname(__FILE__).'/'.$fontfile;
         if(!file_exists($fontfile))return 4;
@@ -473,14 +476,14 @@ class upload
          default://随机
              $posX = rand(0,($ground_w - $w));
              $posY = rand(0,($ground_h - $h));
-             break;     
+             break;
      }
 
      //设定图像的混色模式
      imagealphablending($ground_im, true);
 
      if($isWaterImage) { //图片水印
-         imagecopy($ground_im, $water_im, $posX + $xOffset, $posY + $yOffset, 0, 0, $water_w,$water_h);//拷贝水印到目标文件         
+         imagecopy($ground_im, $water_im, $posX + $xOffset, $posY + $yOffset, 0, 0, $water_w,$water_h);//拷贝水印到目标文件
      } else {//文字水印
          if( !empty($textColor) && (strlen($textColor)==7) ) {
              $R = hexdec(substr($textColor,1,2));
