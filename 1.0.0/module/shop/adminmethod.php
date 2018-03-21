@@ -1734,4 +1734,17 @@ class method extends adminbaseclass
         $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopid."'");
         $this->success('success');
     }
+    public function unblindshop()
+    {
+        $shopid =  intval(IReq::get('shopid'));
+        if(empty($shopid))
+        {
+            $this->message("店铺不存在");
+        }
+        $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where  id='".$shopid."'  ");
+        $data['guid'] = 0;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member', $data, "guid='".$shopinfo['uid']."'");
+        $this->success('success');
+    }
+
 }

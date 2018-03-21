@@ -101,7 +101,12 @@
                         <td align="center"><a href="#" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
                         <td align="center">
                         <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">提现账号设置</a></td>
-                        <td align="center"><a onclick="" href="#">解绑</a></td>
+                        <{load_data assign="member" table="member" type="one" where="guid='<{$items['uid']}>'" fileds="username" }>
+
+                        <td align="center">
+                            <{if !empty($member)}>
+                            <{$member['username']}> <a onclick="unblind(<{$items['id']}>);" >  解绑</a></td>
+                            <{/if}>
                         <td align="center">
                             <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>','<{$items['pscost']}>');" href="#"><{$items['pscost']}></a>
                         </td>
@@ -279,6 +284,34 @@ $('#dosetclosetime').live('click',function(){
      	}
 	 }, 'json');
 });
+function unblind(shopid)
+{
+    if(confirm('确定解绑吗？')){
+        url = '<{ofunc type=url link="/adminpage/shop/module/unblindshop/datatype/json"}>';
+        $.ajax({
+    		type: 'post',
+    		async:false,
+    		url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            data:{'shopid':shopid},
+    		dataType: 'json',success: function(content) {
+    			if(content.error == false){
+    				diasucces( '操作成功');
+    			}else{
+    				if(content.error == true)
+    				{
+    					diaerror(content.msg);
+    				}else{
+    					diaerror(content);
+    				}
+    			}
+    		},
+    		error: function(content) {
+    			diaerror('数据获取失败');
+    		}
+    	});
+
+    }
+}
 function setps(shopid,shopname)
 {
 	 	 dialogs = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=shop&module=setnotice&shopid='+shopid,{height:'180px',width:'400px'},false);
