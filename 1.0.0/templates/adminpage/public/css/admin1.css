@@ -156,7 +156,7 @@ a:hover {
 	color:#fff;
 	padding-top:10px;
 	font-weight:bold;
- 	position:fixed;  
+ 	/*position:fixed;  */
 	width:100%;
     bottom:0;  
 }
