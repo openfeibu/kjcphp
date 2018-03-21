@@ -7,7 +7,7 @@ class upload
     var $savePath; // 保存路径
     var $fileFormat = array('gif', 'jpg', 'png', 'application/octet-stream'); // 文件格式&MIME限定
     var $overwrite = 0; // 覆盖模式
-    var $maxSize = 10485760; // 文件最大字节
+    var $maxSize = 2048000; // 文件最大字节
     var $ext; // 文件扩展名
     var $thumb = 1; // 是否生成缩略图
     var $thumbWidth = 40; // 缩略图宽
@@ -28,7 +28,7 @@ class upload
         $this->setSavepath($savePath);
 		$this->makeDirectory($savePath);//创建上传目录
         $this->setFileformat($fileFormat);
-        $this->setMaxsize($maxSize);
+        $this->setMaxsize('2048000');
         $this->setOverwrite($overwrite);
         $this->setThumb($this->thumb, $this->thumbWidth, $this->thumbHeight);
         $this->errno = 0;
