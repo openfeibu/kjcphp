@@ -260,14 +260,17 @@ class wmrclass
 
 
 
-        #	$info = file_get_contents($url,true);
+        $tmpInfo = file_get_contents($url,true);
+		 return $tmpInfo;
         $curl = curl_init(); // 启动一个CURL会话
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); //对认证证书来源的检查
+       // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); //对认证证书来源的检查
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);   
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);  
         curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']); //模拟用户使用的浏览器
         curl_setopt($curl, CURLOPT_REFERER, '');//设置Referer
         curl_setopt($curl, CURLOPT_POST, 0); //发送一个常规的Post请求
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30); //设置超时限制防止死循环
+        curl_setopt($curl, CURLOPT_TIMEOUT, 120); //设置超时限制防止死循环
         curl_setopt($curl, CURLOPT_HEADER, 0); //显示返回的Header区域内容
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);//获取的信息以文件流的形式返回
         $tmpInfo = curl_exec($curl); // 执行操作
