@@ -18,8 +18,8 @@
             	   <!-- <label>邮箱：</label>
             	   <input type="text" name="email" value="<{$email|default:''}>"> -->
                   
-                 <label>手机：</label>
-            	   <input type="text" name="phone" value="<{$phone|default:''}>">
+                <!--  <label>手机：</label>
+            	   <input type="text" name="phone" value="<{$phone|default:''}>"> -->
                  <label>分校配送负责人：</label>
                    <select name="stationadminid">
                        <option value="0">请选择</option>
@@ -80,7 +80,7 @@
                         <td align="center"><{$items['score']}></td> -->
 
                         <td align="center"><a href="<{ofunc type=url link="/adminpage/member/module/addmember/id/<{$items['uid']}>"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/edit.jpg"></a>
-                        	<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/member/module/delmember/id/<{$items['uid']}>/datatype/json"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/del.jpg"></a></td>
+                        	<!-- <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/member/module/delmember/id/<{$items['uid']}>/datatype/json"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/del.jpg"></a> --></td>
                       </tr>
                        <{/foreach}>
 

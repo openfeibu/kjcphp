@@ -22,9 +22,9 @@
             	   <label>用户名：</label>
             	   <input type="text" name="username" value="<{$username|default:''}>">
 
-                  <label>手机：</label>
+                 <!--  <label>手机：</label>
             	   <input type="text" name="phone" value="<{$phone|default:''}>">
-
+ -->
             	    <input type="submit" value="提交查询" class="button">
             	 </form>
             </div>
@@ -76,7 +76,7 @@
                         <!-- <td align="center"><{$items['score']}></td>  -->
 
                         <td align="center"><a href="<{ofunc type=url link="/adminpage/member/module/addmember/id/<{$items['uid']}>"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/edit.jpg"></a>
-                        	<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/member/module/delmember/id/<{$items['uid']}>/datatype/json"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/del.jpg"></a></td>
+                        	<!-- <a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/member/module/delmember/id/<{$items['uid']}>/datatype/json"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/del.jpg"></a> --></td>
                       </tr>
                        <{/foreach}>
 
