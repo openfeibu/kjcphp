@@ -15,8 +15,8 @@
 
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/analysis/module/shopjsover"}>">
                      <label>分校：</label>
-                     <select name="stationid">
-                         <option value="0">请选择</option>
+                     <select name="stationid" style="width:220px;">
+                         <option value="0">选择分校</option>
                          <{foreach from=$stationlist['list'] key=key  item=items}>
                          <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
                          <{/foreach}>

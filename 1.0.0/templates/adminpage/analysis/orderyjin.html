@@ -11,9 +11,9 @@
             <div class="search_content">
 
             	 <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/analysis/module/orderyjin"}>">
-            	 	<label>所属区域管理：</label>
-            	 	<select name="stationid">
-            	 		<option value="0">选择区域管理</option>
+            	 	<label>分校：</label>
+            	 	<select name="stationid" style="width:220px;">
+            	 		<option value="0">选择分校</option>
             	 		<{foreach from=$quyuguanli item=items}>
             	 		<option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
             	 		<{/foreach}>
