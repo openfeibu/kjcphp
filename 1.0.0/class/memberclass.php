@@ -456,6 +456,8 @@ class memberclass
             $shopmember = $this->mysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$shopinfo['uid']."' ");
             $userinfo['shopmember'] = !empty($shopmember) ? $shopmember : array();
         }
+        $wxuser = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where uid='".$uid."'  ");
+        $userinfo['wxuser'] = $wxuser;
         return $userinfo;
     }
     public function getadmininfo()

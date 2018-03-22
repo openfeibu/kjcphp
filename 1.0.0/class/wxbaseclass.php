@@ -19,7 +19,10 @@ class wxbaseclass extends wmrclass
         //主要是检测权限
         $this->memberCls = new memberclass($this->mysql);
         $this->member = $this->memberCls->getinfo();
-
+        if(!$this->member['wxuser']){
+            $this->memberCls->loginout();
+            $this->member['uid'] == 0;
+        }
         $this->pageCls = new page();
         $this->admin =  $this->memberCls->getadmininfo();
         $this->digui = array();//递归处理数组
