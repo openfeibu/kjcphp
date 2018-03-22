@@ -182,21 +182,26 @@ class wxbaseclass extends wmrclass
                 }
             }
         } else {
-            $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
-            $query_str = $_SERVER['QUERY_STRING'];
-            parse_str($query_str);
-            parse_str($query_str, $query_arr);
-            if(is_array($query_arr) && count($query_arr))
+            if($token['errcode'] == 40163)
             {
-                foreach($query_arr as $key=> $val)
+                $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
+                $query_str = $_SERVER['QUERY_STRING'];
+                parse_str($query_str);
+                parse_str($query_str, $query_arr);
+                if(is_array($query_arr) && count($query_arr))
                 {
-                    if($key != 'code' && $key != 'ctrl')
+                    foreach($query_arr as $key=> $val)
                     {
-                        $newlink .= "&".$key."=".$val;
+                        if($key != 'code' && $key != 'ctrl')
+                        {
+                            $newlink .= "&".$key."=".$val;
+                        }
                     }
                 }
+                header("location:".$newlink);
             }
-            header("location:".$newlink);
+            echo $token['errcode'];
+            exit;
         }
         $check_link = 'https://api.weixin.qq.com/sns/auth?access_token=' . $userinfo['access_token'] . '&openid=' . $userinfo['openid'];
         $checkopen = json_decode($this->curl_get_content($check_link), true);
