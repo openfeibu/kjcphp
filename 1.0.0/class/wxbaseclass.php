@@ -18,7 +18,7 @@ class wxbaseclass extends wmrclass
     {
         //主要是检测权限
         $this->memberCls = new memberclass($this->mysql);
-        $this->member = $this->memberCls->getwxinfo();
+        $this->member = $this->memberCls->getinfo();
 
         $this->pageCls = new page();
         $this->admin =  $this->memberCls->getadmininfo();
@@ -384,15 +384,15 @@ class wxbaseclass extends wmrclass
                 $flag = 1;
             }
         }
-        ICookie::set('wxchecklogins', $flag, 86400);
-        ICookie::set('wxlogintype', 'wx', 86400);
+        ICookie::set('checklogins', $flag, 86400);
+        ICookie::set('logintype', 'wx', 86400);
         ICookie::set('wxopenid', $wxuser['openid'], 86400);
         $userinfo=  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."'  ");
         $this->member = $userinfo;
-        ICookie::set('wxemail', $userinfo['email'], 86400);
-        ICookie::set('wxmemberpwd', $userinfo['password'], 86400);
-        ICookie::set('wxmembername', $userinfo['username'], 86400);
-        ICookie::set('wxuid', $uid, 86400);
+        ICookie::set('email', $userinfo['email'], 86400);
+        ICookie::set('memberpwd', $userinfo['password'], 86400);
+        ICookie::set('membername', $userinfo['username'], 86400);
+        ICookie::set('uid', $uid, 86400);
     }
 
 
