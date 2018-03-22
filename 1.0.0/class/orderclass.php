@@ -348,7 +348,7 @@ class orderclass
                  $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=shopordershow&orderid='.$orderinfo['id'];
                  $data = array(
                      "first" => array(
-                             "value"=> $orderinfo['shopname'].'收到新的订单，单号：'.$orderinfo['dno'],
+                             "value"=> $orderinfo['shopname'].'收到新的订单，单号：'.$orderinfo['dno'].",流水号:".$orderinfo['daycode'],
                              "color"=>"#173177"
                      ),
                     "keyword1"=>array(
