@@ -182,8 +182,21 @@ class wxbaseclass extends wmrclass
                 }
             }
         } else {
-            echo $token['errcode'];
-            exit;
+            $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
+            $query_str = $_SERVER['QUERY_STRING'];
+            parse_str($query_str);
+            parse_str($query_str, $query_arr);
+            if(is_array($query_arr) && count($query_arr))
+            {
+                foreach($query_arr as $key=> $val)
+                {
+                    if($key != 'code' && $key != 'ctrl')
+                    {
+                        $newlink .= "&".$key."=".$val;
+                    }
+                }
+            }
+            header("location:".$newlink);
         }
         $check_link = 'https://api.weixin.qq.com/sns/auth?access_token=' . $userinfo['access_token'] . '&openid=' . $userinfo['openid'];
         $checkopen = json_decode($this->curl_get_content($check_link), true);
