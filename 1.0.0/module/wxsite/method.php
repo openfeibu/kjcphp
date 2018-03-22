@@ -580,7 +580,7 @@ class method extends wxbaseclass
         ini_set('display_startup_errors', 1);    //php启动错误信息
         error_reporting(-1);
         $orderclass = new orderclass();
-        $orderclass->sendmess('33124');
+        $orderclass->sendpsmess('33124');
         echo 'success';
         exit;
         Mysite::$app->setdata($data);
