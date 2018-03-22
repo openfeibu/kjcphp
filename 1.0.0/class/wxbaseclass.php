@@ -206,9 +206,15 @@ class wxbaseclass extends wmrclass
             $query_str = $_SERVER['QUERY_STRING'];
             parse_str($query_str);
             parse_str($query_str, $query_arr);
-            if(isset($query_arr['action']) && !empty($query_arr['action']))
+            if(is_array($query_arr) && count($query_arr))
             {
-                $newlink .= "&action=".$query_arr['action'];
+                foreach($query_arr as $key=> $val)
+                {
+                    if($key != 'code' && $key != 'ctrl')
+                    {
+                        $newlink .= "&".$key."=".$val;
+                    }
+                }
             }
             header("location:".$newlink);
         } else {
