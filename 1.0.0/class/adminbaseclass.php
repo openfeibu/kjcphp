@@ -15,8 +15,7 @@ class adminbaseclass
 	 public $platpsinfo;
 	 function init(){
 			 if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
-				 //判断是微信浏览器不
-				 echo "<script language='javascript'>alert('请勿在微信浏览器打开，请点右上角，在浏览器打开')</script>";
+				 echo file_get_contents(Mysite::$app->config['siteurl']."/index.php?ctrl=site&action=wxopen");
 				 exit;
 			 }
 	 	     //主要是检测权限
