@@ -18,8 +18,8 @@
             	   <input type="hidden" name="action" value="shop">
             	   <input type="hidden" name="module" value="adminshoplist">
                    <label>分校：</label>
-                   <select name="stationid">
-                       <option value="0">请选择</option>
+                   <select name="stationid" style="width:220px;">
+                       <option value="0">请选择分校</option>
                        <{foreach from=$stationlist['list'] key=key  item=items}>
                        <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
                        <{/foreach}>
@@ -64,7 +64,7 @@
                         <th align="center">会员名称</th>
                         <th align="center">标签</th>
                         <th align="center">营业</th>
-                        <th align="center">佣金/结算额</th>
+                        <th align="center" >佣金/结算额</th>
                         <!-- <th align="center">排序</th> -->
                         <th align="center">有效时间</th>
                         <th align="center">提现账号</th>
@@ -94,7 +94,7 @@
                         <a onclick="starttask('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a> </td>
                         <td align="center"><{if $items['is_open'] == 1}>是<{else}>否<{/if}></td>
 
-                         <td align="center"><a onclick="setyjin('<{$items['id']}>','<{$items['shopname']}>','<{$items['yjin']}>','<{$yjin}>','<{$userinfo['backacount']|default:''}>');" href="#">设置</a><{if $items['yjin']=='0'}>默认<{$yjin}><{else}><{$items['yjin']}><{/if}>/<{$userinfo['shopcost']|default:'0'}>
+                         <td align="center" style="width: 120px"><a onclick="setyjin('<{$items['id']}>','<{$items['shopname']}>','<{$items['yjin']}>','<{$yjin}>','<{$userinfo['backacount']|default:''}>');" href="#">设置</a><{if $items['yjin']=='0'}>默认<{$yjin}><{else}><{$items['yjin']}><{/if}>/<{$userinfo['shopcost']|default:'0'}>
                              <a href="#" onclick="addcost(<{$items['uid']}>);">增</a>
                          </td>
                         <!-- <td align="center"><input type="text" name="pxinput" data="<{$items['id']}>" value="<{$items['sort']}>" style="width:30px;padding:0px;"></td> -->
