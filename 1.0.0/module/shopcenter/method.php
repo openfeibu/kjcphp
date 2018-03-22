@@ -8,6 +8,12 @@ class method extends baseclass
     public function init()
     {
         parent::init();
+        if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+            //判断是微信浏览器不
+            echo "<script language='javascript'>alert('请勿在微信浏览器打开，请点右上角，在浏览器打开')</script>";
+            exit;
+        }
+
         $shopid = ICookie::get('adminshopid');
         $start = date('Y-m-d 00:00:00');
         $end = date('Y-m-d H:i:s');

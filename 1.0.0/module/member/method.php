@@ -46,6 +46,12 @@ class method extends baseclass
     //后台管理员登陆
     public function adminlogin()
     {
+        if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+            //判断是微信浏览器不
+            echo "<script language='javascript'>alert('请勿在微信浏览器打开，请点右上角，在浏览器打开')</script>";
+            exit;
+        }
+
         $signup_name =  IFilter::act(IReq::get('signup_name'));
         $signup_password =  IFilter::act(IReq::get('signup_password'));
         $cookiename =  IFilter::act(IReq::get('cookiename'));
@@ -654,7 +660,14 @@ class method extends baseclass
             exit;
         }
     }
-
+    public function shoplogin()
+    {
+        if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+            //判断是微信浏览器不
+            echo "<script language='javascript'>alert('请勿在微信浏览器打开，请点右上角，在浏览器打开')</script>";
+            exit;
+        }
+    }
 
     public function shoploginin()
     {

@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 /**
- * @class baseclass 
+ * @class baseclass
  * @描述   基础类
  */
 class adminbaseclass
@@ -14,49 +14,54 @@ class adminbaseclass
 	 public $digui;
 	 public $platpsinfo;
 	 function init(){
-	 	     //主要是检测权限 
+			 if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
+				 //判断是微信浏览器不
+				 echo "<script language='javascript'>alert('请勿在微信浏览器打开，请点右上角，在浏览器打开')</script>";
+				 exit;
+			 }
+	 	     //主要是检测权限
 	 	     $controller = Mysite::$app->getController();
 	 	     $Taction = Mysite::$app->getAction();
-	 	     $this->mysql =  new mysql_class(); 
-	 	     $this->memberCls = new memberclass($this->mysql);  
+	 	     $this->mysql =  new mysql_class();
+	 	     $this->memberCls = new memberclass($this->mysql);
 	 	     $this->pageCls = new page();
-	 	     $this->admin =  $this->memberCls->getadmininfo();  
+	 	     $this->admin =  $this->memberCls->getadmininfo();
 	 	     $this->digui = array();//递归处理数组
-	 	     $link = IUrl::creatUrl('member/adminlogin'); 
+	 	     $link = IUrl::creatUrl('member/adminlogin');
 	 	     if($this->admin['uid'] == 0) $this->message('member_nologin',$link);
-	 	     $data['admininfo'] = $this->admin; 
+	 	     $data['admininfo'] = $this->admin;
 	 	     if($this->admin['groupid'] == 4){
-	 	       $links = IUrl::creatUrl('areaadminpage/system'); 
+	 	       $links = IUrl::creatUrl('areaadminpage/system');
 	 	       $this->message('',$links);
 	 	     }
-	 	     
-		 
-			
-	 	     $checkmodule =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."module  where name='".$Taction."' and install=1 limit 0,20");  
-	 	     if(empty($checkmodule) && !in_array($controller,array('site','market'))){ 
-	 	         $this->message('module_noinstall'); 
-	 	     }   
-	 	     $action = Mysite::$app->getAction();  
-	 	     $data['moduleid']= $checkmodule['id']; 
-	 	     $data['moduleparent'] = $checkmodule['parent_id']; 
-	 	     $id = intval(IFilter::act(IReq::get('id'))); 
-	 	     $data['id'] = $id; 
-	 	   
-	 	     Mysite::$app->setdata($data);  
-	 } 
+
+
+
+	 	     $checkmodule =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."module  where name='".$Taction."' and install=1 limit 0,20");
+	 	     if(empty($checkmodule) && !in_array($controller,array('site','market'))){
+	 	         $this->message('module_noinstall');
+	 	     }
+	 	     $action = Mysite::$app->getAction();
+	 	     $data['moduleid']= $checkmodule['id'];
+	 	     $data['moduleparent'] = $checkmodule['parent_id'];
+	 	     $id = intval(IFilter::act(IReq::get('id')));
+	 	     $data['id'] = $id;
+
+	 	     Mysite::$app->setdata($data);
+	 }
 	 public function checkadminlogin(){
-	 	 $link = IUrl::creatUrl('member/adminlogin'); 
-	 	 if($this->admin['uid'] == 0) $this->message('member_nologin',$link); 
+	 	 $link = IUrl::creatUrl('member/adminlogin');
+	 	 if($this->admin['uid'] == 0) $this->message('member_nologin',$link);
 	 }
 	 public function checkmemberlogin(){
-	 	 $link = IUrl::creatUrl('member/login'); 
-	 	 if($this->member['uid'] == 0) $this->message('member_nologin',$link); 
+	 	 $link = IUrl::creatUrl('member/login');
+	 	 if($this->member['uid'] == 0) $this->message('member_nologin',$link);
 	 }
 	 public function checkshoplogin(){
-	 	 $link = IUrl::creatUrl('member/shoplogin'); 
-	 	 if($this->member['uid'] == 0&&$this->admin['uid'] == 0)  $this->message('member_nologin',$link); 
+	 	 $link = IUrl::creatUrl('member/shoplogin');
+	 	 if($this->member['uid'] == 0&&$this->admin['uid'] == 0)  $this->message('member_nologin',$link);
 	 	 $shopid = ICookie::get('adminshopid');
-	 	 if(empty($shopid)) $this->message('member_nologin',$link); 
+	 	 if(empty($shopid)) $this->message('member_nologin',$link);
 	 }
 	 public static function sqllink($where,$sqlkey,$sqlvalue,$fuhao){
 	 	  if(empty($sqlvalue)){
@@ -68,22 +73,22 @@ class adminbaseclass
 	 	  	 	 return $where.' and `'.$sqlkey.'`'.$fuhao.'\''.$sqlvalue.'\'';
 	 	  	 }
 	 	  }
-	   
+
 	 }
 	 public static function message($msg,$link=''){
-	 		$datatype = IFilter::act(IReq::get('datatype')); 
+	 		$datatype = IFilter::act(IReq::get('datatype'));
 	 		if($datatype == 'json'){
 	 			 $lngcls = new languagecls();
 	 			 $msg = $lngcls->show($msg);
-	 			 echo json_encode(array('error'=>true,'msg'=>$msg));  
-	       exit; 
-	 		}else{   
+	 			 echo json_encode(array('error'=>true,'msg'=>$msg));
+	       exit;
+	 		}else{
          self::refunction($msg,$link);
-	 		} 
+	 		}
    }
    public static function refunction($msg,$info=''){
    	  $newrul = empty($info)?Mysite::$app->config['siteurl']:$info;
-	    header("Content-Type:text/html;charset=utf-8"); 
+	    header("Content-Type:text/html;charset=utf-8");
 	    if(!empty($msg))
 	    {
 	    	 $lngcls = new languagecls();
@@ -95,19 +100,19 @@ class adminbaseclass
       exit;
    }
    public static function success($msg,$link=''){
-   	   $datatype = IFilter::act(IReq::get('datatype')); 
+   	   $datatype = IFilter::act(IReq::get('datatype'));
 	 		if($datatype == 'json'){
 	 			 $lngcls = new languagecls();
 	 			 $msg = $lngcls->show($msg);
-	 			 echo json_encode(array('error'=>false,'msg'=>$msg)); 
-	       exit; 
+	 			 echo json_encode(array('error'=>false,'msg'=>$msg));
+	       exit;
 	 		}else{
-	 			 self::refunction($msg,$link); 
+	 			 self::refunction($msg,$link);
 	 		}
-    	
+
    }
-   
-	 public static function shopIsopen($is_open,$starttime,$is_orderbefore,$nowhour){ 
+
+	 public static function shopIsopen($is_open,$starttime,$is_orderbefore,$nowhour){
 		  $find = 0 ;
 		  $hfind =0;
 		  $gotime ='';
@@ -121,45 +126,45 @@ class adminbaseclass
 		 	if(empty($starttime)){
 		 		  $opentype = 1;//已打烊
 		 	}else{
-		 		$foo = explode('|',$starttime); 
+		 		$foo = explode('|',$starttime);
 		 		foreach($foo as $key=>$value){
-		 			
+
 		 			if(!empty($value)){
 		 				$mytime = explode('-',$value);
-		 			 
+
 		 				if(count($mytime) > 1){
-		 				
+
 		 					$time1 = strtotime($mytime[0]);
 		 					$time2 = strtotime($mytime[1]);
-		 				 
+
 		 					if($nowhour > $time1 && $nowhour < $time2){
 		 						$find = 1;
-		 						$opentype = 2;//营业中 
+		 						$opentype = 2;//营业中
 		 						$gotime = empty($gotime)?$mytime[0]:$gotime;
 		 						$endtime = !empty($mytime[1])?strtotime($mytime[1]):$endtime;
 		 					}
 		 					if($nowhour < $time2){
 		 						$hfind = 1;
-		 						$gotime = empty($gotime)?$mytime[0]:$gotime; 
-		 						$checkstart = empty($checkstart)?strtotime($mytime[0]):$checkstart; 
+		 						$gotime = empty($gotime)?$mytime[0]:$gotime;
+		 						$checkstart = empty($checkstart)?strtotime($mytime[0]):$checkstart;
 		 					  $checkend = !empty($mytime[1])?strtotime($mytime[1]):$checkend;
-		 					} 
+		 					}
 		 				}
 		 			}
 		 		}
 		 		if($opentype == 0){
 		 		   if($is_orderbefore == 1&& $hfind ==1){
-		 			   $opentype = 3;//3接受预定 
+		 			   $opentype = 3;//3接受预定
 		 		   }
-		 		} 
+		 		}
 		 	}
-		 } 
-		 return array('opentype'=>$opentype,'newstartime'=>$gotime,'endtime'=>$endtime,'startoktime'=>$checkstart,'startendtime'=>$checkend); 
+		 }
+		 return array('opentype'=>$opentype,'newstartime'=>$gotime,'endtime'=>$endtime,'startoktime'=>$checkstart,'startendtime'=>$checkend);
 	 }
 	 public function pscost($shopinfo,$goodsnum){
   	$backdata = array('pscost'=>0,'pstype'=>0,'canps'=>0);
   	$sendtype = 0;//网站配送
-  	if(isset($shopinfo['sendtype']) && $shopinfo['sendtype'] == 1 ){ 
+  	if(isset($shopinfo['sendtype']) && $shopinfo['sendtype'] == 1 ){
   	  $sendtype = 1;  //店铺配送
   	  $backdata['pstype'] = 1;
   	}
@@ -170,21 +175,21 @@ class adminbaseclass
   	}
   	$siteps = unserialize($psinfo);
     $locationtype = $siteps['locationtype']  == 1?1:2;//定位方式
-  	if($sendtype == 0){//网站配送费计算规则;   
+  	if($sendtype == 0){//网站配送费计算规则;
   	   switch($siteps['pstype']){
   	     case '1':
   	        $backdata['pscost'] =  empty($siteps['psvalue1'])?0:$siteps['psvalue1'];
   	        $backdata['canps'] = 1;
   	     break;
   	     case '2'://根据不同区域设置不同配送费
-  	      $areaid = ICookie::get('myaddress');  
+  	      $areaid = ICookie::get('myaddress');
   	      if(!empty($areaid)){
   	           if($shopinfo['shoptype'] == 1){
-  	            $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatomar where areaid = ".$areaid." and shopid = 0"); 
+  	            $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatomar where areaid = ".$areaid." and shopid = 0");
   	           }else{
-  	           $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatoadd where areaid = ".$areaid." and shopid = 0"); 
+  	           $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatoadd where areaid = ".$areaid." and shopid = 0");
   	           }
-  	           $backdata['pscost'] =  isset($areainfo['cost'])? $areainfo['cost']:0;  
+  	           $backdata['pscost'] =  isset($areainfo['cost'])? $areainfo['cost']:0;
   	           $backdata['canps'] = 1;
   	      }else{
   	      	$backdata['canps'] = 0;
@@ -196,8 +201,8 @@ class adminbaseclass
   	     break;
   	     case '4'://地图
   	       if($locationtype == 1){
-  	       	  $lat = ICookie::get('lat');  
-  	       	  $lng = ICookie::get('lng');  
+  	       	  $lat = ICookie::get('lat');
+  	       	  $lng = ICookie::get('lng');
   	       	  $lat = empty($lat)?0:$lat;
   	       	  $lng = empty($lng)?0:$lng;
   	       	  $shoplat = isset($shopinfo['lat'])?$shopinfo['lat']:0;
@@ -215,7 +220,7 @@ class adminbaseclass
   	       	  }else{
   	       	  	$backdata['pscost'] = 100;
   	       	  	$backdata['canps'] = 0;
-  	       	  } 
+  	       	  }
   	       }else{
   	       	 $backdata['pscost'] = 0;
   	       	 $backdata['canps'] = 0;
@@ -223,7 +228,7 @@ class adminbaseclass
   	     break;
   	     case '5'://菜品计算
   	        $tempstart =$siteps['psvalue1'];
-  	        $stepcost =  $goodsnum*$siteps['psvalue2']; 
+  	        $stepcost =  $goodsnum*$siteps['psvalue2'];
   	        $backdata['pscost'] = $tempstart+$stepcost - $siteps['psvalue2'];
   	        $backdata['pscost'] = 0;
   	        $backdata['canps'] = 1;
@@ -233,33 +238,33 @@ class adminbaseclass
   	        $backdata['canps'] = 0;
   	     break;
   	   }
-  	  	
-  	  	
+
+
   	}elseif($sendtype ==  1){//店铺配送费计算规则
-  		
-  		
+
+
   		if(empty($shopinfo['sendset'])){//无店铺设置返回0；
   			  return $backdata;
   		}
-  		
+
   		$shopps =  unserialize($shopinfo['sendset']);
-  		 
+
   		switch($shopps['pstype']){
   	     case '1'://同意配送费
   	        $backdata['pscost'] =  empty($shopps['psvalue1'])?0:$shopps['psvalue1'];
   	        $backdata['canps'] = 1;
   	     break;
-  	     case '2'://根据不同区域设置不同配送费 
+  	     case '2'://根据不同区域设置不同配送费
   	      $areaid = ICookie::get('myaddress');
-  	      if(!empty($areaid)){  
+  	      if(!empty($areaid)){
   	          if($shopinfo['shoptype'] == 1){
-  	          	$areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatomar where areaid = ".$areaid." and shopid = ".$shopinfo['id'].""); 
-  	            $backdata['pscost'] =  isset($areainfo['cost'])? $areainfo['cost']:0;  
-  	            $checkareainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areamarket where areaid = ".$areaid." and shopid = ".$shopinfo['id'].""); 
+  	          	$areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatomar where areaid = ".$areaid." and shopid = ".$shopinfo['id']."");
+  	            $backdata['pscost'] =  isset($areainfo['cost'])? $areainfo['cost']:0;
+  	            $checkareainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areamarket where areaid = ".$areaid." and shopid = ".$shopinfo['id']."");
   	          }else{
-  	            $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatoadd where areaid = ".$areaid." and shopid = ".$shopinfo['id'].""); 
-  	            $backdata['pscost'] =  isset($areainfo['cost'])? $areainfo['cost']:0;  
-  	            $checkareainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areashop where areaid = ".$areaid." and shopid = ".$shopinfo['id'].""); 
+  	            $areainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areatoadd where areaid = ".$areaid." and shopid = ".$shopinfo['id']."");
+  	            $backdata['pscost'] =  isset($areainfo['cost'])? $areainfo['cost']:0;
+  	            $checkareainfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."areashop where areaid = ".$areaid." and shopid = ".$shopinfo['id']."");
   	          }
   	          if(empty($checkareainfo)){
   	          	$backdata['canps'] = 0;
@@ -269,16 +274,16 @@ class adminbaseclass
   	      }else{
   	      	 $backdata['canps'] = 0;
   	      }
-  	      
+
   	     break;
-  	     case '3'://不计算 
+  	     case '3'://不计算
   	        $backdata['pscost'] = 0;
   	        $backdata['canps'] = 1;
   	     break;
   	     case '4'://地图
   	       if($locationtype == 1){
-  	       		$lat = ICookie::get('lat');  
-  	       	  $lng = ICookie::get('lng');  
+  	       		$lat = ICookie::get('lat');
+  	       	  $lng = ICookie::get('lng');
   	       	  $lat = empty($lat)?0:$lat;
   	       	  $lng = empty($lng)?0:$lng;
   	       	  $juli =  $this->GetDistance($lat,$lng, $shopinfo['lat'],$shopinfo['lng'], 1);
@@ -294,7 +299,7 @@ class adminbaseclass
   	       	  }else{
   	       	  	$backdata['canps'] = 0;
   	       	  	$backdata['pscost'] = 100;
-  	       	  } 
+  	       	  }
   	       }else{
   	       	 $backdata['canps'] = 0;
   	       	 $backdata['pscost'] = 0;
@@ -302,7 +307,7 @@ class adminbaseclass
   	     break;
   	     case '5'://菜品计算
   	        $tempstart =$shopps['psvalue1'];
-  	        $stepcost =  $goodsnum*$shopps['psvalue2']; 
+  	        $stepcost =  $goodsnum*$shopps['psvalue2'];
   	        $backdata['pscost'] = $tempstart+$stepcost - $shopps['psvalue2'];
   	        $backdata['canps'] = 1;
   	     break;
@@ -311,17 +316,17 @@ class adminbaseclass
   	        $backdata['canps'] = 0;
   	     break;
   	   }
-  		
-  		
+
+
   	}
-  	return $backdata; 
+  	return $backdata;
   }
-  
+
   //发送通知信息
-  
-  
-  
-  
+
+
+
+
    function GetDistance($lat1, $lng1, $lat2, $lng2, $len_type = 1, $decimal = 2)
   {
     	 define('EARTH_RADIUS', 6378.137);//地球半径，假设地球是规则的球体
@@ -340,6 +345,6 @@ class adminbaseclass
            $s /= 1000;
        }
        return round($s, $decimal);
-   } 
+   }
 }
 ?>
