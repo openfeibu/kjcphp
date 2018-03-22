@@ -339,37 +339,44 @@ class orderclass
              //消息模板
              if($shopwxuser){
                  $temp_content = '';
-                 foreach ($orderdet as $km=>$vc) {
-                     $temp_content .=$vc['goodsname'].'('.$vc['goodscount'].'份)\n';
-                 }
-                 $template_id = '88eaR02txV8yKVNKmPDQOoXxresHFooXA2BByBaWVt4';
+                  foreach ($orderdet as $km=>$vc) {
+                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)";
+                }
+				// $temp_content .= "\n配送费:".$orderinfo['shopps'].'元';
+                // $temp_content .= "\n打包费:".$orderinfo['bagcost'].'元';
+                 $template_id = Mysite::$app->config['order_template_id'];
                  $dolink = Mysite::$app->config['siteurl'].'/index.php?ctrl=wxsite&action=shopordershow&orderid='.$orderinfo['id'];
                  $data = array(
                      "first" => array(
                              "value"=> $orderinfo['shopname'].'收到新的订单，单号：'.$orderinfo['dno'],
                              "color"=>"#173177"
                      ),
-                     "keyword1"=>array(
-                             "value"=> $temp_content,
-                             "color"=>"#173177"
-                     ),
-                     "keyword2"=>array(
-                             "value"=> $orderinfo['allcost'],
-                             "color"=>"#173177"
-                     ),
-                     "keyword3"=>array(
-                             "value"=>'微信支付',
-                             "color"=>"#173177"
-                     ),
-                     "keyword4"=>array(
-                             "value"=>$orderinfo['content'].'\n',
-                             "color"=>"#173177"
-                     ),
+                    "keyword1"=>array(
+						"value"=> $temp_content,
+						"color"=>"#173177"
+					),
+					"keyword2"=>array(
+						"value"=> $orderinfo['allcost'],
+						"color"=>"#173177"
+					),
+					"keyword3"=>array(
+						"value"=>$orderinfo['buyername'].$orderinfo['buyerphone'].' '.$orderinfo['buyeraddress'],
+						"color"=>"#173177"
+					),
+					"keyword4"=>array(
+						"value"=>'微信支付',
+						"color"=>"#173177"
+					),
+					"keyword5"=>array(
+						"value"=>$orderinfo['content'],
+						"color"=>"#173177"
+					),
                      "remark"=> array(
                              "value"=>"请点详情及时处理订单，不要让顾客就等哦",
                              "color"=>"#173177"
                      ),
                  );
+				 //var_dump($shopwxuser);exit;
                  $wx_s->sendMbMessage($shopwxuser['openid'],$template_id,$data,$dolink);
              }
         }
@@ -466,6 +473,7 @@ class orderclass
 						"color"=>"#173177"
 					),
                 );
+				//var_dump($senders);exit;
 				foreach($senders as $senderkey => $sender){
 					$wx_s->sendMbMessage($sender['openid'],$template_id,$data,'');
 				}
