@@ -390,6 +390,7 @@ class orderclass
         if (!empty($orderinfo['buyeruid'])) {
             // $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
             // if (!empty($wxbuyer)) {
+				/*
                 if ($orderinfo['is_goshop'] == 0 &&  $orderinfo['bagcost'] > 0) {
                     $bagcostContent =  ',打包费:'.$orderinfo['bagcost'].'元 ';
                 } else {
@@ -426,7 +427,48 @@ class orderclass
                             logwrite('配送员微信客服发送错误:'.$wx_s->err());
                         }
                     }
+                }*/
+				//模板消息
+				$temp_content = '';
+                foreach ($orderdet as $km=>$vc) {
+                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)";
                 }
+				$temp_content .= "\n配送费:".$orderinfo['shopps'].'元';
+                $temp_content .= "\n打包费:".$orderinfo['bagcost'].'元';
+                $template_id = Mysite::$app->config['order_template_id'];
+                $data = array(
+                    "first" => array(
+                            "value"=> $orderinfo['shopname'].'收到新的订单，单号：'.$orderinfo['dno'],
+                            "color"=>"#173177"
+                    ),
+					"keyword1"=>array(
+						"value"=> $temp_content,
+						"color"=>"#173177"
+					),
+					"keyword2"=>array(
+						"value"=> $orderinfo['allcost'],
+						"color"=>"#173177"
+					),
+					"keyword3"=>array(
+						"value"=>$orderinfo['buyername'].$orderinfo['buyerphone'].' '.$orderinfo['buyeraddress'],
+						"color"=>"#173177"
+					),
+					"keyword4"=>array(
+						"value"=>'微信支付',
+						"color"=>"#173177"
+					),
+					"keyword5"=>array(
+						"value"=>$orderinfo['content'],
+						"color"=>"#173177"
+					),
+					"remark"=> array(
+						"value"=>"请及时配送，不要让顾客久等哦",
+						"color"=>"#173177"
+					),
+                );
+				foreach($senders as $senderkey => $sender){
+					$wx_s->sendMbMessage($sender['openid'],$template_id,$data,'');
+				}
             //}
         }
     }
