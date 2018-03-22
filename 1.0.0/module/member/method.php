@@ -203,7 +203,7 @@ class method extends baseclass
     public function loginout()
     {
         $this->memberCls->loginout();
-        $link = IUrl::creatUrl('site/index');
+        $link = IUrl::creatUrl('member/shoplogin');
         $this->refunction('', $link);
     }
     public function payoncard()
