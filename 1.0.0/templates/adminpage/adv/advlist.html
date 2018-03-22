@@ -52,7 +52,7 @@
                         <td align="center"><{$items['id']}></td>
                         <td align="center"> <{$items['title']}> </td>
                         <td align="center"><{$advtypelist[$items['advtype']]|default:'未定义'}></td>
-                        <td align="center"><img src="<{$items['img']}>" width="30px" height="30px"></td>
+                        <td align="center"><img src="<{$items['img']}>" height="30px"></td>
                         <td align="center"><{$items['module']}></td>
                         <td align="center"><a href="<{ofunc type=url link="/adminpage/adv/module/addadv/id/<{$items['id']}>"}>" ><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/edit.jpg"></a>
                         	<a onclick="return remind(this);" href="<{ofunc type=url link="/adminpage/adv/module/deladv/id/<{$items['id']}>/datatype/json"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/del.jpg"></a></td>

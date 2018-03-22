@@ -36,7 +36,7 @@
                       <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left" valign="top">广告图片</td>
                       <td>
-                      	<img src="<{$info['img']}>" width=80px height=80px id="imgshow" <{if  empty($info['img'])}> style="display:none;"<{/if}>>
+                      	<img src="<{$info['img']}>"  height=80px id="imgshow" <{if  empty($info['img'])}> style="display:none;"<{/if}>>
                       	<input type="hidden" name="img" id="img" value="<{$info['img']}>" class="skey" style="width:150px;" >
                       	<span onclick="uploads();">上传图片</span>
                       	</td>
