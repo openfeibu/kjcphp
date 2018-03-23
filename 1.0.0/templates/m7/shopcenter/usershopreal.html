@@ -33,9 +33,7 @@
 <{block name=bodylist}>
 <div class="conWaiSet fr">
 
-    <div class="shopSetTop">
-        <span>店铺设置</span>
-    </div>
+    
     <{include file="<{$tempdir}>/shopcenter/usereditmenu.html"}>
     <div class="cl"></div>
     <div class="orderset">
@@ -139,7 +137,7 @@
                 var resulte = Number(ztop) -Number(ftop);
                 var url = siteurl+'/index.php?ctrl=shopcenter&action=shoprealimg';
                 $('#editGtype').css('margin-left',resulteleft);
-                $('#editGtype').css('margin-top',resulte);
+                // $('#editGtype').css('margin-top',resulte);
                 $.post(url, {'parent_id':realid},function (data, textStatus){
                     $('#shoprealimg').html(data);
                 }, 'html');

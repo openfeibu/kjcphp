@@ -65,7 +65,7 @@
 		    <div class="baseinfo">基本信息：</div>
 		    <div class="basetext"> <p><{$goodsinfo['name']}></p><p>单价:<{$goodsinfo['cost']}></p><p>打包费：<{$goodsinfo['bagcost']}></p><p>库存:<{$goodsinfo['count']}></p>
 			<{if $adminuid != ''  }>
-				<p>虚拟总销量:<input id="zxscounts" style="width:60px;" type="text" goodid="<{$goodsinfo['id']}>" value="<{$goodsinfo['virtualsellcount']}>"  /><span id="savesellcounts" style="background-color: #ec7501; cursor:pointer; color: #fff;  padding: 4px 8px;  margin-left: 10px;  font-size: 12px;">保存</span></p>
+				<p>虚拟总销量:<input id="zxscounts" style="width:60px;" type="text" goodid="<{$goodsinfo['id']}>" value="<{$goodsinfo['virtualsellcount']}>"  /><span id="savesellcounts" style="background-color: #27a9e3; cursor:pointer; color: #fff;  padding: 4px 8px;  margin-left: 10px;  font-size: 12px;">保存</span></p>
 			<{/if}>
 			</div>
 		    <div class="imgdiv">
@@ -438,7 +438,7 @@
 		 <input type="hidden" name="gid" value="<{$goodsinfo['id']}>">
 		 <div class="hangtiao clr">
 
-		    <input type="submit" value="确认提交" class="labeltext" style="background-color:#ec7501;text-align:center;cursor: pointer;margin-top: 30px;">
+		    <input type="submit" value="确认提交" class="labeltext" style="background-color:#27a9e3;text-align:center;cursor: pointer;margin-top: 30px;">
 
 		 </div>
 
@@ -456,7 +456,7 @@
                      		<div id="div-headpicUpload" style="display:block;">
 		                  	<form id="form1" name="form1" method="post"  enctype="multipart/form-data" target="ifr-headpic-upload" onsubmit="return checkImagetype('1');">
 			                  	<div class="">
-			                  		<div class="" style="position: relative;padding:5px;background: #ec7501;margin:0 5px 0 0;float: left;color: #fff;height: 20px;">
+			                  		<div class="" style="position: relative;padding:5px;background: #27a9e3;margin:0 5px 0 0;float: left;color: #fff;height: 20px;">
 			                  			选择文件
 										<input name="head" type="file" id="imgFile" style="width:68px;position: absolute;top: 0;left: 0;opacity: 0" name="imgFile" onchange="$('#input1').val($(this).val())"  class="curbtn">
 			                  		</div>

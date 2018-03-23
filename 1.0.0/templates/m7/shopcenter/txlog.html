@@ -13,25 +13,17 @@
 }
 
  </style>
- <!---content right start--->
+ <!--content right start-->
   <div class="conWaiSet fr">
-    <div class="shopSetTop"> <span>商家金额记录</span>  
-	
 
-
-	</div>
     <div class="orderTongji">
-      <div class="sjser" style="font-weight:none;">商家订单统计查询
-	  
-	  
-	
-	  </div>
+    
       <form action="<{ofunc type=url link="/shopcenter/txlog"}>" method="post" id="chafrom">  
-      <div style="background:#311f16;">
+      <div style="background:#605d5b;">
       <span>从
-	   <input class="xzrq" type="text" name="stime" id="stime" value="<{$stime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" style="width:80px;"/>
+	   <input class="xzrq" type="text" name="stime" id="stime" value="<{$stime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" style="width:120px;background:#fff"/>
 	   至
-	    <input class="xzrq" type="text" name="etime" id="etime" value="<{$etime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" style="width:80px;"/>
+	    <input class="xzrq" type="text" name="etime" id="etime" value="<{$etime|date_format:"%Y-%m-%d"}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" style="width:120px;background:#fff"/>
       </span>
       <span id="showmonth"> 
       	

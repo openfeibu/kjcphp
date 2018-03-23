@@ -10,9 +10,9 @@
  <{block name=bodylist}>
 
 
-  <!---content right start--->
+  <!--content right start-->
   <div class="conWaiSet fr">
-    <div class="shopSetTop"> <span>订单查询</span> </div>
+
     <div class="selOrder">
       <div class="autoRe" id="showztai" udata="<{$hidecount}>"  data="20" > 自动刷新倒计时<span>0</span>秒 </div>
       <div class="refresh_set">
@@ -29,7 +29,7 @@
 
 				$(function(){
 					$(".waimaiset .jbset").click(function(){
-						$(this).css('background','#ec7501').siblings().css('background','');
+						$(this).css('background','#27a9e3').siblings().css('background','');
 
 					});
 
@@ -353,7 +353,7 @@
                     <{/if}>
                 <{/if}>
                 <{if !empty($items['drawbacklog'])}>
-                    <span style="padding: 4px 8px; position:relative;top:-6px;background: #EC7501;curosr:text;"class="curbtn" >
+                    <span style="padding: 4px 8px; position:relative;top:-6px;background: #27a9e3;curosr:text;"class="curbtn" >
                     <{if $items['is_reback'] == 1 }>已申请退款等待平台处理<{/if}>
                     <{if $items['is_reback'] == 2 }>管理员已退款给用户<{/if}>
                     <{if $items['is_reback'] == 4 }>已申请退款等待管理员处理<{/if}>
@@ -403,18 +403,18 @@
  	<{/if}>
 	$(function(){
 		 if(playwave == true){
-		 	$('#startwave').css('background','#ec7501');
+		 	$('#startwave').css('background','#27a9e3');
 		}else{
-			$('#closetwave').css('background','#ec7501');
+			$('#closetwave').css('background','#27a9e3');
 		}
 		$("#startwave").click(function(){
-			$(this).css('background','#ec7501');//.siblings().css('background','');
+			$(this).css('background','#27a9e3');//.siblings().css('background','');
 			$('#closetwave').css('background','');
 			playwave =   true;
 			ajaxback('<{ofunc type=url link="/shopcenter/wavecontrol/type/openwave/datatype/json"}>','');
 		});
 		$("#closetwave").click(function(){
-			$(this).css('background','#ec7501');//.siblings().css('background','');
+			$(this).css('background','#27a9e3');//.siblings().css('background','');
 				$('#startwave').css('background','');
 					playwave = false;
 		    	ajaxback('<{ofunc type=url link="/shopcenter/wavecontrol/type/closewave/datatype/json"}>','');

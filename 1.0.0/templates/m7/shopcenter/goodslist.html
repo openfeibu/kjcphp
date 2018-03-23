@@ -26,9 +26,9 @@
   <!--content right start-->
         <div class="conWaiSet fr">
 
-            <div class="shopSetTop">
+           <!--  <div class="shopSetTop">
             	<span>菜单设置</span>
-            </div>
+            </div> -->
 
             <div class="orderset">
 
@@ -451,9 +451,12 @@ $(".caidanSet ul li").click(function(){
 					   var tempid = $(this).attr('data');
 					   $('.listgoodsdet').hide();
              if(tempid == 0){
-              $(".order_goodlist_add").hide()
+              $(".order_goodlist_add").hide();
+              $('#editGtype').hide();
              }else{
               $(".order_goodlist_add").show()
+              $('#editGtype').show();
+              
              }
 
 					  $('.goodsdiv_'+tempid).show();
@@ -468,7 +471,7 @@ $(".caidanSet ul li").click(function(){
 				var resulte = Number(zleft) -Number(fleft);
 				var resultet = Number(ztop) -Number(ftop);
 				$('#editGtype').css('margin-left',resulte);
-				$('#editGtype').css('margin-top',resultet);
+				// $('#editGtype').css('margin-top',resultet);
 
 
 

@@ -26,20 +26,21 @@
 <body >
 <{load_data assign="shopinfo" table="shop" where="`id`=<{$adminshopid}>"  type="one"}>
 <!-- <div style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: -1;background:url('<{$siteurl}>/templates/<{$tempdir}>/public/images/shoplogin_bg.jpg') no-repeat center/cover;"></div> -->
-<!---header start--->
+<!--header start-->
 	<div class="header">
     	<div class="top">
         	<div class="topLeft fl">
             	<ul>
-                    <li>今日营业额：<{$todayshopcost}>元</li>
-                    <li>总营业额：<{$allshopcost}>元</li>
+                    <li>今日营业额：<span><{$todayshopcost}></span>元</li>
+                    <li>总营业额：<span><{$allshopcost}></span>元</li>
 
                 </ul>
                  <div class="cl"></div>
             </div>
             <div class="topRight fr">
 
-
+                    <span class="updataPass curbtn" onclick="">修改密码</span>
+                    
                     <span class="username curbtn" onclick="openlink('<{ofunc type=url link="/member/loginout"}>');">退出</span>
 
 
@@ -85,6 +86,8 @@
 					<a href="<{ofunc type=url link="/shopcenter/cxrule"}>">促销规则</a></li>
                     <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptx"}>');"  data="basetx"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dianpujieshao.png" /></div>
                     <a href="<{ofunc type=url link="/shopcenter/shoptx"}>">提现</a></li>
+                    <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptxxg"}>');"  data="basetxxg"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dianpujieshao.png" /></div>
+                    <a href="<{ofunc type=url link="/shopcenter/shoptxxg"}>">提现信息修改</a></li>
 
                 </ul>
 

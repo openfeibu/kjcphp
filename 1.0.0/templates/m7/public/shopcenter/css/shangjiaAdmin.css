@@ -9,13 +9,13 @@ select{border:1px solid #eee;background: #fff;line-height: 26px;    width: 60px;
 .conleft{  width:1200px; height:50px; background:url(../images/navBg.png) repeat-y; }
 .conRight{ width:1150px; padding:0 25px 0 25px; min-height:838px;height:auto; background:url(../images/conRightBg.png) repeat-y;}
 
-.conleft .nav{ width:100%; height:50px; background:#3b363a;}
-.conleft .nav ul li{ cursor:pointer; padding:10px 10px 10px 10px; min-width:80px; height:28px; border-top:1px solid #423c3e;border-bottom:1px solid #39312d;float: left;line-height: 28px;margin:0 0 0 5px;}
+.conleft .nav{ width:100%; height:50px; background:#638595;}
+.conleft .nav ul li{ cursor:pointer; padding:10px 5px 10px 8px; min-width:80px; height:28px; border-top:1px solid #638595;border-bottom:1px solid #638595;float: left;line-height: 28px;margin:0 5px 0 0;}
 .conleft .nav ul li:hover{background:#27a9e3;border-radius: 2px;}
 .conleft .nav ul .on{ background:#27a9e3;border-radius: 2px;}
 .conleft .nav ul li .navimg{ margin:0 auto; width:28px; height:28px; text-align:center; margin-bottom:12px;float: left;}
 .conleft .nav ul li .navimg img{width: auto;height: 80%;margin:10% 0;}
-.conleft .nav ul li a{ color:#f0f0f0; font-size:12px; font-family:"宋体";margin-left: 5px; }
+.conleft .nav ul li a{ color:#f0f0f0; font-size:16px; font-family:"微软雅黑";margin-left: 5px; }
 /**账单明细**/
 .menu{ width:278px; height:830px; background:#313539;}
 .menuTitle{ width:278px; height:42px; background:#27a9e3;}
@@ -90,16 +90,16 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 
 
 /********店铺设置--外卖设置***************/
-.conWaiSet{ width:1200px;  padding:0 ; height:auto; /*background:url(../images/conRightBg.png) repeat-y 0 0 /100% auto;*/background:rgb(59, 54, 58);min-height: 800px;}
+.conWaiSet{ width:1200px;  padding:0 ; height:auto; /*background:url(../images/conRightBg.png) repeat-y 0 0 /100% auto;*/background:#3b3944;min-height: 800px;}
 .shopSetTop{ width:1200px; height:42px; background:#27a9e3; }
 .shopSetTop span{ height:42px; font-family:"微软雅黑"; line-height:42px; font-size:16px; color:#ffffff; background:url(../images/wmsetBg.png) 18px center no-repeat; padding-left:47px;}
 .waimaiset{ width:1140px; height:40px;  background:#605d5b;   padding: 30px  ;}
-.waimaiset .jbset{ cursor:pointer; float:left; margin-right:20px; position:relative; width:135px; height:40px; text-align:center; color:#ffffff; font-family:"微软雅黑"; font-size:16px; line-height: 40px; background:url(../images/jbsetBg.png) repeat-x;border-radius: 5px;}
- .waimaiset .onset { background:#ec7501;}
- .waimaiset .jbset:hover { background:#ec7501;}
+.waimaiset .jbset{ cursor:pointer; float:left; margin-right:20px; position:relative; width:135px; height:40px; text-align:center; color:#ffffff; font-family:"微软雅黑"; font-size:16px; line-height: 40px; background:#638595;border-radius: 5px;}
+ .waimaiset .onset { background:#27a9e3;}
+ .waimaiset .jbset:hover { background:#27a9e3;}
 .waimaiset .jbset img{ position:absolute;  left:14px;height: 25px;top: 7.5px; }
 .waimaiset .jbset span{margin-left: 25px;}
-.waimaiset .jbset .current{ background:#ec7501;}
+
 
 #loginForm{}
 .jutiSet{ padding:48px 95px 36px 95px; width:1010px; height:auto;  position:relative;}
@@ -123,12 +123,12 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .upimg{ width:136px; height:163px; background:#ffffff; position:absolute; right:96px; top:45px;}
 .file_img{width:136px; height:130px; background:#fff;}
 .file_xxiang input{ width:131px;line-height:30px;padding-left:5px; padding-top:5px; height:28px;}
-.geiquAdd{ margin-left:0px; width:81px; height:42px; background:#c56b15; font-size:12px; font-family:"宋体"; line-height:42px; text-align:center; color:#ffffff;}
+.geiquAdd{ margin-left:0px; width:81px; height:42px; background:#27a9e3; font-size:12px; font-family:"宋体"; line-height:42px; text-align:center; color:#ffffff;}
 
 /*************订单查询******************/
 .selOrder{ width:1200px; height:147px; text-align:center; background:#605d5b; }
 .selOrder .autoRe{ color:#ffffff; font-size:24px; font-family:"微软雅黑"; padding-top:10px;  }
-.selOrder .autoRe span{ color:#e47d1b; font-size:46px;}
+.selOrder .autoRe span{ color:#27a9e3; font-size:46px;}
 
 
 .refresh_set{ width:540px; margin:0 auto; margin-top:15px;}
@@ -146,7 +146,7 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
 .orderList{ padding:28px; width:1144px; height:auto; background:url(../images/caidanlistBg.png) repeat; position:relative;}
 .orderList .orderspan{ font-size:15px; color:#ffffff; font-family:"微软雅黑";}
 .orderList .orderspan .numOrder{ font-size:24px;padding:0 8px;}
-.orderList .orderspan .seccost{ color:#ec7501; font-size:24px; padding:0 8px;}
+.orderList .orderspan .seccost{ color:#ef1212; font-size:24px; padding:0 8px;}
 .singleOrder{ width:100%;  background:#466572; margin-top:30px;} 
 .singleOrder .singleOrder_title{ width:100%; height:54px; background:#6dccf6;}
 .singleOrder .singleOrder_title .orderNum{ float:left; color:#ffffff; font-size:36px; height:54px; line-height:54px; font-family:"微软雅黑"; width:90px; text-align:center;background:#27a9e3; } 
@@ -184,7 +184,7 @@ font-size: 30px;
 .addFenlei input{ border:none; width:182px; height:36px; background:#fff;text-indent:1em;}
 .orderset .addButton { background:url(../images/addFenlei.png) no-repeat;  width:124px; height:38px; line-height:38px;}
 
-.caidanSet{  width:1010px;padding:0 95px 0 95px; height:auto;  position:relative;}
+.caidanSet{  width:1010px;padding:20px 95px 0 95px; height:auto;  position:relative;}
 .caidanTitle{ width:1010px; height:42px; background:#544e48;}
 .caidanTitle ul li { font-family:"微软雅黑"; font-size:14px; height:42px; line-height:42px; text-align:center; padding:0 33px; color:#f0f0f0; float:left; cursor:pointer;}
 
@@ -307,7 +307,7 @@ border-bottom: 1px solid #5c5b5a;
 }
 .mes_box table td {
 background: #424549;
-font-size:14px; color:#c3c3c3;
+font-size:16px; color:#c3c3c3;
 font-family:"宋体"; 
 height: 32px;
 padding:5px;
@@ -329,7 +329,7 @@ padding:3px 5px 3px 5px;
 
 
 /***********订单统计*****************/
-.orderTongji{ position:relative;   width:1200px; height:120px;  background:url(../images/fenleiBg.png) repeat;
+.orderTongji{ position:relative;   width:1200px; height:56px;  background:#605d5b;
 
 line-height: 55px;
 color: #27a9e3;
@@ -338,7 +338,7 @@ font-size: 15px;
 text-align:center;
 font-family: "微软雅黑";
  }
-.orderTongji span{ margin-right:20px;font-weight:bold;}
+.orderTongji span{ margin-right:20px;font-weight:bold;font-size: 16px;}
 .ddnum{color:#fff; font-family:none; font-size:12px;}
 .sjser{color: #ffffff;
 font-size: 24px;
@@ -349,7 +349,7 @@ padding-top: 10px;
 background: url(../images/serchBg.png) no-repeat;
 width: 71px;
 position: absolute;
-top: 80px;
+top: 15px;
 right: 80px;
 height: 27px;
 border: none;	
@@ -490,10 +490,22 @@ OVERFLOW-X: hidden;
 input[type="text"]{-webkit-appearance: none;
     -moz-appearance: none;
     outline: none}
-.addDate{width: 124px;height: 38px;line-height: 38px;display: block;line-height: 38px;text-align: center;color: #fff;background: #ec7401;}
+.addDate{width: 124px;height: 38px;line-height: 38px;display: block;line-height: 38px;text-align: center;color: #fff;background: #27a9e3;}
 .shoptx_info{margin:0 auto;color: #fff;font-size: 14px;line-height: 36px;padding:50px;}
 .shoptx_money{color: #fff;font-size: 14px;line-height: 36px;margin:20px 0;}
 .shoptx_form{}
-.shoptx_form input[type="text"]{width: 350px;height: 36px;border: 1px solid #eee;background: #fff;text-indent: 1em;border-radius: 2px;}
+.shoptx_form input[type="text"]{width: 350px;height: 36px;border: 1px solid #eee;background: #fff;text-indent: 1em;border-radius: 2px;font-size: 16px;}
 .shoptx_form input[type="submit"]{width: 120px;height: 38px;border: 1px solid #27a9e3;background: #27a9e3;cursor: pointer;display: block;color: #fff;font-size: 14px;margin:20px 0;border-radius: 2px;}
 .shoptx_des{font-size: 12px;color: #ddd}
+
+.fb-inlineBlock{display: inline-block;*display: inline;*zoom:1;vertical-align: middle;}
+
+#shoptxxg{font-size: 16px;}
+#shoptxxg >div{margin-bottom: 15px;}
+#shoptxxg >div span{margin-left: 10px;color: #ff5f5f}
+#shoptxxg p{margin-right: 10px;}
+#shoptxxg  input[type="text"],#shoptxxg  input[type="password"]{width: 350px;height: 36px;border: 1px solid #eee;background: #fff;text-indent: 1em;border-radius: 2px;font-size:16px;}
+#shoptxxg input[type="submit"]{width: 120px;height: 38px;border: 1px solid #27a9e3;background: #27a9e3;cursor: pointer;display: block;color: #fff;font-size: 14px;margin:40px 0;border-radius: 2px;}
+
+.username{padding: 10px 20px;background: #27a9e3;color: #fff;border-radius: 2px;    box-shadow: 0 5px 20px #b3dbee;font-size: 14px;}
+.updataPass{padding: 10px 20px;background: #27a9e3;color: #fff;border-radius: 2px;    box-shadow: 0 5px 20px #b3dbee;font-size: 14px;margin-right: 20px;}
