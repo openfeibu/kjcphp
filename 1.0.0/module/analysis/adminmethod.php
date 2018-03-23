@@ -714,12 +714,12 @@ class method extends adminbaseclass
         $data['searchvalue'] = '';
         if (!empty($searchvalue)) {
             $data['searchvalue'] = $searchvalue;
-            $where .= ' where s.shopname = \''.$searchvalue.'\' ';
+            $where .= ' AND s.shopname = \''.$searchvalue.'\' ';
             $newlink .= '/searchvalue/'.$searchvalue;
         }
         if (!empty($stationid)) {
             $data['stationid'] = $stationid;
-            $where .= ' where s.stationid = \''.$stationid.'\' ';
+            $where .= ' AND s.stationid = \''.$stationid.'\' ';
             $newlink .= '/stationid/'.$stationid;
         }
         $pageshow = new page();
