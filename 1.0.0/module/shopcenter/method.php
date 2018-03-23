@@ -13,7 +13,6 @@ class method extends baseclass
             echo file_get_contents(Mysite::$app->config['siteurl']."/index.php?ctrl=site&action=wxopen");
             exit;
         }
-
         $shopid = ICookie::get('adminshopid');
         $start = date('Y-m-d 00:00:00');
         $end = date('Y-m-d H:i:s');
@@ -2447,7 +2446,7 @@ class method extends baseclass
         if (is_array($timelist)) {
             foreach ($timelist as $key=>$value) {
                 $where2 = 'and posttime > '.$value['starttime'].' and posttime < '.$value['endtime'];
-                $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =0 and shopcost > 0 and status = 3 ".$where2." order by id asc  limit 0,1000");
+                $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost ,sum(shopdowncost) as shopdowncost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =0 and shopcost > 0 and status = 3 ".$where2." order by id asc  limit 0,1000");
                 $line= $this->mysql->select_one("select count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost,sum(shopcost) as shopcost, sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =1  and paystatus =1 and shopcost > 0 and status = 3 ".$where2."   order by id asc  limit 0,1000");
                 //月 份	订单数量	在线付款	线下支付	使用代金券	店铺优惠	使用积分	打包费	配送费	商品总价
              $value['orderNum'] =  $shoptj['shuliang']+$line['shuliang'];//订单总个数
@@ -2457,12 +2456,13 @@ class method extends baseclass
                 $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
                 $value['unlinescore'] = $scordedown;
                 $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
+                $value['shopdowncost'] = $shoptj['shopdowncost'];
                 $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
-             $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 店铺优惠
-             $value['score'] = $value['unlinescore'] +$value['onlinescore']; //  使用积分
-             $value['bagcost'] = $line['bagcost'] +$shoptj['bagcost'];//   打包费
-             $value['pscost'] = $line['pscost'] +$shoptj['pscost'];//   配送费
-             $value['allcost'] = $line['shopcost'] +$shoptj['shopcost'] - $value['cxcost'];
+                $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 店铺优惠
+                $value['score'] = $value['unlinescore'] +$value['onlinescore']; //  使用积分
+                $value['bagcost'] = $line['bagcost'] +$shoptj['bagcost'];//   打包费
+                $value['pscost'] = $line['pscost'] +$shoptj['pscost'];//   配送费
+                $value['allcost'] = $line['shopcost'] +$shoptj['shopcost'] - $value['cxcost'];
                 $data['allsum'] += $value['allcost'];
                 $data['allnum'] += $value['orderNum'];
                 $value['goodscost'] = $line['shopcost'] +$shoptj['shopcost'];
@@ -3614,4 +3614,63 @@ class method extends baseclass
         $lockSystem->releaseLock($lockKey);
 		$this->success($info);
 	}
+    public function shoptxxg()
+    {
+        $this->checkshoplogin();
+        $shopid = ICookie::get('adminshopid');
+        $shopinfo = $this->shopinfo();
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+        $data['member'] = $member;
+        Mysite::$app->setdata($data);
+    }
+    /*修改提现资料*/
+    public function updatetx()
+    {
+        $this->checkshoplogin();
+        $pwd = trim(IReq::get('password'));
+        if (empty($pwd)) {
+            $this->message('请输入登录密码');
+        }
+        $md5c = md5($pwd);
+        $shopid = ICookie::get('adminshopid');
+        $shopinfo = $this->shopinfo();
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+        if ($member['password']  !=$md5c) {
+            $this->message('密码错误');
+        }
+        $arr['txtype'] = IFilter::act(IReq::get('txtype'));
+        if (empty($arr['txtype'])) {
+            $this->message('请选择提现账号类型');
+        }
+        $arr['txname'] = IFilter::act(IReq::get('txname'));
+        if (empty($arr['txname'])) {
+            $this->message('请输入提现账号名称');
+        }
+        $arr['backacount'] = IFilter::act(IReq::get('backacount'));
+        if (empty($arr['backacount'])) {
+            $this->message('请输入提现账号');
+        }
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member', $arr, "uid='".$shopinfo['uid']."'");
+        $this->success('修改成功');
+    }
+    public function updatepwd()
+    {
+        $this->checkshoplogin();
+        $shopinfo = $this->shopinfo();
+        $member = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$shopinfo['uid']."'  ");
+        $oldpwd = trim(IReq::get('oldpwd'));
+        $pwd  = trim(IReq::get('pwd'));
+        if (empty($oldpwd)) {
+            $this->message('emptyoldpwd');
+        }
+        if (empty($pwd)) {
+            $this->message('emptynewpwd');
+        }
+        if ($member['password'] != md5($oldpwd)) {
+            $this->message('oldpwderr');
+        }
+        $arr['password'] = md5($pwd);
+        $this->mysql->update(Mysite::$app->config['tablepre'].'member', $arr, "uid='".$shopinfo['uid']."'");
+        $this->success('success');
+    }
 }

@@ -11,7 +11,7 @@
   <div class="conWaiSet fr">
 
     <div class="orderTongji">
- 
+
       <form action="<{ofunc type=url link="/shopcenter/shoptotal"}>" method="post" id="chafrom">
       <div >
       <span>年份 :
@@ -63,30 +63,34 @@
             <table cellpadding="0" cellspacing="0" width="100%">
               <tbody>
                 <tr>
-                 <th width="10%">时  间</th>
-                 <th width="10%">订单数量</th>
-                  <th width="10%">在线付款</th>
-                   <th width="10%">线下支付</th>
+                    <th width="10%">时  间</th>
+                    <th width="10%">订单数量</th>
+                    <th width="10%">商品总价</th>
+                    <!-- <th width="10%">在线付款</th> -->
+                    <!-- <th width="10%">线下支付</th> -->
                     <th width="10%">使用代金券</th>
-                     <th width="10%">店铺优惠</th>
-                      <!-- <th width="10%">使用积分</th>
-                       <th width="10%">打包费</th>
-                        <th width="10%">配送费</th> -->
-                         <th width="10%">商品总价</th>
+                    <th width="10%">店铺优惠</th>
+                    <th width="10%">平台承担优惠</th>
+                    <!-- <th width="10%">使用积分</th>
+                    <th width="10%">打包费</th>
+                    <th width="10%">配送费</th> -->
+
 
                 </tr>
                 <{foreach from=$list item=items}>
                 <tr>
-                  <td><{$items['name']}></td>
-                  <td><{$items['orderNum']|default:'0'}></td>
-                  <td><{$items['online']}></td>
-                  <td><{$items['unline']}></td>
-                  <td><{$items['yhjcost']}></td>
-                  <td><{$items['cxcost']}></td>
-                  <!-- <td><{$items['score']}></td>
-                  <td><{$items['bagcost']}></td>
-                  <td><{$items['pscost']}></td> -->
-                  <td><{$items['goodscost']}></td>
+                    <td><{$items['name']}></td>
+                    <td><{$items['orderNum']|default:'0'}></td>
+                    <td><{$items['goodscost']}></td>
+                    <!-- <td><{$items['online']}></td>
+                    <td><{$items['unline']}></td> -->
+                    <td><{$items['yhjcost']}></td>
+                    <td><{$items['cxcost']}></td>
+                    <td><{$items['shopdowncost']}></td>
+                    <!-- <td><{$items['score']}></td>
+                    <td><{$items['bagcost']}></td>
+                    <td><{$items['pscost']}></td> -->
+
                 </tr>
                 <{/foreach}>
 

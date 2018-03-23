@@ -59,14 +59,14 @@
                       <tr>
                         <th align="center">id</th>
                          <th align="center">店铺名称</th>
-						  <th align="center">配送方式</th>
-                        <th align="center">交易类型</th>
+						  <!-- <th align="center">配送方式</th>
+                        <th align="center">交易类型</th> -->
 
-						<th align="center">订单数</th>
+						<!-- <th align="center">订单数</th> -->
                         <th align="center">金额</th>
-
 						<th align="center">佣金比例</th>
 						<th align="center">佣金</th>
+                        <th width="8%">平台承担优惠</th>
 						<th align="center">结算金额</th>
 						<th align="center">结算单创建最近时间</th>
 
@@ -80,12 +80,13 @@
                       <tr class="s_out" onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
                         <td align="center" ><{$items['id']}></td>
                         <td align="center" > <{$items['shopname']}> </td>
-            						<td align="center" >平台配送</td>
-            						<td align="center" > 线上 </td>
-            						<td align="center" > <{$items['onlinecount']|default:'0'}> </td>
+            						<!-- <td align="center" >平台配送</td>
+            						<td align="center" > 线上 </td> -->
+            						<!-- <td align="center" > <{$items['onlinecount']|default:'0'}> </td> -->
             						<td align="center" > <{$items['onlinecost']|default:'0'}> </td>
             						<td align="center" > <{if $items['yjin'] != 0}><{$items['yjin']*0.01}><{else}><{$items['yjb']*0.01}><{/if}> </td>
             						<td align="center" > <{$items['yjcost']|default:'0'}> </td>
+                                    <td align="center" > <{number_format($items['shopdowncost'],2)}> </td>
             						<td align="center" > <{$items['acountcost']|default:'0'}> </td>
             						<td align="center" > <{$items['addtime']|date_format:"%Y-%m-%d %H:%M:%S"}> </td>
                       </tr>

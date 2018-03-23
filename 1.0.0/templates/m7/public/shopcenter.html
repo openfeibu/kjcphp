@@ -39,8 +39,8 @@
             </div>
             <div class="topRight fr">
 
-                    <span class="updataPass curbtn" onclick="">修改密码</span>
-                    
+                    <span class="updataPass curbtn" onclick="modifypwd();">修改密码</span>
+
                     <span class="username curbtn" onclick="openlink('<{ofunc type=url link="/member/loginout"}>');">退出</span>
 
 
@@ -70,6 +70,8 @@
                 	<li onclick="openlink('<{ofunc type=url link="/shopcenter/useredit"}>');" data="baseset"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dpsz.png" /></div>
 					<a href="<{ofunc type=url link="/shopcenter/useredit"}>">店铺设置</a></li>
                     <li onclick="openlink('<{if empty($shopinfo['shoptype'])}><{ofunc type=url link="/shopcenter/goodslist"}><{else}><{ofunc type=url link="/shopcenter/marketgoodslist"}><{/if}>');" data="basemenu"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/cdgl.png" /></div><a href="<{if empty($shopinfo['shoptype'])}><{ofunc type=url link="/shopcenter/goodslist"}><{else}><{ofunc type=url link="/shopcenter/marketgoodslist"}><{/if}>">菜单管理</a></li>
+					<li onclick="openlink('<{ofunc type=url link="/shopcenter/cxrule"}>');"  data="basecx"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xxgz.png" /></div>
+					<a href="<{ofunc type=url link="/shopcenter/cxrule"}>">促销规则</a></li>
                     <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoporderlist"}>');" data="baseorder"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddgl.png" /></div>
 					<a href="<{ofunc type=url link="/shopcenter/shoporderlist"}>">订单管理</a></li>
                     <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptotal"}>');" data="baseordertj"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddtj.png" /></div>
@@ -82,8 +84,7 @@
 					<li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptxlog"}>');" data="shoptxlog"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/ddtj.png" /></div>
 				   <a href="<{ofunc type=url link="/shopcenter/shoptxlog"}>">提现记录</a></li>
 
-					<li onclick="openlink('<{ofunc type=url link="/shopcenter/cxrule"}>');"  data="basecx"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xxgz.png" /></div>
-					<a href="<{ofunc type=url link="/shopcenter/cxrule"}>">促销规则</a></li>
+
                     <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptx"}>');"  data="basetx"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dianpujieshao.png" /></div>
                     <a href="<{ofunc type=url link="/shopcenter/shoptx"}>">提现</a></li>
                     <li onclick="openlink('<{ofunc type=url link="/shopcenter/shoptxxg"}>');"  data="basetxxg"><div class="navimg"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dianpujieshao.png" /></div>
@@ -123,26 +124,35 @@
 
  <script>
 
-				$(function(){
+$(function(){
 
-			  	if("undefined" != typeof mynomenu){
-					   var allobj = $('.nav').find('li');
-					  $.each(allobj, function(i, newobj) {
-					  	if($(this).attr('data') == mynomenu){
-					  	   $(this).addClass('on');
-					  	 }
-					  	//alert($(this).attr('data'));
+	if("undefined" != typeof mynomenu){
+	   var allobj = $('.nav').find('li');
+	  $.each(allobj, function(i, newobj) {
+	  	if($(this).attr('data') == mynomenu){
+	  	   $(this).addClass('on');
+	  	 }
+	  	//alert($(this).attr('data'));
 
-					  });
-				 	}
-					$(".nav ul li").click(function(){
-					    	$(this).addClass('on').siblings().removeClass('on');
+	  });
+ 	}
+	$(".nav ul li").click(function(){
+	    	$(this).addClass('on').siblings().removeClass('on');
 
-					});
-				});
-				function openlink(newlinkes){
-					window.location.href=newlinkes;
-				}
+	});
+});
+function openlink(newlinkes){
+	window.location.href=newlinkes;
+}
+function modifypwd()
+{
+	var showcontent = '<form method="post" name="form1" action="'+siteurl+'/index.php?ctrl=shopcenter&action=updatepwd&datatype=json" onsubmit="return subform(\'\',this);"><div>旧密码:<input type="password" name="oldpwd" value=""></div><div style="padding-top:10px;">新密码:<input type="password" name="pwd" value=""></div><div style="padding-top:10px;padding-left:30px;"><input type="submit" value="确认提交" class="button"> </div> </form>';
+	art.dialog({
+    id: 'KDf435',
+    title: '修改账号密码',
+    content: showcontent
+  });
+}
 </script>
 
 </body>

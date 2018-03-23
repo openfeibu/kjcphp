@@ -699,12 +699,12 @@ class method extends adminbaseclass
         if ($checktime > 457141240) {
             $nowmintime = strtotime(date('Y-m-d', $nowtime));
         }
-        $where = " where jstime >= ".$nowmintime;
+        $where = " where js.jstime >= ".$nowmintime;
 
         $endtime = IFilter::act(IReq::get('endtime')); //结算日
         $checkendtime = strtotime($endtime.' 23:59:59');
         if ($checkendtime   > $nowmintime) {
-            $where .= " and  jstime < ".$checkendtime;
+            $where .= " and  js.jstime < ".$checkendtime;
         } else {
             $checkendtime = strtotime(date('Y-m-d', $nowtime));
         }
@@ -712,37 +712,23 @@ class method extends adminbaseclass
         $data['endtime'] =  date('Y-m-d', $checkendtime);
         $newlink = '/daytime/'.$data['daytime'].'/endtime/'.$data['endtime'];
         $data['searchvalue'] = '';
-        $where2 = '';
         if (!empty($searchvalue)) {
             $data['searchvalue'] = $searchvalue;
-            $where2 .= ' where shopname = \''.$searchvalue.'\' ';
+            $where .= ' where s.shopname = \''.$searchvalue.'\' ';
             $newlink .= '/searchvalue/'.$searchvalue;
         }
         if (!empty($stationid)) {
             $data['stationid'] = $stationid;
-            $where2 .= ' where stationid = \''.$stationid.'\' ';
+            $where .= ' where s.stationid = \''.$stationid.'\' ';
             $newlink .= '/stationid/'.$stationid;
         }
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 10);
-        $shoplist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shop  ".$where2." order by id desc   limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
-        $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shop ".$where2."  order by id asc  ");
+
+        $datalist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shopjs as js join ".Mysite::$app->config['tablepre']."shop as s on s.id = js.shopid  ".$where."   order by js.addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
+        $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shopjs as js join ".Mysite::$app->config['tablepre']."shop as s on s.id = js.shopid ".$where."  order by js.addtime asc  ");
         $pageshow->setnum($shuliang);
-        $datalist = array();
-        if (is_array($shoplist)) {
-            foreach ($shoplist as $key=>$value) {
-                if ($value['shoptype'] == 0) {
-                    $shoppsinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where shopid = ".$value['id']." ");
-                } else {
-                    $shoppsinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where shopid = ".$value['id']." ");
-                }
-                $txlist =   $this->mysql->select_one("select sum(onlinecost) as onlinecost, sum(onlinecount) as onlinecount,sum(unlinecount) as unlinecount,sum(unlinecost) as unlinecost,sum(yjcost) as yjcost,pstype,sum(acountcost) as acountcost,addtime from ".Mysite::$app->config['tablepre']."shopjs  ".$where." and shopid = ".$value['id']." order by addtime desc   limit 0,1000");
-                $value['yjb']=$yjb;
-                $txlist['sendtype']=$shoppsinfo['sendtype'];
-                $newarray =  array_merge($value, $txlist);
-                $datalist[] = $newarray;
-            }
-        }
+
         $link = IUrl::creatUrl('/adminpage/analysis/module/shopjsover'.$newlink);
         $data['pagecontent'] = $pageshow->getpagebar($link);
 
