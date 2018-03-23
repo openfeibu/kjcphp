@@ -61,10 +61,10 @@ class method extends adminbaseclass
         );
         $where1 = ' where 1 ';
         $where1 .= empty($wherearray[$tempselecttype]) ? '':' AND '.$wherearray[$tempselecttype];
-        $where1 .= empty($this->stationid) ? '':' AND s.stationid = '.$this->stationid;
+        $where1 .= empty($this->stationid) ? '':' AND o.stationid = '.$this->stationid;
         $where2 = empty($wherearray[$tempselecttype]) ? '':' and '.$wherearray[$tempselecttype];
 
-        $orderlist = $this->mysql->getarr("select count(o.id) as shuliang ,o.shopid from ".Mysite::$app->config['tablepre']."order  as o left join ".Mysite::$app->config['tablepre']."shop as s on s.id = o.shopid ". $where1."   group by o.shopid   order by shuliang desc  limit 0,11");
+        $orderlist = $this->mysql->getarr("select count(o.id) as shuliang ,o.shopid from ".Mysite::$app->config['tablepre']."order  as o ". $where1."   group by o.shopid   order by shuliang desc  limit 0,11");
 
         $data['list'] = array();
         $data['newdata'] = array();
@@ -119,12 +119,13 @@ class method extends adminbaseclass
         // $tempselecttype = in_array($selecttype,array(0,1,2,3))?$selecttype:0;
 
         $wherearray = array(
-            '0'=>'',
+            '0'=> 'where 1 ',
             '1'=>' where addtime > '.strtotime('-1 month'),
             '2'=>' where addtime > '.strtotime('-7 day'),
             '3'=>' where addtime > '.strtotime(date('Y-m-d', time()))
         );
-        $tempdata =   $this->mysql->getarr(" SELECT count(id) as shuliang ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%k') as month FROM ".Mysite::$app->config['tablepre']."order  ".$wherearray[$selecttype]." GROUP BY month ");
+        $where = empty($this->stationid) ? '' : " AND stationid = ".$this->stationid;
+        $tempdata =   $this->mysql->getarr(" SELECT count(id) as shuliang ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%k') as month FROM ".Mysite::$app->config['tablepre']."order  ".$wherearray[$selecttype].$where." GROUP BY month ");
         $list = array();
         if (is_array($tempdata)) {
             foreach ($tempdata as $key=>$value) {
@@ -150,12 +151,14 @@ class method extends adminbaseclass
         for ($i= $diff; $i >= 1; $i--) {
             $dates[] = $consume_dates[] = date('Y-m-d',strtotime("$EndDate -$i day"));
         }
-
+        $where = empty($this->stationid) ? '': " AND stationid = ".$this->stationid;
         $consumes= array();
+        $allcost = 0;
         foreach($dates as $key => $value)
         {
-            $datas = $this->mysql->select_one(" SELECT sum(allcost) as allcost ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') as day FROM ".Mysite::$app->config['tablepre']."order  where DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') = '".$value."' AND status = 3 AND is_reback = 0 GROUP BY day ");
+            $datas = $this->mysql->select_one(" SELECT sum(allcost) as allcost ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') as day FROM ".Mysite::$app->config['tablepre']."order  where DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%Y-%m-%d') = '".$value."' AND status = 3 AND is_reback = 0 ".$where." GROUP BY day ");
             $consumes["'".date('md',strtotime($value))."'"] = $datas ? $datas['allcost'] : 0;
+            $allcost += $datas['allcost'];
         }
         $data['consumes'] = $consumes;
         $data['x'] = implode(',',array_keys($consumes));
@@ -163,6 +166,7 @@ class method extends adminbaseclass
         $data['datemy'] = $datemy;
         $data['BeginDate'] = $BeginDate;
         $data['EndDate'] = $GEndDate;
+        $data['allcost'] = $allcost;
         Mysite::$app->setdata($data);
     }
     public function ordertotal()
@@ -184,6 +188,7 @@ class method extends adminbaseclass
         $starttime = empty($starttime)? $nowday:$starttime;
         $endtime = empty($endtime)? $nowday:$endtime;
         $where = '  where ord.suretime > '.strtotime($starttime.' 00:00:00').' and ord.suretime < '.strtotime($endtime.' 23:59:59');
+        $where .= empty($this->stationid) ? " " : " AND ord.stationid = ".$this->stationid;
         $data['starttime'] = $starttime;
         $data['endtime'] = $endtime;
         $data['querytype'] = '';

@@ -11,9 +11,11 @@
 function gotolink(){
     var BeginDate = $("#BeginDate").val();
     var EndDate = $("#EndDate").val();
-    var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&EndDate=@EndDate@&BeginDate=@BeginDate@';
+    var stationid = $("select[name='stationid']").find("option:selected").val();
+    var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&EndDate=@EndDate@&BeginDate=@BeginDate@&stationid=@stationid@';
     linkis = linkis.replace('@BeginDate@', BeginDate);
-    window.location.href= linkis.replace('@EndDate@', EndDate);
+    linkis = linkis.replace('@EndDate@', EndDate);
+    window.location.href= linkis.replace('@stationid@', stationid);
  }
 
 
@@ -27,6 +29,13 @@ function gotolink(){
       	 <div class="tags">
           <div id="tagscontent">
             <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
+                <label>分校：</label>
+                <select name="stationid" style="width:220px;" onchange="gotolink();">
+                    <option value="0">选择分校</option>
+                    <{foreach from=$stationlist key=key  item=items}>
+                    <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
+                    <{/foreach}>
+                </select>
                 <input class="Wdate datefmt" type="text" name="BeginDate" id="BeginDate" value="<{$BeginDate}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink()" />
              -
                 <input class="Wdate datefmt" type="text" name="EndDate" id="EndDate" value="<{$EndDate}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink()" />
@@ -61,7 +70,7 @@ function gotolink(){
                          <tr>
                             <td align="center">总计</td>
                             <td align="center">
-
+                                <{$allcost}>
                             </td>
                           </tr>
 
