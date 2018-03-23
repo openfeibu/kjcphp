@@ -3472,8 +3472,44 @@ class method extends baseclass
 
         Mysite::$app->setdata($data);
     }
+    //提现记录
+    public function shoptxlog()
+    {
+        $this->checkshoplogin();
 
+        $shopid = ICookie::get('adminshopid');
+        $shopinfo = $this->shopinfo();
 
+        $where = " where  type = 0 AND shopuid = ".$shopinfo['uid']." ";
+
+        $checklink = "";
+
+        $pageshow = new page();
+        $pageshow->setpage(IReq::get('page'), 10);
+
+        $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."   order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
+        $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shoptx ".$where."  order by addtime asc  ");
+        $pageshow->setnum($shuliang);
+
+        $link = IUrl::creatUrl('/shopcenter/txlog'.$checklink);
+        $data['pagecontent'] = $pageshow->getpagebar($link);
+
+        $typearray = array(0=>'提现申请',1=>'账号充值',2=>'取消提现');
+        $statusarray = array(0=>'空',1=>'申请',2=>'处理成功',3=>'已取消');
+
+        $tempdata = array();
+        if (is_array($txlist)) {
+            foreach ($txlist as $key=>$value) {
+                $value['adddate'] = date('Y-m-d H:i:s', $value['addtime']);
+                $value['statusname'] = isset($statusarray[$value['status']])?$statusarray[$value['status']]:'未定义';
+                $tempdata[] = $value;
+            }
+        }
+        $data['jslist'] = $tempdata;
+        $data['typearray'] = $typearray;
+        Mysite::$app->setdata($data);
+    }
+    //金额记录
     public function txlog()
     {
         $this->checkshoplogin();

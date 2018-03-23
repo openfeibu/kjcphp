@@ -8,13 +8,13 @@
 <script type="text/javascript">
 
 
-	function gotolink(){
-			  var BeginDate = $("#BeginDate").val();
-               var EndDate = $("#EndDate").val();
-			  var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&EndDate=@EndDate@&BeginDate=@BeginDate@';
-		   	linkis = linkis.replace('@BeginDate@', BeginDate);
-            window.location.href= linkis.replace('@EndDate@', EndDate);
-  }
+function gotolink(){
+    var BeginDate = $("#BeginDate").val();
+    var EndDate = $("#EndDate").val();
+    var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&EndDate=@EndDate@&BeginDate=@BeginDate@';
+    linkis = linkis.replace('@BeginDate@', BeginDate);
+    window.location.href= linkis.replace('@EndDate@', EndDate);
+ }
 
 
 
@@ -51,7 +51,7 @@
                     </thead>
                      <tbody>
 
-                    
+
                      	<{foreach from=$consumes key=key item=item}>
                            <tr>
                             <td align="center"><{str_replace("'",'',$key)}></td>
@@ -61,10 +61,10 @@
                          <tr>
                             <td align="center">总计</td>
                             <td align="center">
-                                  
+
                             </td>
                           </tr>
-    
+
                     </tbody>
                   </table>
                </form>

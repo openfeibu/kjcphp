@@ -2078,11 +2078,11 @@ function saveset(){   //保存后台跑腿信息 到配置文件中
 			  $data['status'] = $status;
           }
 		  if(!empty($starttime)){
-              $where.=" and addtime > ".strtotime($starttime)." ";
+              $where.=" and addtime > ".strtotime($starttime.' 00:00:00')." ";
               $newlink .= '/starttime/'.$starttime.'/endtime/'.$endtime;
           }
 		  if(!empty($endtime)){
-              $where.=" and addtime < ".strtotime($endtime)." ";
+              $where.=" and addtime < ".strtotime($endtime.' 23:59:59')." ";
               $newlink .= '/endtime/'.$endtime;
           }
 		   
@@ -2135,11 +2135,11 @@ function saveset(){   //保存后台跑腿信息 到配置文件中
               $newlink .= '/shopname/'.$shopname;
 		  }
 		  if(!empty($starttime)){
-              $where.=" and addtime > ".strtotime($starttime)." ";
+              $where.=" and addtime > ".strtotime($starttime.' 00:00:00')." ";
               $newlink .= '/starttime/'.$starttime.'/endtime/'.$endtime;
           }
 		  if(!empty($endtime)){
-              $where.=" and addtime < ".strtotime($endtime)." ";
+              $where.=" and addtime < ".strtotime($endtime.' 23:59:59')." ";
               $newlink .= '/endtime/'.$endtime;
           }
 
@@ -2211,8 +2211,8 @@ function saveset(){   //保存后台跑腿信息 到配置文件中
             if(!empty($info)) $where.=" and shopuid = ".$info['uid']." ";
 
         }
-        if(!empty($starttime)) $where.=" and addtime > ".strtotime($starttime)." ";
-        if(!empty($endtime)) $where.=" and addtime < ".strtotime($endtime)." ";
+        if(!empty($starttime)) $where.=" and addtime > ".strtotime($starttime.' 00:00:00')." ";
+        if(!empty($endtime)) $where.=" and addtime < ".strtotime($endtime.' 23:59:59')." ";
 
         $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by addtime desc ");
         $statusarray = array(0=>'空',1=>'申请',2=>'处理成功',3=>'已取消');
@@ -2303,11 +2303,11 @@ function saveset(){   //保存后台跑腿信息 到配置文件中
 			  $newlink.='/shopname/'.$shopname;
 		  }
 		  if(!empty($starttime)){
-			  $where.=" and addtime > ".strtotime($starttime)." ";
+			  $where.=" and addtime > ".strtotime($starttime.' 00:00:00')." ";
 			  $newlink.='/starttime/'.$starttime;
 		  }
 		  if(!empty($endtime)){
-			  $where.=" and addtime < ".strtotime($endtime)." ";
+			  $where.=" and addtime < ".strtotime($endtime.' 23:59:59')." ";
 			  $newlink.='/endtime/'.$endtime;
 
 		  }

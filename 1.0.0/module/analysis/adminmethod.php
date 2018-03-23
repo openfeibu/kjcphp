@@ -1,6 +1,14 @@
 <?php
 class method extends adminbaseclass
 {
+    public function init()
+    {
+        parent::init();
+        $data['stationid'] = intval(IFilter::act(IReq::get('stationid')));
+        $data['stationlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo order by id desc");
+        Mysite::$app->setdata($data);
+        $this->stationid = $data['stationid'];
+    }
     public function area()
     {
         $selecttype = intval(IFilter::act(IReq::get('selecttype')));
@@ -47,21 +55,23 @@ class method extends adminbaseclass
         $tempselecttype = in_array($selecttype, array(0,1,2,3))?$selecttype:0;
         $wherearray = array(
             '0'=>'',
-            '1'=>'  addtime > '.strtotime('-1 month'),
-            '2'=>'  addtime > '.strtotime('-7 day'),
-            '3'=>'  addtime > '.strtotime(date('Y-m-d', time()))
+            '1'=>'  o.addtime > '.strtotime('-1 month'),
+            '2'=>'  o.addtime > '.strtotime('-7 day'),
+            '3'=>'  o.addtime > '.strtotime(date('Y-m-d', time()))
         );
-        $where1 = empty($wherearray[$tempselecttype]) ? '':' where '.$wherearray[$tempselecttype];
+        $where1 = ' where 1 ';
+        $where1 .= empty($wherearray[$tempselecttype]) ? '':' AND '.$wherearray[$tempselecttype];
+        $where1 .= empty($this->stationid) ? '':' AND s.stationid = '.$this->stationid;
         $where2 = empty($wherearray[$tempselecttype]) ? '':' and '.$wherearray[$tempselecttype];
 
-        $orderlist = $this->mysql->getarr("select count(id) as shuliang ,shopid from ".Mysite::$app->config['tablepre']."order  ".$where1."   group by shopid   order by shuliang desc  limit 0,11");
+        $orderlist = $this->mysql->getarr("select count(o.id) as shuliang ,o.shopid from ".Mysite::$app->config['tablepre']."order  as o left join ".Mysite::$app->config['tablepre']."shop as s on s.id = o.shopid ". $where1."   group by o.shopid   order by shuliang desc  limit 0,11");
+
         $data['list'] = array();
         $data['newdata'] = array();
         foreach ($orderlist as $key=>$value) {
             if ($value['shopid'] > 0) {
                 $shopinfo = $this->mysql->select_one("select  shopname,id from ".Mysite::$app->config['tablepre']."shop  where id=".$value['shopid']." ");
-                //  $value['det'] = $this->mysql->getarr("select count(id) as shuliang ,DATE_FORMAT(FROM_UNIXTIME(`addtime`),'%e') as month from ".Mysite::$app->config['tablepre']."order where addtime > ".$mintime." and shopid =".$value['shopid']." group by month    order by month desc  limit 0,10");
-                $value['det'] = $this->mysql->getarr("select count(id) as shuliang ,shopid from ".Mysite::$app->config['tablepre']."order where  shopid =".$value['shopid']." ".$where2."  order by id desc  limit 0,11");
+                $value['det'] = $this->mysql->getarr("select count(o.id) as shuliang ,o.shopid from ".Mysite::$app->config['tablepre']."order as o where  o.shopid =".$value['shopid']." ".$where2."  order by id desc  limit 0,11");
                 $value['shopname'] = isset($shopinfo['shopname'])? $shopinfo['shopname']:'不存在';
 
                 $data['list'][] = $value;
@@ -91,7 +101,9 @@ class method extends adminbaseclass
             '2'=>'  ord.addtime > '.strtotime('-7 day'),
             '3'=>'  ord.addtime > '.strtotime(date('Y-m-d', time()))
         );
-        $where1 = empty($wherearray[$selecttype]) ? '':' where '.$wherearray[$selecttype];
+        $where1 = " where 1";
+        $where1 .= empty($wherearray[$selecttype]) ? '':' AND '.$wherearray[$selecttype];
+        $where1 .= empty($this->stationid) ? '':' AND ord.stationid = '.$this->stationid;
         $where2 =  empty($wherearray[$selecttype]) ? '':' and '.$wherearray[$selecttype];
         $where1 .= ' and ord.status = 3  and is_reback = 0 ';
         $data['list']= $this->mysql->getarr("select count(ordet.id) as shuliang ,ordet.goodsid,ordet.goodsname as shopname from ".Mysite::$app->config['tablepre']."orderdet  as ordet left join  ".Mysite::$app->config['tablepre']."order as ord on ordet.order_id = ord.id  ".$where1." group by ordet.goodsid   order by shuliang desc  limit 0,5");
@@ -128,9 +140,10 @@ class method extends adminbaseclass
         $BeginDate = IReq::get('BeginDate');
         $BeginDate = $BeginDate ? $BeginDate : date('Y-m-01');
 
-        $EndDate = IReq::get('EndDate');
-        $EndDate = $EndDate ? $EndDate : date('Y-m-d');
+        $GEndDate = IReq::get('EndDate');
+        $GEndDate = $GEndDate ? $GEndDate : date('Y-m-d');
 
+        $EndDate = date('Y-m-d',strtotime("$GEndDate +1 day"));
         $diff = diffBetweenTwoDays($BeginDate, $EndDate);
 
         $dates = $consume_dates = array();
@@ -149,7 +162,7 @@ class method extends adminbaseclass
         $data['y'] = implode(',',array_values($consumes));
         $data['datemy'] = $datemy;
         $data['BeginDate'] = $BeginDate;
-        $data['EndDate'] = $EndDate;
+        $data['EndDate'] = $GEndDate;
         Mysite::$app->setdata($data);
     }
     public function ordertotal()
@@ -684,7 +697,7 @@ class method extends adminbaseclass
         $where = " where jstime >= ".$nowmintime;
 
         $endtime = IFilter::act(IReq::get('endtime')); //结算日
-        $checkendtime = strtotime($endtime);
+        $checkendtime = strtotime($endtime.' 23:59:59');
         if ($checkendtime   > $nowmintime) {
             $where .= " and  jstime < ".$checkendtime;
         } else {

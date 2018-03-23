@@ -5,7 +5,6 @@
 <{/block}>
  <{block name=controlname}>已结算信息 <{/block}>
  <{block name=bodylist}>
- <{load_data assign="stationlist" table="stationadmininfo" fileds="*" limit="1000"  where="stationis_open = 0" orderby=" id desc"}>
           <div style="width:auto;overflow-x:hidden;overflow-y:auto">
 
 		   <div class="search">
@@ -17,7 +16,7 @@
                      <label>分校：</label>
                      <select name="stationid" style="width:220px;">
                          <option value="0">选择分校</option>
-                         <{foreach from=$stationlist['list'] key=key  item=items}>
+                         <{foreach from=$stationlist key=key  item=items}>
                          <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
                          <{/foreach}>
                      </select>

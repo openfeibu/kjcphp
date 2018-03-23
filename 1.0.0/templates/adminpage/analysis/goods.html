@@ -4,26 +4,32 @@
  <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/chart/highcharts.js"></script>
 <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/chart/modules/exporting.js"></script>
 <script type="text/javascript">
-
-
-
-		function gotolink(obj){
-			  var checkvalue = $(obj).val();
-			  var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=goods&selecttype=@selecttype@';
-		   	window.location.href= linkis.replace('@selecttype@', checkvalue);
-  }
-		</script>
+function gotolink(){
+    var selecttype = $("input[name='selecttype']:checked").val();
+    var stationid = $("select[name='stationid']").find("option:selected").val();
+    var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=goods&selecttype=@selecttype@&stationid=@stationid@';
+    linkis = linkis.replace('@selecttype@', selecttype)
+    window.location.href= linkis.replace('@stationid@', stationid);
+}
+</script>
  <{/block}>
  <{block name=controlname}>菜品销售数据<{/block}>
  <{block name=bodylist}>
    <div style="width:auto;overflow-x:hidden;overflow-y:auto">
       	 <div class="tags">
           <div id="tagscontent">
- <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
-            	 <input type="radio" name="selecttype[]" value="0" <{if empty($selecttype)}>checked<{/if}> onclick="gotolink(this);">所有
-            	 <input type="radio" name="selecttype[]" value="1" <{if $selecttype == 1}>checked<{/if}> onclick="gotolink(this);">最近1月
-            	 <input type="radio" name="selecttype[]" value="2"  <{if $selecttype == 2}>checked<{/if}> onclick="gotolink(this);">最近一周
-            	 <input type="radio" name="selecttype[]" value="3"  <{if $selecttype == 3}>checked<{/if}> onclick="gotolink(this);">当天
+            <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
+                <label>分校：</label>
+                <select name="stationid" style="width:220px;" onchange="gotolink();">
+                <option value="0">选择分校</option>
+                <{foreach from=$stationlist key=key  item=items}>
+                <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
+                <{/foreach}>
+                </select>
+                <input type="radio" name="selecttype" value="0" <{if empty($selecttype)}>checked<{/if}> onclick="gotolink(this);">所有
+                <input type="radio" name="selecttype" value="1" <{if $selecttype == 1}>checked<{/if}> onclick="gotolink(this);">最近1月
+                <input type="radio" name="selecttype" value="2"  <{if $selecttype == 2}>checked<{/if}> onclick="gotolink(this);">最近一周
+                <input type="radio" name="selecttype" value="3"  <{if $selecttype == 3}>checked<{/if}> onclick="gotolink(this);">当天
             </div>
             <div id="con_one_1">
 

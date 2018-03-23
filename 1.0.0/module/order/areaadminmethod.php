@@ -2029,8 +2029,8 @@ function saveset(){   //保存后台跑腿信息 到配置文件中
 			  $info = $this->mysql->select_one(" select *  from ".Mysite::$app->config['tablepre']."shop where shopname='".$shopname."'  ");
 		      if(!empty($info)) $where.=" and shopuid = ".$info['uid']." ";
 		  }
-		  if(!empty($starttime)) $where.=" and addtime > ".strtotime($starttime)." "; 
-		  if(!empty($endtime)) $where.=" and addtime < ".strtotime($endtime)." "; 
+		  if(!empty($starttime)) $where.=" and addtime > ".strtotime($starttime.' 00:00:00')." "; 
+		  if(!empty($endtime)) $where.=" and addtime < ".strtotime($endtime.' 23:59:59')." "; 
 		
 	      $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize().""); 
 	      $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by id asc  ");
@@ -2124,8 +2124,8 @@ function saveset(){   //保存后台跑腿信息 到配置文件中
 			  $info = $this->mysql->select_one(" select *  from ".Mysite::$app->config['tablepre']."shop where shopname='".$shopname."'  ");
 		      if(!empty($info)) $where.=" and shopuid = ".$info['uid']." ";
 		  }
-		  if(!empty($starttime)) $where.=" and addtime > ".strtotime($starttime)." "; 
-		  if(!empty($endtime)) $where.=" and addtime < ".strtotime($endtime)." "; 
+		  if(!empty($starttime)) $where.=" and addtime > ".strtotime($starttime.' 00:00:00')." "; 
+		  if(!empty($endtime)) $where.=" and addtime < ".strtotime($endtime.' 23:59:59')." "; 
 		
 	      $txlist =   $this->mysql->getarr("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by addtime desc   limit ".$pageshow->startnum().", ".$pageshow->getsize().""); 
 	      $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shoptx  ".$where."  order by id asc  ");
