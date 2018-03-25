@@ -257,23 +257,21 @@ class wxbaseclass extends wmrclass
         $uid = 0;
         $oauthinfo=$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxuser['openid']."'  ");
         if (empty($oauthinfo)) {//写用户数据
+            $arr['username'] = $this->strFilter($wxoauth['username']);
+            $arr['phone'] = $wxuser['phone'];
+            $arr['address'] = '';
+            $arr['password'] = md5($wxoauth['openid']);
+            $arr['email'] = '';
+            $arr['creattime'] = time();
+            $arr['score']  =0;
+            $arr['logintime'] = time();
+            $arr['loginip'] ='';
+            $arr['group'] = 10;
+            $arr['logo'] = $wxoauth['imgurl'];
+            $arr['sex'] = $wxuser['sex'];  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+            $this->mysql->insert(Mysite::$app->config['tablepre']."member", $arr);
+            $uid = $this->mysql->insertid();
 
-            if (empty($is_user)) {
-                $arr['username'] = $this->strFilter($wxoauth['username']);
-                $arr['phone'] = $wxuser['phone'];
-                $arr['address'] = '';
-                $arr['password'] = md5($wxoauth['openid']);
-                $arr['email'] = '';
-                $arr['creattime'] = time();
-                $arr['score']  =0;
-                $arr['logintime'] = time();
-                $arr['loginip'] ='';
-                $arr['group'] = 10;
-                $arr['logo'] = $wxoauth['imgurl'];
-                $arr['sex'] = $wxuser['sex'];  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-                $this->mysql->insert(Mysite::$app->config['tablepre']."member", $arr);
-                $uid = $this->mysql->insertid();
-            }
             $mbdata['uid'] = $uid;
             $mbdata['openid'] = $wxoauth['openid'];
             $mbdata['is_bang'] = 0;
@@ -296,34 +294,26 @@ class wxbaseclass extends wmrclass
                     $newusername = $this->strFilter($wxoauth['username']);
                     $cnewdata['username'] = $newusername;
                 }
-                if (empty($is_user)) {
-                    if (!empty($wxuser['phone'])) {
-                        $cnewdata['phone'] = $wxuser['phone'];
-                    }
-                }
-                $cnewdata['cost'] = $is_user['cost']+$membercheck['cost'];
-                $cnewdata['score'] = $is_user['score']+$membercheck['score'];
                 $this->mysql->update(Mysite::$app->config['tablepre'].'member', $cnewdata, "uid='".$oauthinfo['uid']."' ");
                 $flag = 2;
                 $uid = $oauthinfo['uid'];
             } else {
-                if (empty($is_user)) {
-                    $arr['username'] = $wxoauth['openid'];
-                    $arr['phone'] = $wxuser['phone'];
-                    $arr['address'] = '';
-                    $arr['password'] = md5($wxoauth['openid']);
-                    $arr['email'] = '';
-                    $arr['creattime'] = time();
-                    $arr['score'] =0;
-                    $arr['logintime'] = time();
-                    $arr['loginip'] ='';
-                    $arr['group'] = 10;
-                    $arr['logo'] = $wxoauth['imgurl'];
-                    $arr['sex'] = $wxoauth['sex'];  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-                    $arr['uid'] = $oauthinfo['uid'];
-                    $this->mysql->insert(Mysite::$app->config['tablepre']."member", $arr);
-                    $uid = $this->mysql->insertid();
-                }
+                $arr['username'] = $wxoauth['openid'];
+                $arr['phone'] = $wxuser['phone'];
+                $arr['address'] = '';
+                $arr['password'] = md5($wxoauth['openid']);
+                $arr['email'] = '';
+                $arr['creattime'] = time();
+                $arr['score'] =0;
+                $arr['logintime'] = time();
+                $arr['loginip'] ='';
+                $arr['group'] = 10;
+                $arr['logo'] = $wxoauth['imgurl'];
+                $arr['sex'] = $wxoauth['sex'];  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+                $arr['uid'] = $oauthinfo['uid'];
+                $this->mysql->insert(Mysite::$app->config['tablepre']."member", $arr);
+                $uid = $this->mysql->insertid();
+
                 $wx['uid'] = $uid;
                 $this->mysql->update(Mysite::$app->config['tablepre'].'wxuser', $wx, "openid='".$wxuser['openid']."'");
                 $flag = 1;
