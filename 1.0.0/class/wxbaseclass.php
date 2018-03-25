@@ -180,31 +180,15 @@ class wxbaseclass extends wmrclass
                     $userinfo['refresh_token'] = $refresh['refresh_token'];
                     $expires_in = $refresh['expires_in'];
                 } else {
-                    echo $refresh['errcode'];
-                    exit;
+                    refresh();
                 }
             }
         } else {
             if($token['errcode'] == 40163)
             {
-                $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
-                $query_str = $_SERVER['QUERY_STRING'];
-                parse_str($query_str);
-                parse_str($query_str, $query_arr);
-                if(is_array($query_arr) && count($query_arr))
-                {
-                    foreach($query_arr as $key=> $val)
-                    {
-                        if($key != 'code' && $key != 'ctrl')
-                        {
-                            $newlink .= "&".$key."=".$val;
-                        }
-                    }
-                }
-                header("location:".$newlink);
+                refresh();
             }
-            echo $token['errcode'];
-            exit;
+            refresh();
         }
         // $check_link = 'https://api.weixin.qq.com/sns/auth?access_token=' . $userinfo['access_token'] . '&openid=' . $userinfo['openid'];
         // $checkopen = json_decode($this->curl_get_content($check_link), true);
@@ -218,26 +202,11 @@ class wxbaseclass extends wmrclass
         $wxuser = json_decode($this->curl_get_content($getlink), true);
         if (isset($wxuser['openid'])) {
         } else {
-            echo $wxuser['errcode'];
-            exit;
+            refresh();
         }
         if ($loginmode==0) {
             $this->setLoginInfo($wxuser, $userinfo);
-            $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
-            $query_str = $_SERVER['QUERY_STRING'];
-            parse_str($query_str);
-            parse_str($query_str, $query_arr);
-            if(is_array($query_arr) && count($query_arr))
-            {
-                foreach($query_arr as $key=> $val)
-                {
-                    if($key != 'code' && $key != 'ctrl')
-                    {
-                        $newlink .= "&".$key."=".$val;
-                    }
-                }
-            }
-            header("location:".$newlink);
+            refresh();
         } else {
             $data['wxuser'] = $wxuser;
             $data['userinfo'] = $userinfo;
@@ -297,7 +266,7 @@ class wxbaseclass extends wmrclass
                 }
                 $flag = 2;
                 $uid = $oauthinfo['uid'];
-				
+
             } else {
                 $arr['username'] = $wxoauth['openid'];
                 $arr['phone'] = $wxuser['phone'];
