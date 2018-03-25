@@ -188,19 +188,19 @@ class wxbaseclass extends wmrclass
             if($token['errcode'] == 40163)
             {
                 $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
-                $query_str = $_SERVER['QUERY_STRING'];
-                parse_str($query_str);
-                parse_str($query_str, $query_arr);
-                if(is_array($query_arr) && count($query_arr))
-                {
-                    foreach($query_arr as $key=> $val)
-                    {
-                        if($key != 'code' && $key != 'ctrl')
-                        {
-                            $newlink .= "&".$key."=".$val;
-                        }
-                    }
-                }
+                // $query_str = $_SERVER['QUERY_STRING'];
+                // parse_str($query_str);
+                // parse_str($query_str, $query_arr);
+                // if(is_array($query_arr) && count($query_arr))
+                // {
+                //     foreach($query_arr as $key=> $val)
+                //     {
+                //         if($key != 'code' && $key != 'ctrl')
+                //         {
+                //             $newlink .= "&".$key."=".$val;
+                //         }
+                //     }
+                // }
                 header("location:".$newlink);
             }
             echo $token['errcode'];
