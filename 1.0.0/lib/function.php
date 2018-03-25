@@ -355,3 +355,21 @@ function diffBetweenTwoDays ($day1, $day2)
   }
   return ($second1 - $second2) / 86400;
 }
+function refresh()
+{
+    $newlink = Mysite::$app->config['siteurl']."/index.php?ctrl=wxsite";
+    $query_str = $_SERVER['QUERY_STRING'];
+    parse_str($query_str);
+    parse_str($query_str, $query_arr);
+    if(is_array($query_arr) && count($query_arr))
+    {
+        foreach($query_arr as $key=> $val)
+        {
+            if($key != 'code' && $key != 'ctrl')
+            {
+                $newlink .= "&".$key."=".$val;
+            }
+        }
+    }
+    header("location:".$newlink);
+}
