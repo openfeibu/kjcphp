@@ -253,9 +253,7 @@ class wxbaseclass extends wmrclass
         $wxoauth['imgurl'] = $wxuser['headimgurl'];
         $flag = 0;
         $is_user = array();
-        if ($wxuser['phone']>0) {
-            $is_user = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where phone='".$wxuser['phone']."'  ");
-        }
+
         $uid = 0;
         $oauthinfo=$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxuser['openid']."'  ");
         if (empty($oauthinfo)) {//写用户数据
@@ -273,25 +271,8 @@ class wxbaseclass extends wmrclass
                 $arr['group'] = 10;
                 $arr['logo'] = $wxoauth['imgurl'];
                 $arr['sex'] = $wxuser['sex'];  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-                $newusername = $this->strFilter($wxoauth['username']);
-                $checkusername ='x';
-                $k = 0;
-                while (!empty($checkusername)) {
-                    $newusername = $k==0? $newusername:$newusername;
-                    $checkusername = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where username ='".$newusername."' ");
-                    $k = $k+1;
-                    if (empty($checkusername)) {
-                        break;
-                    }
-                }
-                $arr['username'] = $newusername;
                 $this->mysql->insert(Mysite::$app->config['tablepre']."member", $arr);
                 $uid = $this->mysql->insertid();
-            } else {
-                $uid = $is_user['uid'];
-//                    $cnewdata['username'] = $wxoauth['username'] ;
-//                    $cnewdata['logo'] = $wxoauth['imgurl'];
-//                    $this->mysql->update(Mysite::$app->config['tablepre'].'member',$cnewdata,"uid='".$uid."'");
             }
             $mbdata['uid'] = $uid;
             $mbdata['openid'] = $wxoauth['openid'];
@@ -313,37 +294,12 @@ class wxbaseclass extends wmrclass
             if (!empty($membercheck)) {
                 if (empty($membercheck['username'])) {
                     $newusername = $this->strFilter($wxoauth['username']);
-                    $checkusername ='x';
-                    $k = 0;
-                    while (!empty($checkusername)) {
-                        $newusername = $k==0? $newusername:$newusername;
-                        $checkusername = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where username ='".$newusername."' ");
-                        $k = $k+1;
-                        if (empty($checkusername)) {
-                            break;
-                        }
-                    }
                     $cnewdata['username'] = $newusername;
                 }
                 if (empty($is_user)) {
                     if (!empty($wxuser['phone'])) {
                         $cnewdata['phone'] = $wxuser['phone'];
                     }
-                } else {
-                    $wx['uid'] = $is_user['uid'];
-
-                    $this->mysql->update(Mysite::$app->config['tablepre'].'wxuser', $wx, "openid='".$wxuser['openid']."'");
-                    $oauthinfo['uid'] = $is_user['uid'];
-                    $tcuser['cost'] = 0;
-                    $tcuser['score'] = 0;
-
-                    $this->mysql->update(Mysite::$app->config['tablepre'].'member', $tcuser, "uid='".$yuid."'");
-                    $juan['uid'] = $oauthinfo['uid'];
-                    $this->mysql->update(Mysite::$app->config['tablepre'].'juan', $juan, "uid='".$yuid."'");
-                    $address['userid'] = $oauthinfo['uid'];
-                    $this->mysql->update(Mysite::$app->config['tablepre'].'address', $address, "userid='".$yuid."'");
-                    $orderdata['buyeruid'] = $oauthinfo['uid'];
-                    $this->mysql->update(Mysite::$app->config['tablepre'].'order', $orderdata, "buyeruid='".$yuid."'");
                 }
                 $cnewdata['cost'] = $is_user['cost']+$membercheck['cost'];
                 $cnewdata['score'] = $is_user['score']+$membercheck['score'];
@@ -365,22 +321,8 @@ class wxbaseclass extends wmrclass
                     $arr['logo'] = $wxoauth['imgurl'];
                     $arr['sex'] = $wxoauth['sex'];  //用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
                     $arr['uid'] = $oauthinfo['uid'];
-                    $newusername = $this->strFilter($wxoauth['username']);
-                    $checkusername ='x';
-                    $k = 0;
-                    while (!empty($checkusername)) {
-                        $newusername = $k==0? $newusername:$newusername;
-                        $checkusername = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where username ='".$newusername."' ");
-                        $k = $k+1;
-                        if (empty($checkusername)) {
-                            break;
-                        }
-                    }
-                    $arr['username'] = $newusername;
                     $this->mysql->insert(Mysite::$app->config['tablepre']."member", $arr);
                     $uid = $this->mysql->insertid();
-                } else {
-                    $uid = $is_user['uid'];
                 }
                 $wx['uid'] = $uid;
                 $this->mysql->update(Mysite::$app->config['tablepre'].'wxuser', $wx, "openid='".$wxuser['openid']."'");
