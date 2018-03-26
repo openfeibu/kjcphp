@@ -695,11 +695,11 @@ $ch = curl_init($url);
         }
         $data['buycode'] = substr(md5(time()), 9, 6);
         $data['dno'] = time().rand(1000, 9999);
-        $minitime = strtotime(date('Y-m-d', time()));
-        $tj = $this->ordmysql->select_one("select daycode,id from ".Mysite::$app->config['tablepre']."order where shopid='".$info['shopid']."' and addtime > ".$minitime." order by id desc limit 0,1000");
+        // $minitime = strtotime(date('Y-m-d', time()));
+        // $tj = $this->ordmysql->select_one("select daycode,id from ".Mysite::$app->config['tablepre']."order where shopid='".$info['shopid']."' and addtime > ".$minitime." order by id desc limit 0,1000");
 
         $data['daycode'] = empty($tj)?1:$tj['daycode']+1;
-
+        $data['daycode'] = 0;
 
 
 
