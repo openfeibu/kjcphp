@@ -2291,7 +2291,7 @@ class method extends baseclass
         /* 更新订单物流信息 */
         $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id = ".$orderid."   ");
         $minitime = strtotime(date('Y-m-d', time()));
-        $tj = $this->mysql->select_one("select daycode,id from ".Mysite::$app->config['tablepre']."order where shopid='".$orderinfo['shopid']."' and addtime > ".$minitime." AND paystatus = 1 order by id desc");
+        $tj = $this->mysql->select_one("select daycode,id from ".Mysite::$app->config['tablepre']."order where shopid='".$orderinfo['shopid']."' and addtime > ".$minitime." AND paystatus = 1 order by id desc limit 0,1000");
         $data['daycode'] = empty($tj)?1:$tj['daycode']+1;
         $this->mysql->update(Mysite::$app->config['tablepre'].'order',$data,"id ='".$orderid."' ");
         $orderCLs = new orderclass();
