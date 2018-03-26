@@ -368,7 +368,7 @@ class memberclass
             if ($logintype == 'wx') {
                 $wxopenid  = ICookie::get('wxopenid');
                 $apiinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxopenid."'  ");
-                $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$apiinfo['uid']."' ");
+                $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$uid."' ");
 
                 if (!empty($apiinfo) && empty($userinfo)) {
                     //写入局到
