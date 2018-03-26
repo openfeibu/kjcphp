@@ -262,7 +262,7 @@ class wxbaseclass extends wmrclass
                 //if (empty($membercheck['username'])) {
                     $newusername = $this->strFilter($wxoauth['username']) ? $this->strFilter($wxoauth['username']) : $wxoauth['openid'];
                     $cnewdata['username'] = $newusername;
-                    $cnewdata['logo'] = $wxoauth['imgurl']
+                    $cnewdata['logo'] = $wxoauth['imgurl'];
 					$this->mysql->update(Mysite::$app->config['tablepre'].'member', $cnewdata, "uid='".$oauthinfo['uid']."' ");
                 //}
                 $flag = 2;
