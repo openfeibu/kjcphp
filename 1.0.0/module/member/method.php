@@ -203,6 +203,10 @@ class method extends baseclass
     public function loginout()
     {
         $this->memberCls->loginout();
+		// if($_GET['ceshi'])
+		// {
+			// exit;
+		// }
         $link = IUrl::creatUrl('member/shoplogin');
         $this->refunction('', $link);
     }

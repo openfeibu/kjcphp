@@ -363,7 +363,11 @@ class memberclass
         $password = ICookie::get('memberpwd');
         $logintype = ICookie::get('logintype');
         $userinfo = array();
-
+		// if(!ICookie::get('wxopenid'))
+		// {
+			// $this->loginout();
+			 // refresh();
+		// }
         if (!empty($logintype)) {
             if ($logintype == 'wx') {
                 $wxopenid  = ICookie::get('wxopenid');

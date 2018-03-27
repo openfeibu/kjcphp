@@ -4970,6 +4970,10 @@ $backdata['pscost'] = $tempinfo['pscost'];
     public function loginout()
     {
         $this->memberCls->loginout();
+		// if($_GET['ceshi'])
+		// {
+			// exit;
+		// }
         $link = IUrl::creatUrl('wxsite/index');
         $this->message('', $link);
     }

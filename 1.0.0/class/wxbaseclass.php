@@ -104,7 +104,7 @@ class wxbaseclass extends wmrclass
         if ($datatype == 'json') {
         } else {
             //if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) { //判断是微信浏览器不
-                if ($this->member['uid'] <= 0) {
+                if ($this->member['uid'] <= 0  || !$this->member['wxuser']) {
                     if (Mysite::$app->config['wxLoginType']==0) {
                         //微信自动登录
                         $this->wxlogin();
@@ -212,6 +212,7 @@ class wxbaseclass extends wmrclass
             $data['userinfo'] = $userinfo;
             return $data;
         }
+		
     }
     public function setLoginInfo($wxuser, $userinfo)
     {
@@ -225,6 +226,7 @@ class wxbaseclass extends wmrclass
 
         $uid = 0;
         $oauthinfo=$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxuser['openid']."'  ");
+		
         if (empty($oauthinfo)) {//写用户数据
             $arr['username'] = $this->strFilter($wxoauth['username']) ? $this->strFilter($wxoauth['username']) : $wxoauth['openid'];
             $arr['phone'] = $wxuser['phone'];
@@ -298,7 +300,12 @@ class wxbaseclass extends wmrclass
         ICookie::set('email', $userinfo['email'], 86400);
         ICookie::set('memberpwd', $userinfo['password'], 86400);
         ICookie::set('membername', $userinfo['username'], 86400);
+		// if($_GET['ceshi'])
+		// {
+			// var_dump( $uid);exit;
+		// }
         ICookie::set('uid', $uid, 86400);
+
     }
 
 
