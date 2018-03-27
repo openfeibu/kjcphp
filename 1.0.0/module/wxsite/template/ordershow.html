@@ -94,7 +94,9 @@
             <{/if}>
         <{/if}>
         <{if $order['status'] == 4}>
-            <{if $order['is_reback'] == 2}>
+            <{if $order['is_reback'] == 0}>
+                <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">超时关闭</a></div>
+            <{elseif $order['is_reback'] == 2}>
                 <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">已退款</a></div>
             <{else}>
                 <div class="orderDetail_button"><a href="javascript:void(0);" class="orderDetail_button_ed">退款中</a></div>
