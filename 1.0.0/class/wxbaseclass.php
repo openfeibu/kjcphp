@@ -269,7 +269,7 @@ class wxbaseclass extends wmrclass
                 $uid = $oauthinfo['uid'];
 
             } else {
-                $arr['username'] = $wxoauth['openid'];
+                $arr['username'] = $this->strFilter($wxoauth['username']) ? $this->strFilter($wxoauth['username']) : $wxoauth['openid'];
                 $arr['phone'] = $wxuser['phone'];
                 $arr['address'] = '';
                 $arr['password'] = md5($wxoauth['openid']);
