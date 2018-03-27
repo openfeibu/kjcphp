@@ -371,5 +371,5 @@ function refresh()
             }
         }
     }
-    header("location:".$newlink);
+    header("location:".$newlink);exit;
 }
