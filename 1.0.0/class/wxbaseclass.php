@@ -212,7 +212,7 @@ class wxbaseclass extends wmrclass
             $data['userinfo'] = $userinfo;
             return $data;
         }
-		
+
     }
     public function setLoginInfo($wxuser, $userinfo)
     {
@@ -226,7 +226,7 @@ class wxbaseclass extends wmrclass
 
         $uid = 0;
         $oauthinfo=$this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."wxuser where openid='".$wxuser['openid']."'  ");
-		
+
         if (empty($oauthinfo)) {//写用户数据
             $arr['username'] = $this->strFilter($wxoauth['username']) ? $this->strFilter($wxoauth['username']) : $wxoauth['openid'];
             $arr['phone'] = $wxuser['phone'];

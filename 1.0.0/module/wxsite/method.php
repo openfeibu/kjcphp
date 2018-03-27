@@ -3484,8 +3484,28 @@ $backdata['pscost'] = $tempinfo['pscost'];
 				$err = '订单不属于您';
 			}
 		}
+        if ($orderinfo['paytype'] == 1 && $orderinfo['paystatus'] == 0 && $orderinfo['status'] < 3) {
+            $checktime = time() - $orderinfo['addtime'];
+            if ($checktime > 900) {
+                //说明该订单可以关闭
+                if ($orderinfo['yhjids']>0) {
+                    $jdata['status'] =1;
+                    $this->mysql->update(Mysite::$app->config['tablepre'].'juan', $jdata, "id='".$orderinfo['yhjids']."'");
+                }
+                $cdata['status'] = 4;
+                $this->mysql->update(Mysite::$app->config['tablepre'].'order', $cdata, "id='".$orderid."'");
+                $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "orderid = '$orderid' and status != 3");
+                /*更新订单 状态说明*/
+                $statusdata['orderid']     =  $orderid;
+                $statusdata['addtime']     =  $orderinfo['addtime']+900;
+                $statusdata['statustitle'] =  "自动关闭订单";
+                $statusdata['ststusdesc']  =  "在线支付订单，未支付自动关闭";
+                $this->mysql->insert(Mysite::$app->config['tablepre'].'orderstatus', $statusdata);
+                $orderinfo['status'] = 4;
+            }
+        }
         if($orderinfo['status']  == 4){
-            $err = '订单超时或其他状态不可操作';
+            $err = '订单已超时或其他状态不可操作';
         }
         if($err)
         {
