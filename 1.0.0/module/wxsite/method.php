@@ -3264,8 +3264,6 @@ $backdata['pscost'] = $tempinfo['pscost'];
     /* 提交订单 start */
     public function makeorder()
     {
-        error_reporting(-1);
-        ini_set('display_errors',1);
         $this->checkwxweb();
         if ($this->checkbackinfo()) {
             if ($this->member['uid'] == 0) {
@@ -3470,6 +3468,31 @@ $backdata['pscost'] = $tempinfo['pscost'];
     public function pay()
     {
         $orderid = intval(IReq::get('orderid'));
+        if (empty($orderid)) {
+            $err = '订单获取失败';
+        }
+        $userid = empty($this->member['uid'])?0:$this->member['uid'];
+		if($userid == 0){
+            $err = '订单操作无权限';
+        }
+        $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id=".$orderid."  ");
+        if(empty($orderinfo)){
+            $err = '订单数据获取失败';
+        }
+        if($userid > 0){
+			if($orderinfo['buyeruid'] !=  $userid){
+				$err = '订单不属于您';
+			}
+		}
+        if($orderinfo['status']  == 4){
+            $err = '订单超时或其他状态不可操作';
+        }
+        if($err)
+        {
+            $data['error'] = true;
+            $data['msg'] = $err;
+            echo json_encode($data);exit;
+        }
         echo $this->createOrder($orderid);exit;
     }
     public function createOrder($orderid)
