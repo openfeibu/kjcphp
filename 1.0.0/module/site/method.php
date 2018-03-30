@@ -2697,4 +2697,15 @@ class method extends baseclass
     {
 
     }
+    public function testshop()
+    {
+        ini_set('display_errors', 1);            //错误信息
+        ini_set('display_startup_errors', 1);    //php启动错误信息
+        error_reporting(-1);
+        $orderclass = new orderclass();
+        $orderclass->sendpsmess('33124');
+        echo 'success';
+        exit;
+        Mysite::$app->setdata($data);
+    }
 }
