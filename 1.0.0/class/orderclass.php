@@ -340,7 +340,7 @@ class orderclass
              if($shopwxuser){
                  $temp_content = '';
                   foreach ($orderdet as $km=>$vc) {
-                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)";
+                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)(".$vc['goodscost']."元)";
                 }
 				// $temp_content .= "\n配送费:".$orderinfo['shopps'].'元';
                 // $temp_content .= "\n打包费:".$orderinfo['bagcost'].'元';
@@ -438,7 +438,7 @@ class orderclass
 				//模板消息
 				$temp_content = '';
                 foreach ($orderdet as $km=>$vc) {
-                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)";
+                    $temp_content .= "\n".$vc['goodsname'].'('.$vc['goodscount']."份)(".$vc['goodscost']."元)";
                 }
 				$temp_content .= "\n配送费:".$orderinfo['shopps'].'元';
                 $temp_content .= "\n打包费:".$orderinfo['bagcost'].'元';
