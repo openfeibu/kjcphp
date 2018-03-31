@@ -738,7 +738,7 @@ class method extends wxbaseclass
         $id = intval(IReq::get('id'));
         $d = (date("w") ==0) ?7:date("w") ;
 
-        $cxrule = $this->mysql->getarr("select name,id,imgurl from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$id.",shopid)   and status = 1   and ( limittype = 1 or ( limittype = 2 and ".$d."  in ( limittime )  )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
+        $cxrule = $this->mysql->getarr("select name,id,imgurl from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$id.",shopid)   and status = 1   and ( limittype = 1 or ( limittype = 2 and  find_in_set(".$d.",limittime) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
 
         $data['cxlist'] = $cxrule;
         $data['id'] = $id;
@@ -6005,6 +6005,7 @@ CREATE TABLE `xiaozu_shophuiorder` (
         if (!empty($shopsearch)) {
             $where=" and shopname like '%".$shopsearch."%' ";
         }
+        $where .= " AND stationid = ".$this->stationid;
 
         $lng = 0;
         $lat = 0;

@@ -321,7 +321,7 @@ class sellrule
 											}
 										} elseif ($value['controltype'] == 2) {//减肥用
 											$limitarr = explode(',',$value['limitcontent']);
-											$controarr = explode(',',$value['limitcontent']);
+											$controarr = explode(',',$value['controlcontent']);
 											arsort($limitarr);//对数组的值从大到小排序
 											foreach($limitarr as $k=>$v){
 												if($this->cartcost >= $v){
