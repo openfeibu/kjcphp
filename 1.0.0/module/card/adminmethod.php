@@ -473,7 +473,7 @@ class method extends adminbaseclass
     /**促销活动列表**/
     public function cxrulelist()
     {
-        $cityid = Mysite::$app->config['default_cityid'];
+        //$cityid = Mysite::$app->config['default_cityid'];
         $type = intval(IReq::get('type'));//0全部 1待生效 2进行中 3已结束 4未启用
         $type = in_array($type, array(0, 1, 2, 3, 4)) ? $type : 0;
         $wherearr = array(
@@ -483,7 +483,7 @@ class method extends adminbaseclass
        '3'=>' and limittype = 3 and endtime < '.time().' and status = 1 ',
        '4'=>' and status =0 '
        );
-        $cxrulelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where  parentid = 1 ".$wherearr[$type]."  and  cityid = ".$cityid." order by id desc ");
+        $cxrulelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."rule where  parentid = 1 ".$wherearr[$type]."   order by id desc ");
         $data['cxrulelist'] = $cxrulelist;
         $data['type'] = $type;
         $data['nowtime'] = time();
@@ -496,28 +496,35 @@ class method extends adminbaseclass
         $cxinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."rule where  id = ".$id."   ");
         $cityid = Mysite::$app->config['default_cityid'];
         $shoplist = array();
-        $shoplist = $this->mysql->getarr("select id,shopname,shoptype from ".Mysite::$app->config['tablepre']."shop where is_pass = 1   ");
-        foreach ($shoplist as $k=>$v) {
-            if ($v['shoptype']==1) {
-                $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$v['id']."   ");
-                if ($psinfo['sendtype'] == 1) {
-                    $shopps[] = $v;
+        $stationlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo as st ".$where." order by st.id desc");
+        foreach($stationlist as $key => $val)
+        {
+            $shoplist = $this->mysql->getarr("select id,shopname,shoptype from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  AND stationid =  ".$val['id']);
+            foreach ($shoplist as $k=>$v) {
+                if ($v['shoptype']==1) {
+                    $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopmarket where  shopid = ".$v['id']."   ");
+                    if ($psinfo['sendtype'] == 1) {
+                        $shopps[] = $v;
+                    } else {
+                        $platps[] = $v;
+                    }
                 } else {
-                    $platps[] = $v;
-                }
-            } else {
-                $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$v['id']."   ");
-                if ($psinfo['sendtype'] == 1) {
-                    $shopps[] = $v;
-                } else {
-                    $platps[] = $v;
+                    $psinfo = $this->mysql->select_one("select sendtype from ".Mysite::$app->config['tablepre']."shopfast where  shopid = ".$v['id']."   ");
+                    if ($psinfo['sendtype'] == 1) {
+                        $shopps[] = $v;
+                    } else {
+                        $platps[] = $v;
+                    }
                 }
             }
+            $stationlist[$key]['shopps'] = $shopps;
         }
+
         $data['cxsignlist'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodssign where type='cx' order by id desc limit 0, 100");
         $data['cxinfo'] = $cxinfo;
         $data['shopps'] = $shopps;
         $data['platps'] = $platps;
+        $data['stationlist'] = $stationlist;
         Mysite::$app->setdata($data);
     }
     public function delcxrule()
