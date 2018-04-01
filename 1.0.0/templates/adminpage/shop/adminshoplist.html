@@ -36,7 +36,7 @@
             </div>
 
       	</div>
- 
+
 
            <div class="tags">
 
@@ -101,7 +101,7 @@
                         <td align="center"><a href="#" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
                         <td align="center">
                         <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a></td>
-                        <{load_data assign="member" table="member" type="one" where="guid='<{$items['uid']}>'" fileds="username" }>
+                        <{load_data assign="member" table="member" type="one" where="guid='<{$items['uid']}>'" fileds="uid,username" }>
 
                         <td align="center">
                             <{if !empty($member)}>

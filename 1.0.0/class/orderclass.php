@@ -449,7 +449,7 @@ class orderclass
                             "color"=>"#173177"
                     ),
 					"keyword1"=>array(
-						"value"=> $temp_content,
+						"value"=> "请及时配送，不要让顾客久等哦",
 						"color"=>"#173177"
 					),
 					"keyword2"=>array(
@@ -469,7 +469,7 @@ class orderclass
 						"color"=>"#173177"
 					),
 					"remark"=> array(
-						"value"=>"请及时配送，不要让顾客久等哦",
+						"value"=> $temp_content,
 						"color"=>"#173177"
 					),
                 );
