@@ -47,7 +47,7 @@ class method   extends adminbaseclass
 		if($id>1){
             $where .= "  and id in((select shopid from ".Mysite::$app->config['tablepre']."shopattr where attrid = ".$id." ))";
         }
-		
+
         $shoplist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop  {$where}  and is_pass=1 order by sort asc");
         if(!empty($shoplist)){
             $this->success($shoplist);
@@ -215,7 +215,7 @@ class method   extends adminbaseclass
 			$uploadpath = 'upload/'.$uploaddir.'/';
 			$filepath = '/upload/'.$uploaddir.'/';
 			$upload = new upload($uploadpath,array('gif','jpg','jpge','doc','png'));//upload 自动生成压缩图片
-			
+
 			$file = $upload->getfile();
 			if($upload->errno!=15&&$upload->errno!=0){
 				echo "<script>parent.".$func."(true,'".$obj."','".json_encode($upload->errmsg())."');</script>";
@@ -228,9 +228,9 @@ class method   extends adminbaseclass
 		$data['obj'] = $obj;
 		$data['uploaddir'] = $uploaddir;
 		$data['func'] = $func;
-		Mysite::$app->setdata($data); 
+		Mysite::$app->setdata($data);
 	}
-	
+
 	//批量上传图片
 	public function piliang(){
 		if(is_array($_FILES)&& isset($_FILES['imgFile']))
@@ -242,60 +242,60 @@ class method   extends adminbaseclass
          $upload = new upload($uploadpath,array('gif','jpg','jpge','doc','png'));//upload 自动生成压缩图片
          $file = $upload->getfile();
          if($upload->errno!=15&&$upload->errno!=0){
-			 
-			  $this->message($upload->errmsg());   
+
+			  $this->message($upload->errmsg());
 		   }else{
-			   //写到商品库表中   
+			   //写到商品库表中
                $data['imagename']= $file[0]['saveName'];
 			   $data['imageurl']= $filepath.$file[0]['saveName'];
 			   $data['addtime'] = time();
-			
-			   $this->mysql->insert(Mysite::$app->config['tablepre'].'imglist',$data); 
-				$this->success($file[0]['saveName']); 
-		   } 
+
+			   $this->mysql->insert(Mysite::$app->config['tablepre'].'imglist',$data);
+				$this->success($file[0]['saveName']);
+		   }
 		}else{
-		 
-			 $this->message('未定义的上传类型'); 
+
+			 $this->message('未定义的上传类型');
 		}
 	}
      function apiset(){
-		 
+
 		$cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
 		if( empty($cityid) ){
 			$this->message("请先设置网站自营默认城市",'/index.php?ctrl=adminpage&action=system&module=siteset');
 		}
 		$platpssetinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid = '".$cityid."'  ");
 		$platpssetinfo['radiusvalue'] = unserialize( $platpssetinfo['radiusvalue'] );
-		$data['psinfo'] = $platpssetinfo; 
+		$data['psinfo'] = $platpssetinfo;
 		Mysite::$app->setdata($data);
-		 
+
 	 }
 	function saveapiset(){
-		$siteinfo['psbopen'] =  intval(IReq::get('psbopen')); 
-	  	$siteinfo['autopsblink'] = trim(IReq::get('autopsblink'));  
-	  	$siteinfo['autopsbkey'] =trim(IReq::get('autopsbkey'));  
-	    $config = new config('hopeconfig.php',hopedir);  
+		$siteinfo['psbopen'] =  intval(IReq::get('psbopen'));
+	  	$siteinfo['autopsblink'] = trim(IReq::get('autopsblink'));
+	  	$siteinfo['autopsbkey'] =trim(IReq::get('autopsbkey'));
+	    $config = new config('hopeconfig.php',hopedir);
 	    $config->write($siteinfo);
-	    $configs = new config('hopeconfig.php',hopedir);   
+	    $configs = new config('hopeconfig.php',hopedir);
 	    $tests = $config->getInfo();
-	
+
 		$cityid = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
 		$savearray['pttopsb'] = intval(IFilter::act(IReq::get('pttopsb')));
 		$savearray['ptpsblink']  = trim(IFilter::act(IReq::get('ptpsblink')));
 		$savearray['ptpsbaccid']  = intval(IFilter::act(IReq::get('ptpsbaccid')));
 		$savearray['ptpsbkey']  = trim(IFilter::act(IReq::get('ptpsbkey')));
 		$savearray['ptpsbcode']  = trim(IFilter::act(IReq::get('ptpsbcode')));
-			
+
 		$platpssetinfo = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."platpsset  where cityid = '".$cityid."'  ");
-		 
+
 		if( !empty($platpssetinfo) ){
-			 $this->mysql->update(Mysite::$app->config['tablepre'].'platpsset',$savearray,"cityid='".$cityid."'");	 
+			 $this->mysql->update(Mysite::$app->config['tablepre'].'platpsset',$savearray,"cityid='".$cityid."'");
 		}else{
 			 $savearray['cityid'] = $cityid;
-			  $this->mysql->insert(Mysite::$app->config['tablepre'].'platpsset',$savearray);  
-		} 
+			  $this->mysql->insert(Mysite::$app->config['tablepre'].'platpsset',$savearray);
+		}
 		$this->success('success');
-		
+
 	}
 	//批量上传图片
 	public function glyuploadmoreimg(){
@@ -309,21 +309,21 @@ class method   extends adminbaseclass
          $file = $upload->getfile();
 		 $uploadimages = array();
          if($upload->errno!=15&&$upload->errno!=0){
-			 
-			  $this->message($upload->errmsg());   
+
+			  $this->message($upload->errmsg());
 		   }else{
-			   //写到商品库表中   
+			   //写到商品库表中
                $data['imagename']= $file[0]['saveName'];
 			   $data['imageurl']= $filepath.$file[0]['saveName'];
 			   $data['addtime'] = time();
-			
+
 				$uploadimages[] = $file[0]['saveName'];
-			#   $this->mysql->insert(Mysite::$app->config['tablepre'].'imglist',$data); 
-			#	$this->success($file[0]['saveName']); 
+			#   $this->mysql->insert(Mysite::$app->config['tablepre'].'imglist',$data);
+			#	$this->success($file[0]['saveName']);
 		   }
 		}else{
-		 
-			 $this->message('未定义的上传类型'); 
+
+			 $this->message('未定义的上传类型');
 		}
 	}
 
@@ -345,13 +345,14 @@ class method   extends adminbaseclass
 	 	 $func = IFilter::act(IReq::get('func'));
 		 $obj = IReq::get('obj');
 		 $uploaddir =IFilter::act(IReq::get('dir'));
+         $thumb = intval(IReq::get('thumb')) ? 1 : 0;
 		if(is_array($_FILES)&& isset($_FILES['imgFile']))
 		{
 	   	  $uploaddir = empty($uploaddir)?'goods':$uploaddir;
 	  	  $json = new Services_JSON();
           $uploadpath = 'upload/'.$uploaddir.'/';
 		   $filepath = '/upload/'.$uploaddir.'/';
-         $upload = new upload($uploadpath,array('gif','jpg','jpge','doc','png'));//upload 自动生成压缩图片
+         $upload = new upload($uploadpath,array('gif','jpg','jpge','doc','png'), $maxSize = 0, $overwrite = 0 , $fileInput = 'imgFile' , $changeName=1,$thumb = $thumb);//upload 自动生成压缩图片
          $file = $upload->getfile();
          if($upload->errno!=15&&$upload->errno!=0){
 		     echo "<script>parent.".$func."(true,'".$obj."','".json_encode($upload->errmsg())."');</script>";
@@ -366,7 +367,7 @@ class method   extends adminbaseclass
 	   $data['func'] = $func;
 	   Mysite::$app->setdata($data);
 	 }
-	 	
+
 	 public function adminsayupload()			// 一起说管理员发表主题图片
 	 {
 	 	 $func = IFilter::act(IReq::get('func'));
@@ -396,7 +397,7 @@ class method   extends adminbaseclass
 	 public function saveupload()
 	 {
 	 	// $siteurl = Mysite::$app->config['siteurl'];
-	 	
+
 		  $json = new Services_JSON();
       $uploadpath = 'upload/goods/';
 		  $filepath = '/upload/goods/';
@@ -475,9 +476,9 @@ class method   extends adminbaseclass
       }else{
       	//不存在配置文件
       	include_once($logindir.'/'.$idtype.'/set.php');
-      	 
+
       		$data['info'] = $plugsdata;
-       
+
 
         //$data['setinfo'] = plugsget($logindir,$idtype);
       }
@@ -603,8 +604,8 @@ class method   extends adminbaseclass
 	 	$data['allowedsendbuyer'] = Mysite::$app->config['allowedsendbuyer'];
 	 	$data['ordercheckphone'] = Mysite::$app->config['ordercheckphone'];
 	 	$list = array(
-	 	               'emailfindtpl'=>'找回密码邮箱模板', 
-	 	                'usercodetpl'=>'用户验证码模版', 
+	 	               'emailfindtpl'=>'找回密码邮箱模板',
+	 	                'usercodetpl'=>'用户验证码模版',
 	 	                'phoneunorder'=>'后台关闭订单短信通知模板',
 	 	                'noticeunback'=>'退款失败通知',
 	 	                'noticeback'=>'退款成功通知',
@@ -642,7 +643,7 @@ class method   extends adminbaseclass
 	 	                'noticemake'=>'商家制作订单通知',
 	 	                'noticeunmake'=>'商家不制作订单通知',
 	 	                'noticesend'=>'发货通知',
-						
+
 	 	                );
 	 	$info = array_keys($list);
 	 	if(!in_array($tplname,$info))
@@ -717,7 +718,7 @@ class method   extends adminbaseclass
 		if(!empty($tmsg)) $this->message($tmsg);
 	    $config = new config('hopeconfig.php',hopedir);
 	    $siteinfo['smstype'] = IReq::get('smstype');
-	 
+
 	    	$siteinfo['apiuid'] =intval( IReq::get('sms86id') );
 	    	$siteinfo['sms86ac'] =IReq::get('sms86ac');
 		    $siteinfo['sms86pd'] = IReq::get('sms86pd');
@@ -735,7 +736,7 @@ class method   extends adminbaseclass
 		exit;
 	}
 	function smtopay(){
-		 
+
 	  $this->success('success');
 	}
 	function basedata(){
@@ -797,9 +798,9 @@ class method   extends adminbaseclass
 		limitalert();
 		 $tmsg = limitalert();
 		if(!empty($tmsg)) $this->message($tmsg);
-		
-		
-		
+
+
+
 		  $tabelname = IReq::get('tabelname');
 		if(empty($tabelname)) $this->message('other_emptytablepass');
 		$dirname = IReq::get('dirname');
@@ -814,7 +815,7 @@ class method   extends adminbaseclass
 		 	$this->mysql->query($value);
 		 }
 		}
- 
+
 		$this->success('success');
 
 	}
@@ -823,7 +824,7 @@ class method   extends adminbaseclass
 		$this->message("无操作权限");
 		 $tmsg = limitalert();
 		if(!empty($tmsg)) $this->message($tmsg);
-		
+
 			$dirname = IReq::get('dirname');
 		if(empty($dirname)) $this->message('empty_filename');
 		IFile::clearDir(hopedir.'/dbbak/'.$dirname);
@@ -870,19 +871,19 @@ class method   extends adminbaseclass
      fclose($file);
      exit();
    }
-    
+
    function addspecialpage11(){  //添加或者编辑 专题页
-	   
+
 		$id = intval(IReq::get('id'));
 		$data['info'] = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."specialpage where id=".$id."  ");
-	 
+
 
 	 	Mysite::$app->setdata($data);
 	}
 	 function savespecialpage(){  // 保存或者更新 专题页
 	 	// limitalert();
 		$id = IReq::get('ztyid');
-	 
+
  	   	$data['name'] = IReq::get('name');
 		$data['indeximg'] = IReq::get('indeximg');
 		$data['imgwidth'] = IReq::get('imgwidth');
@@ -901,34 +902,34 @@ class method   extends adminbaseclass
 		if($data['showtype'] == 1 ){
 			$data['cx_type'] = $goodscx_type;
 		}
-	 
+
 	   	$data['is_show'] = intval(IReq::get('is_show'));
 	   	$data['orderid'] = intval(IReq::get('orderid'));
 	   	$data['ruleintro'] = IReq::get('ruleintro');
-		 
+
 		$data['cityid'] = isset(Mysite::$app->config['default_cityid'])?Mysite::$app->config['default_cityid']:0;
-		 
+
 		 if(empty($id)){
 			 $linkurl = IUrl::creatUrl('adminpage/other/module/specialpage');
 		 }else{
-			 
-			 $linkurl =  IUrl::creatUrl('adminpage/other/module/addspecialpage/id/'.$id); 
-			 
+
+			 $linkurl =  IUrl::creatUrl('adminpage/other/module/addspecialpage/id/'.$id);
+
 		 }
-		 
+
 		if(empty($data['name'])) $this->message('名称不能为空',$linkurl);
 		if(empty($data['indeximg'])) $this->message('首页显示图片不能为空',$linkurl);
 		if(empty($data['color'])) $this->message('专题页背景色调不能为空',$linkurl);
 		if( $data['is_custom'] !=0 && $data['is_custom'] !=1) $this->message('请选择活动格式',$linkurl);
 		if( $data['showtype'] !=0 && $data['showtype'] !=1 && $data['showtype'] !=2  ) $this->message('请选择活动针对对象',$linkurl);
-		
-		
+
+
 		if( $data['showtype'] == 2 ) {
 			if( empty($zdylink) ) {
 				$this->message('请填写跳转链接',$linkurl);
 			}
 		}
-		
+
 		if( $data['is_custom'] == 1 ){
 			if( $data['showtype'] != 2 ) {
 				if($data['cx_type'] <=0 && $data['cx_type'] >1) $this->message('请选择对象对应活动类型',$linkurl);
@@ -940,19 +941,19 @@ class method   extends adminbaseclass
 			$data['zdylink'] = $zdylink;
 	   	if(empty($id))
 	   	{
-			$link = IUrl::creatUrl('adminpage/other/module/specialpage'); 
+			$link = IUrl::creatUrl('adminpage/other/module/specialpage');
 	   		$this->mysql->insert(Mysite::$app->config['tablepre'].'specialpage',$data);
 	 	$this->success('success',$link);
 	   	}else{
-	    	$link = IUrl::creatUrl('adminpage/other/module/addspecialpage/id/'.$id); 
+	    	$link = IUrl::creatUrl('adminpage/other/module/addspecialpage/id/'.$id);
 			$this->mysql->update(Mysite::$app->config['tablepre'].'specialpage',$data,"id='".$id."'");
 			$this->success('success',$link);
 	   	}
-	//   	$link = IUrl::creatUrl('adminpage/other/module/specialpage');	 
+	//   	$link = IUrl::creatUrl('adminpage/other/module/specialpage');
 	 //   $this->success('success',$link);
-	    
-   } 
-   
+
+   }
+
     function delspecialpage(){  //删除专题页
 //		$this->message("您暂无权限删除，请联系管理员");
 	limitalert();
@@ -970,8 +971,8 @@ class method   extends adminbaseclass
 	    $this->setstatus();
 	    $where = '';
 	    $goodswhere = '';
-	     
-	    
+
+
 	    $data['shopname'] =  trim(IReq::get('shopname'));
 	    $data['name'] =  trim(IReq::get('name'));
 	   $data['username'] =  trim(IReq::get('username'));
@@ -985,67 +986,67 @@ class method   extends adminbaseclass
 	 	 if(!empty($data['phone'])){
 	 	    $where .=" and phone='".$data['phone']."'";
 	 	 }
-	 	 
+
 	 	 //构造查询条件
-	 	 $data['where'] = $where; 
-	    
-		
+	 	 $data['where'] = $where;
+
+
 		 if(!empty($data['shopname'])){
  		    $goodswhere .= " and shopname like '%".$data['shopname']."%'";
 	 	 }
 		 if(!empty($data['name'])){
 	 	    $goodswhere .= " and name like '%".$data['name']."%'";
 	 	 }
-		
-		
+
+
 		$id = IReq::get('id');
 		$data['id'] = $id;
 		$ztyinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."specialpage where id=".$id."  ");
 		$data['ztyinfo'] = $ztyinfo;
-		
-		$this->pageCls->setpage(intval(IReq::get('page')),60); 
-	   
-	  if($ztyinfo['showtype'] ==0){ 
+
+		$this->pageCls->setpage(intval(IReq::get('page')),60);
+
+	  if($ztyinfo['showtype'] ==0){
  			$selectlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shop  where is_pass = 1 ".$where."  order by sort asc  limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()."  ");
  			$shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."shop  where is_pass = 1 ".$where." ");
-	  }     
-	   
+	  }
+
 	   if($ztyinfo['showtype'] == 1){
  			$selectlist = $this->mysql->getarr("select a.*,b.shopname from ".Mysite::$app->config['tablepre']."goods as a left join  ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id where a.id > 0 and b.id > 0 ".$goodswhere."  order by a.good_order asc  limit ".$this->pageCls->startnum().", ".$this->pageCls->getsize()." ");
-			
+
 			$shuliang  = $this->mysql->counts("select a.*,b.shopname from ".Mysite::$app->config['tablepre']."goods as a left join  ".Mysite::$app->config['tablepre']."shop as b  on a.shopid = b.id where a.id > 0 ".$goodswhere."  ");
-		 
+
 	   }
 	  #  print_r($selectlist);
-	   $this->pageCls->setnum($shuliang); 
+	   $this->pageCls->setnum($shuliang);
 	  $data['pagecontent'] = $this->pageCls->getpagebar();
  		$data['selectlist'] = $selectlist;
- 
+
 	    Mysite::$app->setdata($data);
-	    
+
 	}
 	function saveselectztyobj(){	//选择专题页对象 集
 		// limitalert();
 		$id = IReq::get('id');
 		$zjtype = IReq::get('zjtype');
-		
-		
-		$selectobjids = IReq::get('selectobjids');  //160,156, 
+
+
+		$selectobjids = IReq::get('selectobjids');  //160,156,
 		$temparray  = explode(',',$selectobjids);
 	/* 	$seobjids = implode(',',$temparray); // 160,156 */
-		
+
 		$checkinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."specialpage where id=".$id."  ");
 		if(!empty($checkinfo)){
-			
-			
+
+
 			$yuanlaiids = explode( ',',$checkinfo['listids'] );
 		    $tempids = array_diff($yuanlaiids,$temparray);
-		 
+
 			if($zjtype == 1){
 				foreach($temparray as $key=>$value){
 						$tempids[] = $value;
 				}
-			
+
 			}
 			 $templistids = array();
 			foreach($tempids as  $key=>$value){
@@ -1053,25 +1054,25 @@ class method   extends adminbaseclass
 					$templistids[] = $value;
 				}
 			}
-			
+
 			$data['listids'] = count($templistids >0)? join(',',$templistids):'';
-			
+
 			$this->mysql->update(Mysite::$app->config['tablepre'].'specialpage',$data,"id='".$id."'");
 			$this->success('success');
 		}
-		
+
 	}
 	function delpsorder(){
 		//最近 10天
 		$oladtime = time()-10*86400;
 		$newtime = time()-86400;
-		$tempwhere = ' addtime > '.$oladtime.' and addtime < '.$newtime; 
+		$tempwhere = ' addtime > '.$oladtime.' and addtime < '.$newtime;
 		$this->mysql->delete(Mysite::$app->config['tablepre'].'orderps'," orderid not  in(select id from ".Mysite::$app->config['tablepre']."order where ".$tempwhere."  ) and status < 3 ");
-		$link = IUrl::creatUrl('/adminpage/other/module/paylist'); 
-		$this->refunction('清理为空配送单成功',$link); 
+		$link = IUrl::creatUrl('/adminpage/other/module/paylist');
+		$this->refunction('清理为空配送单成功',$link);
 	}
-	
-	
+
+
 }
 
 

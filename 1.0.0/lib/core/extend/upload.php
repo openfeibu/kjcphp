@@ -24,13 +24,13 @@ class upload
     // @param maxSize 文件最大尺寸
     // @param overwriet 是否覆盖 1 允许覆盖 0 禁止覆盖
 
-    function upload($savePath, $fileFormat = '', $maxSize = 0, $overwrite = 0 , $fileInput = 'imgFile' , $changeName=1){
+    function upload($savePath, $fileFormat = '', $maxSize = 0, $overwrite = 0 , $fileInput = 'imgFile' , $changeName=1,$thumb = 1){
         $this->setSavepath($savePath);
 		$this->makeDirectory($savePath);//创建上传目录
         $this->setFileformat($fileFormat);
         $this->setMaxsize('2048000');
         $this->setOverwrite($overwrite);
-        $this->setThumb($this->thumb, $this->thumbWidth, $this->thumbHeight);
+        $this->setThumb($thumb, $this->thumbWidth, $this->thumbHeight);
         $this->errno = 0;
 		$this->run($fileInput,$changeName);
     }
@@ -135,11 +135,11 @@ class upload
             $originalWidth = ImageSX($Original);
             $this->returninfo['originalHeight'] = $originalHeight;
             $this->returninfo['originalWidth'] = $originalWidth;
-            if (($originalWidth < 100)) {
+            if (($originalWidth < 800)) {
                 // 如果比期望的缩略图小，那只Copy
                 copy($this->savePath . $this->saveName, $this->savePath . $this->thumbPrefix . $this->saveName);
             } else {
-                $ratio = $originalWidth>600 ? 600/$originalWidth : 1 ;
+                $ratio = $originalWidth>800 ? 800/$originalWidth : 1 ;
         	  	$thumbWidth = $ratio * $originalWidth * 0.8;
         	  	$thumbHeight = $ratio * $originalHeight * 0.8;
                 // if ($originalWidth > $this->thumbWidth) { // 宽 > 设定宽度
