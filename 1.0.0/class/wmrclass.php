@@ -554,6 +554,8 @@ class wmrclass
                 }
             }
 
+            $goods = $this->mysql->select_one("SELECT SUM('virtualsellcounts') as virtualsellcounts  FROM ".Mysite::$app->config['tablepre']."goods where shopid = '".$value['id']."'");
+            $value['virtualsellcounts'] = $goods['virtualsellcounts'];
 
             $cxinfo = array();
             $d = date("w") ==0?7:date("w");
