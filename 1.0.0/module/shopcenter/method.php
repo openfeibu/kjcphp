@@ -3491,7 +3491,7 @@ class method extends baseclass
         $shuliang  = $this->mysql->counts("select *  from ".Mysite::$app->config['tablepre']."shoptx ".$where."  order by addtime asc  ");
         $pageshow->setnum($shuliang);
 
-        $link = IUrl::creatUrl('/shopcenter/txlog'.$checklink);
+        $link = IUrl::creatUrl('/shopcenter/shoptxlog'.$checklink);
         $data['pagecontent'] = $pageshow->getpagebar($link);
 
         $typearray = array(0=>'提现申请',1=>'账号充值',2=>'取消提现');
