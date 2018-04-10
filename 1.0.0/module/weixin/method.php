@@ -6521,7 +6521,7 @@ function lifeass(){
         if($typeidContent == null || $typeidContent == '')	$this->message('请选择一种投诉类型');
         if(empty($content))	$this->message('详细情况不能为空');
         if(empty($phone))	$this->message('手机号码不能为空');
-        $myreg = '/^1[34578]{1}\d{9}$/';
+        $myreg = '/^1[3456789]{1}\d{9}$/';
         if(!preg_match($myreg,$phone))$this->message('手机号码格式错误');
         $arr['typeidContent'] = $typeidContent;
         $arr['shopname'] = $shopname;
@@ -6748,7 +6748,7 @@ function lifeass(){
             echo 'noshow(\'请填写手机号\')';
             exit;
         }
-        if(!preg_match("/^1[34578]{1}\d{9}$/",$phone)){
+        if(!preg_match("/^1[3456789]{1}\d{9}$/",$phone)){
             echo  'noshow(\'手机格式错误\')';
             exit;
         }
@@ -6776,7 +6776,7 @@ function lifeass(){
         $is_pass =  intval(IReq::get('is_pass')) ;
         $datauid = $this->member['uid'];
         if(empty($phoneyan)) $this->message('请填写手机号');
-        if(!preg_match("/^1[34578]{1}\d{9}$/",$phoneyan)){
+        if(!preg_match("/^1[3456789]{1}\d{9}$/",$phoneyan)){
             $this->message('手机格式错误');
         }
 

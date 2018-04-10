@@ -224,7 +224,7 @@ class method extends baseclass
             echo 'noshow(\'请填写手机号\')';
             exit;
         }
-        if (!preg_match("/^1[34578]{1}\d{9}$/", $phone)) {
+        if (!preg_match("/^1[3456789]{1}\d{9}$/", $phone)) {
             echo  'noshow(\'手机格式错误\')';
             exit;
         }

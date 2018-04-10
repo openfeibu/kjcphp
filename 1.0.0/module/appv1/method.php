@@ -8025,7 +8025,7 @@ if($showtype == 1){    // 加载商品
         if($typeidContent == null || $typeidContent == '')	$this->message('请选择一种投诉类型');
         if(empty($content))	$this->message('详细情况不能为空');
         if(empty($phone))	$this->message('手机号码不能为空');
-        $myreg = '/^1[34578]{1}\d{9}$/';
+        $myreg = '/^1[3456789]{1}\d{9}$/';
         if(!preg_match($myreg,$phone))$this->message('手机号码格式错误');
         $arr['typeidContent'] = $typeidContent;
         $arr['shopname'] = $shopname;

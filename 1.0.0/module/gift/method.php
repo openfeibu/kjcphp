@@ -129,7 +129,7 @@ class method   extends baseclass
 			$data['content'] = IFilter::act(IReq::get('content'));
 	   	}
 
-       if(!preg_match("/^1[34578]{1}\d{9}$/",$data['telphone'])){
+       if(!preg_match("/^1[3456789]{1}\d{9}$/",$data['telphone'])){
            $this->message('手机号格式错误');
        }
 	   	if($this->member['score'] < $lipininfo['score'])$this->message('member_scoredown');
