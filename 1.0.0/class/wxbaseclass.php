@@ -103,7 +103,7 @@ class wxbaseclass extends wmrclass
         $loadaction=array('index','noticelist','ajaxnoticelist','notice','shopshow','mkshopshow','mkcatefoods','loadindexcontent','indexshoplistdata','shoplistdata','saveloation','shoplist','specialpagelistdata','loginmode','choice','marketshop','specialpage','marketlistdata','waimai','marketlist','paotui','togethersay','togethersaydata','foodshow','getshopmorecomment','getshopcomment','getdetailinfo','commentwxuser');
         if ($datatype == 'json') {
         } else {
-            if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) { //判断是微信浏览器不
+            //if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) { //判断是微信浏览器不
                 if ($this->member['uid'] <= 0  || !$this->member['wxuser']) {
                     if (Mysite::$app->config['wxLoginType']==0) {
                         //微信自动登录
@@ -120,7 +120,7 @@ class wxbaseclass extends wmrclass
                     }
                 }
 
-            }
+            //}
         }
         $this->doshare();
         $checkmodule =  $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."module  where name='".$controller."' and install=1 limit 0,20");
