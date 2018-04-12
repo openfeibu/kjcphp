@@ -236,9 +236,10 @@ class method extends wxbaseclass
 
         $julidatalistx = $this->Tdata($this->stationid, array(), array('mijuli'=>'asc'), $lat, $lng, $source);
         $data['julishoplist']  = $julidatalistx;
-        $ordercountdatalistx = $this->Tdata($this->stationid, array('index_com'=>1), array('ordercount'=>'desc'), $lat, $lng, $source);
+        $ordercountdatalistx = $this->Tdata($this->stationid, array(), array('ordercount'=>'desc'), $lat, $lng, $source);
         $data['ordercountshoplist']  = $ordercountdatalistx;
-
+        $cxdatalist = $this->Tdata($this->stationid, array('cxtype' => 2), array('maxcx'=>'desc'), $lat, $lng, $source);
+        $data['cxdatalist']  = $cxdatalist;
         $shoptypelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where parent_id <> 0 order by orderid  asc");
         foreach ($shoptypelist as $key => $value) {
             $shoptypelist[$key]['catelink'] = IUrl::creatUrl('/wxsite/shoplist/typelx/wm/typeid/'.$value['id'].'');

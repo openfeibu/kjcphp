@@ -400,6 +400,9 @@ class wmrclass
         } elseif (isset($paixuarr['ordercount'])) {
             $pxvalue = 'ordercount';
             $pxtype = $paixuarr['ordercount'] == 'asc'?SORT_ASC:SORT_DESC;
+        } elseif (isset($paixuarr['maxcx'])) {
+            $pxvalue = 'maxcx';
+            $pxtype = $paixuarr['maxcx'] == 'asc'?SORT_ASC:SORT_DESC;
         }
         // print_r($this->CITY_ID);
         //$cityid = 410100;
@@ -414,8 +417,9 @@ class wmrclass
         $limitcx = 0;//是否限制店铺促销类型
         $cxshopid = array();
         if (isset($limitarr['cxtype'])&& $limitarr['cxtype'] > 0) {
+            $d = (date("w") ==0) ?7:date("w") ;
             $limitcx = 1;
-            $cxshop = $this->mysql->getarr("select shopid from ".Mysite::$app->config['tablepre']."rule where controltype = ".$limitarr['cxtype']." and FIND_IN_SET(".$source.",supportplatform)    and status = 1  and ( limittype < 3  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
+            $cxshop = $this->mysql->getarr("select shopid from ".Mysite::$app->config['tablepre']."rule where controltype = ".$limitarr['cxtype']." and FIND_IN_SET(".$source.",supportplatform)    and status = 1  and ( limittype = 1 or ( limittype = 2 and  find_in_set(".$d.",limittime) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
             if (is_array($cxshop)) {
                 foreach ($cxshop as $k=>$v) {
                     $cxshopid = array_merge($cxshopid, explode(',', $v['shopid']));
@@ -559,8 +563,16 @@ class wmrclass
 
             $cxinfo = array();
             $d = date("w") ==0?7:date("w");
+            $value['maxcx'] = 0;
             if ($open_wxcx == 1) {
-                $cxinfo = $this->mysql->getarr("select id,name,imgurl,controltype from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$value['id'].",shopid) and FIND_IN_SET(".$source.",supportplatform)    and status = 1  and ( limittype = 1 or ( limittype = 2 and FIND_IN_SET(".$d.",limittime) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
+                $cxinfo = $this->mysql->getarr("select id,name,imgurl,controltype ,controlcontent from ".Mysite::$app->config['tablepre']."rule where  FIND_IN_SET(".$value['id'].",shopid) and FIND_IN_SET(".$source.",supportplatform)    and status = 1  and ( limittype = 1 or ( limittype = 2 and FIND_IN_SET(".$d.",limittime) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
+                $maxcx = 0;
+                foreach($cxinfo as $cxk => $cxv)
+                {
+                    $cxv_arr = array_filter(explode(',',$cxv['controlcontent']));
+                    $maxcx = max($cxv_arr) > $maxcx ? max($cxv_arr) : $maxcx;
+                }
+                $value['maxcx'] = $maxcx;
             }//
             $value['cxlist'] =  $cxinfo;
             $value['cxinfo'] =  $cxinfo;
