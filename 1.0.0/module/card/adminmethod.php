@@ -499,6 +499,7 @@ class method extends adminbaseclass
         $stationlist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."stationadmininfo as st ".$where." order by st.id desc");
         foreach($stationlist as $key => $val)
         {
+            $shopps = [];
             $shoplist = $this->mysql->getarr("select id,shopname,shoptype from ".Mysite::$app->config['tablepre']."shop where is_pass = 1  AND stationid =  ".$val['id']);
             foreach ($shoplist as $k=>$v) {
                 if ($v['shoptype']==1) {
