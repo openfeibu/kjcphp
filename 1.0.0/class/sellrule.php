@@ -286,17 +286,8 @@ class sellrule
                                                 }
                                             } elseif ($value['controltype'] == 2) {//减肥用
 
-												foreach($limitarr as $k=>$v){
-													if($this->cartcost >= $v){
-														$limit = $v;
-														$contrl = $controarr[$k];
-														$datas['downcost'][$value['id']] = $contrl;
-														break;
-													}else{
-														$datas['downcost'][$value['id']] = 0;
-													}
-												}
-												$datas['shopbili'][$value['id']] = $value['shopbili'];
+                                                $datas['downcost'][$value['id']] = $contrl;
+        										$datas['shopbili'][$value['id']] = $value['shopbili'];
 
                                             } elseif ($value['controltype'] == 3) {//折扣
                                                 $datas['zhekou'][$value['id']] = $value['controlcontent'];
@@ -320,20 +311,8 @@ class sellrule
 												unset($gzdata[$value['id']]);
 											}
 										} elseif ($value['controltype'] == 2) {//减肥用
-											$limitarr = explode(',',$value['limitcontent']);
-											$controarr = explode(',',$value['controlcontent']);
-											arsort($limitarr);//对数组的值从大到小排序
-											foreach($limitarr as $k=>$v){
-												if($this->cartcost >= $v){
-													$limit = $v;
-													$contrl = $controarr[$k];
-													$datas['downcost'][$value['id']] = $contrl;
-													break;
-												}else{
-													$datas['downcost'][$value['id']] = 0;
-												}
-											}
-										 $datas['shopbili'][$value['id']] = $value['shopbili'];
+                                            $datas['downcost'][$value['id']] = $contrl;
+    										$datas['shopbili'][$value['id']] = $value['shopbili'];
 										} elseif ($value['controltype'] == 3) {//折扣
 											$datas['zhekou'][$value['id']] = $value['controlcontent'];
 											$datas['shopbili'][$value['id']] = $value['shopbili'];
