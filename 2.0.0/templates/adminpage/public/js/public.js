@@ -279,7 +279,7 @@ function outchoice(obj)
 
 	 if(idsm.length ==0)
    {
-  //   // var url ='m6.waimairen.com/index.php?ctrl=adminpage&action=gift&module=giftlog#';
+  //   // var url ='www.kjcpt.com/index.php?ctrl=adminpage&action=gift&module=giftlog#';
 
       alert('查询条件不能为空');
    }else{

@@ -7,8 +7,8 @@ $alipay_config['sign_type']    = '0001';
 $alipay_config['input_charset']= 'utf-8'; 
 $alipay_config['cacert']    = getcwd().'\\cacert.pem';
 $alipay_config['transport']    = 'http';
-$alipay_config['notify_url'] = 'http://m6.waimairen.com/plug/pay/alimobile/notify_url.php';
-$alipay_config['return_url'] = 'http://m6.waimairen.com/plug/pay/alimobile/call_back_url.php';
-$alipay_config['error_url'] = 'http://m6.waimairen.com/plug/pay/alimobile/error.php';
+$alipay_config['notify_url'] = 'http://www.kjcpt.com/plug/pay/alimobile/notify_url.php';
+$alipay_config['return_url'] = 'http://www.kjcpt.com/plug/pay/alimobile/call_back_url.php';
+$alipay_config['error_url'] = 'http://www.kjcpt.com/plug/pay/alimobile/error.php';
 $alipay_config['seller_email'] = '';
 ?>

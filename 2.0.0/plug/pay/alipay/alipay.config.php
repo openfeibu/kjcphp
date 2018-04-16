@@ -5,7 +5,7 @@
  $alipay_config['input_charset']= strtolower('utf-8');
  $alipay_config['transport'] = 'http';
  $alipay_config['cacert']    = getcwd().'\\cacert.pem';
- $notify_url= 'http://m6.waimairen.com/plug/pay/alipay/notify_url.php';
- $return_url= 'http://m6.waimairen.com/plug/pay/alipay/return_url.php';
+ $notify_url= 'http://www.kjcpt.com/plug/pay/alipay/notify_url.php';
+ $return_url= 'http://www.kjcpt.com/plug/pay/alipay/return_url.php';
  $seller_email= '';
 ?>
