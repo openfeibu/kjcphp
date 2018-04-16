@@ -6,7 +6,7 @@
  */
 class sellrule
 {
-    /*2017年9月份升级后  优惠活动涉及到的xiaozu_cxruleset、xiaozu_rule表说明如下：
+    /* 优惠活动涉及到的xiaozu_cxruleset、xiaozu_rule表说明如下：
 	1.xiaozu_cxruleset表是对五种促销类型中的支持订单、支持平台、和促销图标做统一化设置
 	  字段说明：
       id：类型id  1满赠活动 2满减活动 3折扣活动 4免配送费 5首单立减

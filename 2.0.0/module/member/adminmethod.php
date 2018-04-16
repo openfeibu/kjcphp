@@ -279,7 +279,6 @@ class method extends adminbaseclass
             $this->mysql->delete(Mysite::$app->config['tablepre'].'shopsearch', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'areatoadd', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'areashop', "shopid = '".$testinfo['id']."'");
-            /*2017-06-27  start*/
             $this->mysql->delete(Mysite::$app->config['tablepre'].'shopjs', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'shoptx', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'shopreal', "shopid = '".$testinfo['id']."'");
@@ -295,7 +294,6 @@ class method extends adminbaseclass
             $this->mysql->delete(Mysite::$app->config['tablepre'].'orderps', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'shophui', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'shophuiorder', "shopid = '".$testinfo['id']."'");
-            /*2017-06-27   end*/
             $this->mysql->delete(Mysite::$app->config['tablepre'].'goods', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'goodstype', "shopid = '".$testinfo['id']."'");
             $this->mysql->delete(Mysite::$app->config['tablepre'].'order', "shopid = '".$testinfo['id']."'");
