@@ -1,0 +1,64 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/shop.css">
+<body ontouchstart >
+    <div class="main">
+      <div class="shoptx">
+        <div class="shoptxInfo">
+          <p>店铺名称：<{$member['shopinfo']['shopname']}></p>
+          <p>账户类型：<{if $member['shopmember']['txtype'] == 'ali'}>支付宝<{else}>银行卡<{/if}></p>
+          <p>账户名称：<{$member['shopmember']['txname']}></p>
+          <p>提现账户：<{$member['shopmember']['backacount']}></p>
+          <p>余额：<span><{$member['shopmember']['shopcost']}></span>元(低于100元不可提现)</p>
+        </div>
+
+      <div class="shoptx_form">
+        <form action="#" method="post">
+          <input type="text" name="cost" id="cost" placeholder="输入提现金额" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
+          <input type="submit" name="" id="txbtn" value="申请提现" <{if $member['shopmember']['shopcost'] < 100}> disabled<{/if}>>
+        </form>
+      </div>
+      <div class="shoptx_des">
+        注：提现成功后，将在3个工作日内打款至对应账户，如有任何疑问，请及时联系我们
+      </div>
+      </div>
+    </div>
+
+</body>
+<script>
+$("#txbtn").click(function(){
+    $F.loading();
+    var cost = $("#cost").val();
+    var url = '<{ofunc type=url link="/wxsite/shoptxadd/datatype/json"}>';
+    $.ajax({
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        dataType: "json",
+        async:false,
+        data:{'cost':cost},
+        success:function(content) {
+            $F.closeLoading();
+            if(content.error ==  false){
+                $.toast('提交成功!','text');
+                window.location.href = '<{ofunc type=url link="/wxsite/shoptx"}>';
+            }else{
+                if(content.error == true)
+         		{
+                    $.toast(content.msg,'text');
+         		}else{
+                    $.toast(content,'text');
+         		}
+            }
+            return false;
+        },
+        error:function(){
+            $.toast('提交数据失败','text');
+            $F.closeLoading();
+            return false;
+        }
+    });
+    return false;
+})
+</script>
+<{/block}>
+<{block name=footer}><{/block}>

@@ -1,0 +1,22 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}>联系我们 <{$sitename}><{/block}>
+<{block name=blockcontent}>
+<style>
+body{    background: #ff3156;}
+</style>
+<div class="contact ">
+  <div class="contact_box">
+    <div class="code"><img src="<{$wxewm}>" alt="<{$weixin}>"></div>
+    <div class="code_text">
+      <i class="fb-inlineBlock"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/ic_wechat.png" alt=""></i>
+      <span class="fb-inlineBlock"><{$weixin}></span>
+    </div>
+    <div class="tell_text">
+      <i class="fb-inlineBlock"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/ic_phone2.png" alt=""></i>
+      <span class="fb-inlineBlock"><{$litel}></span>
+    </div>
+    <a class="tell_button" href="tel:<{$litel}>"></a>
+  </div>
+</div>
+  <{/block}>
+  <{block name=footer}><{/block}>

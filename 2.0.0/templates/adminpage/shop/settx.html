@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<meta content="all" name="robots">
+<meta name="description" content="">
+<meta content="" name="keywords">
+<title>提现账号</title>
+<link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/css/admin.css">
+
+ <script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/jquery.js" type="text/javascript" language="javascript"></script>
+ <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/artDialog.js?skin=blue"></script>
+</head>
+<body style="background:none;height:450px;overflow:scroll;width:700px;">
+<form method="post" id="subyj" action="<{ofunc type=url link="/adminpage/shop/module/savetx"}>" style="text-align:center;">
+    <table>
+        <tbody>
+            <tr>
+                <td height="50px">提现账号类型:</td>
+                <td>
+                    <input type="radio" name="txtype" value="ali" <{if $member['txtype'] == 'ali'}>checked<{/if}> >支付宝
+                    <input type="radio" name="txtype" value="bank" <{if $member['txtype'] == 'bank'}>checked<{/if}> >银行卡
+                </td>
+            </tr>
+            <tr>
+                <td height="50px">提现账号姓名:</td>
+                <td> <input type="text" name="txname" value="<{$member['txname']}>" style="width:100px;"></td>
+            </tr>
+            <tr>
+                <td height="50px">提现账号:</td>
+                <td> <input type="text" name="backacount" value="<{$member['backacount']}>" style="width:200px;"></td>
+            </tr>
+        </tbody>
+    </table>
+     <input type="hidden" value="<{$member['uid']}>" name="uid">
+     <input type="submit" value="确认提交" class="button" id="buttonsubyj">
+</form>
+</body>
+</html>

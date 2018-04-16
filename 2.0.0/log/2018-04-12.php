@@ -1,0 +1,13 @@
+时间:2018-04-12 12:21:38,/index.php?ctrl=adminpage描述:访问链接：
+时间:2018-04-12 12:21:40,/index.php?ctrl=member&action=adminlogin描述:访问链接：
+时间:2018-04-12 12:21:43,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-04-12 12:21:47,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-04-12 12:21:49,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-04-12 12:21:52,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-04-12 12:21:56,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-04-12 12:21:56,/index.php?ctrl=adminpage&action=system&module=index描述:访问链接：
+时间:2018-04-12 12:22:03,/index.php?ctrl=adminpage&action=card&module=grantset描述:访问链接：
+时间:2018-04-12 12:22:06,/index.php?ctrl=adminpage&action=card&module=cxruleset描述:访问链接：
+时间:2018-04-12 12:22:10,/index.php?ctrl=adminpage&action=card&module=cxrulelist描述:访问链接：
+时间:2018-04-12 12:22:13,/index.php?ctrl=adminpage&action=card&module=addcxrule描述:访问链接：
+时间:2018-04-12 12:22:51,/index.php?ctrl=adminpage&action=card&module=addcxrule描述:访问链接：

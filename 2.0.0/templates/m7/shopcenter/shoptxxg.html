@@ -1,0 +1,71 @@
+<{extends file="<{$tempdir}>/public/shopcenter.html"}>
+<{block name=extendjs}>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js" type="text/javascript" language="javascript"></script>
+  <script>
+   var mynomenu='basetxxg';
+   </script>
+<{/block}>
+<{block name=bodylist}>
+	<div class="conWaiSet">
+		<div class="shoptx_info">
+			<div class="shoptx_acc">
+				<form id="shoptxxg">
+					<div>
+                        <p class="fb-inlineBlock">账户类型：</p>
+                        <input class="fb-inlineBlock" type="radio" name="txtype" id="bank" value="bank" <{if $member['txtype'] = 'bank'}>checked<{/if}> />
+                        <label class="fb-inlineBlock" for="bank">银行卡</label>
+                        <input class="fb-inlineBlock" type="radio" name="txtype" id="ali" value="ali" <{if $member['txtype'] = 'ali'}>checked<{/if}> />
+                        <label class="fb-inlineBlock" for="ali">支付宝</label>
+                    </div>
+					<div><p class="fb-inlineBlock">账户名称：</p><input  class="fb-inlineBlock" type="text" name="txname"  placeholder="输入账户名称" value="<{$member['txname']}>"/><span class="fb-inlineBlock">银行卡：林XX（开户行）；支付宝：林XX</span></div>
+                    <div><p class="fb-inlineBlock">提现账户：</p><input  class="fb-inlineBlock" type="text" name="backacount"  placeholder="输入提现账户"  value="<{$member['backacount']}>"/></div>
+                    <div><p class="fb-inlineBlock">登录密码：</p><input  class="fb-inlineBlock" type="password" name="password"  placeholder="输入登录密码" /></div>
+                    <input type="submit" name="" value="修改" id="updatetxbtn" />
+
+				</form>
+                <div class="shoptx_des">
+                    注：请不要频繁修改提现信息，以免造成损失；
+                </div>
+			</div>
+
+
+
+		</div>
+
+
+	</div>
+<script>
+$("#updatetxbtn").click(function(){
+    var txtype = $("input[name='txtype']:checked").val();
+    var password = $("input[name='password']").val();
+    var txname = $("input[name='txname']").val();
+    var backacount = $("input[name='backacount']").val();
+    var url = '<{ofunc type=url link="/shopcenter/updatetx/datatype/json"}>';
+    $.ajax({         //script定义
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        dataType: "json",
+        async:false,
+        data:{'txtype':txtype,'password':password,'txname':txname,'backacount':backacount},
+        success:function(content) {
+            if(content.error ==  false){
+                artsucces(content.msg);
+            }else{
+                if(content.error == true)
+         		{
+         			diaerror(content.msg);
+         		}else{
+         			diaerror(content);
+         		}
+            }
+            return false;
+        },
+        error:function(){
+            diaerror('提交数据失败');
+            return false;
+            //$.toast(content.msg,'text');
+        }
+    });
+    return false;
+})
+</script>
+<{/block}>

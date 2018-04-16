@@ -1,0 +1,62 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+  <div class="coupon">
+    <{if !empty($juaninfo)}>
+    <{foreach from=$juaninfo item=items}>
+    <div class="coupon_item">
+      <div class="img fb-inlineBlock"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/ic_coupon_2.png" alt=""></div>
+      <div class="text fb-inlineBlock">
+        <p>满<{$items['limitcost']}>元减<{$items['cost']}>元</p>
+        <span>有效期至：<{date('Y-m-d',$items['endtime'])}></span>
+      </div>
+      <{if $items['is_user_juan'] == 1}>
+      <div class="coupon_button coupon_button_ed fb-inlineBlock" >
+        <a href="<{$siteurl}>/index.php?ctrl=wxsite&action=shoplist&typelx=wm&typeid=401">使用</a>
+      </div>
+      <{else}>
+      <div class="coupon_button coupon_button_get fb-inlineBlock" id="<{$items['id']}>">
+        领取
+      </div>
+      <{/if}>
+    </div>
+    <{/foreach}>
+    <{else}>
+    <div class="noPro" style="display:block;">暂无可领取代金券</div>
+    <{/if}>
+  </div>
+<{/block}>
+
+<{block name=end_script}>
+<script>
+$(function(){
+    $('.coupon_button_get').click(function(){
+        var that = $(this);
+        $F.loading();
+        url = siteurl+'/index.php?ctrl=wxsite&action=getCouponSubmit&datatype=json&random=@random@';
+        url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+        id = $(this).attr('id');
+        $.ajax({         //script定义
+            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            dataType: "json",
+            async:true,
+            data:{'id':id},
+            success:function(content) {
+                if(content.error ==  false){
+                    $.toast('添加成功','text');
+                    that.addClass("coupon_button_ed").removeClass("coupon_button_get").html('<a href="<{$siteurl}>/index.php?ctrl=wxsite&action=shoplist&typelx=wm&typeid=401">使用</a>')
+                    // window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=getCoupon' ;
+                }else{
+                    $.toast(content.msg,'text');
+                }
+                $F.closeLoading();
+            },
+            error:function(){
+                $F.closeLoading();
+            }
+        });
+    });
+});
+</script>
+<{/block}>
+<{block name=footer}><{/block}>

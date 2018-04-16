@@ -1,0 +1,163 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/shop.css">
+<body ontouchstart >
+
+    <div class="orderDetail shopOrder">
+      <div class="orderDetail_top">
+        <div class="orderDetail_shopName fb-position-relative">
+          <{$order['shopname']}>
+          <a href="tel:<{$order['buyerphone']}>">联系顾客</a>
+        </div>
+        <div class="orderDetail_pro">
+            <{foreach from=$orderdet item=items}>
+            <div class="orderDetail_pro_item">
+
+              <div class="orderDetail_pro_name fb-inlineBlock">
+                <p><{$items['goodsname']}></p>
+                <span><{$items['goodsattr']}></span>
+              </div>
+              <div class="orderDetail_pro_num fb-inlineBlock">
+                x<{$items['goodscount']}>
+              </div>
+              <div class="orderDetail_pro_money fb-inlineBlock">
+                ￥<{$items['goodscost']}>
+              </div>
+            </div>
+            <{/foreach}>
+        </div>
+        <div class="orderDetail_item">
+          <p>配送费</p>
+          <span>￥<{$order['shopps']}></span>
+        </div>
+        <{if $order['bagcost'] > 0 }>
+        <div class="orderDetail_item">
+          <p>打包费</p>
+          <span>￥<{$order['bagcost']}></span>
+        </div>
+        <{/if}>
+        <{if $order['cxcost'] > 0 }>
+        <div class="orderDetail_item fsMain">
+          <p>商家优惠</p>
+          <span>-￥<{$order['cxcost']}></span>
+        </div>
+        <{/if}>
+        <div class="orderDetail_item fsMain">
+          <p>代金券</p>
+          <span>-￥<{$order['yhjcost']}></span>
+        </div>
+        <div class="orderDetail_money">
+          <p>实付<span>￥<{$order['allcost']}></span></p>
+        </div>
+      </div>
+      <{if !empty($order['content'])}>
+      <div class="orderDetail_mask">
+        <{$order['content']}>
+      </div>
+      <{/if}>
+      <div class="orderDetail_address">
+        <div class="orderDetail_address_title">收货地址</div>
+        <div class="orderDetail_address_con">
+          <p>顾客名称：<{$order['buyername']}></p>
+          <p>联系电话：<{$order['buyerphone']}></p>
+          <p>送餐地址：<{$order['buyeraddress']}></p>
+        </div>
+      </div>
+      <div class="orderDetail_info">
+        <div class="orderDetail_info_title">
+          订单信息
+        </div>
+        <div class="orderDetail_info_item fb-clearfix fsMain">
+          <p>订单状态</p>
+          <span><{$order['order_status']}></span>
+        </div>
+        <div class="orderDetail_info_item fb-clearfix">
+          <p>订单号码</p>
+          <span><{$order['dno']}></span>
+        </div>
+        <div class="orderDetail_info_item fb-clearfix">
+          <p>下单时间</p>
+          <span><{$order['addtime']}></span>
+        </div>
+        <div class="orderDetail_info_item fb-clearfix">
+          <p>支付方式</p>
+          <span>微信支付</span>
+        </div>
+      </div>
+      <{if $order['is_reback'] == 0}>
+        <{if $order['status'] == 1 && $order['paystatus'] == 1}>
+          <div class="orderDetail_button" >
+            <a href="javascript:shop_send_order('<{$order['id']}>');">确认订单</a>
+          </div>
+          <div class="orderDetail_button closeOrder">
+            <a href="javascript:shop_cancel_order('<{$order['id']}>');">作废订单</a>
+          </div>
+        <{/if}>
+      <{/if}>
+    </div>
+</body>
+<script>
+function shop_cancel_order(id)
+{
+    $.confirm({
+        text: '是否作废订单',
+        onOK: function() {
+            $F.loading();
+            //点击确认
+            var info = {'orderid': id,'typeid':0,'controlname':'closeorder'};
+            var url =  siteurl+'/index.php?ctrl=wxsite&action=shopctlord&datatype=json&random=@random@';
+            $.ajax({
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                data:info,
+                success:function(content) {
+                    $F.closeLoading();
+                    if(content.error ==  false){
+                        $.toast('取消成功!','text');
+                        window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=shopordershow&orderid='+id ;
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+                    $F.closeLoading();
+                }
+            });
+        },
+        onCancel: function() {}
+    });
+}
+function shop_send_order(id)
+{
+    $.confirm({
+        text: '是否确认订单',
+        onOK: function() {
+            $F.loading();
+            //点击确认
+            var info = {'orderid': id,'typeid':0,'controlname':'sendorder'};
+            var url =  siteurl+'/index.php?ctrl=wxsite&action=shopctlord&datatype=json&random=@random@';
+            $.ajax({
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                data:info,
+                success:function(content) {
+                    $F.closeLoading();
+                    if(content.error ==  false){
+                        $.toast('发货成功!','text');
+                        window.location.href=  siteurl+'/index.php?ctrl=wxsite&action=shopordershow&orderid='+id ;
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+                    $F.closeLoading();
+                }
+            });
+        },
+        onCancel: function() {}
+    });
+}
+</script>
+<{/block}>
+<{block name=footer}><{/block}>

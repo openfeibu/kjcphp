@@ -1,0 +1,66 @@
+<{extends file="<{$tempdir}>/public/shopcenter.html"}>
+<{block name=extendjs}>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js" type="text/javascript" language="javascript"></script>
+  <script>
+   var mynomenu='basetx';
+   </script>
+<{/block}>
+<{block name=bodylist}>
+	<div class="conWaiSet">
+		<div class="shoptx_info">
+			<div class="shoptx_acc">
+				<div class="shoptx_info_item">
+					<p>账户类型：<{if $member['txtype'] = 'ali'}>支付宝<{elseif $member['txtype'] = 'bank' }>银行<{else}>未知<{/if}></p>
+					<p>账户名称：<{$member['txname']}></p>
+					<p>提现账户：<{$member['backacount']}></p>
+				</div>
+			</div>
+			<div class="shoptx_money">
+				<p>可提现额度：<{$member['shopcost']}>元(低于100元不可提现)</p>
+			</div>
+			<div class="shoptx_form">
+				<form action="#" method="post">
+					<input type="text" name="cost" id="cost" placeholder="输入提现金额" <{if $member['shopcost'] <100}> disabled<{/if}>/>
+					<input type="submit" name="" value="申请提现" <{if $member['shopcost'] <100}> disabled <{else}>id="txbtn"<{/if}> />
+				</form>
+			</div>
+			<div class="shoptx_des">
+				注：提现成功后，将在3个工作日内打款至对应账户，如有任何疑问，请及时联系我们
+			</div>
+		</div>
+
+
+	</div>
+<script>
+$("#txbtn").click(function(){
+    var cost = $("#cost").val();
+    var url = '<{ofunc type=url link="/shopcenter/shoptxadd/datatype/json"}>';
+    $.ajax({         //script定义
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        dataType: "json",
+        async:false,
+        data:{'cost':cost},
+        success:function(content) {
+            if(content.error ==  false){
+                artsucces('提交成功');
+                window.location.href = '<{ofunc type=url link="/shopcenter/txlog"}>';
+            }else{
+                if(content.error == true)
+         		{
+         			diaerror(content.msg);
+         		}else{
+         			diaerror(content);
+         		}
+            }
+            return false;
+        },
+        error:function(){
+            diaerror('提交数据失败');
+            return false;
+            //$.toast(content.msg,'text');
+        }
+    });
+    return false;
+})
+</script>
+<{/block}>

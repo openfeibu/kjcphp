@@ -1,0 +1,74 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+
+<{block name=blockcontent}>
+ <{load_data assign="info" table="address" type="one" where="id='<{$id}>' and userid = '<{$member['uid']}>'" fileds="*" }>
+<div class="shop_map">
+  <div class="shopMap">
+      <form>
+      <input type="hidden" name="add_addressid" value="<{$addressid}>"  >
+      <div class="shopMap_form">
+        <div class="input_b">
+          <label for="">姓名：</label>
+          <input type="text" placeholder="请填写收货人" name="contactname" value="<{$info['contactname']}>" id="contactname">
+        </div>
+        <div class="input_b">
+          <label for="">电话：</label>
+          <input type="text" placeholder="请填写手机号码" name="phone" value="<{$info['phone']}>" id="phone">
+        </div>
+        <div class="input_b fb-clearfix">
+          <label for="">地址：</label>
+          <!-- <input type="text" placeholder="请填写收货地址"  name="address"> -->
+          <textarea type="text" placeholder="请填写收货地址" name="detailadr" id="detailadr"><{$info['detailadr']}></textarea>
+        </div>
+      </div>
+      <div class="input_submit">
+        <button>确定</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+shopid = "<{$shopid}>";
+  $(".shopMap .orderDetail_address").on("click",function(){
+    var i = $(this).index(".shopMap .orderDetail_address");
+    $(".shopMap .orderDetail_address").eq(i).parents("li").addClass("active").siblings("li").removeClass("active");
+  })
+  $(".map_delete").on("click",function(){
+    var that = $(this);
+    $.confirm({
+      text: '是否删除？',
+      onOK: function () {
+        //点击确认
+        that.parents("li").fadeOut(200);
+      },
+      onCancel: function () {
+      }
+    });
+  })
+  $("form").submit(function(e){
+    $F.loading();
+    var detailadr = $("#detailadr").val();
+    var info = {'contactname':$('#contactname').val(),'phone':$('#phone').val(),'detailadr':detailadr,'addressid':$('input[name="add_addressid"]').val()};
+    var url = '<{ofunc type=url link="/area/saveaddress/random/@random@/datatype/json"}>';
+    var backdata = ajaxback(url,info);
+    if(backdata.flag == false){
+    	// window.location.href = '<{ofunc type=url link="/wxsite/address"}>';
+        if(shopid)
+        {
+            window.location.href = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+shopid;
+        }else{
+            $F.closeLoading();
+            $.toast("修改成功",'text');
+        }
+        return false;
+    }else{
+    	$F.closeLoading();
+    	$.toast(backdata.content,'text');
+        return false;
+    }
+  });
+
+</script>
+<{/block}>
+<{block name="footer"}><{/block}>

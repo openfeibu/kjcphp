@@ -1,0 +1,156 @@
+
+ <{extends file="<{$tempdir}>/public/admin.html"}>
+  <{block name=extendjs}>
+ <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
+  <script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/chart/highcharts.js"></script>
+<script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/chart/modules/exporting.js"></script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/js/datepicker/WdatePicker.js" type="text/javascript" language="javascript"></script>
+<script type="text/javascript">
+
+
+function gotolink(){
+    var BeginDate = $("#BeginDate").val();
+    var EndDate = $("#EndDate").val();
+    var stationid = $("select[name='stationid']").find("option:selected").val();
+    var linkis = siteurl+'/index.php?ctrl=adminpage&action=analysis&module=shopcost&EndDate=@EndDate@&BeginDate=@BeginDate@&stationid=@stationid@';
+    linkis = linkis.replace('@BeginDate@', BeginDate);
+    linkis = linkis.replace('@EndDate@', EndDate);
+    window.location.href= linkis.replace('@stationid@', stationid);
+ }
+
+
+
+</script>
+
+ <{/block}>
+ <{block name=controlname}>每天成功交易额统计<{/block}>
+ <{block name=bodylist}>
+   <div style="width:auto;overflow-x:hidden;overflow-y:auto">
+      	 <div class="tags">
+          <div id="tagscontent">
+            <div style="text-align:center;height:30px;line-height:30px;widht:100%;">
+                <label>分校：</label>
+                <select name="stationid" style="width:220px;" onchange="gotolink();">
+                    <option value="0">选择分校</option>
+                    <{foreach from=$stationlist key=key  item=items}>
+                    <option value="<{$items['id']}>" <{if $stationid == $items['id']}>selected<{/if}>><{$items['stationname']}></option>
+                    <{/foreach}>
+                </select>
+                <input class="Wdate datefmt" type="text" name="BeginDate" id="BeginDate" value="<{$BeginDate}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink()" />
+             -
+                <input class="Wdate datefmt" type="text" name="EndDate" id="EndDate" value="<{$EndDate}>"  onFocus="WdatePicker({isShowClear:false,readOnly:true});" onchange="gotolink()" />
+            </div>
+            <div id="con_one_1">
+
+              <div class="table_td" style="margin-top:10px;">
+
+             <div  id="container" style="min-width: 400px; height: 400px; margin: 0 auto">
+
+              </div>
+
+
+               <form method="post" action="" onsubmit="return remind();">
+                  <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+                    <thead>
+                      <tr>
+                        <th align="center">天</th>
+                        <th align="center">成功交易额（元）</th>
+
+                      </tr>
+                    </thead>
+                     <tbody>
+
+
+                     	<{foreach from=$consumes key=key item=item}>
+                           <tr>
+                            <td align="center"><{str_replace("'",'',$key)}></td>
+                            <td align="center"><{$item}></td>
+                          </tr>
+                       <{/foreach}>
+                         <tr>
+                            <td align="center">总计</td>
+                            <td align="center">
+                                <{$allcost}>
+                            </td>
+                          </tr>
+
+                    </tbody>
+                  </table>
+               </form>
+
+                <div class="page_newc">
+
+                 </div>
+
+                <div class="blank20"></div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+  </div>
+
+</div>
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '交易额统计',
+                x: 0 //center
+            },
+            subtitle: {
+                text: '<{$siteurl}>',
+                x:0
+            },
+            xAxis: {
+                categories: [<{$x}>]
+            },
+            yAxis: {
+                title: {
+                    text: '成功交易额(元)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +'号: '+ this.y +'(元)';
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                name: '天交易额',
+                data: [<{$y}>]
+            }]
+        });
+    });
+
+});
+		</script>
+
+<!--newmain 结束-->
+<{/block}>

@@ -1,0 +1,33 @@
+<{if !empty($orderlist) }>
+ <{foreach from=$orderlist item=items }>
+ <div class="orderList_item" id="orderList_item_<{$items['id']}>">
+   <a href="<{ofunc type=url link="/wxsite/ordershow/orderid/<{$items['id']}>"}>">
+     <div class="img"><img src="<{if $items['shoplogo']}><{$items['shoplogo']}><{else}><{$shoplogo}><{/if}>" alt=""></div>
+     <div class="text">
+       <div class="text_top fb-clearfix">
+         <div class="name fb-fl"><{$items['shopname']}></div>
+         <div class="state fb-fr"><{$items['order_status']}></div>
+       </div>
+       <div class="date"><{$items['addtime']|strtotime|friendlyDate}></div>
+       <div class="order_con fb-clearfix">
+         <div class="order_con_l fb-fl">共<{$items['goods_count']}>件商品</div>
+         <div class="order_con_r fb-fr">￥<{$items['allcost']}></div>
+       </div>
+     </div>
+   </a>
+   <div class="orderList_bottom">
+       <{if $items['status'] == 0 && $items['paystatus'] == 0 && $items['is_reback'] == 0 }>
+           <a href="javascript:;" class="order_button order_button_pay order_button_pay2 fb-inlineBlock" orderid='<{$items['id']}>' >去付款</a>
+       <{/if}>
+       <{if $items['status'] >= 0 && $items['status'] < 2 && $items['is_reback'] == 0}>
+           <{if $items['paystatus'] == 1 }>
+               <a href="javascript:void(0);" class="order_button order_button_pay fb-inlineBlock" onclick="javascript:cancel_order('<{$items['id']}>');">取消订单</a>
+           <{/if}>
+       <{/if}>
+       <{if $items['status'] == 2 && $items['is_reback'] == 0 }>
+            <a href="javascript:void(0);" class="order_button order_button_pay fb-inlineBlock" onclick="javascript:acceptorder('<{$items['id']}>');">确认收货</a>
+       <{/if}>
+   </div>
+ </div>
+<{/foreach}>
+ <{/if}>

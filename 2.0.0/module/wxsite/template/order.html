@@ -1,0 +1,270 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=extendjs}>
+ <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/js/template.min.js"></script>
+ <{/block}>
+<{block name=blockcontent}>
+<div class="shopList"  >
+  <div class="weui-tab" id='page-infinite-navbar'>
+    <div class="weui-navbar">
+      <a class="weui-navbar__item weui-bar__item--on" order-status='1'>
+        待付款
+      </a>
+      <a class="weui-navbar__item" order-status='3'>
+        送货中
+      </a>
+      <a class="weui-navbar__item" order-status='4'>
+        已完成
+      </a>
+      <a class="weui-navbar__item" order-status='5'>
+        退货售后
+      </a>
+    </div>
+    <div class="weui-tab__bd">
+      <div id="sltab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+        <div class="content-padded">
+          <div class="order_group">
+            <div class="orderList" id="orderlist">
+
+
+            </div>
+            <div class="weui-loadmore loadmoreing">
+              <i class="weui-loading"></i>
+              <span class="weui-loadmore__tips">正在加载中</span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line loadmored">
+              <span class="weui-loadmore__tips">已经到底了</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var page=0;
+var order_status = '1';
+$(".weui-navbar .weui-navbar__item").on("click",function(){
+    var i =$(this).index(".weui-navbar .weui-navbar__item");
+    $(this).addClass("weui-bar__item--on").siblings().removeClass("weui-bar__item--on");
+    order_status = $(this).attr('order-status');
+    can_show = true;
+    page = 1;
+    $F.loading();
+    freshpage();
+})
+function htmlback(url,info)
+{
+	var backmessage = {'flag':true,'content':''};
+    $.ajax({
+        type: 'POST',
+        async:true,
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        data: info,
+        dataType: 'html',
+        success: function(content) {
+            backmessage['flag'] = false;
+            backmessage['content'] = content;
+        },
+        error: function(content) {
+            backmessage['content'] = '数据获取失败';
+        }
+    });
+    return backmessage;
+}
+function freshpage(){//刷新函数
+    page = 1;
+    pageend = false;
+    $('.order_group').get(0).loading = false;
+    console.log('order_status:'+order_status);
+    var url = siteurl+'/index.php?ctrl=wxsite&action=userorder';
+    $('#orderlist').html('');
+    $.ajax({
+        type: 'POST',
+        async:true,
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        data: {'page':page,'order_status':order_status},
+        dataType: 'html',
+        success: function(content) {
+            if(removeBr(content).length == 0){
+              $('#orderlist').html('<div id="noPro">  </div>');
+            }else{
+              $('#orderlist').html(content);
+            }
+            // $('#orderlist').append(content);
+            if($.trim(content) != '' && $("#orderlist .orderList_item").length >= 5  ){
+                $(".loadmoreing").show();
+                $(".loadmored").hide();
+            }else{
+                $(".loadmored").show();
+                $(".loadmoreing").hide();
+            }
+            $F.closeLoading();
+        },
+        error: function(content) {
+            $F.closeLoading();
+        }
+    });
+
+}
+function loadmore(_this){//加载函数
+    page++;
+    pageend = false;
+     _this.loading = true;
+    console.log('order_status:'+order_status);
+    var url = siteurl+'/index.php?ctrl=wxsite&action=userorder';
+    $.ajax({
+        type: 'POST',
+        async:false,
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        data: {'page':page,'order_status':order_status},
+        dataType: 'html',
+        success: function(content) {
+            var getmoreContent =  $.trim(content);
+            if( getmoreContent == ''  ){
+                pageend = true;
+            //    $(_this).destroyInfinite();
+                $(_this).find(".loadmoreing").hide();
+                $(_this).find(".loadmored").show();
+            }else{
+                _this.loading = false;
+                $('#orderlist').append(content);
+            }
+        },
+        error: function(content) {
+            pageend = true;
+            //$(_this).destroyInfinite();
+            $(_this).find(".loadmoreing").hide();
+            $(_this).find(".loadmored").show()
+        }
+    });
+    $F.closeLoading();
+}
+$F.loading();
+freshpage();
+//  滚动
+    $('.order_group').infinite(50).on("infinite", function() {
+        var _this = this;
+        if(_this.loading) return;
+        loadmore(_this);
+    });
+$("body").on('click','.order_button_pay2',function(){
+    orderid = $(this).attr('orderid');
+    url = siteurl+'/index.php?ctrl=wxsite&action=pay&random=@random@';
+    $.ajax({         //script定义
+        url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+        dataType: "json",
+        async:true,
+        data:{orderid:orderid},
+        success:function(content) {
+            console.log(content);
+            if(content.error ==  false){
+                wxdata = eval('('+ content.wxdata +')');
+                orderid = content.orderid;
+                callpay();
+            }else{
+                $.toast(content.msg,'text');
+                return false;
+            }
+        },
+        error:function(){
+            //$.toast(content.msg,'text');
+        }
+    });
+});
+function jsApiCall()
+{
+    WeixinJSBridge.invoke(
+        'getBrandWCPayRequest',
+        wxdata,
+        function(res){
+            WeixinJSBridge.log(res.err_msg);
+            var dostring = res.err_msg;
+            var temparr = dostring.split(':');
+            if(temparr.length == 2){
+                if(temparr[1] == 'ok'){
+                    window.location.href= siteurl+'/index.php?ctrl=wxsite&action=ordershow&orderid='+id ;
+                }
+            }else{
+                $.toast(res.err_msg,'text');
+            }
+        }
+    );
+
+}
+function callpay()
+{
+    if (typeof WeixinJSBridge == "undefined"){
+        if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+        }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+        }
+    }else{
+        jsApiCall();
+    }
+}
+function cancel_order(id)
+{
+    $.confirm({
+        text: '是否取消订单',
+        onOK: function() {
+            $F.loading();
+            //点击确认
+            var info = {'orderid': id,'typeid':0};
+            var url =  siteurl+'/index.php?ctrl=wxsite&action=savedrawbacklog&datatype=json&random=@random@';
+            $.ajax({
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                data:info,
+                success:function(content) {
+                    $F.closeLoading();
+                    if(content.error ==  false){
+                        $.toast('取消成功!','text');
+                        $("#orderList_item_"+id).remove();
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+                    $F.closeLoading();
+                }
+            });
+        },
+        onCancel: function() {}
+    });
+}
+function acceptorder(id){
+    $.confirm({
+        text: '确认收货？',
+        onOK: function() {
+            $F.loading();
+            //点击确认
+            var info = {'orderid': id,'typeid':0};
+            var url =  siteurl+'/index.php?ctrl=order&action=acceptorder&orderid='+id+'&datatype=json&random=@random@';
+            $.ajax({
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                data:info,
+                success:function(content) {
+                    $F.closeLoading();
+                    if(content.error ==  false){
+                        $.toast('确认收货成功!','text');
+                        $("#orderList_item_"+id).remove();
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+                    $F.closeLoading();
+                }
+            });
+        },
+        onCancel: function() {}
+    });
+
+}
+</script>
+
+<{/block}>

@@ -1,0 +1,203 @@
+.cart_pro_all li{float:left;}
+.cart_pro_all .ordenabotL{
+    background: url("../images/ic_sub_sel.png") no-repeat center;
+    background-size: 0.45rem 0.45rem;
+}
+.cart_pro_all .ordenabotR{
+    background: url("../images/ic_add.png") no-repeat center;
+    background-size: 0.5rem 0.5rem;
+}
+.cart_pro_all .ordisordR li i {
+    display: block;
+    float: left;
+    width: 0.8rem;
+    height: 0.8rem;
+    background-repeat: no-repeat;
+}
+.cart_pro_all .ordisordR li input {
+    display: inline-block;
+    vertical-align: top;
+    width: 0.5rem;
+    height: 0.8rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.28rem;
+    line-height: 0.8rem;
+    background: #f5f5f5;
+}
+.cart_pro_all {
+    float: right;
+    margin-top: 0.1rem;
+}
+
+.shop_group #noPro {
+  padding-top: 4rem;
+  font-size: 0.26rem;
+  color: #999;
+  text-align: center;
+  line-height: 0.41rem;
+  background: url("../images/noPro.png") no-repeat center 1.8rem;
+  background-size: 2rem 2rem;
+}
+.order_group #noPro {
+  padding-top: 4rem;
+  font-size: 0.26rem;
+  color: #999;
+  text-align: center;
+  line-height: 0.41rem;
+  background: url("../images/noPro.png") no-repeat center 1.8rem;
+  background-size: 2rem 2rem;
+}
+.shop_map ul li .map_update {
+  width: 0.7rem ;
+  height: 100%;
+  position: absolute;
+  right: 0.7rem;
+  top: 0;
+  background: url("../images/ic_address_update.png") no-repeat right center / 0.6rem auto;
+  z-index: 3
+}
+.shop_map ul li .map_update a{display: block;width: 100%;height: 100%;}
+
+.main_header{padding-bottom: 0 !important}
+
+.shop-detail .shop-detail-con .shop-pro-all dl dd .addCar .checkType {
+    width: 1.4rem !important;
+    height: 0.5rem !important;
+    background: none !important;
+    border-radius: 0.5rem;
+    line-height: 0.5rem;
+    border:1px solid #ff3156;
+    color: #ff3156;
+    font-size: 0.24rem;
+    text-align: center;
+    margin-bottom: 0.2rem;
+}
+
+.orderDetail .orderDetail_button_ed{
+   width: 100%;
+    height: 0.95rem;
+    background: #cdcdcd;
+    font-size: 0.32rem;
+    color: #fff;
+    border-radius: 5px;
+    line-height: 0.95rem;
+    text-align: center;
+}
+
+.mine{
+  padding-bottom: 1rem;
+}
+.coupon_button a{color: #ff3156}
+.shop_map ul li .orderDetail_address{margin-right: 1.34rem !important; }
+.shop_map form .input_b textarea{width: 80% !important;}
+.orderDetail .orderDetail_button{margin:0.3rem 0;}
+.orderDetail .closeOrder {
+    width: 100%;
+    height: 0.95rem;
+    background: #f5f5f5  !important;
+    border-radius: 5px;
+    border:2px solid #bbb;
+    color: #cdcdcd
+}
+.orderDetail .closeOrder a{color: #bbb   !important;}
+
+.shop_group .shop_group_list .shop_group_item .img{overflow:hidden;border:1px solid #eee !important;}
+.c_orderDetail .orderDetail_top .orderDetail_item{position: relative;}
+.c_orderDetail .orderDetail_top .orderDetail_item .YHcheckDiscount{position: absolute;width: 100%;height: 100%;background: url(../images/ic_more.png) no-repeat right center / 0.35rem auto;
+}
+.c_orderDetail .orderDetail_top .orderDetail_item .checkDiscount span {
+    margin-right: 0.3rem;
+}
+
+.discount .pro_group_list .pro_group_item .text .pro_nums .pro_nums_x {
+    position: absolute;
+    bottom: 0;
+    left: 2.3rem;
+}
+.discount .pro_group_list .pro_group_item .img{
+  border:1px solid #eee;
+  overflow:hidden;
+  border-radius: 2px;
+}
+.shop_group .shop_group_list .shop_group_item .img{
+   width: 1.5rem  !important;
+   height: 1.5rem  !important;
+}
+.shop_group .shop_group_list .shop_group_item{
+  min-height: 1.5rem;
+}
+.shop_group .shop_group_list .shop_group_item .text{
+  margin-left: 1.8rem !important;
+}
+.c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_name{
+  width: 65% !important;;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_num{
+  width: 12% !important;
+
+}
+.c_orderDetail .orderDetail_top .orderDetail_pro .orderDetail_pro_item .orderDetail_pro_money {
+  width: 20% !important;
+}
+.orderDetail .orderDetail_mask{
+  font-size: 0.3rem !important;
+}
+.c_orderDetail .orderDetail_mask textarea{
+  font-size: 0.3rem !important;
+}
+.pro_detail .pro_detail_img {width:4rem !important;height: 4rem !important;}
+.pro_detail{top: 10%  !important;}
+
+ .shop-detail_header {background: #ff3156 !important;} 
+ .shop-detail_header .discount {background: #ff3156 !important;} 
+.shop-detail_header .shop_name{color: #fff !important;} 
+.shop-detail_header  .shop_text_desc,.shop-detail_header  .shop_text_date{color: #fff !important;}
+.shop-detail_header  .discount .discount_j{color: #fff !important;}
+.shop-detail_header  .discount .discount_t{color: #fff !important;} 
+ 
+ .discount .pro_group_list .pro_group_item .text .pro_name{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  
+ }
+/*文本溢出*/
+.fb-overflow-1 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+.fb-overflow-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.fb-overflow-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.fb-overflow-4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+}
+
+.fb-overflow-5 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+}

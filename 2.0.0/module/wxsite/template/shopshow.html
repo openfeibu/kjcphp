@@ -1,0 +1,1036 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/cart.js"></script>
+<script type="text/javascript">
+
+</script>
+<script>
+    var shopid = <{$shopinfo['id']}>;
+    var is_goshop = <{$shopdet['is_goshop']|default:0}>;
+    var shopis_open = "<{$openinfo['opentype']}>";
+    var checknext = false;
+    var shoplimitcost = '<{$shopdet['limitcost']}>';
+    var zuocart = '<{$siteurl}>/index.php?ctrl=wxsite&action=gowei&id=<{$id}>';
+    $(function(){
+        if(is_goshop == 0 ){
+            if (shoplimitcost == 0){
+                $(".shop-buy").addClass("active");
+            } else{
+                $(".shop-buy").removeClass("active");
+            }
+        }
+        else{
+            $(".shop-buy").addClass("active");
+        }
+        /*初始化样式*/
+        url = siteurl+'/index.php?ctrl=wxsite&action=cart&shopid='+shopid+'&datatype=json&random=@random@';
+        url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+        var bk = ajaxback(url,'');
+        initshop(bk);
+        //showcartdet(bk);
+    });
+    function myyanchi(){
+  		  checknext = false;
+  	}
+    function initshop(datas){
+        $('.onselect').removeClass('onselect');
+        $('.righ_l_b_btn_moren').show();
+        $('.righ_l_b_btn_hover').hide();
+        $('.cartshuliang').hide();
+        $('.right_l_btn_nub').val(0);
+        $('.cartshuliang').text(0);
+        $('#total_count').text(0);
+        $('#total_money').text(0.00);
+
+        if(datas.flag == false){
+        //    if($('#total_money').html() != undefined){
+                if(Number(datas.content.sumcount)>0){
+                    $(".shop-car-icon").addClass("active");
+                }else{
+                    $(".shop-car-icon").removeClass("active")
+                }
+                $('#total_count').show().text(datas.content.sumcount);
+
+                checkcartifempty();
+                var shijicost = datas.content.sum;
+                $('#total_money').text(shijicost.toFixed(2));
+                html = "";
+                $('.shop-pro-all').find('.addCar').addClass("emptyCar").find(".Cinput").text(0);
+
+                $.each(datas.content.list, function(i,val){
+                    html +='<dd proid="'+val.id+'">';
+                    html +='    <div class="car-name fb-inlineBlock">';
+                    html +='      <p>'+val.name+'</p>';
+                    if(val.have_det == 1)
+                    {
+                        html +='    <span>'+val.gg.attrname+'</span>';
+                    }
+                    html +='    </div>';
+                    html +='    <div class="car-money fb-inlineBlock">￥<span>'+val.cost+'</span></div>';
+                    html +='    <div class="CaddCar fb-inlineBlock" maxnum="undefined">';
+                    if(val.have_det == 1)
+                    {
+                        html +='<div class="CprevC" have_det="'+val.have_det+'" product_id="'+val.gg.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
+                        html +='<div class="CCinput">'+val.count+'</div>';
+                        html +='<div class="CaddC" have_det="'+val.have_det+'" product_id="'+val.gg.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
+                        html +='</div>';
+                    }else{
+                        html +='<div class="CprevC" have_det="'+val.have_det+'" product_id="'+val.id+'" data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
+                        html +='<div class="CCinput">'+val.count+'</div>';
+                        html +='<div class="CaddC" have_det="'+val.have_det+'" product_id="'+val.id+'"  data-id="'+val.id+'" data-shopid="'+val.shopid+'"></div>';
+                    }
+
+                    html +='</dd>';
+
+                    $('.car-list dl').html(html);
+                    if($('#gidli_'+val.id).html() != undefined){
+                        //$('#gshu_'+val.id).val(val.count);
+                        if($('#gidli_'+val.id).find('.addC').attr('have_det'))
+                        {
+                            $('#gidli_'+val.id).find('.addCar').removeClass("emptyCar").find(".Cinput").text(val.count);
+                        }
+
+                    }
+                });
+                if(datas.content.list.length == 0){
+                  //没有商品
+                  $('.car-list dl').html('');
+                  closeCar();
+                }
+                if(Number(datas.content.sum) >= Number(shoplimitcost)){
+                    $(".shop-buy").addClass("active").html("去结算");
+                    if(shopis_open !=2 && shopis_open !=3){
+                        $(".shop-buy").removeClass("active").html("休息中");
+                    }
+                }else{
+                    var checkcost = Number(shoplimitcost)-Number(datas.content.sum);
+                    checkcost = checkcost.toFixed(2);
+                    $(".shop-buy").removeClass("active").html("还差￥" + checkcost + "起送");
+                    if(shopis_open !=2 && shopis_open !=3){
+                        $(".shop-buy").removeClass("active").html("休息中");
+                    }
+                }
+            }else{
+
+            }
+    //    }
+
+    }
+    function checkcartifempty(){    //检查购物车是否为空
+
+    	if( $('#total_count').html() == 0 ){
+    	  $(".ordeilpaymenshop").hide();
+    		$(".emptycartBg").show();
+    		$(".ordeilpaymen").hide();
+    		$(".emptyordeilpaymen").show();
+    		$('#total_count').hide();
+    		$('.fb_botcar_numbox').css('background-color','#cccccc')
+    	}else{
+    		$(".ordeilpaymenshop").show();
+    		$(".emptycartBg").hide();
+    		$(".ordeilpaymen").show();
+    		$(".emptyordeilpaymen").hide();
+    		$('#total_count').show();
+    		$('.fb_botcar_numbox').css('background-color','#ff6e6e')
+    	}
+    }
+
+
+
+</script>
+
+<div class="shop-detail pt1">
+  <div class="shop_header fb-position-relative shop-detail_header">
+    <div class="shop_name"><{$shopinfo['shopname']}></div>
+    <div class="shop_text">
+      <div class="shop_text_desc"><span>起送￥<{$shopdet['limitcost']}></span><span>配送￥<{$psinfo['pscost']}></span></div>
+      <div class="shop_text_date">营业时间：<{$shopinfo['starttime']}></div>
+      <div class="discount">
+          <{if !empty($cxlist)}>
+          <{foreach from=$cxlist  item=items}>
+          <div class="discount_j" style="background: url(<{$items['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$items['name']}></div>
+          <{/foreach}>
+          <{/if}>
+      </div>
+    </div>
+    <div class="shop_tell fb-position-absolute"><a href="tel:<{$shopinfo['phone']}>"></a></div>
+    <div class="shop_like fb-position-absolute <{if !empty($collect) }>shop_like_ed<{/if}>"></div>
+  </div>
+  <div class="shop_detail_tab weui-flex">
+    <div class="shop_detail_tab_item weui-flex__item active">点餐</div>
+    <div class="shop_detail_tab_item weui-flex__item">商家</div>
+  </div>
+  <div class="shop-detail-con">
+    <div class="shop-pro-class">
+      <ul>
+          <{if !empty($cx_goods_list) }>
+          <li cateid="cx" class="active">促销</li>
+          <{/if}>
+          <{foreach from=$goodstype key=mykey item=items}>
+          <li cateid="<{$items['id']}>" <{if $mykey == 0  && empty($cx_goods_list)}>class="active"<{/if}> ><{$items['name']}></li>
+          <{/foreach}>
+      </ul>
+    </div>
+    <div class="shop-pro-all" onscroll="bindscroll($(this))" loca="true" style="display: block;">
+
+
+       <{if !empty($goodstype) }>
+      <dl>
+        <{if !empty($cx_goods_list) }>
+        <div class="pro_label">促销</div>
+        <{foreach from=$cx_goods_list item=goods }>
+        <dd proid="<{$goods['id']}>" id="gidli_<{$goods['id']}>" typeid="<{$goods['typeid']}>" data-price="<{$goods['cost']}>">
+          <div onclick="callDialog(this)" imgurl="<{$goods['img']|default:$shoplogo}>" class="shop-pro-img" style="background-image:url(<{$goods['img']|default:$shoplogo}>)">
+          </div>
+          <div class="shop-pro-right" onclick="callDialog(this)">
+            <div class="shop-pro-name">
+              <{$goods['name']}>
+            </div>
+            <div class="shop-pro-des" desc="<{$goods['descgoods']}>">销量<{$goods['sellcount']}>份</div>
+            <div class="shop-pro-money">
+                ￥<label ><{$goods['cost']}></label>
+                <{if $goods['is_cx'] == 1 }><span><{$goods['cost']/($goods['zhekou']/10)}></span><{/if}>
+            </div>
+          </div>
+          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $goods['count'] > 0}>
+          <{else}>
+              <{if $goods['have_det'] == 1 }>
+              <div class="addCar emptyCar" maxnum="65535">
+
+                <div class="addC checkType" id="<{$goods['id']}>" >可选规格</div>
+              </div>
+              <{else}>
+              <div class="addCar emptyCar " maxnum="65535">
+                <div class="prevC" data-id="<{$goods['id']}>" data-shopid="<{$goods['shopid']}>" id="gid_<{$goods['id']}>" have_det="<{$goods['have_det']}>"></div>
+                <div class="Cinput">
+                  0
+                </div>
+                <div class="addC" data-id="<{$goods['id']}>" data-shopid="<{$goods['shopid']}>" id="gid_<{$goods['id']}>" have_det="<{$goods['have_det']}>" data-price="<{$goods['cost']}>" typeid="<{$goods['typeid']}>"></div>
+              </div>
+              <{/if}>
+          <{/if}>
+        </dd>
+        <{/foreach}>
+
+        <{/if}>
+  	    <{foreach from=$goodstype key=mykey item=itv}>
+        <div class="pro_label"><{$itv['name']}></div>
+        <{if !empty($cx_goods_list) }>
+
+        <{/if}>
+        <{foreach from=$itv['det'] item=items }>
+        <{if $items['is_live'] == 1 && !in_array($items['id'],$cx_goodsids)}>
+        <dd proid="<{$items['id']}>" id="gidli_<{$items['id']}>" typeid="<{$items['typeid']}>" data-price="<{$items['cost']}>">
+          <div onclick="callDialog(this)" imgurl="<{$items['img']|default:$shoplogo}>" class="shop-pro-img" style="background-image:url(<{$items['img']|default:$shoplogo}>)">
+          </div>
+          <div class="shop-pro-right" onclick="callDialog(this)">
+            <div class="shop-pro-name">
+              <{$items['name']}>
+            </div>
+            <div class="shop-pro-des" desc="<{$items['descgoods']}>">销量<{$items['sellcount']}>份</div>
+            <div class="shop-pro-money">
+                <{if $items['have_det']==1}>
+                    <{if $items['zhekou'] > 0 }>
+                        ￥<label ><{$items['cost']*($items['zhekou']*0.1)}></label>
+                        <{if $items['is_cx'] == 1 }><span><{$items['cost']}></span><{/if}>
+                    <{else}>
+                        ￥<label ><{$items['cost']}></label>
+                        <{if $items['is_cx'] == 1 }><span><{$items['cost']}></span><{/if}>
+                    <{/if}>
+                <{else}>
+                    ￥<label ><{$items['cost']}></label>
+                    <{if $items['is_cx'] == 1 }><span><{$items['cost']/($items['zhekou']/10)}></span><{/if}>
+                <{/if}>
+            </div>
+          </div>
+          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $items['count'] > 0}>
+          <{else}>
+              <{if $items['have_det'] == 1 }>
+              <div class="addCar emptyCar" maxnum="65535">
+
+                <div class="addC checkType" id="<{$items['id']}>" >可选规格</div>
+
+              </div>
+              <{else}>
+              <div class="addCar emptyCar " maxnum="65535">
+                <div class="prevC" data-id="<{$items['id']}>" data-shopid="<{$items['shopid']}>" id="gid_<{$items['id']}>" have_det="<{$items['have_det']}>"></div>
+                <div class="Cinput">
+                  0
+                </div>
+                <div class="addC" data-id="<{$items['id']}>" data-shopid="<{$items['shopid']}>" id="gid_<{$items['id']}>" have_det="<{$items['have_det']}>" data-price="<{$items['cost']}>" typeid="<{$items['typeid']}>"></div>
+              </div>
+              <{/if}>
+          <{/if}>
+        </dd>
+        <{/if}>
+        <{/foreach}>
+        <{/foreach}>
+      </dl>
+       <{else}>
+        <!--没有商品-->
+        <div id="noPro" style="display: block">没有商品哟</div>
+        <!--没有商品-->
+      <{/if}>
+      <div class="weui-loadmore weui-loadmore_line">
+        <span class="weui-loadmore__tips">已经到底了</span>
+      </div>
+    </div>
+  </div>
+  <div class="shop-detail-info">
+    <div class="shop_info_list">
+      <div class="shop_info_item">
+        营业时间：<{$shopinfo['starttime']}>
+      </div>
+      <div class="shop_info_item">
+        商家地址：<{$shopinfo['address']}>
+      </div>
+      <div class="shop_info_item">
+        商家电话：<{$shopinfo['phone']}>
+      </div>
+      <div class="shop_info_item">
+        商家简介：<{$shopinfo['intr_info']|htmlspecialchars_decode|default:'暂无'}>
+      </div>
+      <div class="shop_info_item">
+        商家公告：<{$shopinfo['notice_info']|htmlspecialchars_decode|default:'暂无'}>
+      </div>
+    </div>
+    <div class="shop_img">
+      <div class="weui-flex">
+        <{foreach from=$shopreal key=key item =shoprealitems}>
+        <{if !empty($shoprealitems['shoprealimg'])}>
+            <{foreach from=$shoprealitems['shoprealimg'] key=key item =items}>
+            <div class="weui-flex__item"><img src="<{$items['img']}>" alt=""></div>
+            <{/foreach}>
+        <{/if}>
+        <{/foreach}>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- 购物车 S -->
+<div class="shop-car">
+  <div class="shop-car-icon active">
+      <span id="total_count">0</span>
+  </div>
+  <div class="shop-count">
+    <p>￥<label id="total_money">0.00</label></p>
+    <{if $psinfo['pscost'] > 0 }>
+    <span>另需配送费<{$psinfo['pscost']}>元</span>
+    <{else}>
+    <span>免配送费</span>
+    <{/if}>
+  </div>
+  <div class="shop-buy">还差￥<{$shopdet['limitcost']}>起送</div>
+  <div class="car-list">
+    <div class="car-list-header">
+      <p>已选商品</p><span class="clearCar">清空</span></div>
+    <dl>
+        <{foreach from=$backdata['list'] item=cart_list}>
+        <dd proid="<{$cart_list.id}>">
+            <div class="car-name fb-inlineBlock">
+              <p>'+val.name']}></p>
+              <{if $cart_list['have_det'] == 1}>
+              <span><{$cart_list.gg.attrname}></span>
+              <{/if}>
+            </div>
+            <div class="car-money fb-inlineBlock">￥<span><{$cart_list['cost']}></span></div>
+            <div class="CaddCar fb-inlineBlock" maxnum="undefined">
+            <{if $cart_list.have_det == 1}>
+             <div class="CprevC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.gg.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+              <div class="CCinput"><{$cart_list.count}></div>
+             <div class="CaddC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.gg.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+            </div>
+            <{else}>
+            <div class="CprevC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+             <div class="CCinput"><{$cart_list.count}></div>
+            <div class="CaddC" have_det="<{$cart_list.have_det}>" product_id="<{$cart_list.id}>"  data-id="<{$cart_list.id}>" data-shopid="<{$cart_list.shopid}>"></div>
+            <{/if}>
+        </dd>
+        <{/foreach}>
+    </dl>
+  </div>
+</div>
+<!-- 购物车 E -->
+ <!--商品详情 -->
+
+  <div class="pro_detail">
+    <div class="pro_detail_img"></div>
+    <div class="pro_detail_name">商品名称</div>
+    <div class="pro_detail_con">商品简介</div>
+    <div class="pro_detail_money">商品价格</div>
+  </div>
+
+<!--规格-->
+<div class="type_box">
+  <div class="type_close"></div>
+  <div class="type_box_title">凉拌猪耳</div>
+  <div class="type_con">
+    <div class="type_item">
+      <div class="type_item_title">份量：</div>
+      <label class="active">大份</label>
+      <label>中份</label>
+      <label>小份</label>
+    </div>
+    <div class="type_item">
+      <div class="type_item_title">味道：</div>
+      <label class="active">孜然</label>
+      <label>孜然+微辣</label>
+      <label>孜然+中辣</label>
+      <label>孜然+特辣</label>
+      <label>孜然+麻辣</label>
+    </div>
+  </div>
+  <div class="type_bottom">
+    <div class="type_money">￥<span>7.5</span></div>
+    <div class="type_button">加入购物车</div>
+  </div>
+</div>
+
+<{/block}>
+<{block name="footer"}><{/block}>
+<{block name="end_script"}>
+
+<script>
+    $(function() {
+        //兼容低级浏览器设置高度
+        var fontS = parseFloat($(window).width() / 7.5) > 100 ? 100 : parseFloat($(window).width() / 7.5);
+        $(".shop-detail-con,.shop-detail-info").css("height", $(window).height() - 0.8 * fontS)
+
+
+    })
+    //  全局变量
+    var openTypeDom;
+    var min_goods_amount = <{$shopdet['limitcost']}> ; //最低配送
+    //  切换
+    $(".shop_detail_tab .shop_detail_tab_item").on("click", function() {
+        var i = $(this).index(".shop_detail_tab_item");
+        $(this).addClass("active").siblings().removeClass("active")
+        if (i == 0) {
+            $(".shop-detail-info").hide();
+            $(".shop-detail-con").fadeIn(200);
+        } else {
+            $(".shop-detail-info").fadeIn(200);
+            $(".shop-detail-con").hide();
+        }
+    })
+    //打开购物车
+    $(".shop-car-icon").on("click", function() {
+        if ($(this).hasClass("active") && $(".fb-mask-car").length == 0) {
+            openCar();
+        } else {
+            closeCar();
+        }
+    })
+    //打开购物车
+    function openCar() {
+        $("body").append("<div class='fb-mask fb-mask-car'></div>");
+        $(".car-list").css("max-height", "5.8rem")
+    }
+    //收起购物车
+    function closeCar() {
+        $(".fb-mask-car").remove();
+        $(".car-list").css("max-height", "0")
+
+    }
+    $("body").on("click", ".fb-mask-car", function() {
+        closeCar();
+    })
+    //收起购物车
+
+    var labelTop = [];
+    var oneTop = $(".shop-pro-all .pro_label").eq(0).offset().top;
+    setTimeout(function() {
+        $.each($(".shop-pro-all .pro_label"), function(a, b) {
+            labelTop.push($(b).offset().top - oneTop);
+        })
+    }, 100)
+
+
+    //滚动特效
+    function bindscroll(that) {
+        var scrollTop = that.scrollTop();
+        for (var i = labelTop.length - 1; i >= 0; i--) {
+            if (scrollTop >= that.scrollHeight() - that.outerHeight()) {
+                $(".shop-pro-class li").eq(labelTop.length - 1).addClass("active").siblings("li").removeClass("active");
+                break;
+            }
+            if (scrollTop > labelTop[i] - 50) {
+                $(".shop-pro-class li").eq(i).addClass("active").siblings("li").removeClass("active");
+                break;
+            }
+        }
+
+        if (scrollTop == 0) {
+            $(".shop-detail").stop().animate({
+                scrollTop: 0
+            }, 100)
+        } else {
+
+            if ($(".shop-detail").scrollTop() == 0) {
+                $(".shop-detail").stop().animate({
+                    scrollTop: $(".shop_header ").height()
+                }, 200)
+            }
+        }
+    }
+    $(".shop-pro-class li").on("click", function() {
+        var i = $(this).index("li");
+        $(this).addClass("active").siblings("li").removeClass("active");
+        console.log(labelTop[i])
+        $(".shop-pro-all").scrollTop(labelTop[i] - 30)
+    })
+    var carTime = null,
+        nowProId; //定时时间
+    // 加入购物车
+    $(".shop-detail-con").on("click", ".addC", function() {
+        //    $(".shop-buy").off("click", createOrder);
+        var addCar = $(this).parents(".addCar"),
+            num = Number(addCar.find(".Cinput").text()),
+            dd = $(this).parents("dd"),
+            proid = dd.attr("proid"),
+            maxNum = addCar.attr("maxNum"),
+            nowNum = num + 1;
+        //            carts = JSON.parse(window.localStorage.cart);
+        if ($(this).hasClass("checkType")) {
+        //    openType(addCar);
+            openType(proid);
+            return false;
+        }
+        //if(lockclick()){
+            status = addonedish(proid,$(this).attr('data-shopid'),1,this);
+        //}
+        // if (status) {
+        //     if (num == 0) {
+        //         addCar.removeClass("emptyCar").find(".Cinput").text(nowNum);
+        //         var pro_info = {
+        //             "name": dd.find(".shop-pro-name").text(),
+        //             "value": dd.find(".shop-pro-money label").text(),
+        //             "maxNum": addCar.attr("maxNum"),
+        //             "proid": proid,
+        //             "goods_id": proid,
+        //             "goods_name": dd.find(".shop-pro-name").text(),
+        //             "goods_price": dd.find(".shop-pro-money label").text(),
+        //             "goods_maxNus": addCar.attr("maxNum"),
+        //             "goods_number": 1
+        //         }
+        //     } else {
+        //         addCar.find(".Cinput").text(nowNum);
+        //         console.log(proid)
+        //         $(".car-list dd[proid='" + proid + "']").find(".CCinput").text(nowNum);
+        //     }
+        // }
+    })
+    $("body").on("click", ".type_button", function() {
+        console.log(openTypeDom)
+        var value = '',
+            parentDom = $(this).parents(".type_box"),
+            num = Number(openTypeDom.find(".Cinput").text()),
+            nowNum = num + 1,
+            proId = openTypeDom.parents("dd").attr("proid"),
+            typeId = Math.random();
+        if (if_car(typeId)) {
+            //存在购物车
+            openTypeDom.find(".Cinput").text(nowNum);
+            $(".car-list dd[typeId='" + typeId + "']").find(".CCinput").text(nowNum);
+
+            updataCount(1);
+            //          updataCar(proid, nowNum) //加入购物车
+            //        $(".shop-buy").on("click", createOrder);
+        } else {
+            value = $(".type_item").eq(0).find("label.active").text() + '、' + $(".type_item").eq(1).find("label.active").text();
+            openTypeDom.removeClass("emptyCar").find(".Cinput").text(nowNum);
+
+            var pro_info = {
+                "name": parentDom.find(".type_box_title").text(),
+                "value": parseFloat(parentDom.find(".type_money span").text()),
+                "maxNum": 10,
+                "type": value,
+                "proid": proId,
+                "typeId": typeId,
+                "goods_number": 1
+            }
+            updataCount(1, pro_info);
+
+        }
+        closeType();
+    })
+    $(".car-list").on("click", ".CaddC", function() {
+        //    $(".shop-buy").off("click", createOrder);
+        var CaddCar = $(this).parents(".CaddCar"),
+            dd = $(this).parents("dd"),
+            proid = dd.attr("proid"),
+            maxNum = CaddCar.attr("maxNum"),
+            Cnum = Number($(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text()), //总和
+            num = Number(CaddCar.find(".CCinput").text()), //当前
+            nowNum = Cnum + 1;
+
+            // CaddCar.find(".CCinput").text(num + 1);
+
+        //    updataCount(1);
+        //    updataCar(proid, nowNum) //加入购物车
+            var checkhavedet = $(this).attr('have_det');
+            if(checkhavedet == 1){
+                uponeproduct($(this).attr('product_id'),$(this).attr('data-shopid'),1);
+            }else{
+                addonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1,this);
+            }
+            // $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(nowNum);
+    })
+
+    // 加入购物车
+    // 减少购物车
+    $(".shop-detail-con").on("click", ".prevC", function() {
+        //    $(".shop-buy").off("click", createOrder);
+        if ($(this).hasClass('no_prevC')) {
+            return false;
+        }
+        var addCar = $(this).parents(".addCar"),
+            dd = $(this).parents("dd"),
+            proid = dd.attr("proid"),
+            num = Number(addCar.find(".Cinput").text()),
+            nowNum = num - 1;
+        status = removeonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1);
+        console.log('status:'+status);
+        // if(status)
+        // {
+        //     if (nowNum == 0) {
+        //         addCar.addClass("emptyCar").find(".Cinput").text(nowNum);
+        //         $(".car-list dd[proid='" + proid + "']").remove();
+        //     } else {
+        //         addCar.find(".Cinput").text(nowNum);
+        //         $(".car-list dd[proid='" + proid + "']").find(".CCinput").text(nowNum);
+        //     }
+        // }
+
+
+    })
+
+    $(".car-list").on("click", ".CprevC", function() {
+        //    $(".shop-buy").off("click", createOrder);
+        var CaddCar = $(this).parents(".CaddCar"),
+            num = Number(CaddCar.find(".CCinput").text()),
+            dd = $(this).parents("dd"),
+            proid = dd.attr("proid"),
+            Cnum = Number($(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text()), //总和
+            nowNum = num - 1;
+        var checkhavedet = $(this).attr('have_det');
+        if(checkhavedet == 1){
+            removeoneproduct($(this).attr('product_id'),$(this).attr('data-shopid'),1);
+        }else{
+
+        	 removeonedish($(this).attr('data-id'),$(this).attr('data-shopid'),1,this);
+        }
+
+        // if (nowNum == 0) {
+        //     dd.remove();
+        //     CaddCar.find(".CCinput").text(nowNum);
+        //     if (--Cnum == 0) {
+        //         $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(Cnum).end().find(".addCar").addClass("emptyCar");
+        //     } else {
+        //         $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(Cnum);
+        //     }
+        // } else {
+        //     CaddCar.find(".CCinput").text(nowNum);
+
+        //     $(".shop-pro-all dd[proid='" + proid + "']").find(".Cinput").text(nowNum);
+        //     console.log(proid);
+        // }
+        setTimeout("myyanchi()", 500);
+    })
+    // 减少购物车
+    //更新数量
+    car_count = 0;
+
+    function updataCount(flag, info) {
+        var typeId = '';
+        // 1为加 0为减
+        if (flag) {
+            car_count = Number($('#total_count').text())+1;
+            console.log(car_count);
+            if ($(".shop-car-icon").find("span").length == 0) {
+                $(".shop-car-icon").append("<span></span>");
+            }
+            $(".shop-car-icon").addClass("active").find("span").text(car_count);
+            if (info) {
+
+                if (info.typeId) {
+                    typeId = 'typeid="' + info.typeId + '"';
+                }
+                if (info.type) {
+                    var info_html = ' <dd proid="' + info.proid + '" ' + typeId + '>\
+                                  <div class="car-name fb-inlineBlock">\
+                                  <p>' + info.name +
+                        '</p>\
+                                  <span>' + info.type + '</span>\
+                          </div>\
+                          <div class="car-money fb-inlineBlock">￥<span>' + info.value +
+                        '</span></div>\
+                                  <div class="CaddCar fb-inlineBlock" maxNum="' + info.maxNum +
+                        '">\
+                                  <div class="CprevC"></div>\
+                                  <div class="CCinput">1</div>\
+                                  <div class="CaddC"></div>\
+                                  </div>\
+                          </dd>'
+                } else {
+                    var info_html = ' <dd proid="' + info.proid + '" ' + typeId + '>\
+                                  <div class="car-name fb-inlineBlock">\
+                                  <p>' + info.name +
+                        '</p>\
+                          </div>\
+                          <div class="car-money fb-inlineBlock">￥<span>' + info.value + '</span></div>\
+                                  <div class="CaddCar fb-inlineBlock" maxNum="' +
+                        info.maxNum +
+                        '">\
+                                  <div class="CprevC"></div>\
+                                  <div class="CCinput">1</div>\
+                                  <div class="CaddC"></div>\
+                                  </div>\
+                          </dd>'
+                }
+
+                $(".car-list dl").append(info_html);
+            }
+            updataValue();
+        } else {
+            car_count = Number($('#total_count').text())-1;
+            $(".shop-car-icon").find("span").text(car_count);
+            if (car_count == 0) {
+                $(".shop-car-icon").removeClass("on");
+            }
+            updataValue();
+        }
+        console.log(car_count)
+    }
+    //更新数量
+
+    //更新PHP购物车 0-1
+    function updataCar(goods_id, goodes_num, func) {
+        var token = window.localStorage.token;
+        var postData = {
+            "token": token,
+            "goods_id": goods_id,
+            "goods_number": goodes_num
+        }
+        $.post(locahost + 'cart/updateCartGoodsNumber', postData, function(data) {
+            if (data.code == 2001) {
+                $.toast(fb_error["2001"],'text')
+                // window.location.href = "../login.html";
+                return;
+            }
+            if (data.code == "200") {
+                if (func) {
+                    func();
+                }
+            } else {
+                $.toast(data.detail,'text');
+            }
+        }).error(function(xhr, errorText, errorType) {
+            alert('网络超时，请稍后再试')
+        });
+    }
+    //更新PHP购物车
+
+    //  收藏
+    $(".shop_like").on("click", function() {
+        var url = siteurl+'/index.php?ctrl=shop&action=addcollect&datatype=json&collectid='+shopid+'&type=0';
+        var backinfo = ajaxback(url,{});
+        if(backinfo.flag == false){
+            $(this).toggleClass("shop_like_ed");
+            if($(this).hasClass("shop_like_ed")){
+              $.toast('收藏成功','text');
+            }else{
+              $.toast('取消收藏成功','text');
+            }
+        }else{
+            $.toast(backinfo.content,'text');
+        }
+    })
+
+    //  规格选择
+    $("body").on("click", ".type_item label", function() {
+        $(this).addClass('active').siblings("label").removeClass('active')
+    })
+    //  关闭规格
+    $("body").on("click", ".type_close", function() {
+        $('.type_box').fadeOut(200);
+        $F.fbMask(0)
+    })
+
+    function closeType() {
+        $('.type_box').fadeOut(200);
+        $F.fbMask(0)
+    }
+    //打开规格
+    function openType(obj) {
+        openTypeDom = obj;
+        $(".type_box").fadeIn(200);
+        $F.fbMask(1)
+    }
+    //判断是否在购物车
+    function if_car(id) {
+        var flag = false;
+        $.each($(".car-list dd"), function(a, b) {
+
+            if ($(b).attr('typeid') == id) {
+                //存在
+                flag = true;
+                return false;
+            }
+        })
+        return flag;
+    }
+
+    //判断是否在购物车
+    //清空购物车
+    $(".clearCar").on("click", function() {
+        $.confirm({
+            text: '是否清空购物车',
+            onOK: function() {
+                //点击确认
+                delshopcart();
+                closeCar();
+            },
+            onCancel: function() {}
+        });
+    })
+
+    function clearCar() {
+        is_alipay(true);
+        var token = window.localStorage.token;
+        var postData = {
+            "token": token,
+            "shop_id": shop_id
+        }
+        $.post(locahost + '/cart/destroyAll', postData, function(data) {
+            if (data.code == 2001) {
+                $.toast(fb_error["2001"],'text')
+                // window.location.href = "../login.html";
+                return;
+            }
+            if (data.code == "200") {
+                is_alipay(false);
+                closeCar();
+                $(".car-list dl").html("");
+                $(".shop-car-icon").removeClass("on").find("span").remove();
+                $(".shop-count span").text("￥0.00")
+                $(".shop-buy").removeClass("active");
+                $(".addCar").addClass("no").find(".Cinput").text(0);
+                car_count = 0;
+                $.toast(data.detail,'text');
+            } else {
+                is_alipay(false);
+                $.toast(data.detail,'text');
+            }
+        }).error(function(xhr, errorText, errorType) {
+            alert('网络超时，请稍后再试')
+        });
+    }
+    //清空购物车
+    //更新总价格
+    function updataValue() {
+        var cV = 0;
+        for (var i = 0, c = $(".car-list dd").length; i < c; i++) {
+            cV += Number($(".car-list dd").eq(i).find(".car-money span").text()) * Number($(".car-list dd").eq(i).find(".CCinput").text());
+        }
+        if (cV == 0) {
+            closeCar();
+            $(".shop-car-icon").removeClass("active").find("span").remove();
+            $(".shop-buy").removeClass("active").html("还差￥" + min_goods_amount + "起送");
+        } else {
+            if (cV >= min_goods_amount) {
+                $(".shop-buy").addClass("active").html("去结算");
+            } else {
+                $(".shop-buy").removeClass("active").html("还差￥" + parseFloat(min_goods_amount - cV) + "起送");
+
+            }
+
+        }
+        $(".shop-count p").text('￥' + cV.toFixed(2));
+    }
+    //更新总价格
+    //  图片浏览
+
+    $(".shop_img").on("click", "img", function() {
+        var i = $(this).index(".shop_img img");
+        var pb = $.photoBrowser({
+            items: [
+               <{foreach from=$shopreal key=key item =shoprealitems}>
+                <{if !empty($shoprealitems['shoprealimg'])}>
+                    <{foreach from=$shoprealitems['shoprealimg'] key=key item =items}>
+                     "<{$items['img']}>",
+                    <{/foreach}>
+                <{/if}>
+                <{/foreach}>
+            ],
+            initIndex: i
+
+        });
+        pb.open();
+    })
+    //商品详情
+    function callDialog(that) {
+        $F.fbMask(1);
+        $(".fb-mask").one("click", function() {
+            closeDes()
+        })
+        var names = $(that).parents("dd").find(".shop-pro-name").text();
+        var dec = $(that).parents("dd").find(".shop-pro-des").attr("desc");
+        var img = $(that).parents("dd").find(".shop-pro-img").attr("imgUrl");
+        var money = $(that).parents("dd").find(".shop-pro-money").html();
+        dec = dec == '' ? '没有留下任何介绍' : dec;
+        $(".pro_detail").find(".pro_detail_img").css("background", "url(" + img + ") no-repeat center/cover").end().find(".pro_detail_name").text(names).end().find(".pro_detail_con").text(dec).end().find(".pro_detail_money").html(money).end().fadeIn(
+            100);
+
+    }
+    //关闭详情
+    function closeDes() {
+        $(".pro_detail").fadeOut(200)
+        $F.fbMask(0);
+    }
+
+    //结算
+    $(".shop-buy").on("click", function() {
+        if($(this).hasClass("active") && $(".shop-car-icon").hasClass("active")){
+          var id = "<{$id}>";
+          var carturl = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+id;
+          window.location.href = carturl;
+        }else{
+          if(!$(".shop-car-icon").hasClass("active")){
+            $.toast('购物车不可为空',"text")
+          }else{
+            $.toast($(this).text(),"text")
+          }
+
+        }
+    })
+    function openType(id){
+        var content = htmlback1(siteurl+'/index.php?ctrl=wxsite&action=foodsgg&id='+id);
+        if(content.flag == false){
+            var getmoreContent =  $.trim(content.content);
+            $('.type_box').html(getmoreContent);
+            $(".type_box").fadeIn(200);
+            $F.fbMask(1)
+        }else{
+            $.toast('获取失败','text');
+        }
+    }
+    function htmlback1(url,info)
+    {
+        var backmessage = {'flag':true,'content':''};
+        $.ajax({
+            type: 'POST',
+            async:false,
+            url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+            data: info,
+            dataType: 'html',success: function(content) {
+                backmessage['flag'] = false;
+                backmessage['content'] = content;
+            },
+            error: function(content) {
+                backmessage['content'] = '获取失败';
+            }
+        });
+        return backmessage;
+        console.log(backmessage);
+    }
+</script>
+<script>
+    function freshowdetcart() {
+        url = siteurl + '/index.php?ctrl=wxsite&action=cart&shopid=' + shopid + '&datatype=json&random=@random@';
+        url = url.replace('@random@', 1 + Math.round(Math.random() * 1000));
+        var bk = ajaxback(url, '');
+        showcartdet(bk);
+    }
+    function showcartdet(datas) {
+        $('.car-list dl').html('');
+        if (datas.flag == false) {
+            //	$('.listcontent').remove();
+            console.log(datas.content.list);
+            var temp_htmls = '';
+            $('.car-list dl').append(temp_htmls);
+            html += temp_htmls;
+            $.each(datas.content.list, function(i, val) {
+                var list = val;
+                var html = '';
+                /*
+                html += ' <div class="box_inline goodsli" style="padding:5px 5px 5px 8px;border-top: 1px solid #cccccc; "    id="gidli_' + list.id + '"  >  ';
+                html += ' <div class="liwd30 detcart"  style="width:50%; text-align:left;">  ';
+                html += '  ' + val.name + ' ';
+                if (list.have_det == 1) {
+                    html += ' <font style="color:#ccc;font-size:10px;">' + list.gg.attrname + '</font> ';
+                }
+                html += '  	</div> ';
+                html += ' <div class="liwd30 detcart" style="width:20%; text-align:left;"> ';
+                html += '	￥' + list.cost + ' ';
+                html += '	</div> ';
+                html += '	<div class="liwd30 detcart" style="width:30%; text-align:center;"> ';
+                html += '	<div style="width:90px; height:38px; line-height:38px;"> ';
+                if (list.have_det == 1) {
+                    html += ' <span class="addbtn" have_det="' + list.have_det + '"    product_id="' + list.gg.id + '"  data-id="' + list.id + '" data-shopid="' + list.shopid +
+                        '"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/<{if $color == "green"}>grjia.png<{else if $color == "yellow"}>yejia.png<{else}>redjia.png<{/if}>" /></span>   ';
+
+                } else {
+                    html += ' <span class="addbtn" have_det="' + list.have_det + '"     data-id="' + list.id + '" data-shopid="' + list.shopid +
+                        '"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/<{if $color == "green"}>grjia.png<{else if $color == "yellow"}>yejia.png<{else}>redjia.png<{/if}>" /></span>   ';
+
+                }
+                html += '	<span class="shuliang gdhd">' + list.count + '</span> ';
+                if (list.have_det == 1) {
+                    html += '   <span class="downdbtn " have_det="' + list.have_det + '"  product_id="' + list.gg.id + '"     data-id="' + list.gg.id + '" data-shopid="' + list.shopid +
+                        '"><img   src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/<{if $color == "green"}>add_01_1.png<{else if $color == "yellow"}>add_01_2.png<{else}>add_01.png<{/if}>" /></span> ';
+
+                } else {
+                    html += '   <span class="downdbtn " have_det="' + list.have_det + '"   data-id="' + list.id + '"   data-shopid="' + list.shopid +
+                        '"><img   src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/images/<{if $color == "green"}>add_01_1.png<{else if $color == "yellow"}>add_01_2.png<{else}>add_01.png<{/if}>" /></span> ';
+
+                }
+                html += '  	</div> ';
+                html += '  	</div> ';
+                html += '  </div> ';
+                */
+                $('#showorderdet .showorderListss').append(html);
+            });
+
+            $('.addbtn').bind("click", function() {
+                if (checknext == false) {
+                    checknext = true;
+                    var checkhavedet = $(this).attr('have_det');
+
+                    if (checkhavedet == 1) {
+                        uponeproduct($(this).attr('product_id'), $(this).attr('data-shopid'), 1);
+                        //freshowdetcart();
+                    } else {
+                        addonedish($(this).attr('data-id'), $(this).attr('data-shopid'), 1, this);
+                        //freshowdetcart();
+                    }
+                    setTimeout("myyanchi()", 500);
+                }
+
+            });
+            $('.downdbtn').bind("click", function() {
+                if (checknext == false) {
+                    checknext = true;
+                    var checkhavedet = $(this).attr('have_det');
+                    if (checkhavedet == 1) {
+                        removeoneproduct($(this).attr('product_id'), $(this).attr('data-shopid'), 1);
+                        freshowdetcart();
+                    } else {
+                        removeonedish($(this).attr('data-id'), $(this).attr('data-shopid'), 1, this);
+                        freshowdetcart();
+                        freshcart();
+                    }
+                    setTimeout("myyanchi()", 500);
+                }
+            });
+            $('.showorderListss').css('height', $('#showorderdet').find('.box_inline').length * 49);
+            //   scroll5.refresh();
+        } else {
+            $('#cartlist').hide();
+        }
+    }
+    /* 点击展示购物车详情   end*/
+</script>
+<{/block}>

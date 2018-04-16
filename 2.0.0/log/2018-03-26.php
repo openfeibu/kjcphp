@@ -1,0 +1,10 @@
+时间:2018-03-26 15:31:28,/index.php?ctrl=adminpage描述:访问链接：
+时间:2018-03-26 15:31:30,/index.php?ctrl=member&action=adminlogin描述:访问链接：
+时间:2018-03-26 15:31:37,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-03-26 15:31:42,/index.php?ctrl=member&action=adminlogin&datatype=json描述:访问链接：
+时间:2018-03-26 15:31:43,/index.php?ctrl=adminpage&action=system&module=index描述:访问链接：
+时间:2018-03-26 15:31:47,/index.php?ctrl=adminpage&action=member&module=adminlist描述:访问链接：
+时间:2018-03-26 15:31:51,/index.php?ctrl=adminpage&action=shop&module=adminshoplist描述:访问链接：
+时间:2018-03-26 15:32:00,/index.php?ctrl=adminpage&action=shop&module=adminshoplist描述:访问链接：
+时间:2018-03-26 15:32:21,/index.php?ctrl=adminpage&action=shop&module=adminshoplist描述:访问链接：
+时间:2018-03-26 15:32:34,/index.php?ctrl=adminpage&action=shop&module=adminshoplist描述:访问链接：

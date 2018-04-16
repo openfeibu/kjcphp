@@ -1,0 +1,99 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}>个人信息<{/block}>
+<{block name=blockcontent}>
+<div class="mineInfo">
+  <div class="weui-cells">
+    <a class="weui-cell weui-cell-tx " >
+      <div class="weui-cell__bd">
+        <p>头像</p>
+      </div>
+      <div class="weui-cell__ft">
+        <img src="<{$member['logo']|default:$userlogo}>" alt="">
+      </div>
+    </a>
+    <a class="weui-cell " href="javascript:;">
+      <div class="weui-cell__bd">
+        <p>昵称</p>
+      </div>
+      <div class="weui-cell__ft">
+        <{$member['username']}>
+      </div>
+    </a>
+    <a class="weui-cell " href="javascript:;">
+      <div class="weui-cell__bd">
+        <p>性别</p>
+      </div>
+      <div class="weui-cell__ft">
+        <{if $member['sex'] == 1}>
+        男
+        <{else if $member['sex'] == 2}>
+        女
+        <{else}>
+        未知
+        <{/if}>
+      </div>
+    </a>
+    <a class="weui-cell " href="javascript:;">
+      <div class="weui-cell__bd">
+        <p>学校</p>
+      </div>
+      <div class="weui-cell__ft">
+        <{$stationadmininfo['stationname']}>
+      </div>
+    </a>
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+      <div class="weui-cell__bd">
+        <p>手机号码</p>
+      </div>
+      <div class="weui-cell__ft"><{$member['phone']}></div>
+    </a>
+  </div>
+</div>
+<script>
+  $(".weui-cell_access").on("click",function(){
+    var that = $(this);
+    var text = $(this).find(".weui-cell__ft").text();
+    $.prompt({
+      title: '',
+      text: '绑定手机号码',
+      input: text,
+      empty: true, // 是否允许为空
+      onOK: function (input) {
+        //点击确认
+        var Ltext = $("#weui-prompt-input").val();
+        $F.loading();
+        ajaxurl = '<{ofunc type=url link="/wxsite/updateMobile/datatype/json"}>';
+        $.ajax({
+           type: 'POST',
+           async:true,
+           url: ajaxurl,
+           data: {'phone':input},
+           dataType:'json',
+           success: function(content) {
+               $F.closeLoading();
+               if(content.error ==  false)
+               {
+                  that.find(".weui-cell__ft").text(Ltext)
+                   $.toast("修改成功","text");
+               }else{
+                   $.toast(content.msg,"text");
+               }
+               console.log(content);
+          },
+          error: function(content) {
+              $F.closeLoading();
+                 //Tmsg('获取失败...');
+          }
+        });
+
+      },
+      onCancel: function () {
+        //点击取消
+
+      }
+    });
+  })
+
+</script>
+<{/block}>
+<{block name=footer}><{/block}>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui"><meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta content="telephone=no" name="format-detection" />
+  <!-- uc强制竖屏 -->
+  <meta name="screen-orientation" content="portrait">
+  <!-- UC应用模式 -->
+  <meta name="browsermode" content="application">
+  <!-- QQ强制竖屏 -->
+  <meta name="x5-orientation" content="portrait">
+  <!-- QQ应用模式 -->
+  <meta name="x5-page-mode" content="app">
+  <!-- UC禁止放大字体 -->
+  <meta name="wap-font-scale" content="no">
+  <title><{block name=sitetitle}>筷叫餐<{/block}></title>
+  <meta name="Keywords" content="" />
+  <meta name="Description" content="" />
+  <link rel="apple-touch-icon-precomposed" href="./icon.png" />
+  <link rel="shortcut icon" href="./icon.png" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/public.css">
+  <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/weui.min.css">
+  <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/index.css">
+  <link href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/swiper.min.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/jquery.min.js"></script>
+  <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/weui.min.js"></script>
+  <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/config.js"></script>
+  <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/controller.js"></script>
+  <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/swiper.min.js"></script>
+  <!-- wx -->
+  <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/jweixin-1.2.0.js"></script>
+   <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/common.js"></script>
+   <script type="text/javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/public.js"></script>
+  <{block name=extendcss}><{/block}>
+  <{block name=extendjs}><{/block}>
+  <script>
+	var siteurl = "<{$siteurl}>";
+	var is_static ="<{$is_static}>";
+	var taction = "<{$Taction}>";
+	var https = '<{$https|default:''}>';
+    var lat = '<{$latitude|default:0}>';
+    var lng = '<{$longitude|default:0}>';
+	// if ( taction != 'member' &&  taction != 'login' &&  taction != 'reg'  ){
+	// 	var cururl = window.location.href;
+	// 	$.cookie('wxCurUrl', cururl);
+	// }
+    var sharelink = '<{ofunc type=url link="/wxsite/index"}>';
+    var sharetitle = '<{$shareinfo['title']}>';
+    var sharedesc = '<{$shareinfo['describe']}>';
+    var shareimgUrl = '<{$siteurl}><{$shareinfo['img']}>';
+    wx.config({
+        debug: false,
+        appId: '<{$signPackage['appId']}>',
+        timestamp: '<{$signPackage['timestamp']}>',
+        nonceStr: '<{$signPackage['nonceStr']}>',
+        signature: '<{$signPackage['signature']}>',
+        jsApiList: [
+            'checkJsApi',
+			'openLocation',
+			'getLocation',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'onMenuShareQZone'
+        ]
+    });
+  </script>
+</head>
+
+<body ontouchstart>
+  <{block name=blockcontent}>
+  <{/block}>
+  <{block name=footer}>
+  <footer>
+    <ul>
+      <li <{if $Taction == 'index'}>class="active" <{/if}>><a href="<{ofunc type=url link="/wxsite/index"}>">首页</a></li>
+      <li <{if $Taction == 'order'}>class="active" <{/if}>><a href="<{ofunc type=url link="/wxsite/order"}>">订单</a></li>
+      <li <{if $Taction == 'member'}>class="active" <{/if}>><a href="<{ofunc type=url link="/wxsite/member"}>">我的</a></li>
+    </ul>
+  </footer>
+  <{/block}>
+  <script>
+
+    wx.ready(function(){
+        // 2. 分享接口
+        // 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+        // document.querySelector('#onMenuShareAppMessage').onclick = function () {
+        wx.onMenuShareAppMessage({
+            title: sharetitle,
+            desc: sharedesc,
+            link: sharelink,
+            imgUrl: shareimgUrl,
+            trigger: function (res) {
+                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                //  Tmsg('用户点击发送给朋友');
+            },
+            success: function (res) {
+                //  Tmsg('分享成功');
+            },
+            cancel: function (res) {
+                // Tmsg('已取消');
+            },
+            fail: function (res) {
+                //  Tmsg(JSON.stringify(res));
+            }
+        });
+        // Tmsg('已注册获取“发送给朋友”状态事件');
+//};
+
+
+        // 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+        //  document.querySelector('#onMenuShareTimeline').onclick = function () {
+        wx.onMenuShareTimeline({
+            title: sharetitle,
+            desc: sharedesc,
+            link: sharelink,
+            imgUrl: shareimgUrl,
+            trigger: function (res) {
+                // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                //Tmsg('用户点击分享到朋友圈');
+            },
+            success: function (res) {
+                //	Tmsg('分享成功');
+            },
+            cancel: function (res) {
+                //	Tmsg('已取消');
+            },
+            fail: function (res) {
+                //	Tmsg(JSON.stringify(res));
+            }
+        });
+        //	Tmsg('已注册获取“分享到朋友圈”状态事件');
+        //  };
+
+        // 2.3 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+        // document.querySelector('#onMenuShareQQ').onclick = function () {
+        wx.onMenuShareQQ({
+            title: sharetitle,
+            desc: sharedesc,
+            link: sharelink,
+            imgUrl: shareimgUrl,
+            trigger: function (res) {
+                // Tmsg('用户点击分享到QQ');
+            },
+            complete: function (res) {
+                //   Tmsg(JSON.stringify(res));
+            },
+            success: function (res) {
+                //   Tmsg('分享成功');
+            },
+            cancel: function (res) {
+                //   Tmsg('已取消');
+            },
+            fail: function (res) {
+                //   Tmsg(JSON.stringify(res));
+            }
+        });
+        //  Tmsg('已注册获取“分享到 QQ”状态事件');
+        // };
+
+        // 2.4 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
+        // document.querySelector('#onMenuShareWeibo').onclick = function () {
+        wx.onMenuShareWeibo({
+            title: sharetitle,
+            desc: sharedesc,
+            link: sharelink,
+            imgUrl: shareimgUrl,
+            trigger: function (res) {
+                //    Tmsg('用户点击分享到微博');
+            },
+            complete: function (res) {
+                //   Tmsg(JSON.stringify(res));
+            },
+            success: function (res) {
+                //    Tmsg('分享成功');
+            },
+            cancel: function (res) {
+                //  Tmsg('已取消');
+            },
+            fail: function (res) {
+                //    Tmsg(JSON.stringify(res));
+            }
+        });
+        //  Tmsg('已注册获取“分享到微博”状态事件');
+//  };
+
+        // 2.5 监听“分享到QZone”按钮点击、自定义分享内容及分享接口
+        // document.querySelector('#onMenuShareQZone').onclick = function () {
+        wx.onMenuShareQZone({
+            title: sharetitle,
+            desc: sharedesc,
+            link: sharelink,
+            imgUrl: shareimgUrl,
+            trigger: function (res) {
+                //    Tmsg('用户点击分享到QZone');
+            },
+            complete: function (res) {
+                //     Tmsg(JSON.stringify(res));
+            },
+            success: function (res) {
+                //      Tmsg('分享成功');
+            },
+            cancel: function (res) {
+                //     Tmsg('已取消');
+            },
+            fail: function (res) {
+                //     Tmsg(JSON.stringify(res));
+            }
+        });
+        //   Tmsg('已注册获取“分享到QZone”状态事件');
+        // };
+		<{if $mlatitude <= 0 || empty($mlatitude) }>
+		wx.checkJsApi({
+			jsApiList: [
+				'getLocation'
+			],
+			success: function (res) {
+				// alert(JSON.stringify(res));
+				// alert(JSON.stringify(res.checkResult.getLocation));
+				if (res.checkResult.getLocation == false) {
+					alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+					return;
+				}
+			}
+		});
+		wx.getLocation({
+			success: function (res) {
+				var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+				var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+				var speed = res.speed; // 速度，以米/每秒计
+				var accuracy = res.accuracy; // 位置精度
+				//alert(latitude);return false;
+				ajaxurl = '<{ofunc type=url link="/wxsite/updateMemberlnglat"}>';
+				$.ajax({
+				   type: 'POST',
+				   async:true,
+				   url: ajaxurl,
+				   data: {'lat':latitude,'lng':longitude},
+				   success: function(content) {
+					   window.location.reload();
+				   },
+				   error: function(content) {
+
+				   }
+				});
+			},
+			cancel: function (res) {
+				console.log('用户拒绝授权获取地理位置');
+			}
+		});
+		<{/if}>
+    });
+  </script>
+</body>
+</html>
+<{block name=end_script}>
+<{/block}>

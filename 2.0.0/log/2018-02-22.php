@@ -1,0 +1,12 @@
+时间:2018-02-22 21:58:49,/index.php?ctrl=wxsite&action=shopshow&typelx=wm&id=891描述:访问链接：
+时间:2018-02-22 21:58:55,/index.php?ctrl=wxsite&action=cart&shopid=891&datatype=json&random=225描述:访问链接：
+时间:2018-02-22 21:59:05,/index.php?ctrl=wxsite&action=foodsgg&id=7245描述:访问链接：
+时间:2018-02-22 21:59:06,/index.php?ctrl=site&action=doselectproduct&goods_id=7245&shopid=891&ggdetids=100,117&type=1&datatype=json&random=699描述:访问链接：
+时间:2018-02-22 21:59:07,/index.php?ctrl=wxsite&action=foodsgg&id=7245描述:访问链接：
+时间:2018-02-22 21:59:07,/index.php?ctrl=site&action=doselectproduct&goods_id=7245&shopid=891&ggdetids=100,117&type=1&datatype=json&random=635描述:访问链接：
+时间:2018-02-22 21:59:10,/index.php?ctrl=site&action=addcart&goods_id=1986&shopid=891&num=1&gdtype=2&datatype=json&random=339描述:访问链接：
+时间:2018-02-22 21:59:10,/index.php?ctrl=site&action=doselectproduct&goods_id=7245&shopid=891&ggdetids=100,117&type=1&datatype=json&random=632描述:访问链接：
+时间:2018-02-22 21:59:11,/index.php?ctrl=wxsite&action=cart&shopid=891&datatype=json&random=350描述:访问链接：
+时间:2018-02-22 21:59:17,/index.php?ctrl=site&action=addcart&goods_id=1986&shopid=891&num=1&gdtype=2&datatype=json&random=717描述:访问链接：
+时间:2018-02-22 21:59:17,/index.php?ctrl=site&action=doselectproduct&goods_id=7245&shopid=891&ggdetids=100,117&type=1&datatype=json&random=989描述:访问链接：
+时间:2018-02-22 21:59:18,/index.php?ctrl=wxsite&action=cart&shopid=891&datatype=json&random=894描述:访问链接：

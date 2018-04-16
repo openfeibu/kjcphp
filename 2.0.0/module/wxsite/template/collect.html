@@ -1,0 +1,58 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+
+<{block name=blockcontent}>
+<div class="shopCollection">
+  <div class="shop_group">
+    <{if empty($templist)}>
+    <div class="noPro" style="display: block;">
+      先去收藏店铺
+    </div>
+    <script>
+      $(".shopCollection,.shop_group").css("height","100%")
+    </script>
+    <{else}>
+      <div class="shop_group_list">
+      <{foreach from=$templist key=mykey item=items}>
+      <div class="shop_group_item">
+        <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
+            <{if $items['opentype'] == 2  }>
+            <div class="shop_state shop_state_ing"></div>
+            <{else}>
+            <div class="shop_state shop_state_ed"></div>
+            <{/if}>
+          <div class="img"><img src="<{$items.shoplogo}>" alt=""></div>
+          <div class="text">
+            <div class="shop_name"><{$items.shopname}></div>
+            <div class="shop_nums">月售<{$items.ordercount}>份</div>
+            <div class="shop_decs fb-clearfix">
+              <div class="fb-fl"><span>起送￥<{$items.limitcost}></span><span>配送￥<{$items.pscost}></span></div>
+              <div class="fb-fr">
+                  <{if !empty($items['arrivetime']) }>
+                     <span><{$items['arrivetime']}>分钟</span>
+              <{/if}>
+                  <span><{$items.juli}></span>
+              </div>
+            </div>
+            <{if !empty($items['cxlist'] ) }>
+            <div class="discount">
+                <{foreach from=$items['cxlist'] item=itv }>
+                <div class="discount_j" style="background: url(<{$itv['imgurl']}>) no-repeat center left;background-size: .32rem .32rem;"><{$itv['name']}></div>
+                <{/foreach}>
+            </div>
+            <{/if}>
+          </div>
+        </a>
+      </div>
+      <{/foreach}>
+    </div>
+
+    <div class="weui-loadmore weui-loadmore_line loadmored" style="display:block;">
+      <span class="weui-loadmore__tips">已经到底了</span>
+    </div>
+    <{/if}>
+    
+  </div>
+</div>
+<{/block}>
+<{block name="footer"}><{/block}>

@@ -1,0 +1,138 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<div class="shopList">
+  <div class="weui-tab" id='page-infinite-navbar'>
+    <div class="weui-navbar">
+      <{foreach from=$caipin item=items}>
+        <a class="weui-navbar__item typeid_<{$items['id']}> <{if $items['id'] == $typeid}>weui-bar__item--on<{/if}>" id="<{$items['id']}>">
+          <{$items['name']}>
+        </a>
+      <{/foreach}>
+    </div>
+    <div class="weui-tab__bd">
+      <div id="sltab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+        <div class="content-padded">
+          <div class="shop_group">
+            <div class="shop_group_list" id="supplierlist">
+
+            </div>
+            <div class="weui-loadmore loadmoreing">
+              <i class="weui-loading"></i>
+              <span class="weui-loadmore__tips">正在加载中</span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line loadmored">
+              <span class="weui-loadmore__tips">已经到底了</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<{/block}>
+<{block name=footer}><{/block}>
+<{block name="end_script"}>
+<script>
+// $F.loading();
+// $F.closeLoading();
+
+    var order = 0;
+    var page = 1;
+    var catid = <{$typeid|default:0}>;
+    var typeid = <{$typeid|default:0}>;
+    var qsjid = 0;
+    var sendtype = 0;
+	var cxtype = 0;
+	var isxl = 0;
+    var myaddress = '<{$myaddress}>';
+    var search_input = '<{$search_input|default:' '}>';
+    $(".weui-navbar .weui-navbar__item").on("click",function(){
+        var i =$(this).index(".weui-navbar .weui-navbar__item");
+        $(this).addClass("weui-bar__item--on").siblings().removeClass("weui-bar__item--on");
+        catid = $(this).attr('id');
+        can_show = true;
+        page = 1;
+        //$F.loading();
+        freshpage();
+    })
+    function freshpage(){//刷新函数
+
+      $('.shop_group').get(0).loading = false;
+        page =1;
+        pageend = false;
+  		var ajaxurl = '<{ofunc type=url link="/wxsite/shoplistdata"}>';
+      $F.loading();
+		$.ajax({
+		   type: 'POST',
+		   async:true,
+		   url: ajaxurl,
+		   data: {'typelx':'<{$typelx|default:0}>','areaid':'<{$areaid|default:0}>','search_input':search_input,'order':order,'catid':catid,'qsjid':qsjid,'isxl':isxl,'sendtype':sendtype,'cxtype':cxtype,'page':page},
+		   dataType: 'html',
+           success: function(content) {
+               $F.closeLoading();
+                if(removeBr(content).length == 0){
+                  $('#supplierlist').html('<div id="noPro">附近没有店铺</div>');
+                }else{
+                  $('#supplierlist').html(content);
+                }
+
+                if(  $.trim(content) != '' && $("#supplierlist .shop_group_item").length >= 10  ){
+                	  $(".loadmoreing").show();
+                    $(".loadmored").hide();
+                }else{
+                    $(".loadmored").show();
+                    $(".loadmoreing").hide();
+                }
+		  },
+		  error: function(content) {
+              $F.closeLoading();
+				 //Tmsg('获取失败...');
+		  }
+		  });
+     }
+     $F.loading();
+     freshpage();
+     function loadmore(_this)
+     {
+         _this.loading = true;
+         page = page+1;
+         var ajaxurl = '<{ofunc type=url link="/wxsite/shoplistdata"}>';
+    		 $.ajax({
+    		   type: 'POST',
+    		   async:true,
+    		   url: ajaxurl,
+    		   data: {'typelx':'<{$typelx|default:0}>','areaid':'<{$areaid|default:0}>','search_input':search_input,'order':order,'catid':catid,'qsjid':qsjid,'isxl':isxl,'sendtype':sendtype,'cxtype':cxtype,'page':page},
+    		   dataType: 'html',
+               success: function(content) {
+        				var getmoreContent =  $.trim(content);
+        				if( getmoreContent == ''  ){
+        					pageend = true;
+                            // $(_this).destroyInfinite();
+                            $(_this).find(".loadmoreing").hide();
+                            $(_this).find(".loadmored").show()
+        				}else{
+                  _this.loading = false;
+        					$('#supplierlist').append(content);
+        				}
+    	      },
+    		  error: function(content) {
+    				         pageend = true;
+                     // $(_this).destroyInfinite();
+                     $(_this).find(".loadmoreing").hide();
+                     $(_this).find(".loadmored").show()
+    		   }
+    		  });
+     }
+
+    $('.shop_group').infinite(50).on("infinite", function() {
+        var _this = this;
+        if(_this.loading) return;
+        loadmore(_this);
+    });
+
+
+</script>
+
+<{/block}>

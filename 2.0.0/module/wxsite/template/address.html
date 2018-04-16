@@ -1,0 +1,102 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+
+<{block name=blockcontent}>
+<div class="shop_map">
+  <{if $shopid}>
+  <div class="addMap" onclick="replaceLocation('<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress&shopid=<{$shopid}>')">
+    添加新地址
+  </div>
+  <{else}>
+  <div class="addMap" onclick="replaceLocation('<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress')">
+    添加新地址
+  </div>
+  <{/if}>
+  <div class="shopMap">
+  <{if empty($arealist)}>
+    <div class="noPro" style="display: block;">
+      请先设置收货地址
+    </div>
+    <{/if}>
+    <ul>
+      <{foreach from=$arealist key=mykey item=items}>
+      <li class="clearfix <{if $items['default'] == 1}>active<{/if}>">
+        <div class="map_default" gid="<{$items['id']}>"></div>
+        <a class="addresschange" gid="<{$items['id']}>" shopid="<{$shopid}>" >
+          <div class="orderDetail_address">
+            <div class="orderDetail_address_con">
+              <p><span><{$items['contactname']}></span>&nbsp;&nbsp;<{$items['phone']}></p>
+              <p><{$items['detailadr']}></p>
+            </div>
+          </div>
+        </a>
+        <div class="map_update"><a href="<{$siteurl}>/index.php?ctrl=wxsite&action=editaddress&id=<{$items['id']}>"></a></div>
+        <div class="map_delete" gid="<{$items['id']}>"></div>
+      </li>
+      <{/foreach}>
+    </ul>
+  </div>
+</div>
+<script>
+  $(".shopMap .map_default").on("click",function(){
+    var that = $(this);
+    var i = that.index(".shopMap .map_default");
+
+    var info = {'tijiao':'do','default':'1','addressid':$(this).attr('gid'),'what':'default'};
+    var url = siteurl+'/index.php?ctrl=area&action=editaddress&random=@random@&datatype=json';
+        url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+    var backinfo = ajaxback(url,info);
+        if(backinfo.flag ==  false){
+          $.toast("设置默认地址成功",'text');
+          that.parents("li").addClass("active").siblings("li").removeClass("active");
+        }else{
+          $.toast(backinfo.content,'text');
+        }
+  })
+  $(".map_delete").on("click",function(){
+    var that = $(this);
+    $.confirm({
+      text: '是否删除？',
+      onOK: function () {
+        //点击确认
+        var gid = that.attr('gid');
+        var info = {'tijiao': 'del', 'addressid': gid};
+        var url = '<{ofunc type=url link="/area/deladdress/random/@random@/datatype/json"}>';
+        url = url.replace('@random@', 1 + Math.round(Math.random() * 1000));
+        var backinfo = ajaxback(url, info);
+        if (backinfo.flag == false) {
+            that.parents("li").fadeOut(200);
+        } else {
+            //$('#loading').hide();
+            $.toast(backinfo.content,'text');
+        }
+      },
+      onCancel: function () {
+      }
+    });
+
+});
+$(".addresschange").on("click",function(){
+    $F.loading();
+    var that = $(this);
+    shopid = that.attr('shopid');
+    gid = that.attr('gid');
+    if(shopid){
+        var info = {'tijiao':'do','default':'1','addressid':$(this).attr('gid'),'what':'default'};
+        var url = siteurl+'/index.php?ctrl=area&action=editaddress&random=@random@&datatype=json';
+            url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+        fbajaxback(url,info,function (backinfo){
+            if(backinfo.flag ==  false){
+                window.location.href = siteurl+"/index.php?ctrl=wxsite&action=shopcart&id="+shopid;
+            }else{
+                $.toast(backinfo.content,'text');
+            }
+        });
+
+    }else{
+        window.location.href = siteurl+"/index.php?ctrl=wxsite&action=editaddress&id="+gid;
+    }
+});
+</script>
+<{/block}>
+<{block name="footer"}><{/block}>

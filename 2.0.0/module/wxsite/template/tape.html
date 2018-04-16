@@ -1,0 +1,19 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+  <div class="tape">
+      <{if !empty($list)}>
+      <{foreach from=$list item=items}>
+      <div class="tape_item">
+        <div class="tape_title"><{$items['name']}></div>
+        <div class="tape_date"><{$items['time']|friendlyDate}></div>
+        <div class="tape_con"><{$items['content']}></div>
+      </div>
+      <{/foreach}>
+      <{else}>
+      <div class="noPro" style="display:block;">暂无消息</div>
+      <{/if}>
+
+  </div>
+  <{/block}>
+  <{block name=footer}><{/block}>

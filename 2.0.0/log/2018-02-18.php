@@ -1,0 +1,17 @@
+时间:2018-02-18 16:52:42,/描述:访问链接：
+时间:2018-02-18 16:52:47,/index.php?ctrl=site&action=guide描述:访问链接：
+时间:2018-02-18 16:52:48,/index.php?ctrl=site&action=checkOpenCity&datatype=json&random=117描述:访问链接：
+时间:2018-02-18 16:56:42,/描述:访问链接：
+时间:2018-02-18 16:56:43,/index.php?ctrl=site&action=guide描述:访问链接：
+时间:2018-02-18 16:56:44,/index.php?ctrl=site&action=checkOpenCity&datatype=json&random=890描述:访问链接：
+时间:2018-02-18 16:57:21,/index.php?ctrl=wxsite&action=index描述:访问链接：
+时间:2018-02-18 16:57:27,/index.php?ctrl=wxsite&action=member描述:访问链接：
+时间:2018-02-18 16:57:30,/index.php?ctrl=wxsite&action=myaccount描述:访问链接：
+时间:2018-02-18 16:57:30,/index.php?ctrl=wxsite&action=login描述:访问链接：
+时间:2018-02-18 16:57:32,/index.php?ctrl=member&action=login&datatype=json&random=301&uname=gwb&pwd=123456&logintype=html5描述:访问链接：
+时间:2018-02-18 16:57:32,/index.php?ctrl=wxsite&action=myaccount描述:访问链接：
+时间:2018-02-18 16:57:34,/index.php?ctrl=wxsite&action=order描述:访问链接：
+时间:2018-02-18 16:57:36,/index.php?ctrl=wxsite&action=member描述:访问链接：
+时间:2018-02-18 16:57:40,/index.php?ctrl=wxsite&action=index描述:访问链接：
+时间:2018-02-18 16:57:46,/index.php?ctrl=wxsite&action=shopshow&typelx=wm&id=891描述:访问链接：
+时间:2018-02-18 16:57:47,/index.php?ctrl=wxsite&action=cart&shopid=891&datatype=json&random=849描述:访问链接：

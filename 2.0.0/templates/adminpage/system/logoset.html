@@ -1,0 +1,411 @@
+ <{extends file="<{$tempdir}>/public/admin.html"}>
+ <{block name=extendjs}>
+<script type="text/javascript" language="javascript" src="<{$siteurl}>/templates/<{$tempdir}>/public/js/artdialog/plugins/iframeTools.js"></script>
+ <{/block}>
+ <{block name=controlname}>logo设置<{/block}>
+ <{block name=bodylist}>
+
+	  <div style="width:auto;overflow-x:hidden;overflow-y:auto;">
+          <div id="tagscontent">
+            <form method="post" name="form1" action="<{ofunc type=url link="/adminpage/system/module/savelogoset/datatype/json"}>" onsubmit="return subform('',this);">
+              <div>
+                <table border="0" cellspacing="2" cellpadding="4" class="list" name="table" id="table" width="100%">
+                  <tbody>
+
+
+				<!-- 	<tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                      <td class="left">网站LOGO</td>
+                      <td>
+                      	<input type="hidden" name="sitelogo" id="sitelogo" value="<{$sitelogo}>" class="skey" style="width:100px;">
+                      	<img src="<{$sitelogo}>" width=150px height=50px id="imgshowc" <{if  empty($sitelogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                      	<span onclick="uploadc();">上传图片</span>
+                      </td>
+                    </tr> -->
+
+				<!-- 	<tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">网站首页LOGO</td>
+                        <td>
+                            <input type="hidden" name="webcaption" id="webcaption" value="<{$webcaption}>" class="skey" style="width:100px;">
+                            <img src="<{$webcaption}>" width=300px height=50px id="imgwebcaption" <{if  empty($webcaption)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadw();">上传图片</span>
+                        </td>
+                    </tr> -->
+                    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                      <td class="left">后台LOGO</td>
+                      <td>
+                      	<input type="hidden" name="adminlogo" id="adminlogo" value="<{$adminlogo}>" class="skey" style="width:100px;">
+                        <{if empty($adminlogo)}>
+                      	<img src="/templates/adminpage/public/images/admin/logo.png" width=200px height=50px id="imgshowadmin" <{if  empty($sitelogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                      	<{else}>
+                        <img src="<{$adminlogo}>" width=200px height=50px id="imgshowadmin" <{if  empty($sitelogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                        <{/if}>
+                             <span onclick="uploadadmin();">上传图片</span>
+                      </td>
+                   </tr>
+
+                 <!--    <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">微信端背景logo</td>
+                        <td>
+                            <input type="hidden" name="wxbglogo" id="wxbglogo" value="<{$wxbglogo}>" class="skey" style="width:100px;">
+                            <img src="<{$wxbglogo}>" width=50px height=50px id="wxbglogoshow" <{if  empty($wxbglogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadwxbglogo();">上传图片</span>
+                        </td>
+                    </tr> -->
+
+				    <!-- <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                      <td class="left">用户默认头像</td>
+                      <td>
+                      	<input type="hidden" name="userlogo" id="userlogo" value="<{$userlogo}>" class="skey" style="width:100px;">
+                      	<img src="<{$userlogo}>" width=50px height=50px id="imgshow" <{if  empty($userlogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                      	<span onclick="uploads();">上传图片</span>
+                      </td>
+                    </tr> -->
+					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                      <td class="left">默认店铺头像</td>
+                      <td>
+                      	<input type="hidden" name="shoplogo" id="shoplogo" value="<{$shoplogo}>" class="skey" style="width:100px;">
+                      	<img src="<{$shoplogo}>" width=50px height=50px id="imgshows" <{if  empty($shoplogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                      	<span onclick="uploadm();">上传图片</span>
+                      </td>
+                    </tr>
+                    <!-- <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">登录页面logo</td>
+                        <td>
+                            <input type="hidden" name="loginlogo" id="loginlogo" value="<{$loginlogo}>" class="skey" style="width:100px;">
+                            <img src="<{$loginlogo}>" width=50px height=50px id="loginlogoshow" <{if  empty($loginlogo)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadl();">上传图片</span>
+                        </td>
+                    </tr> -->
+                  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">微信关注二维码</td>
+                        <td>
+                            <input type="hidden" name="wxewm" id="wxewm" value="<{$wxewm}>" class="skey" style="width:100px;">
+                            <img src="<{$wxewm}>" width=50px height=50px id="imgwxewm" <{if  empty($wxewm)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadwx();">上传图片</span>
+                        </td>
+                    </tr>
+
+              <!--       <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">APP下载二维码</td>
+                        <td>
+                            <input type="hidden" name="appewm" id="appewm" value="<{$appewm}>" class="skey" style="width:100px;">
+                            <img src="<{$appewm}>" width=50px height=50px id="imgappewm" <{if  empty($appewm)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadappewm();">上传图片</span>
+                        </td>
+                    </tr> -->
+                   <!--  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">注册送优惠劵图标</td>
+                        <td>
+                            <input type="hidden" name="regimg" id="regimg" value="<{$regimg}>" class="skey" style="width:100px;">
+                            <img src="<{$regimg}>" width=50px height=50px id="imgregimg" <{if  empty($regimg)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadregimg();">上传图片</span>
+                        </td>
+                    </tr>
+				   -->
+				  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">微信分享默认图标</td>
+                        <td>
+                            <input type="hidden" name="wxshare" id="wxshare" value="<{$share_img}>" class="skey" style="width:100px;">
+                            <img src="<{$share_img}>" width=50px height=50px id="imgwxshare" <{if  empty($share_img)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadwxshare();">上传图片</span>
+                        </td>
+                    </tr>
+                  <!--   <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">商家配送图标</td>
+                        <td>
+                            <input type="hidden" name="shoppsimg" id="shoppsimg" value="<{$shoppsimg}>" class="skey" style="width:100px;">
+                            <img src="<{$shoppsimg}>" width=80px height=25px id="shoppsimgshow" <{if  empty($shoppsimg)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadshoppsimg();">上传图片</span>
+                        </td>
+                    </tr>
+ -->
+                   <!--  <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">网站配送图标</td>
+                        <td>
+                            <input type="hidden" name="psimg" id="psimg" value="<{$psimg}>" class="skey" style="width:100px;">
+                            <img src="<{$psimg}>" width=80px height=25px id="psimgshow" <{if  empty($psimg)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadpsimg();">上传图片</span>
+                        </td>
+                    </tr> -->
+
+                <!--     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="#ffffff">
+                        <td class="left">pc端跑腿二维码</td>
+                        <td>
+                            <input type="hidden" name="ptewm" id="ptewm" value="<{$ptewm}>" class="skey" style="width:100px;">
+                            <img src="<{$ptewm}>" width=35px height=50px id="imgptewm" <{if  empty($ptewm)}> style="display:none;"<{/if}> style="margin-top: 15px;">
+                            <span onclick="uploadptewm();">上传图片</span>
+                        </td>
+                    </tr>	 -->
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="blank20"></div>
+              <input type="hidden" name="tijiao" id="tijiao" value="do" class="skey" style="width:250px;">
+              <input type="hidden" name="saction" id="saction" value="logoset" class="skey" style="width:250px;">
+               <input type="submit" value="确认提交" class="button">
+            </form>
+          </div>
+
+
+         </div>
+
+
+
+          </div>
+<script>
+	var dialogs ;
+ function uploads(){
+ 	  dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucess"}>');
+ 	  dialogs.title('上传图片');
+ }
+ function uploadsucess(flag,obj,linkurl){
+ 	 if(flag == true){
+
+		dialogs.close();
+		uploads();
+ 	 }else{
+ 		dialogs.close();
+ 	 $('#userlogo').val(linkurl);
+   	$('#imgshow').attr('src',linkurl);
+ 	  $('#imgshow').show();
+   }
+ }
+  function uploadwxshare(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsuceswxshare"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadsuceswxshare(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+
+            dialogs.close();
+            $('#wxshare').val(linkurl);
+            $('#imgwxshare').attr('src',linkurl);
+            $('#imgwxshare').show();
+        }
+    }
+function uploadregimg(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucesregimg"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadsucesregimg(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+
+            dialogs.close();
+            $('#regimg').val(linkurl);
+            $('#imgregimg').attr('src',linkurl);
+            $('#imgregimg').show();
+        }
+    }
+ function uploadm(){
+ 	  dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucessm"}>');
+ 	  dialogs.title('上传图片');
+ }
+ function uploadsucessm(flag,obj,linkurl){
+ 	 if(flag == true){
+
+		dialogs.close();
+		uploadm();
+ 	 }else{
+ 		dialogs.close();
+ 	 $('#shoplogo').val(linkurl);
+ 	$('#imgshows').attr('src',linkurl);
+ 	$('#imgshows').show();
+   }
+ }
+ function uploadadmin(){
+ 	  dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucessadmin"}>');
+ 	  dialogs.title('上传图片');
+ }
+ function uploadsucessadmin(flag,obj,linkurl){
+ 	 if(flag == true){
+
+		dialogs.close();
+		uploadadmin();
+ 	 }else{
+ 		dialogs.close();
+ 	 $('#adminlogo').val(linkurl);
+ 	$('#imgshowadmin').attr('src',linkurl);
+ 	$('#imgshowadmin').show();
+   }
+ }
+function uploadc(){
+ 	  dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucessc"}>');
+ 	  dialogs.title('上传图片');
+ }
+ function uploadsucessc(flag,obj,linkurl){
+ 	 if(flag == true){
+
+		dialogs.close();
+		uploadc();
+ 	 }else{
+ 		dialogs.close();
+ 	 	$('#sitelogo').val(linkurl);
+ 	  $('#imgshowc').attr('src',linkurl);
+ 	  $('#imgshowc').show();
+   }
+ }
+ function uploadk(){
+ 	 dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucessk"}>');
+ 	  dialogs.title('上传图片');
+}
+function uploadsucessk(flag,obj,linkurl){
+ 	 if(flag == true){
+
+		dialogs.close();
+		uploadk();
+ 	 }else{
+ 		dialogs.close();
+ 	 	$('#html5logo').val(linkurl);
+ 	  $('#html5logoshow').attr('src',linkurl);
+ 	  $('#html5logoshow').show();
+   }
+ }
+
+    function uploadw(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsuceswebc"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadsuceswebc(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+
+            dialogs.close();
+            $('#webcaption').val(linkurl);
+            $('#imgwebcaption').attr('src',linkurl);
+            $('#imgwebcaption').show();
+        }
+    }
+    function uploadwx(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsuceswxewm"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadsuceswxewm(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+
+            dialogs.close();
+            $('#wxewm').val(linkurl);
+            $('#imgwxewm').attr('src',linkurl);
+            $('#imgwxewm').show();
+        }
+    }
+
+    function uploadappewm(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucesappewm"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadsucesappewm(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+            dialogs.close();
+            $('#appewm').val(linkurl);
+            $('#imgappewm').attr('src',linkurl);
+            $('#imgappewm').show();
+        }
+    }
+    function uploadptewm(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadsucesptewm"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadsucesptewm(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+            dialogs.close();
+            $('#ptewm').val(linkurl);
+            $('#imgptewm').attr('src',linkurl);
+            $('#imgptewm').show();
+        }
+    }
+
+    function uploadshoppsimg(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadshoppsimga"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadshoppsimga(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+            dialogs.close();
+            $('#shoppsimg').val(linkurl);
+            $('#shoppsimgshow').attr('src',linkurl);
+            $('#shoppsimgshow').show();
+        }
+    }
+    function uploadpsimg(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadpsimga"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadpsimga(flag,obj,linkurl){
+        if(flag == true){
+
+            dialogs.close();
+            uploadw();
+        }else{
+            dialogs.close();
+            $('#psimg').val(linkurl);
+            $('#psimgshow').attr('src',linkurl);
+            $('#psimgshow').show();
+        }
+    }
+
+
+    function uploadl(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadloginlogo"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadloginlogo(flag,obj,linkurl){
+        if(flag == true){
+            dialogs.close();
+            uploadw();
+        }else{
+            dialogs.close();
+            $('#loginlogo').val(linkurl);
+            $('#loginlogoshow').attr('src',linkurl);
+            $('#loginlogoshow').show();
+        }
+    }
+
+    function uploadwxbglogo(){
+        dialogs = art.dialog.open('<{ofunc type=url link="/adminpage/other/module/adminupload/func/uploadwxbglogos"}>');
+        dialogs.title('上传图片');
+    }
+    function uploadwxbglogos(flag,obj,linkurl){
+        if(flag == true){
+            dialogs.close();
+            uploadw();
+        }else{
+            dialogs.close();
+            $('#wxbglogo').val(linkurl);
+            $('#wxbglogoshow').attr('src',linkurl);
+            $('#wxbglogoshow').show();
+        }
+    }
+
+
+
+</script>
+<!--newmain 结束-->
+ <{/block}>

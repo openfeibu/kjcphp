@@ -1,0 +1,226 @@
+<{extends file="<{$tempdir}>/public/wxsite.html"}>
+<{block name=sitetitle}><{$sitename}><{/block}>
+<{block name=blockcontent}>
+<script>
+var site_city = '<{$CITY_NAME|default:$cityname}>';
+var shopid = '<{$id}>';
+var pstype = '<{$shopinfo['sendtype']}>';
+var addAreaType = '<{$addAreaType}>';
+var map_comment_link = '<{$map_comment_link}>';
+var map_webservice_key = '<{$map_webservice_key}>';
+var backtype = 0;
+</script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/cart.js"></script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/address.js"></script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/template.min.js"></script>
+<script>
+
+    var cartbagcost =0;
+    var cartpscost = 0;
+    var cartsum = 0;
+    var cxcost = 0;
+    var surecost = 0;
+    var cxcosttotal = 0;
+    var juanlist = <{$juanlist|json_encode}>;
+    var wxjuanlist = <{$wxjuanlist|json_encode}>;
+    var checknext = false;
+    var timelist = <{$timelist|json_encode}>;
+    var backgoshop = '<{ofunc type=url link="/wxsite/shopshow/id/<{$id}>"}>';
+    var backadd = '<{ofunc type=url link="/wxsite/bkaddress/shopid/<{$id}>"}>';
+    $(function(){
+        // maketime();
+		 freshcart();
+         getjuaninfo();
+     });
+</script>
+<script id="cartlist" type="text/html">
+<div class="orderDetail_pro_item" >
+  <div class="orderDetail_pro_name fb-inlineBlock">
+    <p><^%=list.name%^></p>
+    <^%if(list.have_det==1){%^><span><^%=list.gg.attrname%^></span><^%}%^>
+  </div>
+  <div class="orderDetail_pro_num fb-inlineBlock">
+    x<^%=list.count%^>
+  </div>
+  <div class="orderDetail_pro_money fb-inlineBlock">
+    ￥<^%=list.cost%^>
+  </div>
+</div>
+</script>
+<script id="cxlist" type="text/html">
+<div class="orderDetail_item fsMain">
+  <p><^%=list.name%^></p>
+  <span><^%=list.downcost%^></span>
+</div>
+</script>
+    <div class="c_orderDetail">
+    <input type="hidden" name="yhjcost" value="0" />
+    <input type="hidden" name="juanid" data="0" id="juanid" value="0">
+    <input type="hidden" name="juancost" id="juancost" value="0">
+      <div class="checkMap" >
+        <a href="<{$siteurl}>/index.php?ctrl=wxsite&action=address&shopid=<{$shopid}>">
+          <div class="usermap">
+            <div class="orderDetail_address">
+              <div class="orderDetail_address_con">
+                <p><span></span></p>
+                <p></p>
+              </div>
+            </div>
+          </div>
+          <div class="noMap">请选择收货地址</div>
+        </a>
+      </div>
+      <div class="orderDetail_top">
+        <div class="orderDetail_shopName"><{$shopinfo['shopname']}></div>
+        <div id="foodslist">
+            <div class="orderDetail_pro">
+
+            </div>
+            <div class="orderDetail_item">
+              <p>配送费</p>
+              <span>￥0</span>
+            </div>
+        <!-- <div class="orderDetail_item fsMain">
+          <p>商家优惠</p>
+          <span>-￥5</span>
+        </div> -->
+        </div>
+        <div class="orderDetail_item fsMain ">
+          <div class="checkDiscount">
+            <p>代金券</p>
+            <span>暂无可用</span>
+          </div>
+
+          <div class="YHcheckDiscount">
+
+          </div>
+        </div>
+        <div class="orderDetail_money">
+          <p>实付<span class="surecost">￥0</span></p>
+        </div>
+      </div>
+      <div class="orderDetail_mask">
+        <textarea placeholder="备注（选填）" name="remark" id="remark"></textarea>
+      </div>
+      <div class="c_orderDetail_button">
+        <div class="c_money fb-fl">
+          合计 <span class="surecost">￥0</span>
+        </div>
+        <div class="toPay fb-fr" onclick='orderSubmit();'>去支付</div>
+      </div>
+    </div>
+    <div class="shopdetalistCon" style="display:none;">
+        <div class="shopdetalistBox">
+            <ul id="shocart">
+            </ul>
+            <ul id="nextshocart"></ul>
+        </div>
+    </div>
+<script>
+  var count = 28;
+  var discount = 1;
+  discountids = ['0,0'];
+  discountvalues = ['不使用代金券'];
+  $(".YHcheckDiscount").picker({
+    title: "请选择代金券",
+    cols: [
+      {
+        textAlign: 'center',
+        values: discountids,
+        displayValues: discountvalues,
+      }
+    ],
+    onClose:function(picker){
+      var valArr = picker.value[0].split(",");
+      var val = parseFloat(valArr[0]);
+      if(valArr[1] != 0)
+      {
+          $(".checkDiscount span").text("-￥"+val);
+          $('#juanid').val(valArr[1]);
+          $('#juancost').val(val);
+    	    $('input[name="yhjcost"]').val(val);
+          freshcart(1);
+      }else{
+          $(".checkDiscount span").text("不使用代金券");
+
+          $('#juanid').val(valArr[1]);
+          $('#juancost').val(val);
+          $('input[name="yhjcost"]').val(val);
+
+          freshcart(1)
+      }
+
+    }
+  });
+    function  orderSubmit(){
+        var buyerlng = $('input[name="addresslng"]').val();
+        var buyerlat = $('input[name="addresslat"]').val();
+        var remark = $('textarea[name="remark"]').val();
+		$F.loading();
+        if(checknext ==  false){
+            checknext = true;
+            url = siteurl+'/index.php?ctrl=wxsite&action=makeorder&datatype=json&random=@random@';
+            url = url.replace('@random@', 1+Math.round(Math.random()*1000));
+            $.ajax({         //script定义
+                url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
+                dataType: "json",
+                async:true,
+                data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat,'remark':remark},
+                success:function(content) {
+					$F.closeLoading();
+                    if(content.error ==  false){
+                        wxdata = eval('('+ content.wxdata +')');
+						orderid = content.orderid;
+                        callpay();
+                    }else{
+                        $.toast(content.msg,'text');
+                    }
+                },
+                error:function(){
+					$F.loading();
+                    //$.toast(content.msg,'text');
+                }
+            });
+             setTimeout("myyanchi()", 500 );
+        }
+    }
+    function jsApiCall()
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            wxdata,
+            function(res){
+                WeixinJSBridge.log(res.err_msg);
+                var dostring = res.err_msg;
+                var temparr = dostring.split(':');
+				window.location.href = siteurl + '/index.php?ctrl=wxsite&action=ordershow&orderid='+orderid;
+				/*
+                if(temparr.length == 2){
+                    if(temparr[1] == 'ok' || temparr[1] == 'cancel'){
+                        window.location.href = siteurl + '/index.php?ctrl=wxsite&action=ordershow&orderid='+orderid;
+                    }
+                }else{
+                    $.toast(res.err_msg,'text');
+                }
+				*/
+            }
+        );
+
+    }
+  	function callpay()
+  	{
+  		if (typeof WeixinJSBridge == "undefined"){
+  		    if( document.addEventListener ){
+  		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+  		    }else if (document.attachEvent){
+  		        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+  		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+  		    }
+  		}else{
+  		    jsApiCall();
+  		}
+  	}
+
+</script>
+<{/block}>
+<{block name="footer"}><{/block}>
