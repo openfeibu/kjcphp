@@ -175,14 +175,45 @@ class method extends baseclass
         $smardb->setdb($this->mysql)->ClearCart();
         $this->success('清空所有商品成功');
     }
-
+	public function postmsgbypay()
+    {
+        // 普通订单 在线支付成功 后返回数据处理
+        $orderid = intval(IReq::get('orderid'));
+        if (empty($orderid)) {
+            echo '订单号错误';
+            exit;
+        }
+        $checkflag = false;
+        /* 更新订单物流信息 */
+        $orderinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."order where id = ".$orderid."   ");
+        $minitime = strtotime(date('Y-m-d', time()));
+        $tj = $this->mysql->select_one("select count(*) as daycode from ".Mysite::$app->config['tablepre']."order where shopid='".$orderinfo['shopid']."' and addtime > ".$minitime." AND paystatus = 1 order by id desc");
+        $data['daycode'] = $tj['daycode'];
+        $this->mysql->update(Mysite::$app->config['tablepre'].'order',$data,"id ='".$orderid."' ");
+        $orderCLs = new orderclass();
+        $orderCLs->writewuliustatus($orderinfo['id'], 3, $orderinfo['paytype']);  //在线支付成功状态
+        $orderCLs->sendmess($orderid);
+        if ($orderinfo['is_make']  == 1) {
+            $orderCLs->writewuliustatus($orderinfo['id'], 4, $orderinfo['paytype']);  //商家自动确认接单
+            $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop where id='".$orderinfo['shopid']."' ");
+            if ($shopinfo['is_autopreceipt'] == 1) {
+                $orderdatac['status'] = 2;
+                $orderdatac['sendtime'] = time();
+                $orderCLs->writewuliustatus($orderinfo['id'],6,$orderinfo['paytype']);
+                $this->mysql->update(Mysite::$app->config['tablepre'].'order',$orderdatac,"id ='".$orderid."' ");
+                $orderCLs->sendpsmess($orderid);
+            }
+        }
+        echo 'success';
+        exit;
+    }
     public function testshop()
     {
         ini_set('display_errors', 1);            //错误信息
         ini_set('display_startup_errors', 1);    //php启动错误信息
         error_reporting(-1);
         $orderclass = new orderclass();
-        $orderclass->sendpsmess('33124');
+        $orderclass->sendmess('12095');
         echo 'success';
         exit;
         Mysite::$app->setdata($data);
