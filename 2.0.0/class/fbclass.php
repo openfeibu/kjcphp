@@ -550,11 +550,8 @@ class fbclass
             $goods = $this->mysql->select_one("SELECT SUM(virtualsellcount) as virtualsellcounts  FROM ".Mysite::$app->config['tablepre']."goods where shopid = '".$value['id']."'");
             $value['virtualsellcounts'] = $goods['virtualsellcounts'];
 
-            // $mstart = strtotime(date("Y-m-01"));
-            // $mgoods = $this->mysql->select_one("SELECT SUM(goodscount) as mgoodscount  FROM ".Mysite::$app->config['tablepre']."order as o join ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id  where o.shopid = '".$value['id']."' AND o.addtime >= $mstart AND od.status = 3 ");
-            //
-            // $value['ordercount'] = $mgoods['mgoodscount'];
-            $value['virtualsellcounts'] = $goods['virtualsellcounts'];
+
+
             $cxinfo = array();
             $d = date("w") ==0?7:date("w");
             $value['maxcx'] = 0;
@@ -576,6 +573,11 @@ class fbclass
             $imgurl = empty($value['shoplogo'])?Mysite::$app->config['imgserver'].Mysite::$app->config['shoplogo']:Mysite::$app->config['imgserver'].$value['shoplogo'];
             $value['shopimg'] = $imgurl;
             $value['shoplogo'] = $imgurl;
+
+            $mstart = strtotime(date("Y-m-01"));
+            $mgoods = $this->mysql->select_one("SELECT SUM(goodscount) as mgoodscount  FROM ".Mysite::$app->config['tablepre']."order as o join ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id  where o.shopid = '".$value['id']."' AND o.addtime >= $mstart AND o.status = 3 ");
+            $value['ordercount'] = $mgoods['mgoodscount'];
+
             $value['sellcount'] = $value['virtualsellcounts']+$value['ordercount'];
             $value['ordercount'] =$value['sellcount'];
 
@@ -596,8 +598,6 @@ class fbclass
         }
 
         array_multisort($pxvalue2, SORT_DESC, $pxvalue1, $pxtype, $datalist);
-
-
 
         return $datalist;
     }
