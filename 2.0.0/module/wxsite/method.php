@@ -89,7 +89,7 @@ class method extends wxbaseclass
 
         $julidatalistx = $this->Tdata($this->stationid, array(), array('mijuli'=>'asc'), $lat, $lng, $source);
         $data['julishoplist']  = $julidatalistx;
-        $ordercountdatalistx = $this->Tdata($this->stationid, array(), array('ordercount'=>'desc'), $lat, $lng, $source);
+        $ordercountdatalistx = $this->Tdata($this->stationid, array(), array('mordercount'=>'desc'), $lat, $lng, $source);
         $data['ordercountshoplist']  = $ordercountdatalistx;
         $cxdatalist = $this->Tdata($this->stationid, array('cxtype' => 2), array('maxcx'=>'desc'), $lat, $lng, $source);
         $data['cxdatalist']  = $cxdatalist;
