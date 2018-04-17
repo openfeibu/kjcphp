@@ -1,8 +1,7 @@
 <?php
 
 /**
-*   部分测试
-*   客服消息不稳定，应改为模板消息
+ * 
  */
 class orderclass
 {
@@ -16,6 +15,12 @@ class orderclass
     {
         $this->ordmysql =new mysql_class();
     }
+    //关闭订单
+
+
+
+
+
 
     //关闭订单通知
     public function noticeclose($orderid, $reason)
@@ -25,13 +30,17 @@ class orderclass
             $smtp = new ISmtp(Mysite::$app->config['smpt'], 25, Mysite::$app->config['emailname'], Mysite::$app->config['emailpwd'], false);
             $wx_s = new wx_s();
             $appCls = new appbuyclass();
-
+            //app信息
+            $appcheck =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."appbuyerlogin where uid = '".$orderinfo['buyeruid']."'   ");
             $default_tpl = new config('tplset.php', hopedir);
             $tpllist = $default_tpl->getInfo();
             $orderinfo['reason'] = $reason;
             if (isset($tpllist['noticemake']) && !empty($tpllist['phoneunorder'])) {
                 $emailcontent = Mysite::$app->statichtml($tpllist['phoneunorder'], $orderinfo);
-
+                if (!empty($appcheck)) {
+                    $tempuser[] = $appcheck;
+                    $backinfo = $appCls->SetUserlist($tempuser)->sendNewmsg('订单被关闭', $emailcontent);
+                }
                 if (!empty($orderinfo['buyeruid'])) {
                     $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
                     if (!empty($wxbuyer)) {
@@ -44,7 +53,7 @@ class orderclass
             }
         }
     }
-
+    //制作订单通知
     public function noticemake($orderid)
     {
         $orderinfo =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."order  where id= '".$orderid."'   ");
@@ -61,12 +70,16 @@ class orderclass
             $smtp = new ISmtp(Mysite::$app->config['smpt'], 25, Mysite::$app->config['emailname'], Mysite::$app->config['emailpwd'], false);
             $wx_s = new wx_s();
             $appCls = new appbuyclass();  //appBuyclass
-
+            //app信息
+            $appcheck =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."appbuyerlogin where uid = '".$orderinfo['buyeruid']."'   ");
             $default_tpl = new config('tplset.php', hopedir);
             $tpllist = $default_tpl->getInfo();
             if (isset($tpllist['noticemake']) && !empty($tpllist['noticemake'])) {
                 $emailcontent = Mysite::$app->statichtml($tpllist['noticemake'], $orderinfo);
-
+                if (!empty($appcheck)) {
+                    $tempuser[] = $appcheck;
+                    $backinfo = $appCls->SetUserlist($tempuser)->sendNewmsg('商家确认制作该订单', $emailcontent);
+                }
                 if (!empty($orderinfo['buyeruid'])) {
                     $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
                     if (!empty($wxbuyer)) {
@@ -124,11 +137,16 @@ class orderclass
             $drawbacklog =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."drawbacklog  where orderid= '".$orderid."'   ");
             $orderinfo['reason'] = $drawbacklog['bkcontent'];
 
+            //app信息
+            $appcheck =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."appbuyerlogin where uid = '".$orderinfo['buyeruid']."'   ");
             $default_tpl = new config('tplset.php', hopedir);
             $tpllist = $default_tpl->getInfo();
             if (isset($tpllist['noticeback']) && !empty($tpllist['noticeback'])) {
                 $emailcontent = Mysite::$app->statichtml($tpllist['noticeback'], $orderinfo);
-
+                if (!empty($appcheck)) {
+                    $tempuser[] = $appcheck;
+                    $backinfo = $appCls->SetUserlist($tempuser)->sendNewmsg('退款成功', $emailcontent);
+                }
                 if (!empty($orderinfo['buyeruid'])) {
                     $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
                     if (!empty($wxbuyer)) {
@@ -151,12 +169,16 @@ class orderclass
             $appCls = new appbuyclass();
             $drawbacklog =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."drawbacklog  where orderid= '".$orderid."'   ");
             $orderinfo['reason'] = $drawbacklog['bkcontent'];
-
+            //app信息
+            $appcheck =  $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."appbuyerlogin where uid = '".$orderinfo['buyeruid']."'   ");
             $default_tpl = new config('tplset.php', hopedir);
             $tpllist = $default_tpl->getInfo();
             if (isset($tpllist['noticesend']) && !empty($tpllist['noticesend'])) {
                 $emailcontent = Mysite::$app->statichtml($tpllist['noticesend'], $orderinfo);
-
+                if (!empty($appcheck)) {
+                    $tempuser[] = $appcheck;
+                    $backinfo = $appCls->SetUserlist($tempuser)->sendNewmsg("发货提示", $emailcontent);
+                }
                 if (!empty($orderinfo['buyeruid'])) {
                     $wxbuyer = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."wxuser  where uid= '".$orderinfo['buyeruid']."'   ");
                     if (!empty($wxbuyer)) {
@@ -166,6 +188,10 @@ class orderclass
                         }
                     }
                 }
+                // $memberinfo = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$orderinfo['buyeruid']."'   ");
+                // if(IValidate::email($memberinfo['email'])){
+                     // $info = $smtp->send($memberinfo['email'], Mysite::$app->config['emailname'],'发货通知',$emailcontent, "" , "HTML" , "" , "");
+                // }
             }
         }
     }
@@ -200,7 +226,10 @@ class orderclass
                     }
                 }
             }
-
+            // $memberinfo = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."member where uid = '".$orderinfo['buyeruid']."'   ");
+            // if(IValidate::email($memberinfo['email'])){
+            // 	 $info = $smtp->send($shopinfo['email'], Mysite::$app->config['emailname'],'退款失败通知',$emailcontent, "" , "HTML" , "" , "");
+            // }
         }
     }
 
@@ -479,7 +508,26 @@ class orderclass
     }
     public function dosengprint($msg, $machine_code, $mKey)
     {
+        $xmlData = '<xml>
+ <mKey><![CDATA['.$mKey.']]></mKey >
+<machine_code><![CDATA['.$machine_code.']]></machine_code >
+<Content><![CDATA['.$msg.']]></Content >
+</xml>';
 
+        //第一种发送方式，也是推荐的方式：
+$url = 'http://www.waimairen.com/print/wmr.php';  //接收xml数据的文件
+$header[] = "Content-type: text/xml";        //定义content-type为xml,注意是数组
+$ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xmlData);
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            print curl_error($ch);
+        }
+        curl_close($ch);
     }
     //订单处理 普通订单处理
 
@@ -627,7 +675,7 @@ class orderclass
         $mztime = $info['shopinfo']['maketime']*60;
         $ordertime1 = $data['addtime']+$sdtime+$mztime;
         $ordertime2 = $data['posttime'];
-
+       
         if ($ordertime2 < $ordertime1) {
             $data['posttime'] = $ordertime1;
         }
@@ -723,6 +771,11 @@ class orderclass
                 $this->ordmysql->insert(Mysite::$app->config['tablepre'].'address', $addata);
             }
         }
+        if ($sendmsgtops == true) {
+            // $psylist =  $this->ordmysql->getarr("select a.*  from ".Mysite::$app->config['tablepre']."apploginps as a left join ".Mysite::$app->config['tablepre']."member as b on a.uid = b.uid where b.admin_id = ".$data['admin_id']."");
+            // $psCls = new apppsyclass();
+            // $psCls->SetUserlist($psylist)->sendNewmsg('订单提醒','有新订单可以处理');
+        }
 
         if ($data['paytype'] == 0) {
             if ($panduan == 0) {
@@ -730,9 +783,32 @@ class orderclass
                     $this->writewuliustatus($orderid, 4, $data['paytype']);  //订单审核后自动 商家接单
                     $auto_send = Mysite::$app->config['auto_send'];
                     if ($auto_send == 1) {
-
+                        //					  $this->writewuliustatus($orderid,2,$data['paytype']);//订单审核后自动 商家接单后自动发货
+//					  $orderdatac['sendtime'] = time();
+//					  $this->ordmysql->update(Mysite::$app->config['tablepre'].'order',$orderdatac,"id ='".$orderid."' ");
                     } else {
+                        //自动生成配送单------|||||||||||||||-----------------------
+                      if ($data['pstype'] == 0) {//网站配送自动生成配送费
+                          /*
+                            $psdata['orderid'] = $orderid;
+                            $psdata['shopid'] = $data['shopid'];
+                            $psdata['status'] =0;
+                            $psdata['dno'] = $data['dno'];
+                            $psdata['addtime'] = time();
+                            $psdata['pstime'] = $data['posttime'];
+                            $checkpsyset = Mysite::$app->config['psycostset'];
+                            $bilifei =Mysite::$app->config['psybili']*0.01*$data['allcost'];
+                            $psdata['psycost'] = $checkpsyset == 1?Mysite::$app->config['psycost']:$bilifei;
+                            $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderps',$psdata);  //写配送订单
+                              */
                           $sendmsgtops = true;
+                      } elseif ($data['pstype'] == 2) {
+                          $sendmsgtops = false;
+                          $psbinterface = new psbinterface();
+                          if ($psbinterface->psbnoticeorder($orderid)) {
+                          }
+                      }
+                        //自动生成配送单结束-------------
                     }
                 }
             }
@@ -904,9 +980,408 @@ class orderclass
         $statusdata['addtime']     =  time();
         $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderstatus', $statusdata);
     }
+    //后台 代课下单
+    public function houtaimakenormal($info)
+    {
+        //需要的公共数据
+        //$data['othercontent'] = $info['othercontent'];
+        // $data['cattype'] = $info['cattype'];//表示 是否是订台
+        $data['areaids'] = $info['areaids'];
+        $data['admin_id'] = $info['shopinfo']['admin_id'];
+        $data['shoptype'] = $info['shopinfo']['shoptype'];//: 0:普通订单，1订台订单
+        //获取店铺商品总价  获取超市商品总价
+        $data['shopcost'] = $info['allcost'];
+        $data['shopps'] = $info['shopps'];
+        $data['bagcost'] =  $info['bagcost'];
+        $data['ordertype'] = $info['ordertype'];
+        //支付方式检测
+        $userid = $info['userid'];
+        $data['paytype'] = $info['paytype'];
+        $data['cxids'] = '';
+        $data['cxcost'] = 0;
+        $zpin = array();
+        if ($data['shopcost'] > 0) {
+            $sellrule =new sellrule();
+            $sellrule->setdata($info['shopinfo']['id'], $data['shopcost'], $info['shopinfo']['shoptype']);
+            $ruleinfo = $sellrule->getdata();
+            $data['shopdowncost'] = $ruleinfo['shopdowncost'];
+            $data['cxcost'] = $ruleinfo['downcost'];
+            $data['cxids'] = $ruleinfo['cxids'];
+            $zpin = $ruleinfo['zid'];//赠品
+            $data['shopps'] = $ruleinfo['nops'] == true?0:$data['shopps'];
+        }
+        //判断优惠劵
+        $allcost = $data['shopcost'];
+        $data['yhjcost'] = 0;
+        $data['yhjids'] = '';
+        $userid = $info['userid'];
+        $juanid = $info['juanid'];
+        if ($juanid > 0 && $userid > 0) {
+            $juaninfo = $this->ordmysql->select_one("select *  from ".Mysite::$app->config['tablepre']."juan  where id= '".$juanid."' and uid='".$userid."'  and status = 1 and endtime > ".time()." ");
+            if (!empty($juaninfo)) {
+                if ($allcost >= $juaninfo['limitcost']) {
+                    $data['yhjcost'] =  $juaninfo['cost'];
+                    $juandata['status'] = 2;
+                    $juandata['usetime'] =  time();
+                    $this->ordmysql->update(Mysite::$app->config['tablepre'].'juan', $juandata, "id='".$juanid."'");
+                    $data['yhjids'] = $juanid;
+                }
+            }
+        }
+        //积分抵扣
+        $allcost = $allcost - $data['cxcost'] - $data['yhjcost'];
+        $data['scoredown'] = 0;
+        $dikou = $info['dikou'];
+        if (!empty($userid) && $dikou > 0 && Mysite::$app->config['scoretocost'] > 0 && $allcost > $dikou) {
+            $checkuser= $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where uid='".$userid."'  ");
+            if (is_array($checkuser)) {
+                $checkscore = $dikou*(intval(Mysite::$app->config['scoretocost']));
+                if ($checkuser['score']  >= $checkscore) {
+                    $data['scoredown'] =  $checkscore;
+                    $this->ordmysql->update(Mysite::$app->config['tablepre'].'member', '`score`=`score`-'.$checkscore, "uid ='".$userid."' ");
+                }
+            }
+        }
+        $dikou = $data['scoredown'] > 0?$dikou:0;
+        $allcost = $allcost-$dikou;
+        $fupscost = isset($info['addpscost'])?$info['addpscost']:0;
+        $data['allcost'] = $allcost+$data['shopps']+$fupscost+$data['bagcost']; //订单应收费用
+      $data['shopps'] = $data['shopps']+$fupscost;//增加附件配送费
+        $data['pstype'] = $info['pstype'] ;
+        //检测店铺
+
+        $data['shopuid'] = $info['shopinfo']['uid'];// 店铺UID
+      $data['shopid'] =  $info['shopinfo']['id']; //店铺ID
+        $data['shopname'] = $info['shopinfo']['shopname']; //店铺名称
+      $data['shopphone'] = $info['shopinfo']['phone']; //店铺电话
+      $data['shopaddress'] = $info['shopinfo']['address'];// 店铺地址
+      $data['buyeraddress'] = $info['addressdet'];
+        $data['ordertype'] = $info['ordertype'];//来源方式;
+      $data['buyeruid'] = $userid;// 购买用户ID，0未注册用户
+        $data['buyername'] =  $info['username'];//购买热名称
+        $data['buyerphone'] = $info['mobile'];// 联系电话
+        $panduan = 0;
+
+        $data['paystatus'] = 1;// 默认1已支付
+      $data['paytype_name'] = 'open_acout';// 默认未余额支付
+        $data['content'] = $info['remark'];// 订单备注
+
+        //  daycode 当天订单序号
+        $data['ipaddress'] = $info['ipaddress'];
+        $data['is_ping'] = 0;// 是否评价字段 1已评完 0未评
+        $data['addtime'] = time();
+        $data['posttime'] = $info['sendtime'];//: 配送时间
+
+
+        //送达时间
+        $sdtime = $info['shopinfo']['arrivetime']*60;
+        //制作时间
+        $mztime = $info['shopinfo']['maketime']*60;
+        $ordertime1 = $data['addtime']+$sdtime+$mztime;
+        $ordertime2 = $data['posttime'];
+       
+        if ($ordertime2 < $ordertime1) {
+            $data['posttime'] = $ordertime1;
+        }
+
+
+        $data['postdate'] = $info['postdate'];//配送时间段
+      $data['othertext'] = $info['othercontent'];//其他说明
+      if ($info['shopinfo']['is_autopreceipt'] == 1) {
+          $data['is_make'] =1;
+          $data['maketime'] =time();
+      }
+
+        //  :审核时间
+        $data['passtime'] = time();
+        $data['status'] = 1;
+        if ($data['status']  == 1) {
+            $data['passtime'] == 0;
+        }
+        $data['buycode'] = substr(md5(time()), 9, 6);
+        $data['dno'] = time().rand(1000, 9999);
+        $minitime = strtotime(date('Y-m-d', time()));
+        $tj = $this->ordmysql->select_one("select daycode,id from ".Mysite::$app->config['tablepre']."order where shopid='".$info['shopid']."' and addtime > ".$minitime." order by id desc limit 0,1000");
+        $data['daycode'] = empty($tj)?1:$tj['daycode']+1;
+        $data['status'] = 1;
+        $this->ordmysql->insert(Mysite::$app->config['tablepre'].'order', $data);  //写主订单
+
+        $orderid = $this->ordmysql->insertid();
+
+        $sendmsgtops = false;
+
+
+        /* 写订单物流 状态 */
+        /* 第一步 提交成功 */
+        $this->writewuliustatus($orderid, 1, $data['paytype']);
+        if ($data['paytype'] == 0) {
+            if ($panduan == 0) {
+                if ($data['is_make'] == 1) {
+                    $this->writewuliustatus($orderid, 4, $data['paytype']);  //订单审核后自动 商家接单
+                    $auto_send = Mysite::$app->config['auto_send'];
+                    if ($auto_send == 1) {
+                        $this->writewuliustatus($orderid, 6, $data['paytype']);//订单审核后自动 商家接单后自动发货
+                        $orderdatac['sendtime'] = time();
+                        $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', $orderdatac, "id ='".$orderid."' ");
+                    } else {
+                        //自动生成配送单------|||||||||||||||-----------------------
+                      if ($data['pstype'] == 0) {//网站配送自动生成配送费
+                      /*
+                          $psdata['orderid'] = $orderid;
+                          $psdata['shopid'] = $data['shopid'];
+                          $psdata['status'] =0;
+                          $psdata['dno'] = $data['dno'];
+                          $psdata['addtime'] = time();
+                          $psdata['pstime'] = $data['posttime'];
+                          $checkpsyset = Mysite::$app->config['psycostset'];
+                          $bilifei =Mysite::$app->config['psybili']*0.01*$data['allcost'];
+                          $psdata['psycost'] = $checkpsyset == 1?Mysite::$app->config['psycost']:$bilifei;
+                          $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderps',$psdata);  //写配送订单
+                        */
+                          $sendmsgtops = true;
+                      } elseif ($orderinfo['pstype'] == 2) {
+                          $sendmsgtops = false;
+                          $psbinterface = new psbinterface();
+                          if ($psbinterface->psbnoticeorder($orderid)) {
+                          }
+                      }
+                        //自动生成配送单结束-------------
+                    }
+                }
+            }
+        }
+
+        $this->orderid = $orderid;
+        foreach ($info['goodslist'] as $key=>$value) {
+            $cmd['order_id'] = $orderid;
+            $cmd['goodsid'] = $value['id'];
+            $cmd['goodsname'] = $value['name'];
+            $cmd['goodscost'] = $value['cost'];
+            $cmd['goodscount'] = $value['count'];
+            $cmd['shopid'] = $value['shopid'];
+            $cmd['status'] = 0;
+            $cmd['is_send'] = 0;
+            $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderdet', $cmd);
+            $this->ordmysql->update(Mysite::$app->config['tablepre'].'goods', '`count`=`count`-'.$cmd['goodscount'].' ,`sellcount`=`sellcount`+'.$cmd['goodscount'], "id='".$cmd['goodsid']."'");
+        }
+
+        if (is_array($zpin)&& count($zpin) > 0) {
+            foreach ($zpin as $key=>$value) {
+                $datadet['order_id'] = $orderid;
+                $datadet['goodsid'] = $key;
+                $datadet['goodsname'] = $value['presenttitle'];
+                $datadet['goodscost'] = 0;
+                $datadet['goodscount'] = 1;
+                $datadet['shopid'] = $info['shopid'];
+                $datadet['status'] = 0;
+                $datadet['is_send'] = 1;
+                //更新促销规则中 此赠品的数量
+                $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderdet', $datadet);
+                $this->ordmysql->update(Mysite::$app->config['tablepre'].'rule', '`controlcontent`=`controlcontent`-1', "id='".$key."'");
+            }
+        }
+
+        $checkbuyer = Mysite::$app->config['allowedsendbuyer'];
+        $checksend = Mysite::$app->config['man_ispass'];
+        if ($checksend != 1) {
+            if ($data['status'] == 1) {
+                $this->sendmess($orderid);
+            }
+        }
+        if ($userid > 0) {
+            $checkinfo =   $this->ordmysql->select_one("select * from ".Mysite::$app->config['tablepre']."address where userid='".$userid."'  ");
+            if (empty($checkinfo)) {
+                $addata['userid'] = $userid;
+                $addata['username'] = $data['buyername'];
+                $addata['address'] = $data['buyeraddress'];
+                $addata['phone'] = $data['buyerphone'];
+                $addata['contactname'] = $data['buyername'];
+                $addata['default'] = 1;
+                $this->ordmysql->insert(Mysite::$app->config['tablepre'].'address', $addata);
+            }
+        }
+        if ($sendmsgtops == true) {
+            $psylist =  $this->ordmysql->getarr("select a.*  from ".Mysite::$app->config['tablepre']."apploginps as a left join ".Mysite::$app->config['tablepre']."member as b on a.uid = b.uid where b.admin_id = ".$data['admin_id']."");
+            $psCls = new apppsyclass();
+            $psCls->SetUserlist($psylist)->sendNewmsg('订单提醒', '有新订单可以处理');
+        }
+    }
+
+
+    //预订订单
+    public function orderyuding($info)
+    {
+        //$data['subtype'] = $info['subtype'];
+        $data['is_goshop'] = $info['is_goshop'];
+        $data['areaids'] = $info['areaids'];
+        $data['admin_id'] = $info['shopinfo']['admin_id'];
+        $data['shopcost'] = $info['allcost'];//:店铺商品总价
+         $data['shopps'] = 0;//店铺配送费
+         $data['shoptype'] = 0;//: 0:普通订单，1订台订单
+         $data['bagcost']=0;//:打包费
+         //获取店铺商品总价  获取超市商品总价
+         $data['paytype'] = $info['paytype'];
+        $data['cxids'] = '';
+        $data['cxcost'] = 0;
+        $data['yhjcost'] = 0;
+        $data['yhjids'] = '';
+        $data['scoredown'] = 0;
+        $data['allcost'] =$info['allcost']; //订单应收费用
+      $data['shopuid'] =$info['shopinfo']['uid'];// 店铺UID
+        $data['shopid'] =  $info['shopinfo']['id']; //店铺ID
+        $data['shopname'] =$info['shopinfo']['shopname']; //店铺名称
+        $data['shopphone'] =  $info['shopinfo']['phone']; //店铺电话
+        $data['shopaddress'] =$info['shopinfo']['address'];// 店铺地址
+        $data['pstype'] = $info['pstype'] ;
+        $data['shoptype'] = 0;
+        $data['buyeraddress'] = '';
+        $data['ordertype'] = $info['ordertype'];//来源方式;
+      $data['buyeruid'] = $info['userid'];// 购买用户ID，0未注册用户
+        $data['buyername'] =  $info['username'];//购买热名称
+        $data['buyerphone'] = $info['mobile'];// 联系电话
+      $data['paystatus'] = 0;// 支付状态1已支付
+        $data['content'] = $info['remark'];// 订单备注
+        //  daycode 当天订单序号
+      $data['ipaddress'] = $info['ipaddress'];
+        $data['is_ping'] = 0;// 是否评价字段 1已评完 0未评
+        $data['addtime'] = time();
+
+        $data['posttime'] = $info['sendtime'];//: 配送时间
 
 
 
+        //送达时间
+        $sdtime = $info['shopinfo']['arrivetime']*60;
+        //制作时间
+        $mztime = $info['shopinfo']['maketime']*60;
+        $ordertime1 = $data['addtime']+$sdtime+$mztime;
+        $ordertime2 = $data['posttime'];
+        
+        if ($ordertime2 < $ordertime1) {
+            $data['posttime'] = $ordertime1;
+        }
+
+
+
+
+        $data['postdate'] = $info['postdate'];//配送时间段
+      $data['othertext'] = $info['othercontent'];//其他说明
+      //  :审核时间
+      $data['passtime'] = time();
+        $data['buycode'] = substr(md5(time()), 9, 6);
+        $data['dno'] = time().rand(1000, 9999);
+        $minitime = strtotime(date('Y-m-d', time()));
+        $zpin = array();
+        if ($info['subtype'] == 1) {
+            // $this->message('订桌位');
+           //
+        } elseif ($info['subtype'] == 2) {
+            $data['shopcost'] = $data['shopcost'];
+            $data['cxids'] = '';
+            $data['cxcost'] = 0;
+            $cattype = $info['cattype'];
+            if ($data['shopcost'] > 0) {
+                $sellrule =new sellrule();
+                $sellrule->setdata($info['shopid'], $data['shopcost'], $info['shopinfo']['shoptype']);
+                $ruleinfo = $sellrule->getdata();
+                $data['shopdowncost'] = $ruleinfo['shopdowncost'];
+                $data['cxcost'] = $ruleinfo['downcost'];
+                $data['cxids'] = $ruleinfo['cxids'];
+                $zpin = $ruleinfo['zid'];//赠品
+            }
+            $data['allcost'] =   $data['shopcost'] - $data['cxcost'];
+        }
+        $panduan = Mysite::$app->config['man_ispass'];
+        $data['status'] = 0;
+        if ($panduan != 1 && $data['paytype'] == 0) {
+            $data['status'] = 1;
+        }
+
+        if (Mysite::$app->config['allowed_is_make'] == 0) {
+            $data['is_make'] =1;
+            $data['maketime'] =time();
+        }
+
+        #$data['is_make'] = Mysite::$app->config['allowed_is_make'] == 1?0:1;
+        $minitime = strtotime(date('Y-m-d', time()));
+        $tj = $this->ordmysql->select_one("select count(id) as shuliang from ".Mysite::$app->config['tablepre']."order where shopid='".$info['shopid']."' and addtime > ".$minitime."  limit 0,1000");
+        $data['daycode'] = $tj['shuliang']+1;
+        $this->ordmysql->insert(Mysite::$app->config['tablepre'].'order', $data);  //写主订单
+        $orderid = $this->ordmysql->insertid();
+
+        $this->orderid = $orderid;
+
+
+
+        /* 写订单物流 状态 */
+        /* 第一步 提交成功 */
+        $this->writewuliustatus($orderid, 1, $data['paytype']);
+        if ($data['paytype'] == 0) {
+            if ($panduan == 0) {
+                if ($data['is_make'] == 1) {
+                    $this->writewuliustatus($orderid, 4, $data['paytype']);  //订单审核后自动 商家接单
+                    $auto_send = Mysite::$app->config['auto_send'];
+                    if ($auto_send == 1) {
+                        $orderdatac['sendtime'] = time();
+                        $this->ordmysql->update(Mysite::$app->config['tablepre'].'order', $orderdatac, "id ='".$orderid."' ");
+                        $this->writewuliustatus($orderid, 6, $data['paytype']);//订单审核后自动 商家接单后自动发货
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        if ($info['subtype'] == 2) {
+            foreach ($info['goodslist'] as $key=>$value) {
+                $cmd['order_id'] = $orderid;
+                $cmd['goodsid'] = isset($value['gg'])?$value['gg']['goodsid']:$value['id'];
+                $cmd['goodsname'] = isset($value['gg'])?$value['name']."【".$value['gg']['attrname']."】":$value['name'];
+                $cmd['goodscost'] = isset($value['gg'])?$value['gg']['cost']:$value['cost'];
+                $cmd['goodscount'] = $value['count'];
+                $cmd['shopid'] = $value['shopid'];
+                $cmd['status'] = 0;
+                $cmd['is_send'] = 0;
+                $cmd['have_det'] = $value['have_det'];
+                $cmd['product_id'] = isset($value['gg'])?$value['gg']['id']:0;
+                $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderdet', $cmd);
+                if (isset($value['gg'])) {
+                    $this->ordmysql->update(Mysite::$app->config['tablepre'].'product', '`stock`=`stock`-'.$cmd['goodscount'].' ', "id='".$cmd['product_id']."'");
+
+                    $this->ordmysql->update(Mysite::$app->config['tablepre'].'goods', '`sellcount`=`sellcount`+'.$cmd['goodscount'].' ', "id='".$cmd['goodsid']."'");
+                } else {
+                    $this->ordmysql->update(Mysite::$app->config['tablepre'].'goods', '`count`=`count`-'.$cmd['goodscount'].' ,`sellcount`=`sellcount`+'.$cmd['goodscount'], "id='".$cmd['goodsid']."'");
+                }
+            }
+            if (is_array($zpin)&& count($zpin) > 0) {
+                foreach ($zpin as $key=>$value) {
+                    $datadet['order_id'] = $orderid;
+                    $datadet['goodsid'] = $key;
+                    $datadet['goodsname'] = $value['presenttitle'];
+                    $datadet['goodscost'] = 0;
+                    $datadet['goodscount'] = 1;
+                    $datadet['shopid'] = $info['shopid'];
+                    $datadet['status'] = 0;
+                    $datadet['is_send'] = 1;
+                    $datadet['have_det'] = 0;
+                    $datadet['product_id'] = 0;
+                    //更新促销规则中 此赠品的数量
+                    $this->ordmysql->insert(Mysite::$app->config['tablepre'].'orderdet', $datadet);
+                    $this->ordmysql->update(Mysite::$app->config['tablepre'].'rule', '`controlcontent`=`controlcontent`-1', "id='".$key."'");
+                }
+            }
+        }
+
+        $checkbuyer = Mysite::$app->config['allowedsendbuyer'];
+        $checksend = Mysite::$app->config['man_ispass'];
+        if ($checksend != 1) {
+            if ($data['status'] == 1) {
+                $this->sendmess($orderid);
+            }
+        }
+    }
     public function handleOrderStatus($order)
     {
         $status = '';
