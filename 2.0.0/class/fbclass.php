@@ -550,10 +550,10 @@ class fbclass
             $goods = $this->mysql->select_one("SELECT SUM(virtualsellcount) as virtualsellcounts  FROM ".Mysite::$app->config['tablepre']."goods where shopid = '".$value['id']."'");
             $value['virtualsellcounts'] = $goods['virtualsellcounts'];
 
-            $mstart = strtotime(date("Y-m-01"));
-            $mgoods = $this->mysql->select_one("SELECT SUM(goodscount) as mgoodscount  FROM ".Mysite::$app->config['tablepre']."order as o join ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id  where o.shopid = '".$value['id']."' AND o.addtime >= $mstart AND od.status = 3 ");
-
-            $value['ordercount'] = $mgoods['mgoodscount'];
+            // $mstart = strtotime(date("Y-m-01"));
+            // $mgoods = $this->mysql->select_one("SELECT SUM(goodscount) as mgoodscount  FROM ".Mysite::$app->config['tablepre']."order as o join ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id  where o.shopid = '".$value['id']."' AND o.addtime >= $mstart AND od.status = 3 ");
+            //
+            // $value['ordercount'] = $mgoods['mgoodscount'];
             $value['virtualsellcounts'] = $goods['virtualsellcounts'];
             $cxinfo = array();
             $d = date("w") ==0?7:date("w");
