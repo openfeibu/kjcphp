@@ -48,14 +48,14 @@
       <div class="shop_group">
         <div class="shop_group_title">附近商家</div>
         <div class="shop_group_tab fb-clearfix">
-          <div class="shop_group_tab_item active" href="sltab1">距离优先</div>
-          <div class="shop_group_tab_item" href="sltab2">销量优先</div>
+          <div class="shop_group_tab_item active" href="sltab1">销量优先</div>
+          <div class="shop_group_tab_item" href="sltab2">距离优先</div>
           <div class="shop_group_tab_item" href="sltab3">折扣商家</div>
         </div>
         <div class="shop_group_list">
             <div id="sltab1" >
-                <{if !empty($julishoplist) }>
-                <{foreach from=$julishoplist item=items }>
+                <{if !empty($ordercountshoplist) }>
+                <{foreach from=$ordercountshoplist item=items }>
                 <div class="shop_group_item">
                   <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
                     <{if $items['opentype'] == 2  }>
@@ -91,8 +91,8 @@
                 <{/if}>
             </div>
           <div id="sltab2" style="display:none;">
-              <{if !empty($ordercountshoplist) }>
-              <{foreach from=$ordercountshoplist item=items }>
+              <{if !empty($julishoplist) }>
+              <{foreach from=$julishoplist item=items }>
               <div class="shop_group_item">
                 <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
                   <{if $items['opentype'] == 2  }>
