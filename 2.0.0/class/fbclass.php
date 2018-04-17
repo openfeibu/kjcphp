@@ -575,8 +575,8 @@ class fbclass
             $value['shoplogo'] = $imgurl;
 
             $mstart = strtotime(date("Y-m-01"));
-            $mgoods = $this->mysql->select_one("SELECT SUM(goodscount) as mgoodscount  FROM ".Mysite::$app->config['tablepre']."order as o join ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id  where o.shopid = '".$value['id']."' AND o.addtime >= $mstart AND o.status = 3 ");
-            $value['ordercount'] = $mgoods['mgoodscount'];
+            // $mgoods = $this->mysql->select_one("SELECT SUM(goodscount) as mgoodscount  FROM ".Mysite::$app->config['tablepre']."order as o join ".Mysite::$app->config['tablepre']."orderdet as od on o.id = od.order_id  where o.shopid = '".$value['id']."' AND o.addtime >= $mstart AND o.status = 3 ");
+            // $value['ordercount'] = $mgoods['mgoodscount'];
 
             $value['sellcount'] = $value['virtualsellcounts']+$value['ordercount'];
             $value['ordercount'] =$value['sellcount'];
