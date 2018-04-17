@@ -179,8 +179,9 @@ class userctlord
         $this->mysql->update(Mysite::$app->config['tablepre'].'order', $data, "id='".$this->orderinfo['id']."'");
         $this->mysql->update(Mysite::$app->config['tablepre'].'orderps', '`status`=3', "orderid ='".$this->orderinfo['id']."' ");
 
-        $shop = $this->mysql->select_one("select ordercount from ".Mysite::$app->config['tablepre']."shop where id='".$this->orderinfo['shopid']."' ");
+        $shop = $this->mysql->select_one("select ordercount,mordercount from ".Mysite::$app->config['tablepre']."shop where id='".$this->orderinfo['shopid']."' ");
 		$data1['ordercount'] = $shop['ordercount'] + 1;
+        $data1['mordercount'] = $shop['mordercount'] + 1;
 		$this->mysql->update(Mysite::$app->config['tablepre'].'shop',$data1," id=".$this->orderinfo['shopid']." ");
 
         $ordCls = new orderclass();
