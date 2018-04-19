@@ -1536,7 +1536,7 @@ class method extends baseclass
         $data['shopbili'] = 0;//网站承担比例为0
         $data['type'] = 1;//默认购物车限制
         $cxid = intval(IReq::get('cxid'));
-        $controltype = intval(IReq::get('controltype'));//1满赠活动 2满减活动 3折扣活动 4免配送费 5首单立减
+        $controltype = intval(IReq::get('controltype'));
         if (empty($controltype)) {
             $this->message('促销活动类型获取失败！');
         }

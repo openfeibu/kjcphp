@@ -192,7 +192,7 @@ class method extends adminbaseclass
         }
         $this->success('success');
     }
-    
+
     /**促销活动列表**/
     public function cxrulelist()
     {
@@ -274,7 +274,7 @@ class method extends adminbaseclass
         $data['cityid'] = Mysite::$app->config['default_cityid'];
         $data['type'] = 1;//默认购物车限制
         $cxid = intval(IReq::get('cxid'));
-        $controltype = intval(IReq::get('controltype'));//1满赠活动 2满减活动 3折扣活动 4免配送费 5首单立减
+        $controltype = intval(IReq::get('controltype'));
         $data['controltype'] = $controltype;
         $setinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."cxruleset where  id = ".$controltype."   ");
         $data['imgurl'] = $setinfo['imgurl'];//活动图标
