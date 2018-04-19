@@ -282,17 +282,7 @@ class method extends adminbaseclass
         $data['supportplatform'] = $setinfo['supportplat'];//支持平台类型 1pc 2微信 3触屏 4app
         $data['status'] =  intval(IReq::get('status'));
         $ordertype = $data['supporttype']==2?'在线支付满':'满';
-        if ($controltype == 1) {//1满赠活动
-            $data['limitcontent'] = intval(IReq::get('limitcontent_1'));
-            $data['presenttitle'] = trim(IFilter::act(IReq::get('presenttitle')));
-            if (empty($data['limitcontent'])) {
-                $this->message('请输入订单限制金额');
-            }
-            if (empty($data['presenttitle'])) {
-                $this->message('请输入赠品名称及数量');
-            }
-            $data['name']= $ordertype.''.$data['limitcontent'].'赠送'.$data['presenttitle'];
-        }
+
         if ($controltype == 2) {//2满减活动
             $limitcontent = IReq::get('limitcontent_2');
             $controlcontent = IReq::get('controlcontent_2');
@@ -304,30 +294,7 @@ class method extends adminbaseclass
             }
             $data['name'] = rtrim($name, ";");
         }
-        if ($controltype == 3) {//3折扣活动
-            $data['limitcontent'] = intval(IReq::get('limitcontent_3'));
-            $data['controlcontent'] = intval(IReq::get('controlcontent_3'));
-            $zhe = $data['controlcontent']/10;
-            $data['name']= $ordertype.''.$data['limitcontent'].'享'.$zhe.'折优惠';
-            if (empty($data['limitcontent'])) {
-                $this->message('请输入订单限制金额');
-            }
-            if (empty($data['controlcontent'])) {
-                $this->message('请输入折扣值');
-            }
-        }
-        if ($controltype == 4) {//4免配送费
-            $data['limitcontent'] = intval(IReq::get('limitcontent_4'));
-            $data['name']= $ordertype.''.$data['limitcontent'].'免基础配送费';
-            if (empty($data['limitcontent'])) {
-                $this->message('请输入订单限制金额');
-            }
-        }
-        if ($controltype == 5) {//5首单立减
-            $data['limitcontent'] = 0;
-            $data['controlcontent'] = intval(IReq::get('controlcontent_5'));
-            $data['name']= '新用户下单立减'.$data['controlcontent'].'元';
-        }
+        
         if (empty($data['name'])) {
             $this->message('促销标题不能为空');
         }
