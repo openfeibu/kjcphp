@@ -1132,7 +1132,7 @@ class method extends adminbaseclass
         $pageshow = new page();
         $pageshow->setpage(IReq::get('page'), 10);
 
-        $templist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where parent_id =0  order by orderid asc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
+        $templist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."goodsgg where parent_id =0  order by orderid asc,id desc limit ".$pageshow->startnum().", ".$pageshow->getsize()."");
         $shuliang  = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goodsgg  where parent_id = 0 ");
         $pageshow->setnum($shuliang);
         $memcostloglist = array();
