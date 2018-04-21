@@ -1080,18 +1080,22 @@ class method extends baseclass
         $shopid = ICookie::get('adminshopid');
         $link = IUrl::creatUrl('shopcenter/goodsone/gid/'.$gid);
         if (empty($shopid)) {
+            var_dump('emptycookshop');exit;
             $this->message('emptycookshop', $link);
         }
         $shopinfo = $this->shopinfo();
         if (empty($shopinfo)) {
+            var_dump('shop_noexit');exit;
             $this->message('shop_noexit', $link);
         }
         $shoptype = $shopinfo['shoptype'];
         if (empty($gid)) {
+            var_dump('goods_empty');exit;
             $this->message('goods_empty', $link);
         }
         $goodsinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."goods where shopid='".$shopinfo['id']."' and id=".$gid."");
         if (empty($goodsinfo)) {
+            var_dump('goods_empty');exit;
             $this->message('goods_empty', $link);
         }
         //构造数据
@@ -3567,7 +3571,7 @@ class method extends baseclass
         $data['member'] = $member;
         Mysite::$app->setdata($data);
     }
-    /*** 
+    /***
 	商家申请提现
 	***/
 	public function shoptxadd(){

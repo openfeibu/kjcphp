@@ -294,7 +294,30 @@ class method extends adminbaseclass
             }
             $data['name'] = rtrim($name, ";");
         }
-        
+        if ($controltype == 3) {//3折扣活动
+            $data['limitcontent'] = intval(IReq::get('limitcontent_3'));
+            $data['controlcontent'] = intval(IReq::get('controlcontent_3'));
+            $zhe = $data['controlcontent']/10;
+            $data['name']= $ordertype.''.$data['limitcontent'].'享'.$zhe.'折优惠';
+            if (empty($data['limitcontent'])) {
+                $this->message('请输入订单限制金额');
+            }
+            if (empty($data['controlcontent'])) {
+                $this->message('请输入折扣值');
+            }
+        }
+        if ($controltype == 4) {//4免配送费
+            $data['limitcontent'] = intval(IReq::get('limitcontent_4'));
+            $data['name']= $ordertype.''.$data['limitcontent'].'免基础配送费';
+            if (empty($data['limitcontent'])) {
+                $this->message('请输入订单限制金额');
+            }
+        }
+        if ($controltype == 5) {//5首单立减
+            $data['limitcontent'] = 0;
+            $data['controlcontent'] = intval(IReq::get('controlcontent_5'));
+            $data['name']= '新用户下单立减'.$data['controlcontent'].'元';
+        }
         if (empty($data['name'])) {
             $this->message('促销标题不能为空');
         }
