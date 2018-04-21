@@ -42,8 +42,8 @@
                       <td class="left">促销类型:</td>
                       <td>
                           <select name="controltype" id="controltype" onchange="changetxt(this)" >
-                                <option value="2"   selected >满减活动</option>
-
+                              <option value="2"   <{if $cxinfo['controltype'] == 2}>selected<{/if}>>满减活动</option>
+                              <option value="3"   <{if $cxinfo['controltype'] == 3}>selected<{/if}>>折扣活动</option>
                           </select>
                       </td>
                     </tr>
@@ -70,6 +70,15 @@
 
 
 						 </td>
+
+
+				<!--3折扣活动-->
+				      <td class='action action_3' style='display:none'>
+					      订单满 <input type="text" id="limitcontent_3" name="limitcontent_3" value="<{$cxinfo['limitcontent']}>" class="skey" style="width:50px;" >
+					      元，享受 <input name="controlcontent_3" value="<{$cxinfo['controlcontent']}>" class="skey" type="text" class="skey" style="width:50px;" >折优惠（录入80即表示8折优惠）
+					  </td>
+
+					</tr>
 
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                       <td class="left" valign="top">活动时间:</td>
