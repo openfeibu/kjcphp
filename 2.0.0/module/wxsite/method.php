@@ -91,7 +91,7 @@ class method extends wxbaseclass
         $data['julishoplist']  = $julidatalistx;
         $ordercountdatalistx = $this->Tdata($this->stationid, array(), array('mordercount'=>'desc'), $lat, $lng, $source);
         $data['ordercountshoplist']  = $ordercountdatalistx;
-        $cxdatalist = $this->Tdata($this->stationid, array('cxtype' => 2), array('maxcx'=>'desc'), $lat, $lng, $source);
+        $cxdatalist = $this->Tdata($this->stationid, array('cxtype' => '2,3'), array('maxcx'=>'desc'), $lat, $lng, $source);
         $data['cxdatalist']  = $cxdatalist;
         $shoptypelist = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."shoptype where parent_id <> 0 order by orderid  asc");
         foreach ($shoptypelist as $key => $value) {
