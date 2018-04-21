@@ -408,10 +408,10 @@ class fbclass
         //cxtype  运算中在测算 ---这个构造的 shopid太长了在list里运算
         $limitcx = 0;//是否限制店铺促销类型
         $cxshopid = array();
-        if (isset($limitarr['cxtype'])&& $limitarr['cxtype'] > 0) {
+        if (isset($limitarr['cxtype'])&& count($limitarr['cxtype']) > 0) {
             $d = (date("w") ==0) ?7:date("w") ;
             $limitcx = 1;
-            $cxshop = $this->mysql->getarr("select shopid from ".Mysite::$app->config['tablepre']."rule where controltype = ".$limitarr['cxtype']." and FIND_IN_SET(".$source.",supportplatform)    and status = 1  and ( limittype = 1 or ( limittype = 2 and  find_in_set(".$d.",limittime) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
+            $cxshop = $this->mysql->getarr("select shopid from ".Mysite::$app->config['tablepre']."rule where controltype in(".$limitarr['cxtype'].") and FIND_IN_SET(".$source.",supportplatform)    and status = 1  and ( limittype = 1 or ( limittype = 2 and  find_in_set(".$d.",limittime) )  or ( limittype = 3 and endtime > ".time()." and starttime < ".time().")) ");
             if (is_array($cxshop)) {
                 foreach ($cxshop as $k=>$v) {
                     $cxshopid = array_merge($cxshopid, explode(',', $v['shopid']));
@@ -568,6 +568,7 @@ class fbclass
                 }
                 $value['maxcx'] = $maxcx;
             }//
+
             $value['cxlist'] =  $cxinfo;
             $value['cxinfo'] =  $cxinfo;
 
