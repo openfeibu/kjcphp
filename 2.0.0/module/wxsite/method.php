@@ -209,7 +209,7 @@ class method extends wxbaseclass
         $limitarr['shoptype'] = 1;
         $limitarr['shopcat'] = $catid;
         $limitarr['sendtype'] = $sendtype;
-        $limitarr['cxtype'] = $cxtype;
+        //$limitarr['cxtype'] = $cxtype;
         if ($shopshowtype == 'dingtai') {
             $limitarr['is_goshop'] = 1;
         } else {
