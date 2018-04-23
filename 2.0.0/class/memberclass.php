@@ -71,7 +71,7 @@ class memberclass
     public function shopLogin($uname, $pwd)
     {
         $md5c = md5($pwd);
-        $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where  email='".$uname."' or username='".$uname."' or phone='".$uname."'   ");
+        $userinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."member where  username='".$uname."' ");
 
         if (empty($userinfo)) {
             $this->error = '登录账号错误';
