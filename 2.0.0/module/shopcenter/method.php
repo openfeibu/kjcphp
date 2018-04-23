@@ -2451,7 +2451,7 @@ class method extends baseclass
             foreach ($timelist as $key=>$value) {
                 $where2 = 'and posttime > '.$value['starttime'].' and posttime < '.$value['endtime'];
                 $shoptj=  $this->mysql->select_one("select  count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost, sum(shopcost) as shopcost,sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost ,sum(shopdowncost) as shopdowncost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =0 and shopcost > 0 and status = 3 ".$where2." order by id asc  limit 0,1000");
-                $line= $this->mysql->select_one("select count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost,sum(shopcost) as shopcost, sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =1  and paystatus =1 and shopcost > 0 and status = 3 ".$where2."   order by id asc  limit 0,1000");
+                $line= $this->mysql->select_one("select count(id) as shuliang,sum(cxcost) as cxcost,sum(yhjcost) as yhcost,sum(shopcost) as shopcost, sum(scoredown) as score, sum(shopps)as pscost, sum(bagcost) as bagcost ,sum(shopdowncost) as shopdowncost from ".Mysite::$app->config['tablepre']."order  where shopid = '".$shopid."' and paytype =1  and paystatus =1 and shopcost > 0 and status = 3 ".$where2."   order by id asc  limit 0,1000");
                 //月 份	订单数量	在线付款	线下支付	使用代金券	店铺优惠	使用积分	打包费	配送费	商品总价
              $value['orderNum'] =  $shoptj['shuliang']+$line['shuliang'];//订单总个数
              $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $line['score']/Mysite::$app->config['scoretocost']:0;
