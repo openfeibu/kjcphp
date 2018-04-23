@@ -2460,9 +2460,10 @@ class method extends baseclass
                 $scordedown = !empty(Mysite::$app->config['scoretocost']) ? $shoptj['score']/Mysite::$app->config['scoretocost']:0;
                 $value['unlinescore'] = $scordedown;
                 $value['unline'] = $shoptj['shopcost']+$shoptj['pscost']+$shoptj['bagcost'] -$shoptj['cxcost'] - $shoptj['yhcost']-$scordedown;
-                $value['shopdowncost'] = $shoptj['shopdowncost'];
+                $value['shopdowncost'] = $line['shopdowncost'] +$shoptj['shopdowncost'];
                 $value['yhjcost'] = $line['yhcost'] +$shoptj['yhcost'];//使用代金券
                 $value['cxcost'] = $line['cxcost'] +$shoptj['cxcost'];// 店铺优惠
+                $value['ptcost'] = $value['cxcost'] - $value['shopdowncost'];// 店铺优惠
                 $value['score'] = $value['unlinescore'] +$value['onlinescore']; //  使用积分
                 $value['bagcost'] = $line['bagcost'] +$shoptj['bagcost'];//   打包费
                 $value['pscost'] = $line['pscost'] +$shoptj['pscost'];//   配送费
