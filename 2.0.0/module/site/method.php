@@ -207,6 +207,19 @@ class method extends baseclass
         echo 'success';
         exit;
     }
+	public function orderReceiving()
+    {
+        $sql = "SELECT * FROM ".Mysite::$app->config['tablepre']."order where status = 2 AND is_reback = 0 AND from_unixtime(sendtime) <= (select date_sub(now(), interval 3 HOUR))";
+        $orders = $this->mysql->getarr($sql);
+        foreach($orders as $key => $value)
+        {
+            $orderid = $value['id'];
+    		$userctlord = new userctlord($orderid,$value['buyeruid'],$this->mysql);
+            $userctlord->sureorder();
+        }
+		echo "success";
+        exit;
+    }
     public function testshop()
     {
         ini_set('display_errors', 1);            //错误信息
