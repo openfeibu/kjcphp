@@ -9,7 +9,7 @@
   'authkey' => 'likexxx',
   'hta' => true,
   'dbname' => 'kjc',
-  'siteurl' => 'http://wm.feibu.info',
+  'siteurl' => 'http://www.kjcpt.com',
   'admindir' => '',
   'sitename' => '筷叫餐',
   'description' => '筷叫餐平台，大学生的订餐平台',
