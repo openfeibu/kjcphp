@@ -11,6 +11,7 @@
     var shopis_open = "<{$openinfo['opentype']}>";
     var checknext = false;
     var shoplimitcost = '<{$shopdet['limitcost']}>';
+    var is_reserve = '<{$shopinfo['is_reserve']}>';
     var zuocart = '<{$siteurl}>/index.php?ctrl=wxsite&action=gowei&id=<{$id}>';
     $(function(){
         if(is_goshop == 0 ){
@@ -100,14 +101,14 @@
                 }
                 if(Number(datas.content.sum) >= Number(shoplimitcost)){
                     $(".shop-buy").addClass("active").html("去结算");
-                    if(shopis_open !=2 && shopis_open !=3){
+                    if(shopis_open !=2 && shopis_open !=3 && is_reserve !=1){
                         $(".shop-buy").removeClass("active").html("休息中");
                     }
                 }else{
                     var checkcost = Number(shoplimitcost)-Number(datas.content.sum);
                     checkcost = checkcost.toFixed(2);
                     $(".shop-buy").removeClass("active").html("还差￥" + checkcost + "起送");
-                    if(shopis_open !=2 && shopis_open !=3){
+                    if(shopis_open !=2 && shopis_open !=3 && is_reserve !=1){
                         $(".shop-buy").removeClass("active").html("休息中");
                     }
                 }
@@ -193,7 +194,7 @@
                 <{if $goods['is_cx'] == 1 }><span><{$goods['cost']/($goods['zhekou']/10)}></span><{/if}>
             </div>
           </div>
-          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $goods['count'] > 0}>
+          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $goods['count'] > 0 && $shopinfo['is_reserve'] != 1}>
           <{else}>
               <{if $goods['have_det'] == 1 }>
               <div class="addCar emptyCar" maxnum="65535">
@@ -244,7 +245,7 @@
                 <{/if}>
             </div>
           </div>
-          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $items['count'] > 0}>
+          <{if $openinfo['opentype'] != 2 && $openinfo['opentype'] != 3 && $items['count'] > 0 && $shopinfo['is_reserve'] != 1}>
           <{else}>
               <{if $items['have_det'] == 1 }>
               <div class="addCar emptyCar" maxnum="65535">

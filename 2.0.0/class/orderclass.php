@@ -662,6 +662,7 @@ $ch = curl_init($url);
         }
         $data['paystatus'] = 0;// 支付状态1已支付
         $data['content'] = $info['remark'];// 订单备注
+        $data['reserveDate'] = $info['reserveDate'];// 预订时间
 
         //  daycode 当天订单序号
         $data['ipaddress'] = $info['ipaddress'];

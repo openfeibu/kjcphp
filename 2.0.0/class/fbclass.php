@@ -468,7 +468,7 @@ class fbclass
         $juliwhere = "";
 
 
-        $list = $this->mysql->getarr("select  a.sort, a.id,a.shopname,a.sellcount,a.ordercount,a.mordercount,a.point,a.pointcount,a.virtualsellcounts,a.is_open,a.starttime,a.pointcount as pointsellcount,a.lat,a.lng,a.shoplogo,a.shoptype,a.address,a.isforyou,a.is_recom,
+        $list = $this->mysql->getarr("select  a.sort, a.id,a.shopname,a.sellcount,a.ordercount,a.mordercount,a.point,a.pointcount,a.virtualsellcounts,a.is_open,a.is_reserve,a.starttime,a.pointcount as pointsellcount,a.lat,a.lng,a.shoplogo,a.shoptype,a.address,a.isforyou,a.is_recom,
 		 b.shopid,b.is_orderbefore,b.limitcost,b.is_hot,b.is_com,b.is_new,b.maketime,b.pradius,b.sendtype,b.pscost,b.pradiusvalue,b.arrivetime,b.postdate,SQRT(  power(6370693.5*( COS(a.`lat` * 0.01745329252)  )*  (a.`lng` * 0.01745329252 - ".$lng." * 0.01745329252) ,2)+power(6370693.5*(a.`lat` * 0.01745329252 - ".$lat." * 0.01745329252),2) ) as juli
 		 from ".Mysite::$app->config['tablepre']."shopfast as b left join ".Mysite::$app->config['tablepre']."shop as a  on b.shopid  = a.id
 		 where a.is_pass = 1    ".$tempwherexxx." and a.endtime > ".time()." ".$juliwhere." order by id desc  limit 0,2000 ");

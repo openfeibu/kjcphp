@@ -60,6 +60,8 @@
                   <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
                     <{if $items['opentype'] == 2  }>
                     <div class="shop_state shop_state_ing"></div>
+                    <{else if $items['opentype'] == 0 && $items['is_reserve'] == 1}>
+                    <div class="shop_state shop_state_reserve"></div>
                     <{else}>
                     <div class="shop_state shop_state_ed"></div>
                     <{/if}>
@@ -97,6 +99,8 @@
                 <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
                   <{if $items['opentype'] == 2  }>
                   <div class="shop_state shop_state_ing"></div>
+                  <{else if $items['opentype'] == 0 && $items['is_reserve'] == 1}>
+                  <div class="shop_state shop_state_reserve"></div>
                   <{else}>
                   <div class="shop_state shop_state_ed"></div>
                   <{/if}>
@@ -135,6 +139,8 @@
                 <a href="<{ofunc type=url link="/wxsite/shopshow/typelx/wm/id/<{$items['id']}>"}>">
                   <{if $items['opentype'] == 2  }>
                   <div class="shop_state shop_state_ing"></div>
+                  <{else if $items['opentype'] == 0 && $items['is_reserve'] == 1}>
+                  <div class="shop_state shop_state_reserve"></div>
                   <{else}>
                   <div class="shop_state shop_state_ed"></div>
                   <{/if}>

@@ -1361,6 +1361,7 @@ class method extends wxbaseclass
 
         $info['shopid'] = intval(IReq::get('shopid'));//店铺ID
         $info['remark'] = IFilter::act(IReq::get('remark'));//备注
+        $info['reserveDate'] = IFilter::act(IReq::get('reserveDate'));//预订送达时间
         $info['paytype'] =  1;//支付方式
         $info['dikou'] =  intval(IReq::get('dikou'));//抵扣金额
 
@@ -1434,7 +1435,10 @@ class method extends wxbaseclass
         $info['areaids'] = '';
 
         #  logwrite($info['postdate']);
-        if ($shopinfo['is_open'] != 1) {
+        if($shopinfo['is_open'] != 1 && $shopinfo['is_reserve'] == 1 && empty($info['reserveDate'])){
+            $this->message('请预定送达时间');
+        }
+        if ($shopinfo['is_open'] != 1 && $shopinfo['is_reserve'] != 1) {
             $this->message('店铺暂停营业');
         }
         $tempdata = $this->getOpenPosttime($shopinfo['is_orderbefore'], $shopinfo['starttime'], $shopinfo['postdate'], $info['minit'], $shopinfo['befortime']);

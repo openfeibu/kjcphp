@@ -165,6 +165,8 @@ class method extends baseclass
                 $data['goodattrdefault'] = IFilter::act(IReq::get('goodattrdefault'));
                 $data['email'] = IFilter::act(IReq::get('email'));
                 $data['is_open'] = intval(IReq::get('is_open'));
+                $data['is_reserve'] = intval(IReq::get('is_reserve'));
+                $data['reservetime'] = IFilter::act(IReq::get('reservetime'));
                 $data['is_onlinepay'] = intval(IReq::get('is_onlinepay'));
                 $data['is_daopay'] = intval(IReq::get('is_daopay'));
                 $starttime = IFilter::act(IReq::get('starttime'));
@@ -197,6 +199,9 @@ class method extends baseclass
                 }
                 if (!(IValidate::len($data['goodattrdefault'], 0, 10))) {
                     $this->message('默认商品单位长度大于0小于10');
+                }
+                if($data['is_reserve'] == 1 && empty($data['reservetime'])){
+                    $this->message('您开启了预订功能，请选择预订配送的时间段吧');
                 }
                 $data['starttime']='';
                 if (empty($starttime)) {

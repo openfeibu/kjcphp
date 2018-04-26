@@ -170,7 +170,16 @@
           	<{/if}>
 
 
-          	</span> </div>
+          	</span>    
+            <span style=" margin-left:30px;">
+                 <span class="oxx" style="color:#ffff00;">送达时间</span>：
+                 <{if $items['reserveDate'] != null }>
+                 <{$items['reserveDate']}>
+                 <{else}>
+                 尽快送达
+                  <{/if}>
+            </span>
+            </div>
           <div class="showorderdet curbtn" onclick="showdet('<{$items['id']}>',this);">＋</div>
         </div>
         <div class="order_details" id="order_det<{$items['id']}>">

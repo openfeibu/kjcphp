@@ -106,6 +106,11 @@
 .c_orderDetail .orderDetail_top .orderDetail_item{position: relative;}
 .c_orderDetail .orderDetail_top .orderDetail_item .YHcheckDiscount{position: absolute;width: 100%;height: 100%;background: url(../images/ic_more.png) no-repeat right center / 0.35rem auto;
 }
+.c_orderDetail .orderDetail_top .orderDetail_item .DistributionTime{
+    position: absolute; 
+    width: 100%;height: 100%;
+    background: url(../images/ic_more.png) no-repeat right center / 0.35rem auto;
+}
 .c_orderDetail .orderDetail_top .orderDetail_item .checkDiscount span {
     margin-right: 0.3rem;
 }

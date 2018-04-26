@@ -10,9 +10,11 @@ var map_comment_link = '<{$map_comment_link}>';
 var map_webservice_key = '<{$map_webservice_key}>';
 var backtype = 0;
 </script>
+<link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/pickuptime.css">
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/cart.js"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/address.js"></script>
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/template.min.js"></script>
+<script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/pickuptime.min.js"></script>
 <script>
 
     var cartbagcost =0;
@@ -70,6 +72,21 @@ var backtype = 0;
           <div class="noMap">请选择收货地址</div>
         </a>
       </div>
+      <{if $shopinfo['is_reserve'] == 1}>
+      <div class="orderDetail_top">
+        <div class="orderDetail_item fsMain ">
+          <div class="checkDiscount">
+            <p>送达</p>
+            <{if $shopinfo['is_open'] != 1}>
+            <span id="DisSelectTime">请预订配送时间</span>
+            <{else}>
+            <span id="DisSelectTime">尽快送达</span>
+            <{/if}>
+          </div>
+          <div class="DistributionTime" id="Distribution"></div>
+        </div>
+      </div>
+      <{/if}>
       <div class="orderDetail_top">
         <div class="orderDetail_shopName"><{$shopinfo['shopname']}></div>
         <div id="foodslist">
@@ -102,6 +119,7 @@ var backtype = 0;
       <div class="orderDetail_mask">
         <textarea placeholder="备注（选填）" name="remark" id="remark"></textarea>
       </div>
+      <input type="hidden" name="reserveDate" value="" id="reserveDate" >
       <div class="c_orderDetail_button">
         <div class="c_money fb-fl">
           合计 <span class="surecost">￥0</span>
@@ -156,6 +174,7 @@ var backtype = 0;
         var buyerlng = $('input[name="addresslng"]').val();
         var buyerlat = $('input[name="addresslat"]').val();
         var remark = $('textarea[name="remark"]').val();
+        var reserveDate = $('input[name="reserveDate"]').val();
 		$F.loading();
         if(checknext ==  false){
             checknext = true;
@@ -165,7 +184,7 @@ var backtype = 0;
                 url: url.replace('@random@', 1+Math.round(Math.random()*1000)),
                 dataType: "json",
                 async:true,
-                data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat,'remark':remark},
+                data:{shopid:shopid,'juanid':$('#juanid').val(),'buyerlng':buyerlng,'buyerlat':buyerlat,'remark':remark,'reserveDate':reserveDate},
                 success:function(content) {
 					$F.closeLoading();
                     if(content.error ==  false){
@@ -220,7 +239,21 @@ var backtype = 0;
   		    jsApiCall();
   		}
   	}
+    $().ready(function(){
+      $('#Distribution').on('click',function(){
+        var times = '<{$shopinfo['reservetime']}>';
+        var arr = times.split(';');
+        var date = new Date();
+        var year = date.getFullYear();
+        pickuptime.init(0,arr,function(data){
+          $("#DisSelectTime").html(data.split(""));
 
+          var datas = data.split(' ');
+          $("#reserveDate").val(year +'年'+datas[0] + ' '+ datas[3]); 
+
+        });
+      });
+    });
 </script>
 <{/block}>
 <{block name="footer"}><{/block}>

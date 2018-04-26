@@ -99,6 +99,10 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
  .waimaiset .jbset:hover { background:#27a9e3;}
 .waimaiset .jbset img{ position:absolute;  left:14px;height: 25px;top: 7.5px; }
 .waimaiset .jbset span{margin-left: 25px;}
+/*预定新增*/
+#reservetime::-webkit-input-placeholder{color: #fff; }
+#reservetime{background: url(../images/reserve_icon.png)no-repeat center right ;background-size: 40px 40px;cursor: pointer;padding: 10px 0 10px 10px;}
+
 
 
 #loginForm{}
