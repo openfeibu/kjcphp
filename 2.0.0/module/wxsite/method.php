@@ -279,7 +279,7 @@ class method extends wxbaseclass
 
         $nowhour = time();
 
-        $data['openinfo'] = $this->shopIsopen($shopinfo['is_open'], $shopinfo['starttime'], $shopdet['is_orderbefore'], $nowhour);
+        $data['openinfo'] = $this->shopIsopen($shopinfo['is_open'], $shopinfo['starttime'], $shopinfo['is_orderbefore'], $nowhour);
 
         $data['collect'] = $this->mysql->getarr("select * from ".Mysite::$app->config['tablepre']."collect where  collecttype = 0 and uid = ".$this->member['uid']." and collectid  = '".$shopinfo['id']."' ");//收藏
 
@@ -663,6 +663,10 @@ class method extends wxbaseclass
             $data['is_open'] = 0;
         }
 
+        $nowhour = time();
+
+        $data['openinfo'] = $this->shopIsopen($shopinfo['is_open'], $shopinfo['starttime'], $shopinfo['is_orderbefore'], $nowhour);
+
         $nowhout = strtotime(date('Y-m-d', time()));//当天最小linux 时间
         $timelist = !empty($shopinfo['postdate'])?unserialize($shopinfo['postdate']):array();
         $data['timelist'] = array();
@@ -724,7 +728,6 @@ class method extends wxbaseclass
         $data['lng'] = ICookie::get('lng');
         $data['addressname'] =  ICookie::get('addressname');
         $data['shopinfo'] = $shopinfo;
-
 
         $waimai_psrangearr = $this->platpsinfo['waimai_psrange'];
         ;
@@ -1431,11 +1434,16 @@ class method extends wxbaseclass
                 $info['ipaddress']='0';
             }
         }
+
+        $nowhour = time();
+
+        $openinfo = $this->shopIsopen($shopinfo['is_open'], $shopinfo['starttime'], $shopinfo['is_orderbefore'], $nowhour);
+
         //area1 二级地址名称  area2 三级地址名称    area3
         $info['areaids'] = '';
 
         #  logwrite($info['postdate']);
-        if($shopinfo['is_open'] != 1 && $shopinfo['is_reserve'] == 1 && empty($info['reserveDate'])){
+        if($openinfo != 2 && $shopinfo['is_reserve'] == 1 && empty($info['reserveDate'])){
             $this->message('请预定送达时间');
         }
         if ($shopinfo['is_open'] != 1 && $shopinfo['is_reserve'] != 1) {

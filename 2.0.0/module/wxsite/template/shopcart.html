@@ -9,6 +9,7 @@ var addAreaType = '<{$addAreaType}>';
 var map_comment_link = '<{$map_comment_link}>';
 var map_webservice_key = '<{$map_webservice_key}>';
 var backtype = 0;
+console.log(pstype);
 </script>
 <link rel="stylesheet" type="text/css" href="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/css/pickuptime.css">
 <script src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/js/cart.js"></script>
@@ -77,7 +78,7 @@ var backtype = 0;
         <div class="orderDetail_item fsMain ">
           <div class="checkDiscount">
             <p>送达</p>
-            <{if $shopinfo['is_open'] != 1}>
+            <{if $openinfo['opentype'] != 2}>
             <span id="DisSelectTime">请预订配送时间</span>
             <{else}>
             <span id="DisSelectTime">尽快送达</span>
