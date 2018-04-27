@@ -486,6 +486,8 @@ class fbclass
         $nowhour = date('H:i:s', time());
         $nowhour = strtotime($nowhour);
 
+
+        $pxvalue3 = array();
         $pxvalue2 = array();
         $pxvalue1 = array();
         $shoppsimg = Mysite::$app->config['shoppsimg'];
@@ -537,7 +539,15 @@ class fbclass
             } else {
                 $value['opentype'] = $checkinfo['opentype'];
             }
-            $pxvalue2[$key] = $value['opentype'] == 2||$value['opentype'] == 3?1:0;
+
+            if($value['opentype'] == 2||$value['opentype']) {
+                $pxvalue2[$key] = 2;
+            }else if($value['is_reserve'] == 1) {
+                $pxvalue2[$key] = 1;
+            }else{
+                $pxvalue2[$key] = 0;
+            }
+            //$pxvalue2[$key] = $value['opentype'] == 2||$value['opentype'] == 3?1:0;
 
             $timelist = !empty($value['postdate'])?unserialize($value['postdate']):array();
 
@@ -600,7 +610,8 @@ class fbclass
             unset($value['postdate']);
             $datalist[] = $value;
         }
-        array_multisort($pxvalue2, SORT_DESC, $pxvalue1, $pxtype, $datalist);
+
+        array_multisort($pxvalue2,  SORT_DESC, $pxvalue1, $pxtype, $datalist);
 
         return $datalist;
     }
