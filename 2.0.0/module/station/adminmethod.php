@@ -185,6 +185,7 @@ class method extends adminbaseclass
         $orderid = intval(IReq::get('orderid'));
         $stationis_open = trim(IReq::get('stationis_open'));
         $cityid = trim(IReq::get('cityid'));
+        $notice = trim(IReq::get('notice'));
         //如果不允许分校自行设置优惠促销，则删除该分校下的促销活动
 
         if ($is_selfsitecx == 0) {
@@ -252,6 +253,7 @@ class method extends adminbaseclass
             $adddata['orderid'] = $orderid;
             $adddata['is_selfsitecx'] = $is_selfsitecx;
             $adddata['stationis_open'] = $stationis_open;
+            $adddata['notice'] = $notice;
 
             $this->mysql->insert(Mysite::$app->config['tablepre'].'stationadmininfo', $adddata);
         } else {
@@ -296,6 +298,7 @@ class method extends adminbaseclass
             $updataarr['orderid'] = $orderid;
             $updataarr['stationis_open'] = $stationis_open;
             $updataarr['is_selfsitecx'] = $is_selfsitecx;
+            $updataarr['notice'] = $notice;
             $this->mysql->update(Mysite::$app->config['tablepre'].'stationadmininfo', $updataarr, "id='".$stationid."'");
         }
         $this->success('success');

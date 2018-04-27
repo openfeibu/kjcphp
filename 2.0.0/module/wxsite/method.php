@@ -86,7 +86,7 @@ class method extends wxbaseclass
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {
             $source = 2;
         }
-
+        
         $julidatalistx = $this->Tdata($this->stationid, array(), array('mijuli'=>'asc'), $lat, $lng, $source);
         $data['julishoplist']  = $julidatalistx;
         $ordercountdatalistx = $this->Tdata($this->stationid, array(), array('mordercount'=>'desc'), $lat, $lng, $source);
