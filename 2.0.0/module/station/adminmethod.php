@@ -188,9 +188,9 @@ class method extends adminbaseclass
         $notice = trim(IReq::get('notice'));
         //如果不允许分校自行设置优惠促销，则删除该分校下的促销活动
 
-        if ($is_selfsitecx == 0) {
-            $this->mysql->delete(Mysite::$app->config['tablepre'] . 'rule', "cityid = '$cityid'");
-        }
+        //if ($is_selfsitecx == 0) {
+        //  $this->mysql->delete(Mysite::$app->config['tablepre'] . 'rule', "cityid = '$cityid'");
+        // }
         // if (empty($username)) {
         //     $this->message('member_emptyname');
         // }
