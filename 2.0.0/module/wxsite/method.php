@@ -1444,7 +1444,7 @@ class method extends wxbaseclass
         $info['areaids'] = '';
         #  logwrite($info['postdate']);
         if($openinfo['opentype'] != 2 && $shopinfo['is_reserve'] == 1 && empty($info['reserveDate'])){
-            $this->message('请预定送达时间');
+            $this->message('请预定配送时间');
         }
         if ($shopinfo['is_open'] != 1 && $shopinfo['is_reserve'] != 1) {
             $this->message('店铺暂停营业');
