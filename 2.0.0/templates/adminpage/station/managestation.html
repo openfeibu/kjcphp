@@ -63,11 +63,11 @@
 <!-- 					 <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
 					  <td class="left">排序</td>
                       <td><input type="text" name="orderid" id="orderid"   value="<{$stationinfo['orderid']|default:''}>" class="skey" style="width:100px;"></td>
-                    </tr> -->
+                    </tr>--> 
                     <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
                        <td class="left">公告内容</td>
                        <td>
-                          <textarea style="height:150px;width:400px;" name="notice"><{$stationinfo['notice']}></textarea>
+                          <textarea style="height:150px;width:400px;" name="notice" maxlength="500"><{$stationinfo['notice']}></textarea>
                        </td>
                     </tr>
 					          <tr onmouseover="this.bgColor='#F5F5F5';" onmouseout="this.bgColor='ffffff';" bgcolor="ffffff">
