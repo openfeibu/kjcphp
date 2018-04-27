@@ -396,7 +396,7 @@ class fbclass
             $pxvalue = 'mordercount';
             $pxtype = $paixuarr['mordercount'] == 'asc'?SORT_ASC:SORT_DESC;
         }
-        // print_r($this->CITY_ID);
+        //print_r(SORT_ASC);
         //$cityid = 410100;
         $tempwherexxx =  Mysite::$app->config['plateshopid'] > 0? ' and a.id != '.Mysite::$app->config['plateshopid'] .' ':'';
         $tempwherexxx .=  " and a.stationid = '".$stationid."'  ";
@@ -594,14 +594,12 @@ class fbclass
                 $shopstart= 0;
             }
             $value['point'] = 	$shopstart;
-
             $pxvalue1[$key] = $value[$pxvalue];
             unset( $value['valuelist'] );
             unset( $value['pradiusvalue'] );
             unset($value['postdate']);
             $datalist[] = $value;
         }
-
         array_multisort($pxvalue2, SORT_DESC, $pxvalue1, $pxtype, $datalist);
 
         return $datalist;

@@ -84,6 +84,10 @@
           <p>支付方式</p>
           <span>微信支付</span>
         </div>
+        <div class="orderDetail_info_item fb-clearfix fsMain">
+          <p>配送时间</p>
+          <span><{$order['reserveDate']}></span>
+        </div>
       </div>
       <{if $order['is_reback'] == 0}>
         <{if $order['status'] == 1 && $order['paystatus'] == 1}>

@@ -288,6 +288,7 @@ class orderclass
             $msg .= '<L>姓名：'.$orderinfo['buyername'].'</L><BR>';
             $msg .= '<L>电话：'.$orderinfo['buyerphone'].'</L><BR>';
             $msg .= '<B>地址：'.$orderinfo['buyeraddress'].'</B><BR>';
+            $msg .= '<L>配送时间：'.$this->reserveDate($orderinfo['reserveDate']).'</L><BR>';
             $msg .= '下单时间：'.date('m-d H:i', $orderinfo['addtime']).'<BR>';
             $msg .= '订单编号'.$orderinfo['dno'].'<BR>';
             $msg .= '--------------------------------<BR>';
@@ -1503,5 +1504,15 @@ $ch = curl_init($url);
 
             return 'success';
         }
+    }
+    public function reserveDate($date){
+
+        if(empty($date)){
+            $str = '尽快送达';
+        }else{
+            $str = $date;
+        }  
+
+        return $str;
     }
 }

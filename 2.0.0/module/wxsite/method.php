@@ -1193,6 +1193,7 @@ class method extends wxbaseclass
                 $order['setime'] = 15 * 60 - (time() - $order['addtime']);
                 $order['addtime'] = date('Y-m-d H:i:s', $order['addtime']);
                 $order['posttime'] = date('Y-m-d H:i:s', $order['posttime']);
+                $order['reserveDate'] = empty($order['reserveDate'])?'尽快送达':$order['reserveDate'];
 
                 $order['order_status'] = $orderclass->handleOrderStatus($order);
 
@@ -1441,9 +1442,8 @@ class method extends wxbaseclass
 
         //area1 二级地址名称  area2 三级地址名称    area3
         $info['areaids'] = '';
-
         #  logwrite($info['postdate']);
-        if($openinfo != 2 && $shopinfo['is_reserve'] == 1 && empty($info['reserveDate'])){
+        if($openinfo['opentype'] != 2 && $shopinfo['is_reserve'] == 1 && empty($info['reserveDate'])){
             $this->message('请预定送达时间');
         }
         if ($shopinfo['is_open'] != 1 && $shopinfo['is_reserve'] != 1) {
@@ -2654,7 +2654,7 @@ class method extends wxbaseclass
                 $order['setime'] = 15 * 60 - (time() - $order['addtime']);
                 $order['addtime'] = date('Y-m-d H:i:s', $order['addtime']);
                 $order['posttime'] = date('Y-m-d H:i:s', $order['posttime']);
-
+                $order['reserveDate'] = empty($order['reserveDate'])?'尽快送达':$order['reserveDate'];
                 $order['order_status'] = $orderclass->handleOrderStatus($order);
 
                 $data['order'] = $order;
