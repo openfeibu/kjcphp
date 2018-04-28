@@ -81,6 +81,7 @@ class method extends wxbaseclass
         $data['lng'] = $lng;
         $data['addressname'] = $station['stationname'];
         $data['addressid'] = $station['id'];
+        $data['notice'] = trim($station['notice']);
         //判断平台类型  //2微信端,3web端
         $source = 3;
         if (strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger')) {

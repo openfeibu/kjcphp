@@ -31,6 +31,14 @@
     </div>
   </div>
   <div id="loadindecContent">
+    <{if $notice != ''}>
+      <div class="notice">
+          <div class="notice_tab">
+              <div class="notice_tab_tit">公告</div>
+              <p><{$notice}></p>
+          </div>  
+      </div>
+    <{/if}>
       <div class="menu">
         <ul>
           <{foreach from=$shoptypelist item=items }>
@@ -45,18 +53,6 @@
         <a href="<{ofunc type=url link="/wxsite/discount"}>"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/wxsite/kjc/images/pic_discount.jpg" alt=""></a>
       </div>
       <{/if}>
-      <div class="notice">
-
-      </div>
-      <style type="text/css">
-        .notice{
-          padding-left: 0.3rem;
-          padding-right: 0.3rem;
-          background: #fff;
-          margin: 0.3rem 0 0 0;
-          padding-bottom: 0.1rem;
-        }
-      </style> 
       <div class="shop_group">
         <div class="shop_group_title">附近商家</div>
         <div class="shop_group_tab fb-clearfix">

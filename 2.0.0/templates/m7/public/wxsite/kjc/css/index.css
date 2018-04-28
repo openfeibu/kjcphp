@@ -163,6 +163,10 @@ footer ul li.active:nth-of-type(3) {
 .banner img {
   width: 100%;
 }
+.notice{padding: 0.1rem;background: #fff;margin: 0.2rem;border-radius:5px;background-color: #ff3156;}
+.notice .notice_tab{height: 2rem;padding: 0.1rem;background-color: #fff;}
+.notice .notice_tab .notice_tab_tit{text-align: center;padding: 0.08rem 0;letter-spacing: .3rem;font-size: .3rem;color: #000;}
+.notice .notice_tab p{padding-right: .1rem;padding-left: .1rem;font-size: .26rem;color: #000;letter-spacing: .02rem;}
 .menu {
   padding: 0.3rem 0;
   background: #fff;
