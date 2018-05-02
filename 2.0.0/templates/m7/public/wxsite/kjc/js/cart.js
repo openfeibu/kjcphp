@@ -105,7 +105,7 @@ function removeoneproduct(gid,tshopid,num){
     // }
 }
 function addonedish(gid,tshopid,num,obj){
-    $F.loading();
+    //$F.loading();
     var url= siteurl+'/index.php?ctrl=site&action=addcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
     fbajaxback(url, '',function(backmessage){
@@ -129,7 +129,7 @@ function removeonedish(gid,tshopid,num){
     // $('#loading').show();
     url = siteurl+'/index.php?ctrl=site&action=downcart&goods_id='+gid+'&shopid='+tshopid+'&num=1&datatype=json&random=@random@';
     url = url.replace('@random@', 1+Math.round(Math.random()*1000));
-    $F.loading();
+    //$F.loading();
     fbajaxback(url, '',function(backmessage){
         if(backmessage.flag == false){
              $F.closeLoading();
