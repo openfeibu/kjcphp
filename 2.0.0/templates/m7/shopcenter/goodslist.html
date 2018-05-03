@@ -212,7 +212,7 @@ border-right: 1px solid #4c4a48;}
 
                                              <div class="cd_dayNum sx_state" style="width:120px;">
                                                  <{if $ite['is_live'] ==1}>
-                                            
+
                                                     <span class="is_live" style=" background:#27a9e3; padding:8px; color:#fff;" >上架</span>
                                                     <span class="is_live" style=" background:none; padding:8px; color:#fff;" >下架</span>
                                                     <{else}>
@@ -260,7 +260,7 @@ border-right: 1px solid #4c4a48;}
 
                                      <div class="cd_dayNum sx_state" style="width:120px;">
                                             <{if $ite['is_live'] ==1}>
-                                            
+
                                             <span class="is_live" style=" background:#27a9e3; padding:8px; color:#fff;" >上架</span>
                                             <span class="is_live" style=" background:none; padding:8px; color:#fff;" >下架</span>
                                             <{else}>
@@ -474,7 +474,7 @@ $(".caidanSet ul li").click(function(){
              }else{
               $(".order_goodlist_add").show()
               $('#editGtype').show();
-              
+
              }
 
 					  $('.goodsdiv_'+tempid).show();
@@ -675,7 +675,7 @@ function refreshgoods(info){
 	 dialogs.close();
    $("[data="+info.id+"]").remove();
 	 // $('#goodstr_'+info.id).remove();
-    
+
 
 	var htmldata = '<div class="order_list	listgoodsdet goodsdiv_'+info.typeid+' " data="'+info.id+'" id="goodstr_'+info.id+'" have_det="'+info.have_det+'">';
               htmldata += ' <div class="order_goodlist">';
@@ -720,7 +720,7 @@ function refreshgoods(info){
                 var htmldatas = '<div class="order_list  listgoodsdet goodsdiv_0 " style="display:none" data="'+info.id+'" id="goodstr_'+info.id+'" have_det="'+info.have_det+'">';
               }
 
-              
+
                   htmldatas += ' <div class="order_goodlist">';
                   htmldatas += '       <div class="cd_name" style="width:247px;">';
                   htmldatas += '          <p class="name">'+info.name+'</p>';
@@ -787,7 +787,7 @@ function setdbf()
               if($(this).parents(".order_list").css("display") == "block"){
                 idArray.push($(this).val());
               }
-                  
+
             });
   if(idArray.length == 0){
     alert("请先选择要修改的商品")
@@ -796,12 +796,12 @@ function setdbf()
   var htmls = '<form method="post" id="dbf" action="#" style="text-align:center;"><table>';
   htmls += '<tbody><tr>';
   htmls += '<td height="50px">打包费:</td>';
-  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
+  htmls += '<td> <input type="hidden" name="controlname" value="bagcost"><input type="text" name="bagcost" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
 
   htmls += '</tr>';
 
   htmls += '</tbody></table> ';
-  htmls += '<input type="hidden" value="'+idArray+'" name="shopid"> ';
+  htmls += '<input type="hidden" value="'+idArray+'" name="goodsids"> ';
   htmls += '<input type="button" value="确认提交" class="button" id="buttonyy" ></form>';
   art.dialog({
     id: 'setdbf',
@@ -811,21 +811,24 @@ function setdbf()
   return false;
 }
 $('#buttonyy').live('click',function(){
-  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#dbf').serialize() ,function (data, textStatus){
+  $.post('<{ofunc type=url link="/shopcenter/updateallgoods/datatype/json"}>', $('#dbf').serialize() ,function (data, textStatus){
       if(data.error == false){
-          var val =  $('#dbf').find('[name="yjin"]').val();
-          var idArray = $('#dbf').find('[name="shopid"]').val().split(",");
+          var val =  $('#dbf').find('[name="bagcost"]').val();
+          var idArray = $('#dbf').find('[name="goodsids"]').val().split(",");
           $.each(idArray,function(a,b){
             $('[data="'+b+'"]').find(".bagcost").text(val)
           })
+          art.dialog.close();
           alert('操作成功');
       }else{
+          art.dialog.close();
         if(data.error == true)
         {
           diaerror(data.msg);
         }else{
           diaerror(data);
         }
+
       }
    }, 'json');
 });
@@ -837,7 +840,7 @@ function setkc()
               if($(this).parents(".order_list").css("display") == "block"){
                 idArray.push($(this).val());
               }
-                  
+
             });
   if(idArray.length == 0){
     alert("请先选择要修改的商品")
@@ -846,12 +849,12 @@ function setkc()
   var htmls = '<form method="post" id="kc" action="#" style="text-align:center;"><table>';
   htmls += '<tbody><tr>';
   htmls += '<td height="50px">库存:</td>';
-  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
+  htmls += '<td> <input type="hidden" name="controlname" value="count"><input type="text" name="count" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
 
   htmls += '</tr>';
 
   htmls += '</tbody></table> ';
-  htmls += '<input type="hidden" value="'+idArray+'" name="shopid"> ';
+  htmls += '<input type="hidden" value="'+idArray+'" name="goodsids"> ';
   htmls += '<input type="button" value="确认提交" class="button" id="buttonkc" ></form>';
   art.dialog({
     id: 'setkc',
@@ -861,10 +864,10 @@ function setkc()
   return false;
 }
 $('#buttonkc').live('click',function(){
-  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#kc').serialize() ,function (data, textStatus){
+  $.post('<{ofunc type=url link="/shopcenter/updateallgoods/datatype/json"}>', $('#kc').serialize() ,function (data, textStatus){
       if(data.error == false){
-          var val =  $('#kc').find('[name="yjin"]').val();
-          var idArray = $('#kc').find('[name="shopid"]').val().split(",");
+          var val =  $('#kc').find('[name="count"]').val();
+          var idArray = $('#kc').find('[name="goodsids"]').val().split(",");
           $.each(idArray,function(a,b){
             $('[data="'+b+'"]').find(".count").text(val)
           })

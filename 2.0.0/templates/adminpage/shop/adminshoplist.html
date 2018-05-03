@@ -33,7 +33,7 @@
 
             	    <input type="submit" value="提交查询" class="button">
             	 </form>
-              
+
             </div>
 
       	</div>
@@ -372,7 +372,7 @@ function setpsf()
   var htmls = '<form method="post" id="psf" action="#" style="text-align:center;"><table>';
   htmls += '<tbody><tr>';
   htmls += '<td height="50px">配送费:</td>';
-  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;"></td></tr>';
+  htmls += '<td> <input type="text" name="pscost" value="" style="width:100px;"></td></tr>';
   htmls += '</tr>';
 
   htmls += '</tbody></table> ';
@@ -385,7 +385,7 @@ function setpsf()
   });
 }
 $('#buttonpsf').live('click',function(){
-  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshoppscost/datatype/json"}>', $('#psf').serialize() ,function (data, textStatus){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetallshoppscost/datatype/json"}>', $('#psf').serialize() ,function (data, textStatus){
       if(data.error == false){
           diasucces('操作成功','');
       }else{
@@ -425,7 +425,7 @@ function setyj()
   });
 }
 $('#buttonyj').live('click',function(){
-  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#yj').serialize() ,function (data, textStatus){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetallshopyjin/datatype/json"}>', $('#yj').serialize() ,function (data, textStatus){
       if(data.error == false){
           diasucces('操作成功','');
       }else{

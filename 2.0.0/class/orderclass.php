@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  */
 class orderclass
 {
@@ -677,7 +677,7 @@ $ch = curl_init($url);
         $mztime = $info['shopinfo']['maketime']*60;
         $ordertime1 = $data['addtime']+$sdtime+$mztime;
         $ordertime2 = $data['posttime'];
-       
+
         if ($ordertime2 < $ordertime1) {
             $data['posttime'] = $ordertime1;
         }
@@ -1081,7 +1081,7 @@ $ch = curl_init($url);
         $mztime = $info['shopinfo']['maketime']*60;
         $ordertime1 = $data['addtime']+$sdtime+$mztime;
         $ordertime2 = $data['posttime'];
-       
+
         if ($ordertime2 < $ordertime1) {
             $data['posttime'] = $ordertime1;
         }
@@ -1258,7 +1258,7 @@ $ch = curl_init($url);
         $mztime = $info['shopinfo']['maketime']*60;
         $ordertime1 = $data['addtime']+$sdtime+$mztime;
         $ordertime2 = $data['posttime'];
-        
+
         if ($ordertime2 < $ordertime1) {
             $data['posttime'] = $ordertime1;
         }

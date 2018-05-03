@@ -121,6 +121,7 @@ function is_mobile_request()
 }
 function error($type, $msg)
 {
+    //echo $msg;exit;
     logwrite($msg, 1);
 }
 function logwrite($msg, $checkflag = 1)
@@ -146,7 +147,7 @@ function logwrite($msg, $checkflag = 1)
 
  function limitalert()
  {
-     /* 
+     /*
        echo '{"error":true,"msg":"'.$tmsg.'"}';
        exit;  */
  }

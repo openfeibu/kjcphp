@@ -393,15 +393,27 @@ class method extends adminbaseclass
         if (empty($userinfo)) {
             $this->message('店铺对应账号不存在');
         }
-        // $cdata['backacount'] = trim(IReq::get('backacount'));
-        // if (empty($cdata['backacount'])) {
-        //     $this->message('提现账号不能为空');
-        // }
-        //$this->mysql->update(Mysite::$app->config['tablepre'].'member', $cdata, "uid='".$userinfo['uid']."'");
         $data['yjin'] = round($yjin, 2);//$yjin;
         $this->mysql->update(Mysite::$app->config['tablepre'].'shop', $data, "id='".$shopid."'");
         $this->success('success');
     }
+    public function savesetallshopyjin()
+    {
+        $yjin = IReq::get('yjin');
+        $shopids = IReq::get('shopid');
+        $shopids = explode(',',$shopids);
+
+        foreach ($shopids as $key => $shopid) {
+            $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop  where id=".$shopid."  ");
+            if($shopinfo)
+            {
+                $data['yjin'] = round($yjin, 2);//$yjin;
+                $this->mysql->update(Mysite::$app->config['tablepre'].'shop', $data, "id='".$shopid."'");
+            }
+        }
+        $this->success('success');
+    }
+
     //店铺排序
     public function adminshoppx()
     {
@@ -1476,6 +1488,17 @@ class method extends adminbaseclass
         }
         $data['pscost'] = $pscost;
         $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopid."'");
+        $this->success('success');
+    }
+    public function savesetallshoppscost()
+    {
+        $shopids =  IReq::get('shopid');
+        $shopids = explode(',',$shopids);
+        $pscost = IReq::get('pscost') ? IReq::get('pscost') : 0;
+        $data['pscost'] = $pscost;
+        foreach ($shopids as $key => $shopid) {
+            $this->mysql->update(Mysite::$app->config['tablepre'].'shopfast', $data, "shopid='".$shopid."'");
+        }
         $this->success('success');
     }
     public function unblindshop()
