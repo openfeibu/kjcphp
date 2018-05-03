@@ -242,7 +242,7 @@ input {
 
 .homeRightCon .homeRightBot .homeRightBox .homeRightEdit,.homeRightCon .homeRightBot .homeRightBox .homeRightData{
 	width: 100%;
-	height: 108px;
+	/*height: 108px;*/
 	overflow: hidden;
 }
 

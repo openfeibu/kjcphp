@@ -63,6 +63,18 @@ class method extends adminbaseclass
         $tjdata['market'] = $this->mysql->counts("select id from ".Mysite::$app->config['tablepre']."order where shoptype=1 ");
         //商品数量
         $tjdata['marketg'] = $this->mysql->counts("select * from ".Mysite::$app->config['tablepre']."goods");
+        //申请提现
+        $sqtx = $this->mysql->select_one("select sum(cost) as txs from ".Mysite::$app->config['tablepre']."shoptx where status = 1 and type = 0");
+        $tjdata['sqtx'] = $sqtx['txs'];
+        //提现成功
+        $txcg = $this->mysql->select_one("select sum(cost) as txs from ".Mysite::$app->config['tablepre']."shoptx where status = 2 and type = 0");
+        $tjdata['txcg'] = $txcg['txs'];
+        //店铺余额
+        $wtx = $this->mysql->select_one("select sum(a.shopcost) as txs from ".Mysite::$app->config['tablepre']."member as a left join ".Mysite::$app->config['tablepre']."shop as b on a.uid = b.uid");
+        $tjdata['wtx'] = $wtx['txs'];
+       //店铺总额
+        $tjdata['total'] = $sqtx['txs'] + $wtx['txs'];
+
         $data['tjdata'] = $tjdata;
         $data['serverurl'] = Mysite::$app->config['serverurl'];
         Mysite::$app->setdata($data);
