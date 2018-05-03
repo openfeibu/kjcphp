@@ -33,10 +33,19 @@
 
             	    <input type="submit" value="提交查询" class="button">
             	 </form>
+              
             </div>
 
       	</div>
-
+         <div class="pl_box">
+              <span class="pl_box_title">批量操作：</span>
+              <div class="pl_box_button" onclick="setpsf()">
+                修改配送费
+              </div>
+              <div class="pl_box_button" onclick="setyj()">
+                修改佣金
+              </div>
+           </div>
 
            <div class="tags">
 
@@ -56,16 +65,11 @@
                       <tr>
 
                         <th width="30px"><input type="checkbox" id="chkall" name="chkall" onclick="checkall()"></th>
-
                         <th align="center">店铺名称</th>
-                        <!-- <th align="center">所属城市</th> -->
                         <th align="center" width="120px">所属分校</th>
-						<!-- <th align="center">入驻资料</th> -->
                         <th align="center">会员名称</th>
-                        <th align="center">标签</th>
                         <th align="center">营业</th>
                         <th align="center" >佣金/结算额</th>
-                        <!-- <th align="center">排序</th> -->
                         <th align="center">有效时间</th>
                         <th align="center">提现账号</th>
                         <th align="center">解绑</th>
@@ -90,17 +94,15 @@
                         	<{load_data assign="userinfo" table="member" type="one" where="uid='<{$items['uid']}>'" fileds="username,shopcost,backacount" }>
                           	<{$userinfo['username']}>
                         	</td>
-                        <td align="center">
-                        <a onclick="starttask('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a> </td>
-                        <td align="center"><{if $items['is_open'] == 1}>是<{else}>否<{/if}></td>
+                        <td align="center"><a style="cursor: pointer" onclick="setyy('<{$items['id']}>','<{$items['shopname']}>','<{$items['is_open']}>')"><{if $items['is_open'] == 1}>是<{else}>否<{/if}></a></td>
 
-                         <td align="center" style="width: 120px"><a onclick="setyjin('<{$items['id']}>','<{$items['shopname']}>','<{$items['yjin']}>','<{$yjin}>','<{$userinfo['backacount']|default:''}>');" href="#">设置</a><{if $items['yjin']=='0'}>默认<{$yjin}><{else}><{$items['yjin']}><{/if}>/<{$userinfo['shopcost']|default:'0'}>
-                             <a href="#" onclick="addcost(<{$items['uid']}>);">增</a>
+                         <td align="center" style="width: 120px"><a onclick="setyjin('<{$items['id']}>','<{$items['shopname']}>','<{$items['yjin']}>','<{$yjin}>','<{$userinfo['backacount']|default:''}>');" style="cursor: pointer">设置</a><{if $items['yjin']=='0'}>默认<{$yjin}><{else}><{$items['yjin']}><{/if}>/<{$userinfo['shopcost']|default:'0'}>
+                             <a style="cursor: pointer" onclick="addcost(<{$items['uid']}>);">增</a>
                          </td>
                         <!-- <td align="center"><input type="text" name="pxinput" data="<{$items['id']}>" value="<{$items['sort']}>" style="width:30px;padding:0px;"></td> -->
-                        <td align="center"><a href="#" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
+                        <td align="center"><a style="cursor: pointer" onclick="doshow('<{$items['id']}>','<{intval(($items['endtime']-time())/86400)}>');"> <{if $items['endtime'] > 0}>    <{intval(($items['endtime']-time())/86400)}>    <{else}>设置 <{/if}></a></td>
                         <td align="center">
-                        <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" href="#">设置</a></td>
+                        <a onclick="txset('<{$items['id']}>','<{$items['shopname']}>');" style="cursor: pointer">设置</a></td>
                         <{load_data assign="member" table="member" type="one" where="guid='<{$items['uid']}>'" fileds="uid,username" }>
 
                         <td align="center">
@@ -108,7 +110,7 @@
                             <{$member['username']}> <a onclick="unblind(<{$items['id']}>);" style="cursor: pointer;display: block;" >  解绑</a></td>
                             <{/if}>
                         <td align="center">
-                            <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>','<{$items['pscost']}>');" href="#"><{$items['pscost']}></a>
+                            <a onclick="pscostset('<{$items['id']}>','<{$items['shopname']}>','<{$items['pscost']}>');" style="cursor: pointer"><{$items['pscost']}></a>
                         </td>
                          <td align="center"><a href="<{ofunc type=url link="/adminpage/shop/module/resetdefualt/shopid/<{$items['id']}>"}>" target="_blank"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/images/admin/but.png"></a></td>
                       </tr>
@@ -354,6 +356,126 @@ $('#buttonsubpscost').live('click',function(){
      		}
      	}
 	 }, 'json');
+});
+
+
+function setpsf()
+{
+  var idArray = [];
+  $("[name='id[]']:checkbox[checked]").each(function(i){
+                  idArray.push($(this).val());
+            });
+  if(idArray.length == 0){
+    alert("请先选择要修改的店铺")
+    return false;
+  }
+  var htmls = '<form method="post" id="psf" action="#" style="text-align:center;"><table>';
+  htmls += '<tbody><tr>';
+  htmls += '<td height="50px">配送费:</td>';
+  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;"></td></tr>';
+  htmls += '</tr>';
+
+  htmls += '</tbody></table> ';
+  htmls += '<input type="hidden" value="'+idArray+'" name="shopid"> ';
+  htmls += '<input type="button" value="确认提交" class="button" id="buttonpsf" ></form>';
+  art.dialog({
+    id: 'setpsf',
+    title:'批量修改配送费',
+    content: htmls
+  });
+}
+$('#buttonpsf').live('click',function(){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshoppscost/datatype/json"}>', $('#psf').serialize() ,function (data, textStatus){
+      if(data.error == false){
+          diasucces('操作成功','');
+      }else{
+        if(data.error == true)
+        {
+          diaerror(data.msg);
+        }else{
+          diaerror(data);
+        }
+      }
+   }, 'json');
+});
+
+function setyj()
+{
+  var idArray = [];
+  $("[name='id[]']:checkbox[checked]").each(function(i){
+                  idArray.push($(this).val());
+            });
+  if(idArray.length == 0){
+    alert("请先选择要修改的店铺")
+    return false;
+  }
+  var htmls = '<form method="post" id="yj" action="#" style="text-align:center;"><table>';
+  htmls += '<tbody><tr>';
+  htmls += '<td height="50px">佣金比例(%):</td>';
+  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;"></td></tr>';
+  htmls += '</tr>';
+
+  htmls += '</tbody></table> ';
+  htmls += '<input type="hidden" value="'+idArray+'" name="shopid"> ';
+  htmls += '<input type="button" value="确认提交" class="button" id="buttonyj" ></form>';
+  art.dialog({
+    id: 'setyj',
+    title:'批量修改佣金',
+    content: htmls
+  });
+}
+$('#buttonyj').live('click',function(){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#yj').serialize() ,function (data, textStatus){
+      if(data.error == false){
+          diasucces('操作成功','');
+      }else{
+        if(data.error == true)
+        {
+          diaerror(data.msg);
+        }else{
+          diaerror(data);
+        }
+      }
+   }, 'json');
+});
+
+function setyy(id,name,state)
+{
+  var htmls = '<form method="post" id="yy" action="#" style="text-align:center;"><table>';
+  htmls += '<tbody><tr>';
+  htmls += '<td height="50px">是否营业:</td>';
+  if(state == 1){
+    //营业
+    htmls += '<td> <input type="radio" checked name="yjin" value="" style="width:15px;height:15px;">是<input type="radio" name="yjin" value="" style="width:15px;height:15px;">否</td></tr>';
+  }else{
+      htmls += '<td> <input type="radio" name="yjin" value="" style="width:15px;height:15px;">是<input type="radio" name="yjin" checked value="" style="width:15px;height:15px;">否</td></tr>';
+  }
+
+  htmls += '</tr>';
+
+  htmls += '</tbody></table> ';
+  htmls += '<input type="hidden" value="'+id+'" name="shopid"> ';
+  htmls += '<input type="button" value="确认提交" class="button" id="buttonyy" ></form>';
+  art.dialog({
+    id: 'setyj',
+    title:'修改'+name+'营业状态',
+    content: htmls
+  });
+  return false;
+}
+$('#buttonyy').live('click',function(){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#yy').serialize() ,function (data, textStatus){
+      if(data.error == false){
+          diasucces('操作成功','');
+      }else{
+        if(data.error == true)
+        {
+          diaerror(data.msg);
+        }else{
+          diaerror(data);
+        }
+      }
+   }, 'json');
 });
 </script>
 <!--newmain 结束-->

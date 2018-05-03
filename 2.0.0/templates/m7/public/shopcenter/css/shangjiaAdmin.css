@@ -513,3 +513,23 @@ input[type="text"]{-webkit-appearance: none;
 
 .username{padding: 10px 20px;background: #27a9e3;color: #fff;border-radius: 2px;    box-shadow: 0 5px 20px #b3dbee;font-size: 14px;}
 .updataPass{padding: 10px 20px;background: #27a9e3;color: #fff;border-radius: 2px;    box-shadow: 0 5px 20px #b3dbee;font-size: 14px;margin-right: 20px;}
+
+.pl_box{height: 42px;padding:20px 95px 0 95px;}
+.pl_box .pl_box_title{float: left;line-height: 42px;color: #fff;font-size: 14px;}
+.pl_box .pl_box_button{float: left;border-radius:5px;background: #27a9e3;cursor: pointer;height: 32px !important;line-height: 32px !important;cursor: pointer;text-align: center;padding: 0 20px !important;overflow: hidden;display: block;border: none;margin: 5px 10px;color: #fff;}
+.button {
+    color: #fff;
+    border-radius: 2px;
+    background: #1783b2;
+    cursor: pointer;
+    height: 32px !important;
+    line-height: 32px !important;
+    cursor: pointer;
+    text-align: center;
+    padding: 0 20px !important;
+    overflow: hidden;
+    display: block;
+    border: none;
+    margin: 0 10px;
+    display: inline-block;
+}

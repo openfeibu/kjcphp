@@ -757,3 +757,8 @@ border-radius: 2px;
 
 }
 .fb_shoplist tr td{line-height: 24px;padding:5px 0;}
+
+.pl_box{height: 42px;padding:0 20px;}
+.pl_box .pl_box_title{float: left;line-height: 42px;color: #666;font-size: 14px;}
+.pl_box .pl_box_button{float: left;border-radius:5px;background: #1783b2;cursor: pointer;height: 32px !important;line-height: 32px !important;cursor: pointer;text-align: center;padding: 0 20px !important;overflow: hidden;display: block;border: none;margin: 5px 10px;color: #fff;}
+.aui_main input[type="text"]{text-indent: 1em;}

@@ -104,6 +104,15 @@ $("#bldsearch").keyup(function(){
 
                   <div class="cl"></div>
             </div>
+             <div class="pl_box">
+              <span class="pl_box_title">批量操作：</span>
+              <div class="pl_box_button" onclick="setdbf()">
+                修改打包费
+              </div>
+              <div class="pl_box_button" onclick="setkc()">
+                修改库存
+              </div>
+           </div>
              <div class="cl"></div>
 
                 <form action="" method="post">
@@ -130,6 +139,9 @@ $("#bldsearch").keyup(function(){
                         <div class="div_orderList_show">
 
                         <div class="orderList_show_goodli">
+                            <div  style="width:60px;float: left;height:67px;border-right: 1px solid #4c4a48;">
+                                <input type="checkbox" id="chkall" name="chkall" onclick="checkall()" style="display: block;width:15px;height:15px;margin:20px auto;">
+                            </div>
                             <div class="ord_goodname" style="width:247px;">
                                 <span>食品名称</span>
                             </div>
@@ -182,6 +194,9 @@ border-right: 1px solid #4c4a48;}
                             <{foreach from=$cx_goods_list item=ite }>
                                     <div class="order_list	listgoodsdet goodsdiv_0  goodstr_<{$ite['parentid']}>"   data="<{$ite['id']}>" id="goodstr_<{$ite['id']}>" have_det="<{$ite['have_det']}>" goodname="<{$ite['name']}>" >
         								 <div class="order_goodlist">
+                         <div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;">
+                            <input type="checkbox" name="id[]" value="<{$ite['id']}>" style="display: block;width:15px;height:15px;margin:15px auto;">
+                          </div>
         									<div class="cd_name" style="width:247px;">
         										<p class="name"><{$ite['name']}></p>
         									</div>
@@ -227,6 +242,9 @@ border-right: 1px solid #4c4a48;}
                       <{foreach from=$items['det']  item=ite}>
 							<div class="order_list	listgoodsdet goodsdiv_<{$items['id']}>  goodstr_<{$ite['parentid']}>"   data="<{$ite['id']}>" id="goodstr_<{$ite['id']}>" have_det="<{$ite['have_det']}>" goodname="<{$ite['name']}>" >
 								 <div class="order_goodlist">
+                  <div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;">
+                            <input type="checkbox" name="id[]" value="<{$ite['id']}>" style="display: block;width:15px;height:15px;margin:15px auto;">
+                    </div>
 									<div class="cd_name" style="width:247px;">
 										<p class="name"><{$ite['name']}></p>
 									</div>
@@ -751,7 +769,116 @@ function refreshgoods(info){
 
 
 }
+//全选操作
+function checkall()
+{
+  var checkinfo = $('#chkall').attr('checked');
+  if(checkinfo ==  'checked'){
+    $("input[name='id[]']").attr("checked",true);
+  }else{
+    $("input[name='id[]']").attr("checked",false);
+  }
+}
 
+function setdbf()
+{
+  var idArray = [];
+  $("[name='id[]']:checkbox[checked]").each(function(i){
+              if($(this).parents(".order_list").css("display") == "block"){
+                idArray.push($(this).val());
+              }
+                  
+            });
+  if(idArray.length == 0){
+    alert("请先选择要修改的商品")
+    return false;
+  }
+  var htmls = '<form method="post" id="dbf" action="#" style="text-align:center;"><table>';
+  htmls += '<tbody><tr>';
+  htmls += '<td height="50px">打包费:</td>';
+  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
+
+  htmls += '</tr>';
+
+  htmls += '</tbody></table> ';
+  htmls += '<input type="hidden" value="'+idArray+'" name="shopid"> ';
+  htmls += '<input type="button" value="确认提交" class="button" id="buttonyy" ></form>';
+  art.dialog({
+    id: 'setdbf',
+    title:'批量修改打包费',
+    content: htmls
+  });
+  return false;
+}
+$('#buttonyy').live('click',function(){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#dbf').serialize() ,function (data, textStatus){
+      if(data.error == false){
+          var val =  $('#dbf').find('[name="yjin"]').val();
+          var idArray = $('#dbf').find('[name="shopid"]').val().split(",");
+          $.each(idArray,function(a,b){
+            $('[data="'+b+'"]').find(".bagcost").text(val)
+          })
+          alert('操作成功');
+      }else{
+        if(data.error == true)
+        {
+          diaerror(data.msg);
+        }else{
+          diaerror(data);
+        }
+      }
+   }, 'json');
+});
+
+function setkc()
+{
+  var idArray = [];
+  $("[name='id[]']:checkbox[checked]").each(function(i){
+              if($(this).parents(".order_list").css("display") == "block"){
+                idArray.push($(this).val());
+              }
+                  
+            });
+  if(idArray.length == 0){
+    alert("请先选择要修改的商品")
+    return false;
+  }
+  var htmls = '<form method="post" id="kc" action="#" style="text-align:center;"><table>';
+  htmls += '<tbody><tr>';
+  htmls += '<td height="50px">库存:</td>';
+  htmls += '<td> <input type="text" name="yjin" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
+
+  htmls += '</tr>';
+
+  htmls += '</tbody></table> ';
+  htmls += '<input type="hidden" value="'+idArray+'" name="shopid"> ';
+  htmls += '<input type="button" value="确认提交" class="button" id="buttonkc" ></form>';
+  art.dialog({
+    id: 'setkc',
+    title:'批量修改库存',
+    content: htmls
+  });
+  return false;
+}
+$('#buttonkc').live('click',function(){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#kc').serialize() ,function (data, textStatus){
+      if(data.error == false){
+          var val =  $('#kc').find('[name="yjin"]').val();
+          var idArray = $('#kc').find('[name="shopid"]').val().split(",");
+          $.each(idArray,function(a,b){
+            $('[data="'+b+'"]').find(".count").text(val)
+          })
+          alert('操作成功');
+      }else{
+        if(data.error == true)
+        {
+          diaerror(data.msg);
+        }else{
+          diaerror(data);
+        }
+      }
+   }, 'json');
+});
   </script>
 
 
