@@ -218,7 +218,9 @@ font-family:"宋体";  text-align:center; border-right:1px solid #4c4a48;}
     text-overflow: ellipsis;
     overflow: hidden;
     outline: 0!important;
+    position: relative;
 }
+.order_goodlist .cd_name .typeG{position: absolute;width: 30px;height: 30px;border-radius: 50%;background: #ec7501;color: #fff;text-align: center;line-height: 30px;top: 10px;left: 5px;}
 .order_goodlist .cd_price{ width:11%; border-left:1px solid #5c5a59;}
 .order_goodlist .cd_dbf{ width:10%;border-left:1px solid #5c5a59;}
 .order_goodlist .cd_dayNum{width:20%;border-left:1px solid #5c5a59;}
@@ -533,3 +535,6 @@ input[type="text"]{-webkit-appearance: none;
     margin: 0 10px;
     display: inline-block;
 }
+
+.pl_box_right{float: right;color: #fff;font-size: 14px;height: 30px;margin-top: 10px}
+.pl_box_right span{width: 30px;height: 30px;border-radius: 50%;background: #ec7501;color: #fff;text-align: center;line-height: 30px;display: inline-block;margin-right: 5px;}

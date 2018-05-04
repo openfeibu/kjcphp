@@ -112,6 +112,9 @@ $("#bldsearch").keyup(function(){
               <div class="pl_box_button" onclick="setkc()">
                 修改库存
               </div>
+              <div class="pl_box_right">
+                <span>多</span>标签表示该商品为多规格商品
+              </div>
            </div>
              <div class="cl"></div>
 
@@ -192,23 +195,24 @@ border-right: 1px solid #4c4a48;}
                         <{if !empty($cx_goods_list) }>
                             <div id="subaddtype_0">
                             <{foreach from=$cx_goods_list item=ite }>
-                                    <div class="order_list	listgoodsdet goodsdiv_0  goodstr_<{$ite['parentid']}>"   data="<{$ite['id']}>" id="goodstr_<{$ite['id']}>" have_det="<{$ite['have_det']}>" goodname="<{$ite['name']}>" >
-        								 <div class="order_goodlist">
-                         <div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;">
-                            <input type="checkbox" name="id[]" value="<{$ite['id']}>" style="display: block;width:15px;height:15px;margin:15px auto;">
-                          </div>
-        									<div class="cd_name" style="width:247px;">
-        										<p class="name"><{$ite['name']}></p>
-        									</div>
-        									<div class="cd_price">
-        										<p class="cost"><{$ite['cost']}></p>
-        									</div>
-        									<div class="cd_dbf">
-        										 <p class="bagcost"><{$ite['bagcost']}></p>
-        									</div>
-        									<div class="cd_dayNum"style="width:80px;">
-        										 <p class="count"><{$ite['count']}></p>
-        									</div>
+                                    <div class="order_list	listgoodsdet goodsdiv_0  goodstr_<{$ite['parentid']}>"   data="<{$ite['id']}>" id="goodstr_<{$ite['id']}>"  have_det="<{$ite['have_det']}>" goodname="<{$ite['name']}>" >
+            								 <div class="order_goodlist">
+                             <div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;">
+                                <input type="checkbox" name="id[]"  value="<{$ite['id']}>" style="display: block;width:15px;height:15px;margin:15px auto;">
+                              </div>
+            									<div class="cd_name" style="width:247px;">
+            										<p class="name"><{$ite['name']}></p>
+                                <{if $ite['have_det'] == 1}><span class="typeG">多</span><{/if}>
+            									</div>
+            									<div class="cd_price">
+            										<p class="cost"><{$ite['cost']}></p>
+            									</div>
+            									<div class="cd_dbf">
+            										 <p class="bagcost"><{$ite['bagcost']}></p>
+            									</div>
+            									<div class="cd_dayNum"style="width:80px;">
+            										 <p class="count"><{$ite['count']}></p>
+            									</div>
 
                                              <div class="cd_dayNum sx_state" style="width:120px;">
                                                  <{if $ite['is_live'] ==1}>
@@ -243,10 +247,11 @@ border-right: 1px solid #4c4a48;}
 							<div class="order_list	listgoodsdet goodsdiv_<{$items['id']}>  goodstr_<{$ite['parentid']}>"   data="<{$ite['id']}>" id="goodstr_<{$ite['id']}>" have_det="<{$ite['have_det']}>" goodname="<{$ite['name']}>" >
 								 <div class="order_goodlist">
                   <div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;">
-                            <input type="checkbox" name="id[]" value="<{$ite['id']}>" style="display: block;width:15px;height:15px;margin:15px auto;">
+                            <input type="checkbox" name="id[]"  value="<{$ite['id']}>" style="display: block;width:15px;height:15px;margin:15px auto;">
                     </div>
 									<div class="cd_name" style="width:247px;">
 										<p class="name"><{$ite['name']}></p>
+                    <{if $ite['have_det'] == 1}><span class="typeG">多</span><{/if}>
 									</div>
 									<div class="cd_price">
 										<p class="cost"><{$ite['cost']}></p>
@@ -288,6 +293,7 @@ border-right: 1px solid #4c4a48;}
                       <div class="order_list"  id="additem" style="display:none;">
                       	    <input type="hidden" name="adgoodstypeid" value="">
                        		 <div class="order_goodlist">
+                                <div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;"><input type="checkbox" name="id[]" value="" style="display: block;width:15px;height:15px;margin:15px auto;"></div>
                                 <div class="cd_name" style="width:247px;">
                                     <input style="width:50%;" type="text" value="" name="adgoodname" placeholder="商品名称"/>
                                 </div>
@@ -363,13 +369,14 @@ border-right: 1px solid #4c4a48;}
 function addtogoods(goodsinfo,fenleiid){
 	var html = '<div class="order_list	listgoodsdet goodsdiv_'+goodsinfo.id+'  goodstr_'+goodsinfo.id+'  " data="'+goodsinfo.id+'" id="goodstr_'+goodsinfo.id+'" >';
       html += '<div class="order_goodlist">';
+      html +='<div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;"><input type="checkbox" name="id[]" value="" style="display: block;width:15px;height:15px;margin:15px auto;"></div>';
       html += ' <div class="cd_name" style="width:247px;">';
       html += '<p class="name">'+goodsinfo.name+'</p>';
       html += '</div>';
       html += '<div class="cd_price">';
       html += '<p class="cost">'+goodsinfo.cost+'</p>';
       html += '</div>';
-	     html += '<div class="cd_dbf">';
+	    html += '<div class="cd_dbf">';
       html += '<p class="bagcost">0.00</p>';
       html += '</div>';
 	   html += '<div class="cd_dayNum"style="width:80px;">';
@@ -582,6 +589,7 @@ $('#saveaddgoods').live('click',function(){
 	     }else{
 	  	    hideop();
 	  	    var htmldata = '<div class="order_list	listgoodsdet goodsdiv_'+backinfo.content.typeid+'" data="'+backinfo.content.id+'" id="goodstr_'+backinfo.content.id+'" have_det="'+backinfo.content.have_det+'">';
+              htmldata = '<div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;"><input type="checkbox" name="id[]" value="'+backinfo.content.id+'" style="display: block;width:15px;height:15px;margin:15px auto;"></div>';
               htmldata += ' <div class="order_goodlist">';
               htmldata += '       <div class="cd_name" style="width:247px;">';
               htmldata += '          <p class="name">'+backinfo.content.name+'</p>';
@@ -625,7 +633,6 @@ $('#saveaddgoods').live('click',function(){
 
 	     }
 		}
-
 });
 //删除商品
 
@@ -679,8 +686,12 @@ function refreshgoods(info){
 
 	var htmldata = '<div class="order_list	listgoodsdet goodsdiv_'+info.typeid+' " data="'+info.id+'" id="goodstr_'+info.id+'" have_det="'+info.have_det+'">';
               htmldata += ' <div class="order_goodlist">';
+              htmldata +='<div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;"><input type="checkbox" name="id[]" value="'+info.id+'" style="display: block;width:15px;height:15px;margin:15px auto;"></div>';
               htmldata += '       <div class="cd_name" style="width:247px;">';
               htmldata += '          <p class="name">'+info.name+'</p>';
+              if(info.have_det == 1){
+                htmldata += '<span class="typeG">多</span>'
+              }
               htmldata += '       </div>';
               htmldata += '      <div class="cd_price">';
               htmldata += '          <p class="cost">'+info.cost+'</p>  ';
@@ -722,8 +733,12 @@ function refreshgoods(info){
 
 
                   htmldatas += ' <div class="order_goodlist">';
+                  htmldatas +='<div  style="width:60px;float: left;border-right: 1px solid #4c4a48;height:50px;"><input type="checkbox" name="id[]" value="'+info.id+'" style="display: block;width:15px;height:15px;margin:15px auto;"></div>';
                   htmldatas += '       <div class="cd_name" style="width:247px;">';
                   htmldatas += '          <p class="name">'+info.name+'</p>';
+                   if(info.have_det == 1){
+                  htmldatas += '<span class="typeG">多</span>'
+                }
                   htmldatas += '       </div>';
                   htmldatas += '      <div class="cd_price">';
                   htmldatas += '          <p class="cost">'+info.cost+'</p>  ';
@@ -779,16 +794,15 @@ function checkall()
     $("input[name='id[]']").attr("checked",false);
   }
 }
-
+var dbf = null;
 function setdbf()
 {
   var idArray = [];
   $("[name='id[]']:checkbox[checked]").each(function(i){
-              if($(this).parents(".order_list").css("display") == "block"){
-                idArray.push($(this).val());
-              }
-
-            });
+          if($(this).parents(".order_list").css("display") == "block"){
+            idArray.push($(this).val());
+          }
+    });
   if(idArray.length == 0){
     alert("请先选择要修改的商品")
     return false;
@@ -797,13 +811,11 @@ function setdbf()
   htmls += '<tbody><tr>';
   htmls += '<td height="50px">打包费:</td>';
   htmls += '<td> <input type="hidden" name="controlname" value="bagcost"><input type="text" name="bagcost" value="" style="width:100px;border: 1px solid #ddd;height:24px;text-indent:1em;"></td></tr>';
-
   htmls += '</tr>';
-
   htmls += '</tbody></table> ';
   htmls += '<input type="hidden" value="'+idArray+'" name="goodsids"> ';
   htmls += '<input type="button" value="确认提交" class="button" id="buttonyy" ></form>';
-  art.dialog({
+  dbf=art.dialog({
     id: 'setdbf',
     title:'批量修改打包费',
     content: htmls
@@ -818,10 +830,10 @@ $('#buttonyy').live('click',function(){
           $.each(idArray,function(a,b){
             $('[data="'+b+'"]').find(".bagcost").text(val)
           })
-          art.dialog.close();
           alert('操作成功');
+          dbf.close();
       }else{
-          art.dialog.close();
+        dbf.close();
         if(data.error == true)
         {
           diaerror(data.msg);
@@ -832,7 +844,7 @@ $('#buttonyy').live('click',function(){
       }
    }, 'json');
 });
-
+var kc = null;
 function setkc()
 {
   var idArray = [];
@@ -856,7 +868,7 @@ function setkc()
   htmls += '</tbody></table> ';
   htmls += '<input type="hidden" value="'+idArray+'" name="goodsids"> ';
   htmls += '<input type="button" value="确认提交" class="button" id="buttonkc" ></form>';
-  art.dialog({
+  kc = art.dialog({
     id: 'setkc',
     title:'批量修改库存',
     content: htmls
@@ -872,7 +884,10 @@ $('#buttonkc').live('click',function(){
             $('[data="'+b+'"]').find(".count").text(val)
           })
           alert('操作成功');
+          kc.close()
+          
       }else{
+       kc.close()
         if(data.error == true)
         {
           diaerror(data.msg);
