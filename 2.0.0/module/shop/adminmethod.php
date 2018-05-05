@@ -413,7 +413,22 @@ class method extends adminbaseclass
         }
         $this->success('success');
     }
-
+    //保存佣金
+    public function savesetshopopen()
+    {
+        $is_open = IReq::get('is_open');
+        $shopid = intval(IReq::get('shopid'));
+        if (empty($shopid)) {
+            $this->message('shop_noexit');
+        }
+        $shopinfo = $this->mysql->select_one("select * from ".Mysite::$app->config['tablepre']."shop  where id=".$shopid."  ");
+        if (empty($shopinfo)) {
+            $this->message('店铺对应账号不存在');
+        }
+        $data['is_open'] = $is_open;
+        $this->mysql->update(Mysite::$app->config['tablepre'].'shop', $data, "id='".$shopid."'");
+        $this->success('success');
+    }
     //店铺排序
     public function adminshoppx()
     {

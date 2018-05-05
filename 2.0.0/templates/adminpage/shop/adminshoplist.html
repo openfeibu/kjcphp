@@ -446,9 +446,9 @@ function setyy(id,name,state)
   htmls += '<td height="50px">是否营业:</td>';
   if(state == 1){
     //营业
-    htmls += '<td> <input type="radio" checked name="yjin" value="" style="width:15px;height:15px;">是<input type="radio" name="yjin" value="" style="width:15px;height:15px;">否</td></tr>';
+    htmls += '<td> <input type="radio" checked name="is_open" value="1" style="width:15px;height:15px;">是<input type="radio" name="is_open" value="0" style="width:15px;height:15px;">否</td></tr>';
   }else{
-      htmls += '<td> <input type="radio" name="yjin" value="" style="width:15px;height:15px;">是<input type="radio" name="yjin" checked value="" style="width:15px;height:15px;">否</td></tr>';
+      htmls += '<td> <input type="radio" name="is_open" value="1" style="width:15px;height:15px;">是<input type="radio" name="is_open" checked value="0" style="width:15px;height:15px;">否</td></tr>';
   }
 
   htmls += '</tr>';
@@ -464,7 +464,7 @@ function setyy(id,name,state)
   return false;
 }
 $('#buttonyy').live('click',function(){
-  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopyjin/datatype/json"}>', $('#yy').serialize() ,function (data, textStatus){
+  $.post('<{ofunc type=url link="/adminpage/shop/module/savesetshopopen/datatype/json"}>', $('#yy').serialize() ,function (data, textStatus){
       if(data.error == false){
           diasucces('操作成功','');
       }else{
