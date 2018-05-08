@@ -172,12 +172,11 @@
 
           	</span>    
             <span style=" margin-left:30px;">
-                 <span class="oxx" style="color:#ffff00;">配送时间</span>：
-                 <{if $items['reserveDate'] != null }>
-                 <{$items['reserveDate']}>
-                 <{else}>
-                 尽快送达
-                  <{/if}>
+                 <span class="oxx" style="color:#ffff00;"><{$items['haveorder']['name']}></span>
+            </span>
+            <span style=" margin-left:30px;">
+                 <span class="oxx" style="color:#ffff00;"><{$items['haveorder']['tit']}></span>：
+                 <{$items['haveorder']['date']}>
             </span>
             </div>
           <div class="showorderdet curbtn" onclick="showdet('<{$items['id']}>',this);">＋</div>
@@ -347,6 +346,9 @@
                 <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/dayindingdan.png" /></a>
                 <a href="<{$siteurl}>/index.php?ctrl=shopcenter&action=orderprint&orderid=<{$items['id']}>&printtype=1" target="_blank">
                 <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/xiaopiaodayin.png" /></a>
+              <{if $items['is_reback']  != 2 }>
+                <a href="javascript:;" onclick="qzdrawbutton(<{$items['id']}>);"><img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/tuikuan.png" /></a>
+              <{/if}>
                 <{if $items['status'] == 2}>
                 <!-- <span class="curbtn" onclick="wancheng(<{$items['id']}>);"  >
                 <img src="<{$siteurl}>/templates/<{$tempdir}>/public/shopcenter/images/wanchengdingdan.png" /></span> -->
@@ -534,6 +536,13 @@ function refreshorder(){
 		        myajax('<{ofunc type=url link="/shopcenter/shopcontrol/controlname/unreback/datatype/json"}>',{'orderid':orderid});
 		  }
 	 }
+
+ function qzdrawbutton(orderid)   //退款操作
+  {
+
+      mydialog = art.dialog.open(siteurl+'/index.php?ctrl=adminpage&action=order&module=draworderinfo&orderid='+orderid,{height:'600px',width:'400px'},false);
+
+  }
 	  var mydialog;
 	function printorder(orderid,printtype)
 	{

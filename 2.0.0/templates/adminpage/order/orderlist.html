@@ -176,7 +176,8 @@
 						 	 <{if $items['is_hand']  != 1 }>
 							 <td colspan="2" style="text-align:left;">配送方式：<{if $items['pstype']  != 1 }>平台配送<{else}>店铺配送<{/if}></td>
 							  <{/if}>
-							 <td colspan="2" style="text-align:left;">配送时间：<{if $items['reserveDate'] != null}><{$items['reserveDate']}><{else}>尽快送达<{/if}></td>
+							 <td colspan="2" style="text-align:left;">提餐方式：<{$items['haveorder']['name']}></td>
+							 <td colspan="2" style="text-align:left;"><{$items['haveorder']['tit']}>：<{$items['haveorder']['date']}></td>
 							 <td colspan="2" style="text-align:left;"></td>
 						</tr>
 
@@ -349,13 +350,14 @@
 
 	<{if $items['is_reback']  == 2 }><font color=blue>已退款成功 <input type="button" onclick="showqzdrawbutton(<{$items['id']}>);" value="查看退款记录" class="button"></font><{/if}>
 	<{if $items['is_reback']  == 3 }><font color=blue>拒绝退款 <input type="button" onclick="showqzdrawbutton(<{$items['id']}>);" value="查看退款记录" class="button"> </font><{/if}>
-	<{if $items['is_reback']  != 2 }>
+	<!-- <{if $items['is_reback']  != 2 }>
 						  <{if $items['status'] != 2 && $items['is_acceptorder']  != 1 && $items['is_reback']  != 3  && $items['paystatus']  != 0}>
 						  <input type="button" onclick="qzdrawbutton(<{$items['id']}>);" value="退款" class="button">
 						  <{/if}>
-						  <{/if}>
-
-
+						  <{/if}> -->
+						<{if $items['is_reback']  != 2 }>
+						   <input type="button" onclick="qzdrawbutton(<{$items['id']}>);" value="退款" class="button">
+						<{/if}>
 
 					  </td>
 		            </tr>
